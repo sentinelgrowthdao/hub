@@ -1,0 +1,15 @@
+syntax = "proto3";
+package sentinel.oracle.v1;
+
+import "gogoproto/gogo.proto";
+import "sentinel/oracle/v1/asset.proto";
+
+option go_package = "github.com/sentinel-official/hub/v12/x/oracle/types";
+option (gogoproto.equal_all) = false;
+option (gogoproto.goproto_getters_all) = false;
+
+// GenesisState represents the genesis state for the module.
+message GenesisState {
+  // List of assets included in the genesis state.
+  repeated sentinel.oracle.v1.Asset assets = 1;
+}
