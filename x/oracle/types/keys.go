@@ -11,7 +11,7 @@ const (
 )
 
 var (
-	PortKey = []byte{0x00}
+	PortIDKey = []byte{0x00}
 
 	AssetKeyPrefix           = []byte{0x10}
 	AssetPriceKeyPrefix      = []byte{0x20}

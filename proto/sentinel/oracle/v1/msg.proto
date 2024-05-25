@@ -1,0 +1,10 @@
+syntax = "proto3";
+package sentinel.oracle.v1;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/sentinel-official/hub/v12/x/oracle/types";
+option (gogoproto.equal_all) = false;
+option (gogoproto.goproto_getters_all) = false;
+
+service MsgService {}
