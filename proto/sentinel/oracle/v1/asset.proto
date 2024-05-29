@@ -2,7 +2,6 @@ syntax = "proto3";
 package sentinel.oracle.v1;
 
 import "gogoproto/gogo.proto";
-import "osmosis/poolmanager/v1beta1/query.proto";
 
 option go_package = "github.com/sentinel-official/hub/v12/x/oracle/types";
 option (gogoproto.equal_all) = false;
@@ -14,8 +13,16 @@ message Asset {
   string denom = 1;
 
   // Number of decimal places that the asset's smallest unit is divided into.
-  int64 decimals = 2;
+  string multiplier = 2 [
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
 
-  // Request structure for querying the spot price from Osmosis PoolManager.
-  osmosis.poolmanager.v1beta1.SpotPriceRequest request = 3;
+  uint64 pool_id = 3 [(gogoproto.customname) = "PoolID"];
+  string base_asset_denom = 4;
+  string quote_asset_denom = 5;
+  string price = 6 [
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
 }
