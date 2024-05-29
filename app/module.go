@@ -62,6 +62,8 @@ import (
 	deposittypes "github.com/sentinel-official/hub/v12/x/deposit/types"
 	custommint "github.com/sentinel-official/hub/v12/x/mint"
 	customminttypes "github.com/sentinel-official/hub/v12/x/mint/types"
+	"github.com/sentinel-official/hub/v12/x/oracle"
+	oracletypes "github.com/sentinel-official/hub/v12/x/oracle/types"
 	"github.com/sentinel-official/hub/v12/x/swap"
 	swaptypes "github.com/sentinel-official/hub/v12/x/swap/types"
 	"github.com/sentinel-official/hub/v12/x/vpn"
@@ -112,6 +114,7 @@ var (
 
 		// Sentinel Hub module basics
 		custommint.AppModuleBasic{},
+		oracle.AppModuleBasic{},
 		swap.AppModuleBasic{},
 		vpn.AppModuleBasic{},
 
@@ -138,6 +141,7 @@ func ModuleAccPerms() map[string][]string {
 
 		// Sentinel Hub module account permissions
 		customminttypes.ModuleName: nil,
+		oracletypes.ModuleName:     nil,
 		deposittypes.ModuleName:    nil,
 		swaptypes.ModuleName:       {authtypes.Minter},
 
@@ -201,6 +205,7 @@ func NewModuleManager(
 
 		// Sentinel Hub modules
 		custommint.NewAppModule(encCfg.Codec, k.CustomMintKeeper),
+		oracle.NewAppModule(k.OracleKeeper),
 		swap.NewAppModule(encCfg.Codec, k.SwapKeeper),
 		vpn.NewAppModule(encCfg.Codec, k.AccountKeeper, k.BankKeeper, k.VPNKeeper),
 
@@ -242,6 +247,7 @@ func NewModuleManager(
 
 		// Sentinel Hub modules
 		swaptypes.ModuleName,
+		oracletypes.ModuleName,
 		vpntypes.ModuleName,
 
 		// Other modules
@@ -277,6 +283,7 @@ func NewModuleManager(
 
 		// Sentinel Hub modules
 		customminttypes.ModuleName,
+		oracletypes.ModuleName,
 		swaptypes.ModuleName,
 		vpntypes.ModuleName,
 
@@ -313,6 +320,7 @@ func NewModuleManager(
 
 		// Sentinel Hub modules
 		customminttypes.ModuleName,
+		oracletypes.ModuleName,
 		swaptypes.ModuleName,
 		vpntypes.ModuleName,
 
@@ -356,6 +364,7 @@ func NewSimulationManager(encCfg EncodingConfig, k Keepers, msgRouter *baseapp.M
 
 		// Sentinel Hub modules
 		custommint.NewAppModule(encCfg.Codec, k.CustomMintKeeper),
+		oracle.NewAppModule(k.OracleKeeper),
 		swap.NewAppModule(encCfg.Codec, k.SwapKeeper),
 		vpn.NewAppModule(encCfg.Codec, k.AccountKeeper, k.BankKeeper, k.VPNKeeper),
 

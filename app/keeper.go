@@ -63,6 +63,8 @@ import (
 
 	custommintkeeper "github.com/sentinel-official/hub/v12/x/mint/keeper"
 	customminttypes "github.com/sentinel-official/hub/v12/x/mint/types"
+	oraclekeeper "github.com/sentinel-official/hub/v12/x/oracle/keeper"
+	oracletypes "github.com/sentinel-official/hub/v12/x/oracle/types"
 	swapkeeper "github.com/sentinel-official/hub/v12/x/swap/keeper"
 	swaptypes "github.com/sentinel-official/hub/v12/x/swap/types"
 	vpnkeeper "github.com/sentinel-official/hub/v12/x/vpn/keeper"
@@ -98,6 +100,7 @@ type Keepers struct {
 
 	// Sentinel Hub keepers
 	CustomMintKeeper custommintkeeper.Keeper
+	OracleKeeper     oraclekeeper.Keeper
 	SwapKeeper       swapkeeper.Keeper
 	VPNKeeper        vpnkeeper.Keeper
 
@@ -111,6 +114,9 @@ type Keepers struct {
 	ScopedIBCICAControllerKeeper capabilitykeeper.ScopedKeeper
 	ScopedIBCICAHostKeeper       capabilitykeeper.ScopedKeeper
 	ScopedIBCTransferKeeper      capabilitykeeper.ScopedKeeper
+
+	// Sentinel scoped keepers
+	ScopedOracleKeeper capabilitykeeper.ScopedKeeper
 
 	// Other scoped keepers
 	ScopedWasmKeeper capabilitykeeper.ScopedKeeper
@@ -258,7 +264,13 @@ func NewKeepers(
 	)
 
 	// Sentinel Hub keepers
+	k.ScopedOracleKeeper = k.CapabilityKeeper.ScopeToModule(oracletypes.ModuleName)
+
 	k.CustomMintKeeper = custommintkeeper.NewKeeper(encCfg.Codec, keys.KV(customminttypes.StoreKey), k.MintKeeper)
+	k.OracleKeeper = oraclekeeper.NewKeeper(
+		encCfg.Codec, keys.KV(oracletypes.StoreKey), k.ScopedOracleKeeper, k.IBCKeeper.ChannelKeeper,
+		k.IBCKeeper.ChannelKeeper, govModuleAddr,
+	)
 	k.SwapKeeper = swapkeeper.NewKeeper(
 		encCfg.Codec, keys.KV(swaptypes.StoreKey), k.Subspace(swaptypes.ModuleName), k.AccountKeeper, k.BankKeeper,
 	)

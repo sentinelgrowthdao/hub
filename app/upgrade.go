@@ -32,6 +32,7 @@ import (
 	"github.com/cosmos/ibc-go/v7/modules/core/exported"
 	ibctmmigrations "github.com/cosmos/ibc-go/v7/modules/light-clients/07-tendermint/migrations"
 
+	oracletypes "github.com/sentinel-official/hub/v12/x/oracle/types"
 	subscriptionkeeper "github.com/sentinel-official/hub/v12/x/subscription/keeper"
 	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types"
 )
@@ -47,6 +48,7 @@ var (
 			crisistypes.ModuleName,
 			group.ModuleName,
 			nft.ModuleName,
+			oracletypes.ModuleName,
 		},
 	}
 )

@@ -28,6 +28,7 @@ import (
 	ibcexported "github.com/cosmos/ibc-go/v7/modules/core/exported"
 
 	customminttypes "github.com/sentinel-official/hub/v12/x/mint/types"
+	oracletypes "github.com/sentinel-official/hub/v12/x/oracle/types"
 	swaptypes "github.com/sentinel-official/hub/v12/x/swap/types"
 	vpntypes "github.com/sentinel-official/hub/v12/x/vpn/types"
 )
@@ -69,6 +70,7 @@ func NewStoreKeys() StoreKeys {
 
 			// Sentinel Hub keys
 			customminttypes.StoreKey,
+			oracletypes.StoreKey,
 			swaptypes.StoreKey,
 			vpntypes.StoreKey,
 
