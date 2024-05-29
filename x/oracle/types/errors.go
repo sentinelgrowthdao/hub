@@ -12,8 +12,8 @@ import (
 var (
 	ErrorInvalidMessage = sdkerrors.Register(ModuleName, 101, "invalid message")
 
-	ErrorAssetNotFound      = sdkerrors.Register(ModuleName, 201, "asset not found")
-	ErrorAssetPriceNotFound = sdkerrors.Register(ModuleName, 202, "asset price not found")
+	ErrorAssetNotFound = sdkerrors.Register(ModuleName, 201, "asset not found")
+	ErrorDenomNotFound = sdkerrors.Register(ModuleName, 202, "denom not found")
 )
 
 func NewErrorInvalidVersion(version, expected string) error {
@@ -36,6 +36,6 @@ func NewErrorAssetNotFound(denom string) error {
 	return sdkerrors.Wrapf(ErrorAssetNotFound, "asset %s does not exist", denom)
 }
 
-func NewErrorAssetPriceNotFound(denom string) error {
-	return sdkerrors.Wrapf(ErrorAssetPriceNotFound, "price for asset %s does not exist", denom)
+func NewErrorDenomtNotFound(portID, channelID string, sequence uint64) error {
+	return sdkerrors.Wrapf(ErrorAssetNotFound, "denom for packet %s/%s/%d does not exist", portID, channelID, sequence)
 }
