@@ -37,8 +37,8 @@ func (im IBCModule) OnChanOpenInit(
 		return "", types.NewErrorInvalidVersion(version, types.Version)
 	}
 
-	if order != ibcchanneltypes.UNORDERED {
-		return "", types.NewErrorInvalidChannelOrdering(order, ibcchanneltypes.UNORDERED)
+	if order != ibcchanneltypes.ORDERED {
+		return "", types.NewErrorInvalidChannelOrdering(order, ibcchanneltypes.ORDERED)
 	}
 
 	boundPortID := im.k.GetPortID(ctx)
@@ -61,8 +61,8 @@ func (im IBCModule) OnChanOpenTry(
 		return "", types.NewErrorInvalidCounterpartyVersion(counterpartyVersion, types.Version)
 	}
 
-	if order != ibcchanneltypes.UNORDERED {
-		return "", types.NewErrorInvalidChannelOrdering(order, ibcchanneltypes.UNORDERED)
+	if order != ibcchanneltypes.ORDERED {
+		return "", types.NewErrorInvalidChannelOrdering(order, ibcchanneltypes.ORDERED)
 	}
 
 	boundPortID := im.k.GetPortID(ctx)
@@ -94,7 +94,7 @@ func (im IBCModule) OnChanCloseInit(_ sdk.Context, _, _ string) error {
 func (im IBCModule) OnChanCloseConfirm(_ sdk.Context, _, _ string) error { return nil }
 
 func (im IBCModule) OnRecvPacket(_ sdk.Context, _ ibcchanneltypes.Packet, _ sdk.AccAddress) ibcexported.Acknowledgement {
-	err := sdkerrors.Wrap(ibcerrors.ErrInvalidRequest, "oracle module can not receive packets")
+	err := sdkerrors.Wrap(ibcerrors.ErrInvalidRequest, "oracle module can not receive the packets")
 	return ibcchanneltypes.NewErrorAcknowledgement(err)
 }
 
