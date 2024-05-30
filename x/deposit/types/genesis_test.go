@@ -8,7 +8,7 @@ import (
 
 func TestDefaultGenesisState(t *testing.T) {
 	var (
-		state GenesisState
+		state *GenesisState
 	)
 
 	state = DefaultGenesisState()
@@ -18,7 +18,7 @@ func TestDefaultGenesisState(t *testing.T) {
 func TestNewGenesisState(t *testing.T) {
 	var (
 		deposits Deposits
-		state    GenesisState
+		state    *GenesisState
 	)
 
 	state = NewGenesisState(nil)
@@ -26,20 +26,20 @@ func TestNewGenesisState(t *testing.T) {
 	require.Len(t, state, 0)
 
 	state = NewGenesisState(deposits)
-	require.Equal(t, GenesisState(nil), state)
+	require.Equal(t, GenesisState{Deposits: nil}, state)
 	require.Len(t, state, 0)
 
 	deposits = append(deposits,
 		Deposit{},
 	)
 	state = NewGenesisState(deposits)
-	require.Equal(t, GenesisState(deposits), state)
+	require.Equal(t, GenesisState{Deposits: nil}, state)
 	require.Len(t, state, 1)
 
 	deposits = append(deposits,
 		Deposit{},
 	)
 	state = NewGenesisState(deposits)
-	require.Equal(t, GenesisState(deposits), state)
+	require.Equal(t, GenesisState{Deposits: nil}, state)
 	require.Len(t, state, 2)
 }

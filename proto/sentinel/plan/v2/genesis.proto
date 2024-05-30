@@ -17,3 +17,13 @@ message GenesisPlan {
   // Field 2: List of node addresses associated with the plan.
   repeated string nodes = 2;
 }
+
+message GenesisState {
+  // Field 1: List of plans included in the genesis state.
+  // - (gogoproto.moretags) = "yaml:\"plans\"": YAML tag for better representation.
+  // - (gogoproto.nullable) = false: Field is not nullable.
+  repeated GenesisPlan plans = 1 [
+    (gogoproto.moretags) = "yaml:\"plans\"",
+    (gogoproto.nullable) = false
+  ];
+}

@@ -12,10 +12,10 @@ import (
 )
 
 func NewGenesisState(
-	deposits deposittypes.GenesisState,
+	deposits *deposittypes.GenesisState,
 	providers *providertypes.GenesisState,
 	nodes *nodetypes.GenesisState,
-	plans plantypes.GenesisState,
+	plans *plantypes.GenesisState,
 	subscriptions *subscriptiontypes.GenesisState,
 	sessions *sessiontypes.GenesisState,
 ) *GenesisState {

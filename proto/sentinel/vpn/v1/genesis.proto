@@ -2,7 +2,7 @@ syntax = "proto3";
 package sentinel.vpn.v1;
 
 import "gogoproto/gogo.proto";
-import "sentinel/deposit/v1/deposit.proto";
+import "sentinel/deposit/v1/genesis.proto";
 import "sentinel/node/v2/genesis.proto";
 import "sentinel/plan/v2/genesis.proto";
 import "sentinel/provider/v2/genesis.proto";
@@ -17,14 +17,14 @@ option (gogoproto.goproto_getters_all) = false;
 message GenesisState {
   // Field 1: List of deposits associated with the Sentinel module.
   // This field is not nullable.
-  repeated sentinel.deposit.v1.Deposit deposits = 1 [(gogoproto.nullable) = false];
+  sentinel.deposit.v1.GenesisState deposits = 1;
 
   // Field 2: Genesis state for nodes in the Sentinel module.
   sentinel.node.v2.GenesisState nodes = 2;
 
   // Field 3: List of plans associated with the Sentinel module.
   // This field is not nullable.
-  repeated sentinel.plan.v2.GenesisPlan plans = 3 [(gogoproto.nullable) = false];
+  sentinel.plan.v2.GenesisState plans = 3;
 
   // Field 4: Genesis state for providers in the Sentinel module.
   sentinel.provider.v2.GenesisState providers = 4;

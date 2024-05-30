@@ -8,8 +8,8 @@ import (
 	"github.com/sentinel-official/hub/v12/x/plan/types"
 )
 
-func InitGenesis(ctx sdk.Context, k keeper.Keeper, state types.GenesisState) {
-	for _, item := range state {
+func InitGenesis(ctx sdk.Context, k keeper.Keeper, state *types.GenesisState) {
+	for _, item := range state.Plans {
 		addr := item.Plan.GetProviderAddress()
 		k.SetPlan(ctx, item.Plan)
 		k.SetPlanForProvider(ctx, addr, item.Plan.ID)
@@ -25,7 +25,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, state types.GenesisState) {
 	}
 
 	count := uint64(0)
-	for _, item := range state {
+	for _, item := range state.Plans {
 		if item.Plan.ID > count {
 			count = item.Plan.ID
 		}
@@ -34,7 +34,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, state types.GenesisState) {
 	k.SetCount(ctx, count)
 }
 
-func ExportGenesis(ctx sdk.Context, k keeper.Keeper) types.GenesisState {
+func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	var (
 		plans = k.GetPlans(ctx)
 		items = make(types.GenesisPlans, 0, len(plans))

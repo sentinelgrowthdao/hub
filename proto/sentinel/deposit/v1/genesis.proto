@@ -1,0 +1,20 @@
+syntax = "proto3";
+package sentinel.deposit.v1;
+
+import "gogoproto/gogo.proto";
+import "sentinel/deposit/v1/deposit.proto";
+
+option go_package = "github.com/sentinel-official/hub/v12/x/deposit/types";
+option (gogoproto.equal_all) = false;
+option (gogoproto.goproto_getters_all) = false;
+
+// GenesisState represents the genesis state for the module.
+message GenesisState {
+  // Field 1: List of deposits included in the genesis state.
+  // - (gogoproto.moretags) = "yaml:\"deposits\"": YAML tag for better representation.
+  // - (gogoproto.nullable) = false: Field is not nullable.
+  repeated Deposit deposits = 1 [
+    (gogoproto.moretags) = "yaml:\"deposits\"",
+    (gogoproto.nullable) = false
+  ];
+}
