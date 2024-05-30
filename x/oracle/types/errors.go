@@ -4,6 +4,7 @@ package types
 
 import (
 	sdkerrors "cosmossdk.io/errors"
+	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	ibcchanneltypes "github.com/cosmos/ibc-go/v7/modules/core/04-channel/types"
 	ibcporttypes "github.com/cosmos/ibc-go/v7/modules/core/05-port/types"
 	ibcerrors "github.com/cosmos/ibc-go/v7/modules/core/errors"
@@ -38,4 +39,8 @@ func NewErrorAssetNotFound(denom string) error {
 
 func NewErrorDenomtNotFound(portID, channelID string, sequence uint64) error {
 	return sdkerrors.Wrapf(ErrorAssetNotFound, "denom for packet %s/%s/%d does not exist", portID, channelID, sequence)
+}
+
+func NewErrorInvalidSigner(from, expected string) error {
+	return sdkerrors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority %s; expected %s", from, expected)
 }

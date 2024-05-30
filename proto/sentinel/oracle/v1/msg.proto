@@ -2,9 +2,19 @@ syntax = "proto3";
 package sentinel.oracle.v1;
 
 import "gogoproto/gogo.proto";
+import "sentinel/oracle/v1/params.proto";
 
 option go_package = "github.com/sentinel-official/hub/v12/x/oracle/types";
 option (gogoproto.equal_all) = false;
 option (gogoproto.goproto_getters_all) = false;
 
-service MsgService {}
+message MsgUpdateParamsRequest {
+  string from = 1;
+  Params params = 2 [(gogoproto.nullable) = false];
+}
+
+message MsgUpdateParamsResponse {}
+
+service MsgService {
+  rpc MsgUpdateParams(MsgUpdateParamsRequest) returns (MsgUpdateParamsResponse);
+}
