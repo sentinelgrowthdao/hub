@@ -12,7 +12,7 @@ func TestDefaultGenesisState(t *testing.T) {
 	)
 
 	state = DefaultGenesisState()
-	require.Equal(t, GenesisState{Plans: nil}, state)
+	require.Equal(t, &GenesisState{Plans: nil}, state)
 }
 
 func TestNewGenesisState(t *testing.T) {
@@ -22,24 +22,24 @@ func TestNewGenesisState(t *testing.T) {
 	)
 
 	state = NewGenesisState(nil)
-	require.Nil(t, state)
-	require.Len(t, state, 0)
+	require.Equal(t, &GenesisState{Plans: nil}, state)
+	require.Len(t, state.Plans, 0)
 
 	state = NewGenesisState(plans)
-	require.Equal(t, GenesisState{Plans: nil}, state)
-	require.Len(t, state, 0)
-
-	plans = append(plans,
-		GenesisPlan{},
-	)
-	state = NewGenesisState(plans)
-	require.Equal(t, GenesisState{Plans: nil}, state)
-	require.Len(t, state, 1)
+	require.Equal(t, &GenesisState{Plans: plans}, state)
+	require.Len(t, state.Plans, 0)
 
 	plans = append(plans,
 		GenesisPlan{},
 	)
 	state = NewGenesisState(plans)
-	require.Equal(t, GenesisState{Plans: nil}, state)
-	require.Len(t, state, 2)
+	require.Equal(t, &GenesisState{Plans: plans}, state)
+	require.Len(t, state.Plans, 1)
+
+	plans = append(plans,
+		GenesisPlan{},
+	)
+	state = NewGenesisState(plans)
+	require.Equal(t, &GenesisState{Plans: plans}, state)
+	require.Len(t, state.Plans, 2)
 }
