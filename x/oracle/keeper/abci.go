@@ -18,17 +18,17 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 		return nil
 	}
 
-	k.IterateAssets(ctx, func(_ int, asset types.Asset) bool {
+	k.IterateAssets(ctx, func(_ int, item types.Asset) bool {
 		sequence, err := k.SendQueryPacket(
 			ctx, channelCap, portID, channelID, uint64(timeout),
-			asset.QueryGetProtoRevPoolRequest(k.cdc),
-			asset.SpotPriceRequest(k.cdc),
+			item.ProtoRevPoolRequest(k.cdc),
+			item.SpotPriceRequest(k.cdc),
 		)
 		if err != nil {
 			panic(err)
 		}
 
-		k.SetDenomForPacket(ctx, portID, channelID, sequence, asset.Denom)
+		k.SetDenomForPacket(ctx, portID, channelID, sequence, item.Denom)
 		return false
 	})
 

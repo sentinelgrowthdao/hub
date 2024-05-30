@@ -18,10 +18,6 @@ func (k *Keeper) GetCapability(ctx sdk.Context, name string) (*capabilitytypes.C
 	return k.capability.GetCapability(ctx, name)
 }
 
-func (k *Keeper) GetNextSequenceSend(ctx sdk.Context, portID, channelID string) (uint64, bool) {
-	return k.channel.GetNextSequenceSend(ctx, portID, channelID)
-}
-
 func (k *Keeper) SendPacket(
 	ctx sdk.Context, chanCap *capabilitytypes.Capability, sourcePort string, sourceChannel string,
 	timeoutHeight ibcclienttypes.Height, timeoutTimestamp uint64, data []byte,

@@ -8,7 +8,7 @@ import (
 	protorevtypes "github.com/sentinel-official/hub/v12/third_party/osmosis/x/protorev/types"
 )
 
-func (a *Asset) QueryGetProtoRevPoolRequest(cdc codec.Codec) abcitypes.RequestQuery {
+func (a *Asset) ProtoRevPoolRequest(cdc codec.Codec) abcitypes.RequestQuery {
 	return abcitypes.RequestQuery{
 		Data: cdc.MustMarshal(
 			&protorevtypes.QueryGetProtoRevPoolRequest{

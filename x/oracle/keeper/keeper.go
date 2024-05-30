@@ -6,8 +6,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	ibcporttypes "github.com/cosmos/ibc-go/v7/modules/core/05-port/types"
 	ibcexported "github.com/cosmos/ibc-go/v7/modules/core/exported"
-
-	"github.com/sentinel-official/hub/v12/x/oracle/exptected"
 )
 
 type Keeper struct {
@@ -15,20 +13,18 @@ type Keeper struct {
 	cdc        codec.Codec
 	key        storetypes.StoreKey
 	capability ibcexported.ScopedKeeper
-	channel    exptected.ChannelKeeper
 	ics4       ibcporttypes.ICS4Wrapper
 }
 
 func NewKeeper(
-	cdc codec.Codec, key storetypes.StoreKey, capability ibcexported.ScopedKeeper, channel exptected.ChannelKeeper,
-	ics4 ibcporttypes.ICS4Wrapper, authority string,
+	cdc codec.Codec, key storetypes.StoreKey, capability ibcexported.ScopedKeeper, ics4 ibcporttypes.ICS4Wrapper,
+	authority string,
 ) Keeper {
 	return Keeper{
 		authority:  authority,
 		cdc:        cdc,
 		key:        key,
 		capability: capability,
-		channel:    channel,
 		ics4:       ics4,
 	}
 }
