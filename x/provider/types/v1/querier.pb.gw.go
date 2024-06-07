@@ -2,11 +2,11 @@
 // source: sentinel/provider/v1/querier.proto
 
 /*
-Package v1 is a reverse proxy.
+Package v1types is a reverse proxy.
 
 It translates gRPC into RESTful JSON APIs.
 */
-package v1
+package v1types
 
 import (
 	"context"
