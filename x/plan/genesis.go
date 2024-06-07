@@ -3,7 +3,7 @@ package plan
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/plan/keeper"
 	"github.com/sentinel-official/hub/v12/x/plan/types"
 )
@@ -15,7 +15,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, state *types.GenesisState) {
 		k.SetPlanForProvider(ctx, addr, item.Plan.ID)
 
 		for _, node := range item.Nodes {
-			addr, err := hubtypes.NodeAddressFromBech32(node)
+			addr, err := base.NodeAddressFromBech32(node)
 			if err != nil {
 				panic(err)
 			}

@@ -6,7 +6,7 @@ import (
 	abcitypes "github.com/cometbft/cometbft/abci/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/node/types"
 )
 
@@ -107,13 +107,13 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 		k.DeleteNodeForInactiveAt(ctx, item.InactiveAt, nodeAddr)
 
 		item.InactiveAt = time.Time{}
-		item.Status = hubtypes.StatusInactive
+		item.Status = base.StatusInactive
 		item.StatusAt = ctx.BlockTime()
 
 		k.SetNode(ctx, item)
 		ctx.EventManager().EmitTypedEvent(
 			&types.EventUpdateStatus{
-				Status:  hubtypes.StatusInactive,
+				Status:  base.StatusInactive,
 				Address: item.Address,
 			},
 		)

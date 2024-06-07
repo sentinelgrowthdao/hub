@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/plan/types"
 )
 
@@ -53,9 +53,9 @@ func (q *queryServer) QueryPlans(c context.Context, req *types.QueryPlansRequest
 	)
 
 	switch req.Status {
-	case hubtypes.StatusActive:
+	case base.StatusActive:
 		keyPrefix = types.ActivePlanKeyPrefix
-	case hubtypes.StatusInactive:
+	case base.StatusInactive:
 		keyPrefix = types.InactivePlanKeyPrefix
 	default:
 		keyPrefix = types.PlanKeyPrefix
@@ -84,7 +84,7 @@ func (q *queryServer) QueryPlansForProvider(c context.Context, req *types.QueryP
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
-	addr, err := hubtypes.ProvAddressFromBech32(req.Address)
+	addr, err := base.ProvAddressFromBech32(req.Address)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "invalid address %s", req.Address)
 	}
@@ -105,7 +105,7 @@ func (q *queryServer) QueryPlansForProvider(c context.Context, req *types.QueryP
 			return false, fmt.Errorf("plan for key %X does not exist", key)
 		}
 
-		if req.Status.Equal(hubtypes.StatusUnspecified) || item.Status.Equal(req.Status) {
+		if req.Status.Equal(base.StatusUnspecified) || item.Status.Equal(req.Status) {
 			items = append(items, item)
 			return true, nil
 		}

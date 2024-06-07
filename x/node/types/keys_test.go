@@ -8,7 +8,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/address"
 	"github.com/stretchr/testify/require"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 func TestActiveNodeKey(t *testing.T) {
@@ -46,10 +46,10 @@ func TestAddressFromNodeForInactiveAtKey(t *testing.T) {
 		addr = make([]byte, i)
 		_, _ = rand.Read(addr)
 
-		key = NodeForInactiveAtKey(hubtypes.TestTimeNow, addr)
+		key = NodeForInactiveAtKey(base.TestTimeNow, addr)
 		require.Equal(
 			t,
-			hubtypes.NodeAddress(addr),
+			base.NodeAddress(addr),
 			AddressFromNodeForInactiveAtKey(key),
 		)
 	}
@@ -68,7 +68,7 @@ func TestAddressFromNodeForPlanKey(t *testing.T) {
 		key = NodeForPlanKey(uint64(i), addr)
 		require.Equal(
 			t,
-			hubtypes.NodeAddress(addr),
+			base.NodeAddress(addr),
 			AddressFromNodeForPlanKey(key),
 		)
 	}
@@ -111,15 +111,15 @@ func TestNodeForInactiveAtKey(t *testing.T) {
 		if i < 256 {
 			require.Equal(
 				t,
-				append(append(NodeForInactiveAtKeyPrefix, sdk.FormatTimeBytes(hubtypes.TestTimeNow)...), address.MustLengthPrefix(addr)...),
-				NodeForInactiveAtKey(hubtypes.TestTimeNow, addr),
+				append(append(NodeForInactiveAtKeyPrefix, sdk.FormatTimeBytes(base.TestTimeNow)...), address.MustLengthPrefix(addr)...),
+				NodeForInactiveAtKey(base.TestTimeNow, addr),
 			)
 
 			continue
 		}
 
 		require.Panics(t, func() {
-			NodeForInactiveAtKey(hubtypes.TestTimeNow, addr)
+			NodeForInactiveAtKey(base.TestTimeNow, addr)
 		})
 	}
 }

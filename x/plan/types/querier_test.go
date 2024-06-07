@@ -7,7 +7,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"github.com/stretchr/testify/require"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 func TestNewQueryPlanRequest(t *testing.T) {
@@ -25,13 +25,13 @@ func TestNewQueryPlanRequest(t *testing.T) {
 func TestNewQueryPlansForProviderRequest(t *testing.T) {
 	var (
 		address    []byte
-		status     hubtypes.Status
+		status     base.Status
 		pagination *query.PageRequest
 	)
 
 	for i := 0; i < 40; i++ {
 		address = make([]byte, i)
-		status = hubtypes.Status(i % 4)
+		status = base.Status(i % 4)
 		pagination = &query.PageRequest{
 			Key:        make([]byte, i),
 			Offset:     uint64(i),
@@ -45,7 +45,7 @@ func TestNewQueryPlansForProviderRequest(t *testing.T) {
 		require.Equal(
 			t,
 			&QueryPlansForProviderRequest{
-				Address:    hubtypes.ProvAddress(address).String(),
+				Address:    base.ProvAddress(address).String(),
 				Status:     status,
 				Pagination: pagination,
 			},
@@ -56,12 +56,12 @@ func TestNewQueryPlansForProviderRequest(t *testing.T) {
 
 func TestNewQueryPlansRequest(t *testing.T) {
 	var (
-		status     hubtypes.Status
+		status     base.Status
 		pagination *query.PageRequest
 	)
 
 	for i := 0; i < 20; i++ {
-		status = hubtypes.Status(i % 4)
+		status = base.Status(i % 4)
 		pagination = &query.PageRequest{
 			Key:        make([]byte, i),
 			Offset:     uint64(i),

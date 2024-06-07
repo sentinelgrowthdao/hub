@@ -9,7 +9,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/node/types"
 )
 
@@ -24,7 +24,7 @@ func queryNode() *cobra.Command {
 				return err
 			}
 
-			addr, err := hubtypes.NodeAddressFromBech32(args[0])
+			addr, err := base.NodeAddressFromBech32(args[0])
 			if err != nil {
 				return err
 			}
@@ -67,7 +67,7 @@ func queryNodes() *cobra.Command {
 				return err
 			}
 
-			status, err := hubtypes.StatusFromFlags(cmd.Flags())
+			status, err := base.StatusFromFlags(cmd.Flags())
 			if err != nil {
 				return err
 			}
@@ -114,7 +114,7 @@ func queryNodes() *cobra.Command {
 
 	flags.AddQueryFlagsToCmd(cmd)
 	flags.AddPaginationFlagsToCmd(cmd, "nodes")
-	cmd.Flags().String(hubtypes.FlagStatus, "", "filter the nodes by status (active|inactive)")
+	cmd.Flags().String(base.FlagStatus, "", "filter the nodes by status (active|inactive)")
 	cmd.Flags().Uint64(flagPlan, 0, "filter the nodes by subscription plan")
 
 	return cmd

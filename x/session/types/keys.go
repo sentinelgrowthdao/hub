@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/address"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 const (
@@ -37,11 +37,11 @@ func SessionForAccountKey(addr sdk.AccAddress, id uint64) []byte {
 	return append(GetSessionForAccountKeyPrefix(addr), sdk.Uint64ToBigEndian(id)...)
 }
 
-func GetSessionForNodeKeyPrefix(addr hubtypes.NodeAddress) []byte {
+func GetSessionForNodeKeyPrefix(addr base.NodeAddress) []byte {
 	return append(SessionForNodeKeyPrefix, address.MustLengthPrefix(addr.Bytes())...)
 }
 
-func SessionForNodeKey(addr hubtypes.NodeAddress, id uint64) []byte {
+func SessionForNodeKey(addr base.NodeAddress, id uint64) []byte {
 	return append(GetSessionForNodeKeyPrefix(addr), sdk.Uint64ToBigEndian(id)...)
 }
 

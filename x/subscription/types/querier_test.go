@@ -4,7 +4,7 @@ import (
 	"crypto/rand"
 	"testing"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
@@ -124,7 +124,7 @@ func TestNewQuerySubscriptionsForNodeRequest(t *testing.T) {
 		require.Equal(
 			t,
 			&QuerySubscriptionsForNodeRequest{
-				Address:    hubtypes.NodeAddress(addr).String(),
+				Address:    base.NodeAddress(addr).String(),
 				Pagination: pagination,
 			},
 			NewQuerySubscriptionsForNodeRequest(addr, pagination),

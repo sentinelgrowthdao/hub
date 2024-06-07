@@ -6,7 +6,7 @@ import (
 	sdkerrors "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 // The `types` package contains custom message types for the Cosmos SDK.
@@ -22,7 +22,7 @@ var (
 )
 
 // NewMsgCreateRequest creates a new MsgCreateRequest instance with the given parameters.
-func NewMsgCreateRequest(from hubtypes.ProvAddress, duration time.Duration, gigabytes int64, prices sdk.Coins) *MsgCreateRequest {
+func NewMsgCreateRequest(from base.ProvAddress, duration time.Duration, gigabytes int64, prices sdk.Coins) *MsgCreateRequest {
 	return &MsgCreateRequest{
 		From:      from.String(),
 		Duration:  duration,
@@ -40,7 +40,7 @@ func (m *MsgCreateRequest) ValidateBasic() error {
 	if m.From == "" {
 		return sdkerrors.Wrap(ErrorInvalidMessage, "from cannot be empty")
 	}
-	if _, err := hubtypes.ProvAddressFromBech32(m.From); err != nil {
+	if _, err := base.ProvAddressFromBech32(m.From); err != nil {
 		return sdkerrors.Wrap(ErrorInvalidMessage, err.Error())
 	}
 	if m.Duration < 0 {
@@ -73,7 +73,7 @@ func (m *MsgCreateRequest) ValidateBasic() error {
 
 // GetSigners returns an array containing the signer's account address extracted from the 'From' field of the MsgCreateRequest.
 func (m *MsgCreateRequest) GetSigners() []sdk.AccAddress {
-	from, err := hubtypes.ProvAddressFromBech32(m.From)
+	from, err := base.ProvAddressFromBech32(m.From)
 	if err != nil {
 		panic(err)
 	}
@@ -82,7 +82,7 @@ func (m *MsgCreateRequest) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgUpdateStatusRequest creates a new MsgUpdateStatusRequest instance with the given parameters.
-func NewMsgUpdateStatusRequest(from hubtypes.ProvAddress, id uint64, status hubtypes.Status) *MsgUpdateStatusRequest {
+func NewMsgUpdateStatusRequest(from base.ProvAddress, id uint64, status base.Status) *MsgUpdateStatusRequest {
 	return &MsgUpdateStatusRequest{
 		From:   from.String(),
 		ID:     id,
@@ -98,13 +98,13 @@ func (m *MsgUpdateStatusRequest) ValidateBasic() error {
 	if m.From == "" {
 		return sdkerrors.Wrap(ErrorInvalidMessage, "from cannot be empty")
 	}
-	if _, err := hubtypes.ProvAddressFromBech32(m.From); err != nil {
+	if _, err := base.ProvAddressFromBech32(m.From); err != nil {
 		return sdkerrors.Wrap(ErrorInvalidMessage, err.Error())
 	}
 	if m.ID == 0 {
 		return sdkerrors.Wrap(ErrorInvalidMessage, "id cannot be zero")
 	}
-	if !m.Status.IsOneOf(hubtypes.StatusActive, hubtypes.StatusInactive) {
+	if !m.Status.IsOneOf(base.StatusActive, base.StatusInactive) {
 		return sdkerrors.Wrap(ErrorInvalidMessage, "status must be one of [active, inactive]")
 	}
 
@@ -113,7 +113,7 @@ func (m *MsgUpdateStatusRequest) ValidateBasic() error {
 
 // GetSigners returns an array containing the signer's account address extracted from the 'From' field of the MsgUpdateStatusRequest.
 func (m *MsgUpdateStatusRequest) GetSigners() []sdk.AccAddress {
-	from, err := hubtypes.ProvAddressFromBech32(m.From)
+	from, err := base.ProvAddressFromBech32(m.From)
 	if err != nil {
 		panic(err)
 	}
@@ -122,7 +122,7 @@ func (m *MsgUpdateStatusRequest) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgLinkNodeRequest creates a new MsgLinkNodeRequest instance with the given parameters.
-func NewMsgLinkNodeRequest(from hubtypes.ProvAddress, id uint64, addr hubtypes.NodeAddress) *MsgLinkNodeRequest {
+func NewMsgLinkNodeRequest(from base.ProvAddress, id uint64, addr base.NodeAddress) *MsgLinkNodeRequest {
 	return &MsgLinkNodeRequest{
 		From:        from.String(),
 		ID:          id,
@@ -138,7 +138,7 @@ func (m *MsgLinkNodeRequest) ValidateBasic() error {
 	if m.From == "" {
 		return sdkerrors.Wrap(ErrorInvalidMessage, "from cannot be empty")
 	}
-	if _, err := hubtypes.ProvAddressFromBech32(m.From); err != nil {
+	if _, err := base.ProvAddressFromBech32(m.From); err != nil {
 		return sdkerrors.Wrap(ErrorInvalidMessage, err.Error())
 	}
 	if m.ID == 0 {
@@ -147,7 +147,7 @@ func (m *MsgLinkNodeRequest) ValidateBasic() error {
 	if m.NodeAddress == "" {
 		return sdkerrors.Wrap(ErrorInvalidMessage, "node_address cannot be empty")
 	}
-	if _, err := hubtypes.NodeAddressFromBech32(m.NodeAddress); err != nil {
+	if _, err := base.NodeAddressFromBech32(m.NodeAddress); err != nil {
 		return sdkerrors.Wrap(ErrorInvalidMessage, err.Error())
 	}
 
@@ -156,7 +156,7 @@ func (m *MsgLinkNodeRequest) ValidateBasic() error {
 
 // GetSigners returns an array containing the signer's account address extracted from the 'From' field of the MsgLinkNodeRequest.
 func (m *MsgLinkNodeRequest) GetSigners() []sdk.AccAddress {
-	from, err := hubtypes.ProvAddressFromBech32(m.From)
+	from, err := base.ProvAddressFromBech32(m.From)
 	if err != nil {
 		panic(err)
 	}
@@ -165,7 +165,7 @@ func (m *MsgLinkNodeRequest) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgUnlinkNodeRequest creates a new MsgUnlinkNodeRequest instance with the given parameters.
-func NewMsgUnlinkNodeRequest(from hubtypes.ProvAddress, id uint64, addr hubtypes.NodeAddress) *MsgUnlinkNodeRequest {
+func NewMsgUnlinkNodeRequest(from base.ProvAddress, id uint64, addr base.NodeAddress) *MsgUnlinkNodeRequest {
 	return &MsgUnlinkNodeRequest{
 		From:        from.String(),
 		ID:          id,
@@ -181,7 +181,7 @@ func (m *MsgUnlinkNodeRequest) ValidateBasic() error {
 	if m.From == "" {
 		return sdkerrors.Wrap(ErrorInvalidMessage, "from cannot be empty")
 	}
-	if _, err := hubtypes.ProvAddressFromBech32(m.From); err != nil {
+	if _, err := base.ProvAddressFromBech32(m.From); err != nil {
 		return sdkerrors.Wrap(ErrorInvalidMessage, err.Error())
 	}
 	if m.ID == 0 {
@@ -190,7 +190,7 @@ func (m *MsgUnlinkNodeRequest) ValidateBasic() error {
 	if m.NodeAddress == "" {
 		return sdkerrors.Wrap(ErrorInvalidMessage, "node_address cannot be empty")
 	}
-	if _, err := hubtypes.NodeAddressFromBech32(m.NodeAddress); err != nil {
+	if _, err := base.NodeAddressFromBech32(m.NodeAddress); err != nil {
 		return sdkerrors.Wrap(ErrorInvalidMessage, err.Error())
 	}
 
@@ -199,7 +199,7 @@ func (m *MsgUnlinkNodeRequest) ValidateBasic() error {
 
 // GetSigners returns an array containing the signer's account address extracted from the 'From' field of the MsgUnlinkNodeRequest.
 func (m *MsgUnlinkNodeRequest) GetSigners() []sdk.AccAddress {
-	from, err := hubtypes.ProvAddressFromBech32(m.From)
+	from, err := base.ProvAddressFromBech32(m.From)
 	if err != nil {
 		panic(err)
 	}

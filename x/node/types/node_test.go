@@ -8,7 +8,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 func TestNode_GetAddress(t *testing.T) {
@@ -18,21 +18,21 @@ func TestNode_GetAddress(t *testing.T) {
 	tests := []struct {
 		name   string
 		fields fields
-		want   hubtypes.NodeAddress
+		want   base.NodeAddress
 	}{
 		{
 			"address empty",
 			fields{
-				Address: hubtypes.TestAddrEmpty,
+				Address: base.TestAddrEmpty,
 			},
 			nil,
 		},
 		{
 			"address 20 bytes",
 			fields{
-				Address: hubtypes.TestBech32NodeAddr20Bytes,
+				Address: base.TestBech32NodeAddr20Bytes,
 			},
-			hubtypes.NodeAddress{0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x20},
+			base.NodeAddress{0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x20},
 		},
 	}
 	for _, tt := range tests {
@@ -64,100 +64,100 @@ func TestNode_GigabytePrice(t *testing.T) {
 		{
 			"gigabyte_prices nil and denom empty",
 			fields{
-				GigabytePrices: hubtypes.TestCoinsNil,
+				GigabytePrices: base.TestCoinsNil,
 			},
 			args{
-				denom: hubtypes.TestDenomEmpty,
+				denom: base.TestDenomEmpty,
 			},
-			hubtypes.TestCoinEmpty,
+			base.TestCoinEmpty,
 			false,
 		},
 		{
 			"gigabyte_prices empty and denom empty",
 			fields{
-				GigabytePrices: hubtypes.TestCoinsEmpty,
+				GigabytePrices: base.TestCoinsEmpty,
 			},
 			args{
-				denom: hubtypes.TestDenomEmpty,
+				denom: base.TestDenomEmpty,
 			},
-			hubtypes.TestCoinEmpty,
+			base.TestCoinEmpty,
 			false,
 		},
 		{
 			"gigabyte_prices 1000one and denom empty",
 			fields{
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
+				GigabytePrices: base.TestCoinsPositiveAmount,
 			},
 			args{
-				denom: hubtypes.TestDenomEmpty,
+				denom: base.TestDenomEmpty,
 			},
-			hubtypes.TestCoinEmpty,
+			base.TestCoinEmpty,
 			false,
 		},
 		{
 			"gigabyte_prices nil and denom one",
 			fields{
-				GigabytePrices: hubtypes.TestCoinsNil,
+				GigabytePrices: base.TestCoinsNil,
 			},
 			args{
-				denom: hubtypes.TestDenomOne,
+				denom: base.TestDenomOne,
 			},
-			hubtypes.TestCoinEmpty,
+			base.TestCoinEmpty,
 			false,
 		},
 		{
 			"gigabyte_prices empty and denom one",
 			fields{
-				GigabytePrices: hubtypes.TestCoinsEmpty,
+				GigabytePrices: base.TestCoinsEmpty,
 			},
 			args{
-				denom: hubtypes.TestDenomOne,
+				denom: base.TestDenomOne,
 			},
-			hubtypes.TestCoinEmpty,
+			base.TestCoinEmpty,
 			false,
 		},
 		{
 			"gigabyte_prices 1000one and denom one",
 			fields{
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
+				GigabytePrices: base.TestCoinsPositiveAmount,
 			},
 			args{
-				denom: hubtypes.TestDenomOne,
+				denom: base.TestDenomOne,
 			},
-			hubtypes.TestCoinPositiveAmount,
+			base.TestCoinPositiveAmount,
 			true,
 		},
 		{
 			"gigabyte_prices nil and denom two",
 			fields{
-				GigabytePrices: hubtypes.TestCoinsNil,
+				GigabytePrices: base.TestCoinsNil,
 			},
 			args{
-				denom: hubtypes.TestDenomTwo,
+				denom: base.TestDenomTwo,
 			},
-			hubtypes.TestCoinEmpty,
+			base.TestCoinEmpty,
 			false,
 		},
 		{
 			"gigabyte_prices empty and denom two",
 			fields{
-				GigabytePrices: hubtypes.TestCoinsEmpty,
+				GigabytePrices: base.TestCoinsEmpty,
 			},
 			args{
-				denom: hubtypes.TestDenomTwo,
+				denom: base.TestDenomTwo,
 			},
-			hubtypes.TestCoinEmpty,
+			base.TestCoinEmpty,
 			false,
 		},
 		{
 			"gigabyte_prices 1000one and denom two",
 			fields{
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
+				GigabytePrices: base.TestCoinsPositiveAmount,
 			},
 			args{
-				denom: hubtypes.TestDenomTwo,
+				denom: base.TestDenomTwo,
 			},
-			hubtypes.TestCoinEmpty,
+			base.TestCoinEmpty,
 			false,
 		},
 	}
@@ -194,34 +194,34 @@ func TestNode_HourlyPrice(t *testing.T) {
 		{
 			"hourly_prices nil and denom empty",
 			fields{
-				HourlyPrices: hubtypes.TestCoinsNil,
+				HourlyPrices: base.TestCoinsNil,
 			},
 			args{
-				denom: hubtypes.TestDenomEmpty,
+				denom: base.TestDenomEmpty,
 			},
-			hubtypes.TestCoinEmpty,
+			base.TestCoinEmpty,
 			false,
 		},
 		{
 			"hourly_prices empty and denom empty",
 			fields{
-				HourlyPrices: hubtypes.TestCoinsEmpty,
+				HourlyPrices: base.TestCoinsEmpty,
 			},
 			args{
-				denom: hubtypes.TestDenomEmpty,
+				denom: base.TestDenomEmpty,
 			},
-			hubtypes.TestCoinEmpty,
+			base.TestCoinEmpty,
 			false,
 		},
 		{
 			"hourly_prices 1000one and denom empty",
 			fields{
-				HourlyPrices: hubtypes.TestCoinsPositiveAmount,
+				HourlyPrices: base.TestCoinsPositiveAmount,
 			},
 			args{
-				denom: hubtypes.TestDenomEmpty,
+				denom: base.TestDenomEmpty,
 			},
-			hubtypes.TestCoinEmpty,
+			base.TestCoinEmpty,
 			false,
 		},
 		{
@@ -230,31 +230,31 @@ func TestNode_HourlyPrice(t *testing.T) {
 				HourlyPrices: nil,
 			},
 			args{
-				denom: hubtypes.TestDenomOne,
+				denom: base.TestDenomOne,
 			},
-			hubtypes.TestCoinEmpty,
+			base.TestCoinEmpty,
 			false,
 		},
 		{
 			"hourly_prices empty and denom one",
 			fields{
-				HourlyPrices: hubtypes.TestCoinsEmpty,
+				HourlyPrices: base.TestCoinsEmpty,
 			},
 			args{
-				denom: hubtypes.TestDenomOne,
+				denom: base.TestDenomOne,
 			},
-			hubtypes.TestCoinEmpty,
+			base.TestCoinEmpty,
 			false,
 		},
 		{
 			"hourly_prices 1000one and denom one",
 			fields{
-				HourlyPrices: hubtypes.TestCoinsPositiveAmount,
+				HourlyPrices: base.TestCoinsPositiveAmount,
 			},
 			args{
-				denom: hubtypes.TestDenomOne,
+				denom: base.TestDenomOne,
 			},
-			hubtypes.TestCoinPositiveAmount,
+			base.TestCoinPositiveAmount,
 			true,
 		},
 		{
@@ -263,31 +263,31 @@ func TestNode_HourlyPrice(t *testing.T) {
 				HourlyPrices: nil,
 			},
 			args{
-				denom: hubtypes.TestDenomTwo,
+				denom: base.TestDenomTwo,
 			},
-			hubtypes.TestCoinEmpty,
+			base.TestCoinEmpty,
 			false,
 		},
 		{
 			"hourly_prices empty and denom two",
 			fields{
-				HourlyPrices: hubtypes.TestCoinsEmpty,
+				HourlyPrices: base.TestCoinsEmpty,
 			},
 			args{
-				denom: hubtypes.TestDenomTwo,
+				denom: base.TestDenomTwo,
 			},
-			hubtypes.TestCoinEmpty,
+			base.TestCoinEmpty,
 			false,
 		},
 		{
 			"hourly_prices 1000one and denom two",
 			fields{
-				HourlyPrices: hubtypes.TestCoinsPositiveAmount,
+				HourlyPrices: base.TestCoinsPositiveAmount,
 			},
 			args{
-				denom: hubtypes.TestDenomTwo,
+				denom: base.TestDenomTwo,
 			},
-			hubtypes.TestCoinEmpty,
+			base.TestCoinEmpty,
 			false,
 		},
 	}
@@ -314,7 +314,7 @@ func TestNode_Validate(t *testing.T) {
 		HourlyPrices   sdk.Coins
 		RemoteURL      string
 		InactiveAt     time.Time
-		Status         hubtypes.Status
+		Status         base.Status
 		StatusAt       time.Time
 	}
 	tests := []struct {
@@ -325,223 +325,223 @@ func TestNode_Validate(t *testing.T) {
 		{
 			"address empty",
 			fields{
-				Address: hubtypes.TestAddrEmpty,
+				Address: base.TestAddrEmpty,
 			},
 			true,
 		},
 		{
 			"address invalid",
 			fields{
-				Address: hubtypes.TestAddrInvalid,
+				Address: base.TestAddrInvalid,
 			},
 			true,
 		},
 		{
 			"address invalid prefix",
 			fields{
-				Address: hubtypes.TestBech32AccAddr20Bytes,
+				Address: base.TestBech32AccAddr20Bytes,
 			},
 			true,
 		},
 		{
 			"address 10 bytes",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr10Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsPositiveAmount,
+				Address:        base.TestBech32NodeAddr10Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
-				InactiveAt:     hubtypes.TestTimeNow,
-				Status:         hubtypes.StatusActive,
-				StatusAt:       hubtypes.TestTimeNow,
+				InactiveAt:     base.TestTimeNow,
+				Status:         base.StatusActive,
+				StatusAt:       base.TestTimeNow,
 			},
 			false,
 		},
 		{
 			"address 20 bytes",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsPositiveAmount,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
-				InactiveAt:     hubtypes.TestTimeNow,
-				Status:         hubtypes.StatusActive,
-				StatusAt:       hubtypes.TestTimeNow,
+				InactiveAt:     base.TestTimeNow,
+				Status:         base.StatusActive,
+				StatusAt:       base.TestTimeNow,
 			},
 			false,
 		},
 		{
 			"address 30 bytes",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr30Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsPositiveAmount,
+				Address:        base.TestBech32NodeAddr30Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
-				InactiveAt:     hubtypes.TestTimeNow,
-				Status:         hubtypes.StatusActive,
-				StatusAt:       hubtypes.TestTimeNow,
+				InactiveAt:     base.TestTimeNow,
+				Status:         base.StatusActive,
+				StatusAt:       base.TestTimeNow,
 			},
 			false,
 		},
 		{
 			"gigabyte_prices nil",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsNil,
-				HourlyPrices:   hubtypes.TestCoinsPositiveAmount,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsNil,
+				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
-				InactiveAt:     hubtypes.TestTimeNow,
-				Status:         hubtypes.StatusActive,
-				StatusAt:       hubtypes.TestTimeNow,
+				InactiveAt:     base.TestTimeNow,
+				Status:         base.StatusActive,
+				StatusAt:       base.TestTimeNow,
 			},
 			true,
 		},
 		{
 			"gigabyte_prices empty",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsEmpty,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsEmpty,
 			},
 			true,
 		},
 		{
 			"gigabyte_prices empty denom",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsEmptyDenom,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsEmptyDenom,
 			},
 			true,
 		},
 		{
 			"gigabyte_prices invalid denom",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsInvalidDenom,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsInvalidDenom,
 			},
 			true,
 		},
 		{
 			"gigabyte_prices empty amount",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsEmptyAmount,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsEmptyAmount,
 			},
 			true,
 		},
 		{
 			"gigabyte_prices negative amount",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsNegativeAmount,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsNegativeAmount,
 			},
 			true,
 		},
 		{
 			"gigabyte_prices zero amount",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsZeroAmount,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsZeroAmount,
 			},
 			true,
 		},
 		{
 			"gigabyte_prices positive amount",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsPositiveAmount,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
-				InactiveAt:     hubtypes.TestTimeNow,
-				Status:         hubtypes.StatusActive,
-				StatusAt:       hubtypes.TestTimeNow,
+				InactiveAt:     base.TestTimeNow,
+				Status:         base.StatusActive,
+				StatusAt:       base.TestTimeNow,
 			},
 			false,
 		},
 		{
 			"hourly_prices nil",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsNil,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsNil,
 				RemoteURL:      "https://remote.url:443",
-				InactiveAt:     hubtypes.TestTimeNow,
-				Status:         hubtypes.StatusActive,
-				StatusAt:       hubtypes.TestTimeNow,
+				InactiveAt:     base.TestTimeNow,
+				Status:         base.StatusActive,
+				StatusAt:       base.TestTimeNow,
 			},
 			true,
 		},
 		{
 			"hourly_prices empty",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsEmpty,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsEmpty,
 			},
 			true,
 		},
 		{
 			"hourly_prices empty denom",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsEmptyDenom,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsEmptyDenom,
 			},
 			true,
 		},
 		{
 			"hourly_prices invalid denom",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsInvalidDenom,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsInvalidDenom,
 			},
 			true,
 		},
 		{
 			"hourly_prices empty amount",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsEmptyAmount,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsEmptyAmount,
 			},
 			true,
 		},
 		{
 			"hourly_prices negative amount",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsNegativeAmount,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsNegativeAmount,
 			},
 			true,
 		},
 		{
 			"hourly_prices zero amount",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsZeroAmount,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsZeroAmount,
 			},
 			true,
 		},
 		{
 			"hourly_prices positive amount",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsPositiveAmount,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
-				InactiveAt:     hubtypes.TestTimeNow,
-				Status:         hubtypes.StatusActive,
-				StatusAt:       hubtypes.TestTimeNow,
+				InactiveAt:     base.TestTimeNow,
+				Status:         base.StatusActive,
+				StatusAt:       base.TestTimeNow,
 			},
 			false,
 		},
 		{
 			"remote_url empty",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsPositiveAmount,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "",
 			},
 			true,
@@ -549,9 +549,9 @@ func TestNode_Validate(t *testing.T) {
 		{
 			"remote_url 72 chars",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsPositiveAmount,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      strings.Repeat("r", 72),
 			},
 			true,
@@ -559,9 +559,9 @@ func TestNode_Validate(t *testing.T) {
 		{
 			"remote_url invalid",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsPositiveAmount,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "invalid",
 			},
 			true,
@@ -569,9 +569,9 @@ func TestNode_Validate(t *testing.T) {
 		{
 			"remote_url invalid scheme",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsPositiveAmount,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "tcp://remote.url:80",
 			},
 			true,
@@ -579,9 +579,9 @@ func TestNode_Validate(t *testing.T) {
 		{
 			"remote_url without port",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsPositiveAmount,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url",
 			},
 			true,
@@ -589,113 +589,113 @@ func TestNode_Validate(t *testing.T) {
 		{
 			"remote_url with port",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsPositiveAmount,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
-				InactiveAt:     hubtypes.TestTimeNow,
-				Status:         hubtypes.StatusActive,
-				StatusAt:       hubtypes.TestTimeNow,
+				InactiveAt:     base.TestTimeNow,
+				Status:         base.StatusActive,
+				StatusAt:       base.TestTimeNow,
 			},
 			false,
 		},
 		{
 			"inactive_at empty",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsPositiveAmount,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
-				InactiveAt:     hubtypes.TestTimeZero,
+				InactiveAt:     base.TestTimeZero,
 			},
 			true,
 		},
 		{
 			"inactive_at now",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsPositiveAmount,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
-				InactiveAt:     hubtypes.TestTimeNow,
-				Status:         hubtypes.StatusActive,
-				StatusAt:       hubtypes.TestTimeNow,
+				InactiveAt:     base.TestTimeNow,
+				Status:         base.StatusActive,
+				StatusAt:       base.TestTimeNow,
 			},
 			false,
 		},
 		{
 			"status unspecified",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsPositiveAmount,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
-				InactiveAt:     hubtypes.TestTimeNow,
-				Status:         hubtypes.StatusUnspecified,
+				InactiveAt:     base.TestTimeNow,
+				Status:         base.StatusUnspecified,
 			},
 			true,
 		},
 		{
 			"status active",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsPositiveAmount,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
-				InactiveAt:     hubtypes.TestTimeNow,
-				Status:         hubtypes.StatusActive,
-				StatusAt:       hubtypes.TestTimeNow,
+				InactiveAt:     base.TestTimeNow,
+				Status:         base.StatusActive,
+				StatusAt:       base.TestTimeNow,
 			},
 			false,
 		},
 		{
 			"status inactive_pending",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsPositiveAmount,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
-				InactiveAt:     hubtypes.TestTimeNow,
-				Status:         hubtypes.StatusInactivePending,
+				InactiveAt:     base.TestTimeNow,
+				Status:         base.StatusInactivePending,
 			},
 			true,
 		},
 		{
 			"status inactive",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsPositiveAmount,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
-				InactiveAt:     hubtypes.TestTimeZero,
-				Status:         hubtypes.StatusInactive,
-				StatusAt:       hubtypes.TestTimeNow,
+				InactiveAt:     base.TestTimeZero,
+				Status:         base.StatusInactive,
+				StatusAt:       base.TestTimeNow,
 			},
 			false,
 		},
 		{
 			"status_at empty",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsPositiveAmount,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
-				InactiveAt:     hubtypes.TestTimeNow,
-				Status:         hubtypes.StatusActive,
-				StatusAt:       hubtypes.TestTimeZero,
+				InactiveAt:     base.TestTimeNow,
+				Status:         base.StatusActive,
+				StatusAt:       base.TestTimeZero,
 			},
 			true,
 		},
 		{
 			"status_at now",
 			fields{
-				Address:        hubtypes.TestBech32NodeAddr20Bytes,
-				GigabytePrices: hubtypes.TestCoinsPositiveAmount,
-				HourlyPrices:   hubtypes.TestCoinsPositiveAmount,
+				Address:        base.TestBech32NodeAddr20Bytes,
+				GigabytePrices: base.TestCoinsPositiveAmount,
+				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
-				InactiveAt:     hubtypes.TestTimeNow,
-				Status:         hubtypes.StatusActive,
-				StatusAt:       hubtypes.TestTimeNow,
+				InactiveAt:     base.TestTimeNow,
+				Status:         base.StatusActive,
+				StatusAt:       base.TestTimeNow,
 			},
 			false,
 		},

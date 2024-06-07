@@ -7,7 +7,7 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 func TestParams_Validate(t *testing.T) {
@@ -32,49 +32,49 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"deposit empty",
 			fields{
-				Deposit: hubtypes.TestCoinEmpty,
+				Deposit: base.TestCoinEmpty,
 			},
 			true,
 		},
 		{
 			"deposit empty denom",
 			fields{
-				Deposit: hubtypes.TestCoinEmptyDenom,
+				Deposit: base.TestCoinEmptyDenom,
 			},
 			true,
 		},
 		{
 			"deposit invalid denom",
 			fields{
-				Deposit: hubtypes.TestCoinInvalidDenom,
+				Deposit: base.TestCoinInvalidDenom,
 			},
 			true,
 		},
 		{
 			"deposit empty amount",
 			fields{
-				Deposit: hubtypes.TestCoinEmptyAmount,
+				Deposit: base.TestCoinEmptyAmount,
 			},
 			true,
 		},
 		{
 			"deposit negative amount",
 			fields{
-				Deposit: hubtypes.TestCoinNegativeAmount,
+				Deposit: base.TestCoinNegativeAmount,
 			},
 			true,
 		},
 		{
 			"deposit zero amount",
 			fields{
-				Deposit: hubtypes.TestCoinZeroAmount,
+				Deposit: base.TestCoinZeroAmount,
 			},
 			true,
 		},
 		{
 			"deposit positive amount",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
 				MaxSubscriptionGigabytes: 1000,
 				MinSubscriptionGigabytes: 1,
@@ -87,7 +87,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"active_duration negative",
 			fields{
-				Deposit:        hubtypes.TestCoinPositiveAmount,
+				Deposit:        base.TestCoinPositiveAmount,
 				ActiveDuration: -1000,
 			},
 			true,
@@ -95,7 +95,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"active_duration zero",
 			fields{
-				Deposit:        hubtypes.TestCoinPositiveAmount,
+				Deposit:        base.TestCoinPositiveAmount,
 				ActiveDuration: 0,
 			},
 			true,
@@ -103,7 +103,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"active_duration positive",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
 				MaxSubscriptionGigabytes: 1000,
 				MinSubscriptionGigabytes: 1,
@@ -116,7 +116,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"max_gigabyte_prices nil",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
 				MaxGigabytePrices:        nil,
 				MaxSubscriptionGigabytes: 1000,
@@ -130,9 +130,9 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"max_gigabyte_prices empty",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
-				MaxGigabytePrices:        hubtypes.TestCoinsEmpty,
+				MaxGigabytePrices:        base.TestCoinsEmpty,
 				MaxSubscriptionGigabytes: 1000,
 				MinSubscriptionGigabytes: 1,
 				MaxSubscriptionHours:     1000,
@@ -144,54 +144,54 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"max_gigabyte_prices empty denom",
 			fields{
-				Deposit:           hubtypes.TestCoinPositiveAmount,
+				Deposit:           base.TestCoinPositiveAmount,
 				ActiveDuration:    1000,
-				MaxGigabytePrices: hubtypes.TestCoinsEmptyDenom,
+				MaxGigabytePrices: base.TestCoinsEmptyDenom,
 			},
 			true,
 		},
 		{
 			"max_gigabyte_prices invalid denom",
 			fields{
-				Deposit:           hubtypes.TestCoinPositiveAmount,
+				Deposit:           base.TestCoinPositiveAmount,
 				ActiveDuration:    1000,
-				MaxGigabytePrices: hubtypes.TestCoinsInvalidDenom,
+				MaxGigabytePrices: base.TestCoinsInvalidDenom,
 			},
 			true,
 		},
 		{
 			"max_gigabyte_prices empty amount",
 			fields{
-				Deposit:           hubtypes.TestCoinPositiveAmount,
+				Deposit:           base.TestCoinPositiveAmount,
 				ActiveDuration:    1000,
-				MaxGigabytePrices: hubtypes.TestCoinsEmptyAmount,
+				MaxGigabytePrices: base.TestCoinsEmptyAmount,
 			},
 			true,
 		},
 		{
 			"max_gigabyte_prices negative amount",
 			fields{
-				Deposit:           hubtypes.TestCoinPositiveAmount,
+				Deposit:           base.TestCoinPositiveAmount,
 				ActiveDuration:    1000,
-				MaxGigabytePrices: hubtypes.TestCoinsNegativeAmount,
+				MaxGigabytePrices: base.TestCoinsNegativeAmount,
 			},
 			true,
 		},
 		{
 			"max_gigabyte_prices zero amount",
 			fields{
-				Deposit:           hubtypes.TestCoinPositiveAmount,
+				Deposit:           base.TestCoinPositiveAmount,
 				ActiveDuration:    1000,
-				MaxGigabytePrices: hubtypes.TestCoinsZeroAmount,
+				MaxGigabytePrices: base.TestCoinsZeroAmount,
 			},
 			true,
 		},
 		{
 			"max_gigabyte_prices positive amount",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
-				MaxGigabytePrices:        hubtypes.TestCoinsPositiveAmount,
+				MaxGigabytePrices:        base.TestCoinsPositiveAmount,
 				MaxSubscriptionGigabytes: 1000,
 				MinSubscriptionGigabytes: 1,
 				MaxSubscriptionHours:     1000,
@@ -203,7 +203,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"min_gigabyte_prices nil",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
 				MinGigabytePrices:        nil,
 				MaxSubscriptionGigabytes: 1000,
@@ -217,9 +217,9 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"min_gigabyte_prices empty",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
-				MinGigabytePrices:        hubtypes.TestCoinsEmpty,
+				MinGigabytePrices:        base.TestCoinsEmpty,
 				MaxSubscriptionGigabytes: 1000,
 				MinSubscriptionGigabytes: 1,
 				MaxSubscriptionHours:     1000,
@@ -231,54 +231,54 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"min_gigabyte_prices empty denom",
 			fields{
-				Deposit:           hubtypes.TestCoinPositiveAmount,
+				Deposit:           base.TestCoinPositiveAmount,
 				ActiveDuration:    1000,
-				MinGigabytePrices: hubtypes.TestCoinsEmptyDenom,
+				MinGigabytePrices: base.TestCoinsEmptyDenom,
 			},
 			true,
 		},
 		{
 			"min_gigabyte_prices invalid denom",
 			fields{
-				Deposit:           hubtypes.TestCoinPositiveAmount,
+				Deposit:           base.TestCoinPositiveAmount,
 				ActiveDuration:    1000,
-				MinGigabytePrices: hubtypes.TestCoinsInvalidDenom,
+				MinGigabytePrices: base.TestCoinsInvalidDenom,
 			},
 			true,
 		},
 		{
 			"min_gigabyte_prices empty amount",
 			fields{
-				Deposit:           hubtypes.TestCoinPositiveAmount,
+				Deposit:           base.TestCoinPositiveAmount,
 				ActiveDuration:    1000,
-				MinGigabytePrices: hubtypes.TestCoinsEmptyAmount,
+				MinGigabytePrices: base.TestCoinsEmptyAmount,
 			},
 			true,
 		},
 		{
 			"min_gigabyte_prices negative amount",
 			fields{
-				Deposit:           hubtypes.TestCoinPositiveAmount,
+				Deposit:           base.TestCoinPositiveAmount,
 				ActiveDuration:    1000,
-				MinGigabytePrices: hubtypes.TestCoinsNegativeAmount,
+				MinGigabytePrices: base.TestCoinsNegativeAmount,
 			},
 			true,
 		},
 		{
 			"min_gigabyte_prices zero amount",
 			fields{
-				Deposit:           hubtypes.TestCoinPositiveAmount,
+				Deposit:           base.TestCoinPositiveAmount,
 				ActiveDuration:    1000,
-				MinGigabytePrices: hubtypes.TestCoinsZeroAmount,
+				MinGigabytePrices: base.TestCoinsZeroAmount,
 			},
 			true,
 		},
 		{
 			"min_gigabyte_prices positive amount",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
-				MinGigabytePrices:        hubtypes.TestCoinsPositiveAmount,
+				MinGigabytePrices:        base.TestCoinsPositiveAmount,
 				MaxSubscriptionGigabytes: 1000,
 				MinSubscriptionGigabytes: 1,
 				MaxSubscriptionHours:     1000,
@@ -290,7 +290,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"max_hourly_prices nil",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
 				MaxHourlyPrices:          nil,
 				MaxSubscriptionGigabytes: 1000,
@@ -304,9 +304,9 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"max_hourly_prices empty",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
-				MaxHourlyPrices:          hubtypes.TestCoinsEmpty,
+				MaxHourlyPrices:          base.TestCoinsEmpty,
 				MaxSubscriptionGigabytes: 1000,
 				MinSubscriptionGigabytes: 1,
 				MaxSubscriptionHours:     1000,
@@ -318,54 +318,54 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"max_hourly_prices empty denom",
 			fields{
-				Deposit:         hubtypes.TestCoinPositiveAmount,
+				Deposit:         base.TestCoinPositiveAmount,
 				ActiveDuration:  1000,
-				MaxHourlyPrices: hubtypes.TestCoinsEmptyDenom,
+				MaxHourlyPrices: base.TestCoinsEmptyDenom,
 			},
 			true,
 		},
 		{
 			"max_hourly_prices invalid denom",
 			fields{
-				Deposit:         hubtypes.TestCoinPositiveAmount,
+				Deposit:         base.TestCoinPositiveAmount,
 				ActiveDuration:  1000,
-				MaxHourlyPrices: hubtypes.TestCoinsInvalidDenom,
+				MaxHourlyPrices: base.TestCoinsInvalidDenom,
 			},
 			true,
 		},
 		{
 			"max_hourly_prices empty amount",
 			fields{
-				Deposit:         hubtypes.TestCoinPositiveAmount,
+				Deposit:         base.TestCoinPositiveAmount,
 				ActiveDuration:  1000,
-				MaxHourlyPrices: hubtypes.TestCoinsEmptyAmount,
+				MaxHourlyPrices: base.TestCoinsEmptyAmount,
 			},
 			true,
 		},
 		{
 			"max_hourly_prices negative amount",
 			fields{
-				Deposit:         hubtypes.TestCoinPositiveAmount,
+				Deposit:         base.TestCoinPositiveAmount,
 				ActiveDuration:  1000,
-				MaxHourlyPrices: hubtypes.TestCoinsNegativeAmount,
+				MaxHourlyPrices: base.TestCoinsNegativeAmount,
 			},
 			true,
 		},
 		{
 			"max_hourly_prices zero amount",
 			fields{
-				Deposit:         hubtypes.TestCoinPositiveAmount,
+				Deposit:         base.TestCoinPositiveAmount,
 				ActiveDuration:  1000,
-				MaxHourlyPrices: hubtypes.TestCoinsZeroAmount,
+				MaxHourlyPrices: base.TestCoinsZeroAmount,
 			},
 			true,
 		},
 		{
 			"max_hourly_prices positive amount",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
-				MaxHourlyPrices:          hubtypes.TestCoinsPositiveAmount,
+				MaxHourlyPrices:          base.TestCoinsPositiveAmount,
 				MaxSubscriptionGigabytes: 1000,
 				MinSubscriptionGigabytes: 1,
 				MaxSubscriptionHours:     1000,
@@ -377,7 +377,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"min_hourly_prices nil",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
 				MinHourlyPrices:          nil,
 				MaxSubscriptionGigabytes: 1000,
@@ -391,9 +391,9 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"min_hourly_prices empty",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
-				MinHourlyPrices:          hubtypes.TestCoinsEmpty,
+				MinHourlyPrices:          base.TestCoinsEmpty,
 				MaxSubscriptionGigabytes: 1000,
 				MinSubscriptionGigabytes: 1,
 				MaxSubscriptionHours:     1000,
@@ -405,54 +405,54 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"min_hourly_prices empty denom",
 			fields{
-				Deposit:         hubtypes.TestCoinPositiveAmount,
+				Deposit:         base.TestCoinPositiveAmount,
 				ActiveDuration:  1000,
-				MinHourlyPrices: hubtypes.TestCoinsEmptyDenom,
+				MinHourlyPrices: base.TestCoinsEmptyDenom,
 			},
 			true,
 		},
 		{
 			"min_hourly_prices invalid denom",
 			fields{
-				Deposit:         hubtypes.TestCoinPositiveAmount,
+				Deposit:         base.TestCoinPositiveAmount,
 				ActiveDuration:  1000,
-				MinHourlyPrices: hubtypes.TestCoinsInvalidDenom,
+				MinHourlyPrices: base.TestCoinsInvalidDenom,
 			},
 			true,
 		},
 		{
 			"min_hourly_prices empty amount",
 			fields{
-				Deposit:         hubtypes.TestCoinPositiveAmount,
+				Deposit:         base.TestCoinPositiveAmount,
 				ActiveDuration:  1000,
-				MinHourlyPrices: hubtypes.TestCoinsEmptyAmount,
+				MinHourlyPrices: base.TestCoinsEmptyAmount,
 			},
 			true,
 		},
 		{
 			"min_hourly_prices negative amount",
 			fields{
-				Deposit:         hubtypes.TestCoinPositiveAmount,
+				Deposit:         base.TestCoinPositiveAmount,
 				ActiveDuration:  1000,
-				MinHourlyPrices: hubtypes.TestCoinsNegativeAmount,
+				MinHourlyPrices: base.TestCoinsNegativeAmount,
 			},
 			true,
 		},
 		{
 			"min_hourly_prices zero amount",
 			fields{
-				Deposit:         hubtypes.TestCoinPositiveAmount,
+				Deposit:         base.TestCoinPositiveAmount,
 				ActiveDuration:  1000,
-				MinHourlyPrices: hubtypes.TestCoinsZeroAmount,
+				MinHourlyPrices: base.TestCoinsZeroAmount,
 			},
 			true,
 		},
 		{
 			"min_hourly_prices positive amount",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
-				MinHourlyPrices:          hubtypes.TestCoinsPositiveAmount,
+				MinHourlyPrices:          base.TestCoinsPositiveAmount,
 				MaxSubscriptionGigabytes: 1000,
 				MinSubscriptionGigabytes: 1,
 				MaxSubscriptionHours:     1000,
@@ -464,7 +464,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"max_subscription_gigabytes negative",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
 				MaxSubscriptionGigabytes: -1000,
 			},
@@ -473,7 +473,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"max_subscription_gigabytes zero",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
 				MaxSubscriptionGigabytes: 0,
 				StakingShare:             sdkmath.LegacyNewDecWithPrec(1, 0),
@@ -483,7 +483,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"max_subscription_gigabytes positive",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
 				MaxSubscriptionGigabytes: 1000,
 				MinSubscriptionGigabytes: 1,
@@ -496,7 +496,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"min_subscription_gigabytes negative",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
 				MaxSubscriptionGigabytes: 1000,
 				MinSubscriptionGigabytes: -1000,
@@ -506,7 +506,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"min_subscription_gigabytes zero",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
 				MaxSubscriptionGigabytes: 1000,
 				MinSubscriptionGigabytes: 0,
@@ -517,7 +517,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"min_subscription_gigabytes positive",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
 				MaxSubscriptionGigabytes: 1000,
 				MinSubscriptionGigabytes: 1,
@@ -530,7 +530,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"max_subscription_hours negative",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
 				MaxSubscriptionGigabytes: 1000,
 				MinSubscriptionGigabytes: 1,
@@ -541,7 +541,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"max_subscription_hours zero",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
 				MaxSubscriptionGigabytes: 1000,
 				MinSubscriptionGigabytes: 1,
@@ -553,7 +553,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"max_subscription_hours positive",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
 				MaxSubscriptionGigabytes: 1000,
 				MinSubscriptionGigabytes: 1,
@@ -566,7 +566,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"min_subscription_hours negative",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
 				MaxSubscriptionGigabytes: 1000,
 				MinSubscriptionGigabytes: 1,
@@ -579,7 +579,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"min_subscription_hours zero",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
 				MaxSubscriptionGigabytes: 1000,
 				MinSubscriptionGigabytes: 1,
@@ -592,7 +592,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"min_subscription_hours positive",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
 				MaxSubscriptionGigabytes: 1000,
 				MinSubscriptionGigabytes: 1,
@@ -605,7 +605,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"staking_share empty",
 			fields{
-				Deposit:        hubtypes.TestCoinPositiveAmount,
+				Deposit:        base.TestCoinPositiveAmount,
 				ActiveDuration: 1000,
 				StakingShare:   sdkmath.LegacyDec{},
 			},
@@ -614,7 +614,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"staking_share -10",
 			fields{
-				Deposit:        hubtypes.TestCoinPositiveAmount,
+				Deposit:        base.TestCoinPositiveAmount,
 				ActiveDuration: 1000,
 				StakingShare:   sdkmath.LegacyNewDecWithPrec(-10, 0),
 			},
@@ -623,7 +623,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"staking_share -1",
 			fields{
-				Deposit:        hubtypes.TestCoinPositiveAmount,
+				Deposit:        base.TestCoinPositiveAmount,
 				ActiveDuration: 1000,
 				StakingShare:   sdkmath.LegacyNewDecWithPrec(-1, 0),
 			},
@@ -632,7 +632,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"staking_share -0.5",
 			fields{
-				Deposit:        hubtypes.TestCoinPositiveAmount,
+				Deposit:        base.TestCoinPositiveAmount,
 				ActiveDuration: 1000,
 				StakingShare:   sdkmath.LegacyNewDecWithPrec(-5, 1),
 			},
@@ -641,7 +641,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"staking_share 0",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
 				MaxSubscriptionGigabytes: 1000,
 				MinSubscriptionGigabytes: 1,
@@ -654,7 +654,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"staking_share 0.5",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
 				MaxSubscriptionGigabytes: 1000,
 				MinSubscriptionGigabytes: 1,
@@ -667,7 +667,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"staking_share 1",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
 				MaxSubscriptionGigabytes: 1000,
 				MinSubscriptionGigabytes: 1,
@@ -680,7 +680,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			"staking_share 10",
 			fields{
-				Deposit:                  hubtypes.TestCoinPositiveAmount,
+				Deposit:                  base.TestCoinPositiveAmount,
 				ActiveDuration:           1000,
 				MaxSubscriptionGigabytes: 1000,
 				MinSubscriptionGigabytes: 1,

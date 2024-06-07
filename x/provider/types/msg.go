@@ -6,7 +6,7 @@ import (
 	sdkerrors "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 // The `types` package contains custom message types for the Cosmos SDK.
@@ -78,7 +78,7 @@ func (m *MsgRegisterRequest) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgUpdateRequest creates a new MsgUpdateRequest instance with the given parameters.
-func NewMsgUpdateRequest(from hubtypes.ProvAddress, name, identity, website, description string, status hubtypes.Status) *MsgUpdateRequest {
+func NewMsgUpdateRequest(from base.ProvAddress, name, identity, website, description string, status base.Status) *MsgUpdateRequest {
 	return &MsgUpdateRequest{
 		From:        from.String(),
 		Name:        name,
@@ -101,7 +101,7 @@ func (m *MsgUpdateRequest) ValidateBasic() error {
 	if m.From == "" {
 		return sdkerrors.Wrap(ErrorInvalidMessage, "from cannot be empty")
 	}
-	if _, err := hubtypes.ProvAddressFromBech32(m.From); err != nil {
+	if _, err := base.ProvAddressFromBech32(m.From); err != nil {
 		return sdkerrors.Wrap(ErrorInvalidMessage, err.Error())
 	}
 	if len(m.Name) > 64 {
@@ -121,7 +121,7 @@ func (m *MsgUpdateRequest) ValidateBasic() error {
 	if len(m.Description) > 256 {
 		return sdkerrors.Wrapf(ErrorInvalidMessage, "description length cannot be greater than %d chars", 256)
 	}
-	if !m.Status.IsOneOf(hubtypes.StatusUnspecified, hubtypes.StatusActive, hubtypes.StatusInactive) {
+	if !m.Status.IsOneOf(base.StatusUnspecified, base.StatusActive, base.StatusInactive) {
 		return sdkerrors.Wrap(ErrorInvalidMessage, "status must be one of [unspecified, active, inactive]")
 	}
 
@@ -130,7 +130,7 @@ func (m *MsgUpdateRequest) ValidateBasic() error {
 
 // GetSigners returns an array containing the signer's account address extracted from the 'From' field of the MsgUpdateRequest.
 func (m *MsgUpdateRequest) GetSigners() []sdk.AccAddress {
-	from, err := hubtypes.ProvAddressFromBech32(m.From)
+	from, err := base.ProvAddressFromBech32(m.From)
 	if err != nil {
 		panic(err)
 	}

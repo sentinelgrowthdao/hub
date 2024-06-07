@@ -3,7 +3,7 @@ package types
 import (
 	"github.com/cosmos/cosmos-sdk/types/address"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 const (
@@ -16,10 +16,10 @@ var (
 	InactiveProviderKeyPrefix = append(ProviderKeyPrefix, 0x02)
 )
 
-func ActiveProviderKey(addr hubtypes.ProvAddress) []byte {
+func ActiveProviderKey(addr base.ProvAddress) []byte {
 	return append(ActiveProviderKeyPrefix, address.MustLengthPrefix(addr.Bytes())...)
 }
 
-func InactiveProviderKey(addr hubtypes.ProvAddress) (v []byte) {
+func InactiveProviderKey(addr base.ProvAddress) (v []byte) {
 	return append(InactiveProviderKeyPrefix, address.MustLengthPrefix(addr.Bytes())...)
 }

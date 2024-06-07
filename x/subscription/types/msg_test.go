@@ -5,7 +5,7 @@ import (
 
 	sdkmath "cosmossdk.io/math"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 func TestMsgCancelRequest_ValidateBasic(t *testing.T) {
@@ -21,28 +21,28 @@ func TestMsgCancelRequest_ValidateBasic(t *testing.T) {
 		{
 			"empty from",
 			fields{
-				From: hubtypes.TestAddrEmpty,
+				From: base.TestAddrEmpty,
 			},
 			true,
 		},
 		{
 			"invalid from",
 			fields{
-				From: hubtypes.TestAddrInvalid,
+				From: base.TestAddrInvalid,
 			},
 			true,
 		},
 		{
 			"invalid prefix from",
 			fields{
-				From: hubtypes.TestBech32NodeAddr20Bytes,
+				From: base.TestBech32NodeAddr20Bytes,
 			},
 			true,
 		},
 		{
 			"10 bytes from",
 			fields{
-				From: hubtypes.TestBech32AccAddr10Bytes,
+				From: base.TestBech32AccAddr10Bytes,
 				ID:   1000,
 			},
 			false,
@@ -50,7 +50,7 @@ func TestMsgCancelRequest_ValidateBasic(t *testing.T) {
 		{
 			"20 bytes from",
 			fields{
-				From: hubtypes.TestBech32AccAddr20Bytes,
+				From: base.TestBech32AccAddr20Bytes,
 				ID:   1000,
 			},
 			false,
@@ -58,7 +58,7 @@ func TestMsgCancelRequest_ValidateBasic(t *testing.T) {
 		{
 			"30 bytes from",
 			fields{
-				From: hubtypes.TestBech32AccAddr30Bytes,
+				From: base.TestBech32AccAddr30Bytes,
 				ID:   1000,
 			},
 			false,
@@ -66,7 +66,7 @@ func TestMsgCancelRequest_ValidateBasic(t *testing.T) {
 		{
 			"zero id",
 			fields{
-				From: hubtypes.TestBech32AccAddr20Bytes,
+				From: base.TestBech32AccAddr20Bytes,
 				ID:   0,
 			},
 			true,
@@ -74,7 +74,7 @@ func TestMsgCancelRequest_ValidateBasic(t *testing.T) {
 		{
 			"positive id",
 			fields{
-				From: hubtypes.TestBech32AccAddr20Bytes,
+				From: base.TestBech32AccAddr20Bytes,
 				ID:   1000,
 			},
 			false,
@@ -108,30 +108,30 @@ func TestMsgAllocateRequest_ValidateBasic(t *testing.T) {
 		{
 			"empty from",
 			fields{
-				From: hubtypes.TestAddrEmpty,
+				From: base.TestAddrEmpty,
 			},
 			true,
 		},
 		{
 			"invalid from",
 			fields{
-				From: hubtypes.TestAddrInvalid,
+				From: base.TestAddrInvalid,
 			},
 			true,
 		},
 		{
 			"invalid prefix from",
 			fields{
-				From: hubtypes.TestBech32NodeAddr20Bytes,
+				From: base.TestBech32NodeAddr20Bytes,
 			},
 			true,
 		},
 		{
 			"10 bytes from",
 			fields{
-				From:    hubtypes.TestBech32AccAddr10Bytes,
+				From:    base.TestBech32AccAddr10Bytes,
 				ID:      1000,
-				Address: hubtypes.TestBech32AccAddr20Bytes,
+				Address: base.TestBech32AccAddr20Bytes,
 				Bytes:   sdkmath.NewInt(0),
 			},
 			false,
@@ -139,9 +139,9 @@ func TestMsgAllocateRequest_ValidateBasic(t *testing.T) {
 		{
 			"20 bytes from",
 			fields{
-				From:    hubtypes.TestBech32AccAddr20Bytes,
+				From:    base.TestBech32AccAddr20Bytes,
 				ID:      1000,
-				Address: hubtypes.TestBech32AccAddr20Bytes,
+				Address: base.TestBech32AccAddr20Bytes,
 				Bytes:   sdkmath.NewInt(0),
 			},
 			false,
@@ -149,9 +149,9 @@ func TestMsgAllocateRequest_ValidateBasic(t *testing.T) {
 		{
 			"30 bytes from",
 			fields{
-				From:    hubtypes.TestBech32AccAddr30Bytes,
+				From:    base.TestBech32AccAddr30Bytes,
 				ID:      1000,
-				Address: hubtypes.TestBech32AccAddr20Bytes,
+				Address: base.TestBech32AccAddr20Bytes,
 				Bytes:   sdkmath.NewInt(0),
 			},
 			false,
@@ -159,7 +159,7 @@ func TestMsgAllocateRequest_ValidateBasic(t *testing.T) {
 		{
 			"zero id",
 			fields{
-				From: hubtypes.TestBech32AccAddr20Bytes,
+				From: base.TestBech32AccAddr20Bytes,
 				ID:   0,
 			},
 			true,
@@ -167,9 +167,9 @@ func TestMsgAllocateRequest_ValidateBasic(t *testing.T) {
 		{
 			"positive id",
 			fields{
-				From:    hubtypes.TestBech32AccAddr20Bytes,
+				From:    base.TestBech32AccAddr20Bytes,
 				ID:      1000,
-				Address: hubtypes.TestBech32AccAddr20Bytes,
+				Address: base.TestBech32AccAddr20Bytes,
 				Bytes:   sdkmath.NewInt(0),
 			},
 			false,
@@ -177,36 +177,36 @@ func TestMsgAllocateRequest_ValidateBasic(t *testing.T) {
 		{
 			"empty address",
 			fields{
-				From:    hubtypes.TestBech32AccAddr20Bytes,
+				From:    base.TestBech32AccAddr20Bytes,
 				ID:      1000,
-				Address: hubtypes.TestAddrEmpty,
+				Address: base.TestAddrEmpty,
 			},
 			true,
 		},
 		{
 			"invalid address",
 			fields{
-				From:    hubtypes.TestBech32AccAddr20Bytes,
+				From:    base.TestBech32AccAddr20Bytes,
 				ID:      1000,
-				Address: hubtypes.TestAddrInvalid,
+				Address: base.TestAddrInvalid,
 			},
 			true,
 		},
 		{
 			"invalid prefix address",
 			fields{
-				From:    hubtypes.TestBech32AccAddr20Bytes,
+				From:    base.TestBech32AccAddr20Bytes,
 				ID:      1000,
-				Address: hubtypes.TestBech32NodeAddr20Bytes,
+				Address: base.TestBech32NodeAddr20Bytes,
 			},
 			true,
 		},
 		{
 			"10 bytes address",
 			fields{
-				From:    hubtypes.TestBech32AccAddr20Bytes,
+				From:    base.TestBech32AccAddr20Bytes,
 				ID:      1000,
-				Address: hubtypes.TestBech32AccAddr10Bytes,
+				Address: base.TestBech32AccAddr10Bytes,
 				Bytes:   sdkmath.NewInt(0),
 			},
 			false,
@@ -214,9 +214,9 @@ func TestMsgAllocateRequest_ValidateBasic(t *testing.T) {
 		{
 			"20 bytes address",
 			fields{
-				From:    hubtypes.TestBech32AccAddr20Bytes,
+				From:    base.TestBech32AccAddr20Bytes,
 				ID:      1000,
-				Address: hubtypes.TestBech32AccAddr20Bytes,
+				Address: base.TestBech32AccAddr20Bytes,
 				Bytes:   sdkmath.NewInt(0),
 			},
 			false,
@@ -224,9 +224,9 @@ func TestMsgAllocateRequest_ValidateBasic(t *testing.T) {
 		{
 			"30 bytes address",
 			fields{
-				From:    hubtypes.TestBech32AccAddr20Bytes,
+				From:    base.TestBech32AccAddr20Bytes,
 				ID:      1000,
-				Address: hubtypes.TestBech32AccAddr30Bytes,
+				Address: base.TestBech32AccAddr30Bytes,
 				Bytes:   sdkmath.NewInt(0),
 			},
 			false,
@@ -234,9 +234,9 @@ func TestMsgAllocateRequest_ValidateBasic(t *testing.T) {
 		{
 			"nil bytes",
 			fields{
-				From:    hubtypes.TestBech32AccAddr20Bytes,
+				From:    base.TestBech32AccAddr20Bytes,
 				ID:      1000,
-				Address: hubtypes.TestBech32AccAddr20Bytes,
+				Address: base.TestBech32AccAddr20Bytes,
 				Bytes:   sdkmath.Int{},
 			},
 			true,
@@ -244,9 +244,9 @@ func TestMsgAllocateRequest_ValidateBasic(t *testing.T) {
 		{
 			"negative bytes",
 			fields{
-				From:    hubtypes.TestBech32AccAddr20Bytes,
+				From:    base.TestBech32AccAddr20Bytes,
 				ID:      1000,
-				Address: hubtypes.TestBech32AccAddr20Bytes,
+				Address: base.TestBech32AccAddr20Bytes,
 				Bytes:   sdkmath.NewInt(-1000),
 			},
 			true,
@@ -254,9 +254,9 @@ func TestMsgAllocateRequest_ValidateBasic(t *testing.T) {
 		{
 			"zero bytes",
 			fields{
-				From:    hubtypes.TestBech32AccAddr20Bytes,
+				From:    base.TestBech32AccAddr20Bytes,
 				ID:      1000,
-				Address: hubtypes.TestBech32AccAddr20Bytes,
+				Address: base.TestBech32AccAddr20Bytes,
 				Bytes:   sdkmath.NewInt(0),
 			},
 			false,
@@ -264,9 +264,9 @@ func TestMsgAllocateRequest_ValidateBasic(t *testing.T) {
 		{
 			"positive bytes",
 			fields{
-				From:    hubtypes.TestBech32AccAddr20Bytes,
+				From:    base.TestBech32AccAddr20Bytes,
 				ID:      1000,
-				Address: hubtypes.TestBech32AccAddr20Bytes,
+				Address: base.TestBech32AccAddr20Bytes,
 				Bytes:   sdkmath.NewInt(1000),
 			},
 			false,

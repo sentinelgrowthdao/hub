@@ -3,7 +3,7 @@ package types
 import (
 	"github.com/cosmos/cosmos-sdk/types/query"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 func NewQueryPlanRequest(id uint64) *QueryPlanRequest {
@@ -12,14 +12,14 @@ func NewQueryPlanRequest(id uint64) *QueryPlanRequest {
 	}
 }
 
-func NewQueryPlansRequest(status hubtypes.Status, pagination *query.PageRequest) *QueryPlansRequest {
+func NewQueryPlansRequest(status base.Status, pagination *query.PageRequest) *QueryPlansRequest {
 	return &QueryPlansRequest{
 		Status:     status,
 		Pagination: pagination,
 	}
 }
 
-func NewQueryPlansForProviderRequest(addr hubtypes.ProvAddress, status hubtypes.Status, pagination *query.PageRequest) *QueryPlansForProviderRequest {
+func NewQueryPlansForProviderRequest(addr base.ProvAddress, status base.Status, pagination *query.PageRequest) *QueryPlansForProviderRequest {
 	return &QueryPlansForProviderRequest{
 		Address:    addr.String(),
 		Status:     status,

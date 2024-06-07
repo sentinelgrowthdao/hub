@@ -5,7 +5,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/session/types"
 	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types"
 )
@@ -39,13 +39,13 @@ func (k *msgServer) MsgStart(c context.Context, msg *types.MsgStartRequest) (*ty
 	}
 
 	// Check if the subscription status is 'Active' as only active subscriptions can start sessions.
-	if !subscription.GetStatus().Equal(hubtypes.StatusActive) {
+	if !subscription.GetStatus().Equal(base.StatusActive) {
 		// If the subscription status is not 'Active', return an error indicating that the subscription status is invalid for starting a session.
 		return nil, types.NewErrorInvalidSubscriptionStatus(subscription.GetID(), subscription.GetStatus())
 	}
 
 	// Parse the node address from the Bech32 encoded address provided in the message.
-	nodeAddr, err := hubtypes.NodeAddressFromBech32(msg.Address)
+	nodeAddr, err := base.NodeAddressFromBech32(msg.Address)
 	if err != nil {
 		return nil, err
 	}
@@ -58,7 +58,7 @@ func (k *msgServer) MsgStart(c context.Context, msg *types.MsgStartRequest) (*ty
 	}
 
 	// Check if the node status is 'Active' as only active nodes can be used for starting a session.
-	if !node.Status.Equal(hubtypes.StatusActive) {
+	if !node.Status.Equal(base.StatusActive) {
 		// If the node status is not 'Active', return an error indicating that the node status is invalid for starting a session.
 		return nil, types.NewErrorInvalidNodeStatus(nodeAddr, node.Status)
 	}
@@ -129,7 +129,7 @@ func (k *msgServer) MsgStart(c context.Context, msg *types.MsgStartRequest) (*ty
 
 	// Check if there is already an active session for the given subscription and account.
 	session, found := k.GetLatestSessionForAllocation(ctx, subscription.GetID(), accAddr)
-	if found && session.Status.Equal(hubtypes.StatusActive) {
+	if found && session.Status.Equal(base.StatusActive) {
 		// If an active session already exists, return an error indicating a duplicate active session.
 		return nil, types.NewErrorDuplicateActiveSession(session.ID)
 	}
@@ -144,10 +144,10 @@ func (k *msgServer) MsgStart(c context.Context, msg *types.MsgStartRequest) (*ty
 		SubscriptionID: subscription.GetID(),
 		NodeAddress:    nodeAddr.String(),
 		Address:        accAddr.String(),
-		Bandwidth:      hubtypes.NewBandwidthFromInt64(0, 0),
+		Bandwidth:      base.NewBandwidthFromInt64(0, 0),
 		Duration:       0,
 		InactiveAt:     ctx.BlockTime().Add(statusChangeDelay),
-		Status:         hubtypes.StatusActive,
+		Status:         base.StatusActive,
 		StatusAt:       ctx.BlockTime(),
 	}
 
@@ -190,7 +190,7 @@ func (k *msgServer) MsgUpdateDetails(c context.Context, msg *types.MsgUpdateDeta
 	}
 
 	// Check if the session status is 'Inactive' as only active or inactive-pending sessions can be updated.
-	if session.Status.Equal(hubtypes.StatusInactive) {
+	if session.Status.Equal(base.StatusInactive) {
 		// If the session status is 'Inactive', return an error indicating that the session status is invalid for updating details.
 		return nil, types.NewErrorInvalidSessionStatus(session.ID, session.Status)
 	}
@@ -210,7 +210,7 @@ func (k *msgServer) MsgUpdateDetails(c context.Context, msg *types.MsgUpdateDeta
 	}
 
 	// If the session status is 'Active', update the session's InactiveAt value based on the status change delay.
-	if session.Status.Equal(hubtypes.StatusActive) {
+	if session.Status.Equal(base.StatusActive) {
 		// Get the status change delay from the Store.
 		statusChangeDelay := k.StatusChangeDelay(ctx)
 
@@ -260,7 +260,7 @@ func (k *msgServer) MsgEnd(c context.Context, msg *types.MsgEndRequest) (*types.
 	}
 
 	// Check if the session status is 'Active' as only active sessions can be ended.
-	if !session.Status.Equal(hubtypes.StatusActive) {
+	if !session.Status.Equal(base.StatusActive) {
 		// If the session status is not 'Active', return an error indicating that the session status is invalid.
 		return nil, types.NewErrorInvalidSessionStatus(session.ID, session.Status)
 	}
@@ -281,7 +281,7 @@ func (k *msgServer) MsgEnd(c context.Context, msg *types.MsgEndRequest) (*types.
 	session.InactiveAt = ctx.BlockTime().Add(statusChangeDelay)
 
 	// Set the session status to 'InactivePending' to mark it for an upcoming status update.
-	session.Status = hubtypes.StatusInactivePending
+	session.Status = base.StatusInactivePending
 
 	// Record the time of the status update in 'StatusAt' field.
 	session.StatusAt = ctx.BlockTime()
@@ -295,7 +295,7 @@ func (k *msgServer) MsgEnd(c context.Context, msg *types.MsgEndRequest) (*types.
 	// Emit an event to notify that the session status has been updated.
 	ctx.EventManager().EmitTypedEvent(
 		&types.EventUpdateStatus{
-			Status:         hubtypes.StatusInactivePending,
+			Status:         base.StatusInactivePending,
 			Address:        session.Address,
 			NodeAddress:    session.NodeAddress,
 			ID:             session.ID,

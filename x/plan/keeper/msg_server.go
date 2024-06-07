@@ -5,7 +5,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/plan/types"
 )
 
@@ -29,8 +29,8 @@ func NewMsgServiceServer(k Keeper) types.MsgServiceServer {
 func (k *msgServer) MsgCreate(c context.Context, msg *types.MsgCreateRequest) (*types.MsgCreateResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
 
-	// Convert the `msg.From` address (in Bech32 format) to a `hubtypes.ProvAddress`.
-	provAddr, err := hubtypes.ProvAddressFromBech32(msg.From)
+	// Convert the `msg.From` address (in Bech32 format) to a `base.ProvAddress`.
+	provAddr, err := base.ProvAddressFromBech32(msg.From)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +48,7 @@ func (k *msgServer) MsgCreate(c context.Context, msg *types.MsgCreateRequest) (*
 		Duration:        msg.Duration,
 		Gigabytes:       msg.Gigabytes,
 		Prices:          msg.Prices,
-		Status:          hubtypes.StatusInactive,
+		Status:          base.StatusInactive,
 		StatusAt:        ctx.BlockTime(),
 	}
 
@@ -85,15 +85,15 @@ func (k *msgServer) MsgUpdateStatus(c context.Context, msg *types.MsgUpdateStatu
 	}
 
 	// If the current status of the plan is `Active`, handle the necessary updates for changing to `Inactive` status.
-	if plan.Status.Equal(hubtypes.StatusActive) {
-		if msg.Status.Equal(hubtypes.StatusInactive) {
+	if plan.Status.Equal(base.StatusActive) {
+		if msg.Status.Equal(base.StatusInactive) {
 			k.DeleteActivePlan(ctx, plan.ID)
 		}
 	}
 
 	// If the current status of the plan is `Inactive`, handle the necessary updates for changing to `Active` status.
-	if plan.Status.Equal(hubtypes.StatusInactive) {
-		if msg.Status.Equal(hubtypes.StatusActive) {
+	if plan.Status.Equal(base.StatusInactive) {
+		if msg.Status.Equal(base.StatusActive) {
 			k.DeleteInactivePlan(ctx, plan.ID)
 		}
 	}
@@ -133,8 +133,8 @@ func (k *msgServer) MsgLinkNode(c context.Context, msg *types.MsgLinkNodeRequest
 		return nil, types.NewErrorUnauthorized(msg.From)
 	}
 
-	// Convert the `msg.NodeAddress` (node address) to a `hubtypes.NodeAddress`.
-	nodeAddr, err := hubtypes.NodeAddressFromBech32(msg.NodeAddress)
+	// Convert the `msg.NodeAddress` (node address) to a `base.NodeAddress`.
+	nodeAddr, err := base.NodeAddressFromBech32(msg.NodeAddress)
 	if err != nil {
 		return nil, err
 	}
@@ -175,8 +175,8 @@ func (k *msgServer) MsgUnlinkNode(c context.Context, msg *types.MsgUnlinkNodeReq
 		return nil, types.NewErrorUnauthorized(msg.From)
 	}
 
-	// Convert the `msg.NodeAddress` (node address) to a `hubtypes.NodeAddress`.
-	nodeAddr, err := hubtypes.NodeAddressFromBech32(msg.NodeAddress)
+	// Convert the `msg.NodeAddress` (node address) to a `base.NodeAddress`.
+	nodeAddr, err := base.NodeAddressFromBech32(msg.NodeAddress)
 	if err != nil {
 		return nil, err
 	}

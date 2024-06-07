@@ -9,7 +9,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/provider/types"
 )
 
@@ -30,7 +30,7 @@ func (q *queryServer) QueryProvider(c context.Context, req *types.QueryProviderR
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
-	addr, err := hubtypes.ProvAddressFromBech32(req.Address)
+	addr, err := base.ProvAddressFromBech32(req.Address)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "invalid address %s", req.Address)
 	}
@@ -57,9 +57,9 @@ func (q *queryServer) QueryProviders(c context.Context, req *types.QueryProvider
 	)
 
 	switch req.Status {
-	case hubtypes.StatusActive:
+	case base.StatusActive:
 		keyPrefix = types.ActiveProviderKeyPrefix
-	case hubtypes.StatusInactive:
+	case base.StatusInactive:
 		keyPrefix = types.InactiveProviderKeyPrefix
 	default:
 		keyPrefix = types.ProviderKeyPrefix

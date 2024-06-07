@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	protobuf "github.com/gogo/protobuf/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/node/types"
 )
 
@@ -21,7 +21,7 @@ func (k *Keeper) SetActiveNode(ctx sdk.Context, node types.Node) {
 	store.Set(key, value)
 }
 
-func (k *Keeper) HasActiveNode(ctx sdk.Context, addr hubtypes.NodeAddress) bool {
+func (k *Keeper) HasActiveNode(ctx sdk.Context, addr base.NodeAddress) bool {
 	var (
 		store = k.Store(ctx)
 		key   = types.ActiveNodeKey(addr)
@@ -30,7 +30,7 @@ func (k *Keeper) HasActiveNode(ctx sdk.Context, addr hubtypes.NodeAddress) bool 
 	return store.Has(key)
 }
 
-func (k *Keeper) GetActiveNode(ctx sdk.Context, addr hubtypes.NodeAddress) (v types.Node, found bool) {
+func (k *Keeper) GetActiveNode(ctx sdk.Context, addr base.NodeAddress) (v types.Node, found bool) {
 	var (
 		store = k.Store(ctx)
 		key   = types.ActiveNodeKey(addr)
@@ -45,7 +45,7 @@ func (k *Keeper) GetActiveNode(ctx sdk.Context, addr hubtypes.NodeAddress) (v ty
 	return v, true
 }
 
-func (k *Keeper) DeleteActiveNode(ctx sdk.Context, addr hubtypes.NodeAddress) {
+func (k *Keeper) DeleteActiveNode(ctx sdk.Context, addr base.NodeAddress) {
 	var (
 		store = k.Store(ctx)
 		key   = types.ActiveNodeKey(addr)
@@ -64,7 +64,7 @@ func (k *Keeper) SetInactiveNode(ctx sdk.Context, node types.Node) {
 	store.Set(key, value)
 }
 
-func (k *Keeper) HasInactiveNode(ctx sdk.Context, addr hubtypes.NodeAddress) bool {
+func (k *Keeper) HasInactiveNode(ctx sdk.Context, addr base.NodeAddress) bool {
 	var (
 		store = k.Store(ctx)
 		key   = types.InactiveNodeKey(addr)
@@ -73,7 +73,7 @@ func (k *Keeper) HasInactiveNode(ctx sdk.Context, addr hubtypes.NodeAddress) boo
 	return store.Has(key)
 }
 
-func (k *Keeper) GetInactiveNode(ctx sdk.Context, addr hubtypes.NodeAddress) (v types.Node, found bool) {
+func (k *Keeper) GetInactiveNode(ctx sdk.Context, addr base.NodeAddress) (v types.Node, found bool) {
 	var (
 		store = k.Store(ctx)
 		key   = types.InactiveNodeKey(addr)
@@ -88,7 +88,7 @@ func (k *Keeper) GetInactiveNode(ctx sdk.Context, addr hubtypes.NodeAddress) (v 
 	return v, true
 }
 
-func (k *Keeper) DeleteInactiveNode(ctx sdk.Context, addr hubtypes.NodeAddress) {
+func (k *Keeper) DeleteInactiveNode(ctx sdk.Context, addr base.NodeAddress) {
 	var (
 		store = k.Store(ctx)
 		key   = types.InactiveNodeKey(addr)
@@ -99,20 +99,20 @@ func (k *Keeper) DeleteInactiveNode(ctx sdk.Context, addr hubtypes.NodeAddress) 
 
 func (k *Keeper) SetNode(ctx sdk.Context, node types.Node) {
 	switch node.Status {
-	case hubtypes.StatusActive:
+	case base.StatusActive:
 		k.SetActiveNode(ctx, node)
-	case hubtypes.StatusInactive:
+	case base.StatusInactive:
 		k.SetInactiveNode(ctx, node)
 	default:
 		panic(fmt.Errorf("failed to set the node %v", node))
 	}
 }
 
-func (k *Keeper) HasNode(ctx sdk.Context, addr hubtypes.NodeAddress) bool {
+func (k *Keeper) HasNode(ctx sdk.Context, addr base.NodeAddress) bool {
 	return k.HasActiveNode(ctx, addr) || k.HasInactiveNode(ctx, addr)
 }
 
-func (k *Keeper) GetNode(ctx sdk.Context, addr hubtypes.NodeAddress) (node types.Node, found bool) {
+func (k *Keeper) GetNode(ctx sdk.Context, addr base.NodeAddress) (node types.Node, found bool) {
 	node, found = k.GetActiveNode(ctx, addr)
 	if found {
 		return
@@ -160,7 +160,7 @@ func (k *Keeper) IterateNodes(ctx sdk.Context, fn func(index int, item types.Nod
 	}
 }
 
-func (k *Keeper) SetNodeForInactiveAt(ctx sdk.Context, at time.Time, addr hubtypes.NodeAddress) {
+func (k *Keeper) SetNodeForInactiveAt(ctx sdk.Context, at time.Time, addr base.NodeAddress) {
 	var (
 		store = k.Store(ctx)
 		key   = types.NodeForInactiveAtKey(at, addr)
@@ -170,7 +170,7 @@ func (k *Keeper) SetNodeForInactiveAt(ctx sdk.Context, at time.Time, addr hubtyp
 	store.Set(key, value)
 }
 
-func (k *Keeper) DeleteNodeForInactiveAt(ctx sdk.Context, at time.Time, addr hubtypes.NodeAddress) {
+func (k *Keeper) DeleteNodeForInactiveAt(ctx sdk.Context, at time.Time, addr base.NodeAddress) {
 	var (
 		store = k.Store(ctx)
 		key   = types.NodeForInactiveAtKey(at, addr)
@@ -198,7 +198,7 @@ func (k *Keeper) IterateNodesForInactiveAt(ctx sdk.Context, at time.Time, fn fun
 	}
 }
 
-func (k *Keeper) SetNodeForPlan(ctx sdk.Context, id uint64, addr hubtypes.NodeAddress) {
+func (k *Keeper) SetNodeForPlan(ctx sdk.Context, id uint64, addr base.NodeAddress) {
 	var (
 		store = k.Store(ctx)
 		key   = types.NodeForPlanKey(id, addr)
@@ -208,7 +208,7 @@ func (k *Keeper) SetNodeForPlan(ctx sdk.Context, id uint64, addr hubtypes.NodeAd
 	store.Set(key, value)
 }
 
-func (k *Keeper) HasNodeForPlan(ctx sdk.Context, id uint64, addr hubtypes.NodeAddress) bool {
+func (k *Keeper) HasNodeForPlan(ctx sdk.Context, id uint64, addr base.NodeAddress) bool {
 	var (
 		store = k.Store(ctx)
 		key   = types.NodeForPlanKey(id, addr)
@@ -217,7 +217,7 @@ func (k *Keeper) HasNodeForPlan(ctx sdk.Context, id uint64, addr hubtypes.NodeAd
 	return store.Has(key)
 }
 
-func (k *Keeper) DeleteNodeForPlan(ctx sdk.Context, id uint64, addr hubtypes.NodeAddress) {
+func (k *Keeper) DeleteNodeForPlan(ctx sdk.Context, id uint64, addr base.NodeAddress) {
 	var (
 		store = k.Store(ctx)
 		key   = types.NodeForPlanKey(id, addr)

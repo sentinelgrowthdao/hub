@@ -8,7 +8,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	protobuf "github.com/gogo/protobuf/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 	hubutils "github.com/sentinel-official/hub/v12/utils"
 	"github.com/sentinel-official/hub/v12/x/subscription/types"
 )
@@ -138,7 +138,7 @@ func (k *Keeper) GetSubscriptionsForAccount(ctx sdk.Context, addr sdk.AccAddress
 	return items
 }
 
-func (k *Keeper) SetSubscriptionForNode(ctx sdk.Context, addr hubtypes.NodeAddress, id uint64) {
+func (k *Keeper) SetSubscriptionForNode(ctx sdk.Context, addr base.NodeAddress, id uint64) {
 	var (
 		store = k.Store(ctx)
 		key   = types.SubscriptionForNodeKey(addr, id)
@@ -148,7 +148,7 @@ func (k *Keeper) SetSubscriptionForNode(ctx sdk.Context, addr hubtypes.NodeAddre
 	store.Set(key, value)
 }
 
-func (k *Keeper) HashSubscriptionForNode(ctx sdk.Context, addr hubtypes.NodeAddress, id uint64) bool {
+func (k *Keeper) HashSubscriptionForNode(ctx sdk.Context, addr base.NodeAddress, id uint64) bool {
 	var (
 		store = k.Store(ctx)
 		key   = types.SubscriptionForNodeKey(addr, id)
@@ -157,7 +157,7 @@ func (k *Keeper) HashSubscriptionForNode(ctx sdk.Context, addr hubtypes.NodeAddr
 	return store.Has(key)
 }
 
-func (k *Keeper) DeleteSubscriptionForNode(ctx sdk.Context, addr hubtypes.NodeAddress, id uint64) {
+func (k *Keeper) DeleteSubscriptionForNode(ctx sdk.Context, addr base.NodeAddress, id uint64) {
 	var (
 		store = k.Store(ctx)
 		key   = types.SubscriptionForNodeKey(addr, id)
@@ -166,7 +166,7 @@ func (k *Keeper) DeleteSubscriptionForNode(ctx sdk.Context, addr hubtypes.NodeAd
 	store.Delete(key)
 }
 
-func (k *Keeper) GetSubscriptionsForNode(ctx sdk.Context, addr hubtypes.NodeAddress) (items types.Subscriptions) {
+func (k *Keeper) GetSubscriptionsForNode(ctx sdk.Context, addr base.NodeAddress) (items types.Subscriptions) {
 	var (
 		store = k.Store(ctx)
 		iter  = sdk.KVStorePrefixIterator(store, types.GetSubscriptionForNodeKeyPrefix(addr))
@@ -269,13 +269,13 @@ func (k *Keeper) IterateSubscriptionsForInactiveAt(ctx sdk.Context, endTime time
 }
 
 // CreateSubscriptionForNode creates a new NodeSubscription for a specific node and account.
-func (k *Keeper) CreateSubscriptionForNode(ctx sdk.Context, accAddr sdk.AccAddress, nodeAddr hubtypes.NodeAddress, gigabytes, hours int64, denom string) (*types.NodeSubscription, error) {
+func (k *Keeper) CreateSubscriptionForNode(ctx sdk.Context, accAddr sdk.AccAddress, nodeAddr base.NodeAddress, gigabytes, hours int64, denom string) (*types.NodeSubscription, error) {
 	// Check if the node exists and is in an active status.
 	node, found := k.GetNode(ctx, nodeAddr)
 	if !found {
 		return nil, types.NewErrorNodeNotFound(nodeAddr)
 	}
-	if !node.Status.Equal(hubtypes.StatusActive) {
+	if !node.Status.Equal(base.StatusActive) {
 		return nil, types.NewErrorInvalidNodeStatus(nodeAddr, node.Status)
 	}
 
@@ -286,7 +286,7 @@ func (k *Keeper) CreateSubscriptionForNode(ctx sdk.Context, accAddr sdk.AccAddre
 			ID:         count + 1,
 			Address:    accAddr.String(),
 			InactiveAt: time.Time{},
-			Status:     hubtypes.StatusActive,
+			Status:     base.StatusActive,
 			StatusAt:   ctx.BlockTime(),
 		},
 		NodeAddress: nodeAddr.String(),
@@ -304,7 +304,7 @@ func (k *Keeper) CreateSubscriptionForNode(ctx sdk.Context, accAddr sdk.AccAddre
 		subscription.InactiveAt = ctx.BlockTime().Add(90 * types.Day) // TODO: move to params
 		subscription.Deposit = sdk.NewCoin(
 			price.Denom,
-			hubutils.AmountForBytes(price.Amount, hubtypes.Gigabyte.MulRaw(gigabytes)),
+			hubutils.AmountForBytes(price.Amount, base.Gigabyte.MulRaw(gigabytes)),
 		)
 	}
 	if hours != 0 {
@@ -338,7 +338,7 @@ func (k *Keeper) CreateSubscriptionForNode(ctx sdk.Context, accAddr sdk.AccAddre
 		alloc := types.Allocation{
 			ID:            subscription.GetID(),
 			Address:       accAddr.String(),
-			GrantedBytes:  hubtypes.Gigabyte.MulRaw(gigabytes),
+			GrantedBytes:  base.Gigabyte.MulRaw(gigabytes),
 			UtilisedBytes: sdkmath.ZeroInt(),
 		}
 
@@ -391,7 +391,7 @@ func (k *Keeper) CreateSubscriptionForPlan(ctx sdk.Context, accAddr sdk.AccAddre
 	if !found {
 		return nil, types.NewErrorPlanNotFound(id)
 	}
-	if !plan.Status.Equal(hubtypes.StatusActive) {
+	if !plan.Status.Equal(base.StatusActive) {
 		return nil, types.NewErrorInvalidPlanStatus(plan.ID, plan.Status)
 	}
 
@@ -441,7 +441,7 @@ func (k *Keeper) CreateSubscriptionForPlan(ctx sdk.Context, accAddr sdk.AccAddre
 			ID:         count + 1,
 			Address:    accAddr.String(),
 			InactiveAt: ctx.BlockTime().Add(plan.Duration),
-			Status:     hubtypes.StatusActive,
+			Status:     base.StatusActive,
 			StatusAt:   ctx.BlockTime(),
 		},
 		PlanID: plan.ID,
@@ -459,7 +459,7 @@ func (k *Keeper) CreateSubscriptionForPlan(ctx sdk.Context, accAddr sdk.AccAddre
 	alloc := types.Allocation{
 		ID:            subscription.GetID(),
 		Address:       accAddr.String(),
-		GrantedBytes:  hubtypes.Gigabyte.MulRaw(plan.Gigabytes),
+		GrantedBytes:  base.Gigabyte.MulRaw(plan.Gigabytes),
 		UtilisedBytes: sdkmath.ZeroInt(),
 	}
 

@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	protobuf "github.com/gogo/protobuf/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/subscription/types"
 )
 
@@ -116,7 +116,7 @@ func (k *Keeper) DeletePayoutForAccount(ctx sdk.Context, addr sdk.AccAddress, id
 	store.Delete(key)
 }
 
-func (k *Keeper) SetPayoutForNode(ctx sdk.Context, addr hubtypes.NodeAddress, id uint64) {
+func (k *Keeper) SetPayoutForNode(ctx sdk.Context, addr base.NodeAddress, id uint64) {
 	var (
 		store = k.Store(ctx)
 		key   = types.PayoutForNodeKey(addr, id)
@@ -126,7 +126,7 @@ func (k *Keeper) SetPayoutForNode(ctx sdk.Context, addr hubtypes.NodeAddress, id
 	store.Set(key, value)
 }
 
-func (k *Keeper) HashPayoutForNode(ctx sdk.Context, addr hubtypes.NodeAddress, id uint64) bool {
+func (k *Keeper) HashPayoutForNode(ctx sdk.Context, addr base.NodeAddress, id uint64) bool {
 	var (
 		store = k.Store(ctx)
 		key   = types.PayoutForNodeKey(addr, id)
@@ -135,7 +135,7 @@ func (k *Keeper) HashPayoutForNode(ctx sdk.Context, addr hubtypes.NodeAddress, i
 	return store.Has(key)
 }
 
-func (k *Keeper) DeletePayoutForNode(ctx sdk.Context, addr hubtypes.NodeAddress, id uint64) {
+func (k *Keeper) DeletePayoutForNode(ctx sdk.Context, addr base.NodeAddress, id uint64) {
 	var (
 		store = k.Store(ctx)
 		key   = types.PayoutForNodeKey(addr, id)
@@ -144,7 +144,7 @@ func (k *Keeper) DeletePayoutForNode(ctx sdk.Context, addr hubtypes.NodeAddress,
 	store.Delete(key)
 }
 
-func (k *Keeper) SetPayoutForAccountByNode(ctx sdk.Context, accAddr sdk.AccAddress, nodeAddr hubtypes.NodeAddress, id uint64) {
+func (k *Keeper) SetPayoutForAccountByNode(ctx sdk.Context, accAddr sdk.AccAddress, nodeAddr base.NodeAddress, id uint64) {
 	var (
 		store = k.Store(ctx)
 		key   = types.PayoutForAccountByNodeKey(accAddr, nodeAddr, id)
@@ -154,7 +154,7 @@ func (k *Keeper) SetPayoutForAccountByNode(ctx sdk.Context, accAddr sdk.AccAddre
 	store.Set(key, value)
 }
 
-func (k *Keeper) HashPayoutForAccountByNode(ctx sdk.Context, accAddr sdk.AccAddress, nodeAddr hubtypes.NodeAddress, id uint64) bool {
+func (k *Keeper) HashPayoutForAccountByNode(ctx sdk.Context, accAddr sdk.AccAddress, nodeAddr base.NodeAddress, id uint64) bool {
 	var (
 		store = k.Store(ctx)
 		key   = types.PayoutForAccountByNodeKey(accAddr, nodeAddr, id)
@@ -163,7 +163,7 @@ func (k *Keeper) HashPayoutForAccountByNode(ctx sdk.Context, accAddr sdk.AccAddr
 	return store.Has(key)
 }
 
-func (k *Keeper) DeletePayoutForAccountByNode(ctx sdk.Context, accAddr sdk.AccAddress, nodeAddr hubtypes.NodeAddress, id uint64) {
+func (k *Keeper) DeletePayoutForAccountByNode(ctx sdk.Context, accAddr sdk.AccAddress, nodeAddr base.NodeAddress, id uint64) {
 	var (
 		store = k.Store(ctx)
 		key   = types.PayoutForAccountByNodeKey(accAddr, nodeAddr, id)
@@ -172,7 +172,7 @@ func (k *Keeper) DeletePayoutForAccountByNode(ctx sdk.Context, accAddr sdk.AccAd
 	store.Delete(key)
 }
 
-func (k *Keeper) GetLatestPayoutForAccountByNode(ctx sdk.Context, accAddr sdk.AccAddress, nodeAddr hubtypes.NodeAddress) (payout types.Payout, found bool) {
+func (k *Keeper) GetLatestPayoutForAccountByNode(ctx sdk.Context, accAddr sdk.AccAddress, nodeAddr base.NodeAddress) (payout types.Payout, found bool) {
 	store := k.Store(ctx)
 
 	iter := sdk.KVStoreReversePrefixIterator(store, types.GetPayoutForAccountByNodeKeyPrefix(accAddr, nodeAddr))

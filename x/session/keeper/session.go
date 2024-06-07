@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	protobuf "github.com/gogo/protobuf/types"
@@ -119,7 +119,7 @@ func (k *Keeper) GetSessionsForAccount(ctx sdk.Context, addr sdk.AccAddress) (it
 	return items
 }
 
-func (k *Keeper) SetSessionForNode(ctx sdk.Context, addr hubtypes.NodeAddress, id uint64) {
+func (k *Keeper) SetSessionForNode(ctx sdk.Context, addr base.NodeAddress, id uint64) {
 	var (
 		store = k.Store(ctx)
 		key   = types.SessionForNodeKey(addr, id)
@@ -129,7 +129,7 @@ func (k *Keeper) SetSessionForNode(ctx sdk.Context, addr hubtypes.NodeAddress, i
 	store.Set(key, value)
 }
 
-func (k *Keeper) DeleteSessionForNode(ctx sdk.Context, addr hubtypes.NodeAddress, id uint64) {
+func (k *Keeper) DeleteSessionForNode(ctx sdk.Context, addr base.NodeAddress, id uint64) {
 	var (
 		store = k.Store(ctx)
 		key   = types.SessionForNodeKey(addr, id)
@@ -138,7 +138,7 @@ func (k *Keeper) DeleteSessionForNode(ctx sdk.Context, addr hubtypes.NodeAddress
 	store.Delete(key)
 }
 
-func (k *Keeper) GetSessionsForNode(ctx sdk.Context, addr hubtypes.NodeAddress) (items types.Sessions) {
+func (k *Keeper) GetSessionsForNode(ctx sdk.Context, addr base.NodeAddress) (items types.Sessions) {
 	var (
 		store = k.Store(ctx)
 		iter  = sdk.KVStorePrefixIterator(store, types.GetSessionForNodeKeyPrefix(addr))

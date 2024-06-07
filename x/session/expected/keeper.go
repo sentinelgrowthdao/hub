@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 	nodetypes "github.com/sentinel-official/hub/v12/x/node/types"
 	plantypes "github.com/sentinel-official/hub/v12/x/plan/types"
 	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types"
@@ -27,8 +27,8 @@ type DepositKeeper interface {
 }
 
 type NodeKeeper interface {
-	GetNode(ctx sdk.Context, address hubtypes.NodeAddress) (nodetypes.Node, bool)
-	HasNodeForPlan(ctx sdk.Context, id uint64, addr hubtypes.NodeAddress) bool
+	GetNode(ctx sdk.Context, address base.NodeAddress) (nodetypes.Node, bool)
+	HasNodeForPlan(ctx sdk.Context, id uint64, addr base.NodeAddress) bool
 	StakingShare(ctx sdk.Context) sdkmath.LegacyDec
 }
 
@@ -40,6 +40,6 @@ type SubscriptionKeeper interface {
 	GetAllocation(ctx sdk.Context, id uint64, addr sdk.AccAddress) (subscriptiontypes.Allocation, bool)
 	SetAllocation(ctx sdk.Context, alloc subscriptiontypes.Allocation)
 	GetSubscription(ctx sdk.Context, id uint64) (subscriptiontypes.Subscription, bool)
-	GetLatestPayoutForAccountByNode(ctx sdk.Context, accAddr sdk.AccAddress, nodeAddr hubtypes.NodeAddress) (subscriptiontypes.Payout, bool)
-	SessionInactiveHook(ctx sdk.Context, subscriptionID uint64, accAddr sdk.AccAddress, nodeAddr hubtypes.NodeAddress, bytes sdkmath.Int) error
+	GetLatestPayoutForAccountByNode(ctx sdk.Context, accAddr sdk.AccAddress, nodeAddr base.NodeAddress) (subscriptiontypes.Payout, bool)
+	SessionInactiveHook(ctx sdk.Context, subscriptionID uint64, accAddr sdk.AccAddress, nodeAddr base.NodeAddress, bytes sdkmath.Int) error
 }

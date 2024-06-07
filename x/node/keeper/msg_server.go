@@ -6,7 +6,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/node/types"
 )
 
@@ -46,8 +46,8 @@ func (k *msgServer) MsgRegister(c context.Context, msg *types.MsgRegisterRequest
 		return nil, err
 	}
 
-	// Convert the account address to a `hubtypes.NodeAddress`.
-	nodeAddr := hubtypes.NodeAddress(accAddr.Bytes())
+	// Convert the account address to a `base.NodeAddress`.
+	nodeAddr := base.NodeAddress(accAddr.Bytes())
 
 	// Check if the node already exists in the network. If found, return an error to prevent duplicate registration.
 	if k.HasNode(ctx, nodeAddr) {
@@ -69,7 +69,7 @@ func (k *msgServer) MsgRegister(c context.Context, msg *types.MsgRegisterRequest
 		HourlyPrices:   msg.HourlyPrices,
 		RemoteURL:      msg.RemoteURL,
 		InactiveAt:     time.Time{},
-		Status:         hubtypes.StatusInactive,
+		Status:         base.StatusInactive,
 		StatusAt:       ctx.BlockTime(),
 	}
 
@@ -105,8 +105,8 @@ func (k *msgServer) MsgUpdateDetails(c context.Context, msg *types.MsgUpdateDeta
 		}
 	}
 
-	// Convert the `msg.From` address (in Bech32 format) to a `hubtypes.NodeAddress`.
-	nodeAddr, err := hubtypes.NodeAddressFromBech32(msg.From)
+	// Convert the `msg.From` address (in Bech32 format) to a `base.NodeAddress`.
+	nodeAddr, err := base.NodeAddressFromBech32(msg.From)
 	if err != nil {
 		return nil, err
 	}
@@ -146,8 +146,8 @@ func (k *msgServer) MsgUpdateDetails(c context.Context, msg *types.MsgUpdateDeta
 func (k *msgServer) MsgUpdateStatus(c context.Context, msg *types.MsgUpdateStatusRequest) (*types.MsgUpdateStatusResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
 
-	// Convert the `msg.From` address (in Bech32 format) to a `hubtypes.NodeAddress`.
-	nodeAddr, err := hubtypes.NodeAddressFromBech32(msg.From)
+	// Convert the `msg.From` address (in Bech32 format) to a `base.NodeAddress`.
+	nodeAddr, err := base.NodeAddressFromBech32(msg.From)
 	if err != nil {
 		return nil, err
 	}
@@ -159,22 +159,22 @@ func (k *msgServer) MsgUpdateStatus(c context.Context, msg *types.MsgUpdateStatu
 	}
 
 	// If the current status of the node is `Active`, handle the necessary updates for changing to `Inactive` status.
-	if node.Status.Equal(hubtypes.StatusActive) {
+	if node.Status.Equal(base.StatusActive) {
 		k.DeleteNodeForInactiveAt(ctx, node.InactiveAt, nodeAddr)
-		if msg.Status.Equal(hubtypes.StatusInactive) {
+		if msg.Status.Equal(base.StatusInactive) {
 			k.DeleteActiveNode(ctx, nodeAddr)
 		}
 	}
 
 	// If the current status of the node is `Inactive`, handle the necessary updates for changing to `Active` status.
-	if node.Status.Equal(hubtypes.StatusInactive) {
-		if msg.Status.Equal(hubtypes.StatusActive) {
+	if node.Status.Equal(base.StatusInactive) {
+		if msg.Status.Equal(base.StatusActive) {
 			k.DeleteInactiveNode(ctx, nodeAddr)
 		}
 	}
 
 	// If the new status is `Active`, update the node's inactive time based on the active duration.
-	if msg.Status.Equal(hubtypes.StatusActive) {
+	if msg.Status.Equal(base.StatusActive) {
 		node.InactiveAt = ctx.BlockTime().Add(
 			k.ActiveDuration(ctx),
 		)
@@ -182,7 +182,7 @@ func (k *msgServer) MsgUpdateStatus(c context.Context, msg *types.MsgUpdateStatu
 	}
 
 	// If the new status is `Inactive`, set the node's inactive time to zero.
-	if msg.Status.Equal(hubtypes.StatusInactive) {
+	if msg.Status.Equal(base.StatusInactive) {
 		node.InactiveAt = time.Time{}
 	}
 
@@ -229,8 +229,8 @@ func (k *msgServer) MsgSubscribe(c context.Context, msg *types.MsgSubscribeReque
 		return nil, err
 	}
 
-	// Convert the `msg.NodeAddress` (node address) to a `hubtypes.NodeAddress`.
-	nodeAddr, err := hubtypes.NodeAddressFromBech32(msg.NodeAddress)
+	// Convert the `msg.NodeAddress` (node address) to a `base.NodeAddress`.
+	nodeAddr, err := base.NodeAddressFromBech32(msg.NodeAddress)
 	if err != nil {
 		return nil, err
 	}

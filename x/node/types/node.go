@@ -7,15 +7,15 @@ import (
 	sdkerrors "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
-func (m *Node) GetAddress() hubtypes.NodeAddress {
+func (m *Node) GetAddress() base.NodeAddress {
 	if m.Address == "" {
 		return nil
 	}
 
-	addr, err := hubtypes.NodeAddressFromBech32(m.Address)
+	addr, err := base.NodeAddressFromBech32(m.Address)
 	if err != nil {
 		panic(err)
 	}
@@ -27,7 +27,7 @@ func (m *Node) Validate() error {
 	if m.Address == "" {
 		return fmt.Errorf("address cannot be empty")
 	}
-	if _, err := hubtypes.NodeAddressFromBech32(m.Address); err != nil {
+	if _, err := base.NodeAddressFromBech32(m.Address); err != nil {
 		return sdkerrors.Wrapf(err, "invalid address %s", m.Address)
 	}
 	if m.GigabytePrices == nil {
@@ -73,16 +73,16 @@ func (m *Node) Validate() error {
 	}
 
 	if m.InactiveAt.IsZero() {
-		if !m.Status.Equal(hubtypes.StatusInactive) {
+		if !m.Status.Equal(base.StatusInactive) {
 			return fmt.Errorf("invalid inactive_at %s; expected positive", m.InactiveAt)
 		}
 	}
 	if !m.InactiveAt.IsZero() {
-		if !m.Status.Equal(hubtypes.StatusActive) {
+		if !m.Status.Equal(base.StatusActive) {
 			return fmt.Errorf("invalid inactive_at %s; expected zero", m.InactiveAt)
 		}
 	}
-	if !m.Status.IsOneOf(hubtypes.StatusActive, hubtypes.StatusInactive) {
+	if !m.Status.IsOneOf(base.StatusActive, base.StatusInactive) {
 		return fmt.Errorf("status must be one of [active, inactive]")
 	}
 	if m.StatusAt.IsZero() {

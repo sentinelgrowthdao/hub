@@ -6,15 +6,15 @@ import (
 
 	sdkerrors "cosmossdk.io/errors"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
-func (m *Provider) GetAddress() hubtypes.ProvAddress {
+func (m *Provider) GetAddress() base.ProvAddress {
 	if m.Address == "" {
 		return nil
 	}
 
-	addr, err := hubtypes.ProvAddressFromBech32(m.Address)
+	addr, err := base.ProvAddressFromBech32(m.Address)
 	if err != nil {
 		panic(err)
 	}
@@ -26,7 +26,7 @@ func (m *Provider) Validate() error {
 	if m.Address == "" {
 		return fmt.Errorf("address cannot be empty")
 	}
-	if _, err := hubtypes.ProvAddressFromBech32(m.Address); err != nil {
+	if _, err := base.ProvAddressFromBech32(m.Address); err != nil {
 		return sdkerrors.Wrapf(err, "invalid address %s", m.Address)
 	}
 	if m.Name == "" {
@@ -49,7 +49,7 @@ func (m *Provider) Validate() error {
 	if len(m.Description) > 256 {
 		return fmt.Errorf("description length cannot be greater than %d chars", 256)
 	}
-	if !m.Status.IsOneOf(hubtypes.StatusActive, hubtypes.StatusInactive) {
+	if !m.Status.IsOneOf(base.StatusActive, base.StatusInactive) {
 		return fmt.Errorf("status must be one of [active, inactive]")
 	}
 

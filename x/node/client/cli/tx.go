@@ -8,7 +8,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	"github.com/spf13/cobra"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/node/types"
 )
 
@@ -114,7 +114,7 @@ func txUpdateStatus() *cobra.Command {
 
 			msg := types.NewMsgUpdateStatusRequest(
 				ctx.FromAddress.Bytes(),
-				hubtypes.StatusFromString(args[0]),
+				base.StatusFromString(args[0]),
 			)
 			if err = msg.ValidateBasic(); err != nil {
 				return err
@@ -140,7 +140,7 @@ func txSubscribe() *cobra.Command {
 				return err
 			}
 
-			addr, err := hubtypes.NodeAddressFromBech32(args[0])
+			addr, err := base.NodeAddressFromBech32(args[0])
 			if err != nil {
 				return err
 			}

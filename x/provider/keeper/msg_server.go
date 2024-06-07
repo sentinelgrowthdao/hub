@@ -5,7 +5,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/provider/types"
 )
 
@@ -35,8 +35,8 @@ func (k *msgServer) MsgRegister(c context.Context, msg *types.MsgRegisterRequest
 		return nil, err
 	}
 
-	// Convert the `accAddr` to a `hubtypes.ProvAddress` to represent the provider address.
-	provAddr := hubtypes.ProvAddress(accAddr.Bytes())
+	// Convert the `accAddr` to a `base.ProvAddress` to represent the provider address.
+	provAddr := base.ProvAddress(accAddr.Bytes())
 
 	// Check if the provider with the given address exists in the network. If yes, return an error.
 	if k.HasProvider(ctx, provAddr) {
@@ -56,7 +56,7 @@ func (k *msgServer) MsgRegister(c context.Context, msg *types.MsgRegisterRequest
 		Identity:    msg.Identity,
 		Website:     msg.Website,
 		Description: msg.Description,
-		Status:      hubtypes.StatusInactive,
+		Status:      base.StatusInactive,
 		StatusAt:    ctx.BlockTime(),
 	}
 
@@ -78,8 +78,8 @@ func (k *msgServer) MsgRegister(c context.Context, msg *types.MsgRegisterRequest
 func (k *msgServer) MsgUpdate(c context.Context, msg *types.MsgUpdateRequest) (*types.MsgUpdateResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
 
-	// Convert the `msg.From` address (in Bech32 format) to a `hubtypes.ProvAddress`.
-	provAddr, err := hubtypes.ProvAddressFromBech32(msg.From)
+	// Convert the `msg.From` address (in Bech32 format) to a `base.ProvAddress`.
+	provAddr, err := base.ProvAddressFromBech32(msg.From)
 	if err != nil {
 		return nil, err
 	}
@@ -99,16 +99,16 @@ func (k *msgServer) MsgUpdate(c context.Context, msg *types.MsgUpdateRequest) (*
 	provider.Description = msg.Description
 
 	// If the status is provided in the message and it is not `StatusUnspecified`, update the provider's status.
-	if !msg.Status.Equal(hubtypes.StatusUnspecified) {
+	if !msg.Status.Equal(base.StatusUnspecified) {
 		// If the current status of the provider is `Active`, handle the necessary updates for changing to `Inactive` status.
-		if provider.Status.Equal(hubtypes.StatusActive) {
-			if msg.Status.Equal(hubtypes.StatusInactive) {
+		if provider.Status.Equal(base.StatusActive) {
+			if msg.Status.Equal(base.StatusInactive) {
 				k.DeleteActiveProvider(ctx, provAddr)
 			}
 		}
 		// If the current status of the provider is `Inactive`, handle the necessary updates for changing to `Active` status.
-		if provider.Status.Equal(hubtypes.StatusInactive) {
-			if msg.Status.Equal(hubtypes.StatusActive) {
+		if provider.Status.Equal(base.StatusInactive) {
+			if msg.Status.Equal(base.StatusActive) {
 				k.DeleteInactiveProvider(ctx, provAddr)
 			}
 		}

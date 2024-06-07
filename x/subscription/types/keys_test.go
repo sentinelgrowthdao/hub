@@ -8,15 +8,15 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/address"
 	"github.com/stretchr/testify/require"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 func TestSubscriptionForInactiveAtKey(t *testing.T) {
 	for i := 0; i < 512; i += 64 {
 		require.Equal(
 			t,
-			append(append(SubscriptionForInactiveAtKeyPrefix, sdk.FormatTimeBytes(hubtypes.TestTimeNow)...), sdk.Uint64ToBigEndian(uint64(i))...),
-			SubscriptionForInactiveAtKey(hubtypes.TestTimeNow, uint64(i)),
+			append(append(SubscriptionForInactiveAtKeyPrefix, sdk.FormatTimeBytes(base.TestTimeNow)...), sdk.Uint64ToBigEndian(uint64(i))...),
+			SubscriptionForInactiveAtKey(base.TestTimeNow, uint64(i)),
 		)
 	}
 }
@@ -198,7 +198,7 @@ func TestIDFromSubscriptionForInactiveAtKey(t *testing.T) {
 	)
 
 	for i := 1; i <= 256; i += 64 {
-		key = SubscriptionForInactiveAtKey(hubtypes.TestTimeNow, uint64(i))
+		key = SubscriptionForInactiveAtKey(base.TestTimeNow, uint64(i))
 		require.Equal(
 			t,
 			uint64(i),
@@ -339,7 +339,7 @@ func TestIDFromPayoutForNextAtKey(t *testing.T) {
 	)
 
 	for i := 1; i <= 256; i += 64 {
-		key = PayoutForNextAtKey(hubtypes.TestTimeNow, uint64(i))
+		key = PayoutForNextAtKey(base.TestTimeNow, uint64(i))
 		require.Equal(
 			t,
 			uint64(i),

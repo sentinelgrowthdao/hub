@@ -4,7 +4,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 	nodetypes "github.com/sentinel-official/hub/v12/x/node/types"
 	plantypes "github.com/sentinel-official/hub/v12/x/plan/types"
 	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types"
@@ -30,11 +30,11 @@ func (k *Keeper) SendCoinFromDepositToModule(ctx sdk.Context, from sdk.AccAddres
 	return k.deposit.SendCoinsFromDepositToModule(ctx, from, to, sdk.NewCoins(coin))
 }
 
-func (k *Keeper) HasNodeForPlan(ctx sdk.Context, id uint64, addr hubtypes.NodeAddress) bool {
+func (k *Keeper) HasNodeForPlan(ctx sdk.Context, id uint64, addr base.NodeAddress) bool {
 	return k.node.HasNodeForPlan(ctx, id, addr)
 }
 
-func (k *Keeper) GetNode(ctx sdk.Context, addr hubtypes.NodeAddress) (nodetypes.Node, bool) {
+func (k *Keeper) GetNode(ctx sdk.Context, addr base.NodeAddress) (nodetypes.Node, bool) {
 	return k.node.GetNode(ctx, addr)
 }
 
@@ -50,7 +50,7 @@ func (k *Keeper) SetAllocation(ctx sdk.Context, alloc subscriptiontypes.Allocati
 	k.subscription.SetAllocation(ctx, alloc)
 }
 
-func (k *Keeper) GetLatestPayoutForAccountByNode(ctx sdk.Context, accAddr sdk.AccAddress, nodeAddr hubtypes.NodeAddress) (subscriptiontypes.Payout, bool) {
+func (k *Keeper) GetLatestPayoutForAccountByNode(ctx sdk.Context, accAddr sdk.AccAddress, nodeAddr base.NodeAddress) (subscriptiontypes.Payout, bool) {
 	return k.subscription.GetLatestPayoutForAccountByNode(ctx, accAddr, nodeAddr)
 }
 

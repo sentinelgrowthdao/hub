@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/address"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 const (
@@ -30,11 +30,11 @@ func InactivePlanKey(id uint64) []byte {
 	return append(InactivePlanKeyPrefix, sdk.Uint64ToBigEndian(id)...)
 }
 
-func GetPlanForProviderKeyPrefix(addr hubtypes.ProvAddress) []byte {
+func GetPlanForProviderKeyPrefix(addr base.ProvAddress) []byte {
 	return append(PlanForProviderKeyPrefix, address.MustLengthPrefix(addr.Bytes())...)
 }
 
-func PlanForProviderKey(addr hubtypes.ProvAddress, id uint64) []byte {
+func PlanForProviderKey(addr base.ProvAddress, id uint64) []byte {
 	return append(GetPlanForProviderKeyPrefix(addr), sdk.Uint64ToBigEndian(id)...)
 }
 

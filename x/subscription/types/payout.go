@@ -5,7 +5,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 func (p *Payout) GetAddress() sdk.AccAddress {
@@ -21,12 +21,12 @@ func (p *Payout) GetAddress() sdk.AccAddress {
 	return addr
 }
 
-func (p *Payout) GetNodeAddress() hubtypes.NodeAddress {
+func (p *Payout) GetNodeAddress() base.NodeAddress {
 	if p.NodeAddress == "" {
 		return nil
 	}
 
-	addr, err := hubtypes.NodeAddressFromBech32(p.NodeAddress)
+	addr, err := base.NodeAddressFromBech32(p.NodeAddress)
 	if err != nil {
 		panic(err)
 	}

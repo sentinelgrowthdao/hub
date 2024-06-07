@@ -3,7 +3,7 @@ package cli
 import (
 	"encoding/base64"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/pflag"
@@ -29,7 +29,7 @@ func GetAddress(flags *pflag.FlagSet) (sdk.AccAddress, error) {
 	return sdk.AccAddressFromBech32(s)
 }
 
-func GetNodeAddress(flags *pflag.FlagSet) (hubtypes.NodeAddress, error) {
+func GetNodeAddress(flags *pflag.FlagSet) (base.NodeAddress, error) {
 	s, err := flags.GetString(flagNodeAddress)
 	if err != nil {
 		return nil, err
@@ -38,7 +38,7 @@ func GetNodeAddress(flags *pflag.FlagSet) (hubtypes.NodeAddress, error) {
 		return nil, nil
 	}
 
-	return hubtypes.NodeAddressFromBech32(s)
+	return base.NodeAddressFromBech32(s)
 }
 
 func GetSignature(flags *pflag.FlagSet) ([]byte, error) {

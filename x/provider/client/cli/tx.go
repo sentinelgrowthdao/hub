@@ -8,7 +8,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	"github.com/spf13/cobra"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/provider/types"
 )
 
@@ -91,7 +91,7 @@ func txUpdate() *cobra.Command {
 				return err
 			}
 
-			status, err := hubtypes.StatusFromFlags(cmd.Flags())
+			status, err := base.StatusFromFlags(cmd.Flags())
 			if err != nil {
 				return err
 			}
@@ -117,7 +117,7 @@ func txUpdate() *cobra.Command {
 	cmd.Flags().String(flagIdentity, "", "identity of the provider")
 	cmd.Flags().String(flagWebsite, "", "website of the provider")
 	cmd.Flags().String(flagDescription, "", "description of the provider")
-	cmd.Flags().String(hubtypes.FlagStatus, "", "status of the provider (active|inactive)")
+	cmd.Flags().String(base.FlagStatus, "", "status of the provider (active|inactive)")
 
 	return cmd
 }

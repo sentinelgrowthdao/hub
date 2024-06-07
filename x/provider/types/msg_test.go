@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 func TestMsgRegisterRequest_ValidateBasic(t *testing.T) {
@@ -23,28 +23,28 @@ func TestMsgRegisterRequest_ValidateBasic(t *testing.T) {
 		{
 			"from empty",
 			fields{
-				From: hubtypes.TestAddrEmpty,
+				From: base.TestAddrEmpty,
 			},
 			true,
 		},
 		{
 			"from invalid",
 			fields{
-				From: hubtypes.TestAddrInvalid,
+				From: base.TestAddrInvalid,
 			},
 			true,
 		},
 		{
 			"from invalid prefix",
 			fields{
-				From: hubtypes.TestBech32ProvAddr20Bytes,
+				From: base.TestBech32ProvAddr20Bytes,
 			},
 			true,
 		},
 		{
 			"from 10 bytes",
 			fields{
-				From: hubtypes.TestBech32AccAddr10Bytes,
+				From: base.TestBech32AccAddr10Bytes,
 				Name: "name",
 			},
 			false,
@@ -52,7 +52,7 @@ func TestMsgRegisterRequest_ValidateBasic(t *testing.T) {
 		{
 			"from 20 bytes",
 			fields{
-				From: hubtypes.TestBech32AccAddr20Bytes,
+				From: base.TestBech32AccAddr20Bytes,
 				Name: "name",
 			},
 			false,
@@ -60,7 +60,7 @@ func TestMsgRegisterRequest_ValidateBasic(t *testing.T) {
 		{
 			"from 30 bytes",
 			fields{
-				From: hubtypes.TestBech32AccAddr30Bytes,
+				From: base.TestBech32AccAddr30Bytes,
 				Name: "name",
 			},
 			false,
@@ -68,7 +68,7 @@ func TestMsgRegisterRequest_ValidateBasic(t *testing.T) {
 		{
 			"name empty",
 			fields{
-				From: hubtypes.TestBech32AccAddr20Bytes,
+				From: base.TestBech32AccAddr20Bytes,
 				Name: "",
 			},
 			true,
@@ -76,7 +76,7 @@ func TestMsgRegisterRequest_ValidateBasic(t *testing.T) {
 		{
 			"name non-empty",
 			fields{
-				From: hubtypes.TestBech32AccAddr20Bytes,
+				From: base.TestBech32AccAddr20Bytes,
 				Name: strings.Repeat("n", 8),
 			},
 			false,
@@ -84,7 +84,7 @@ func TestMsgRegisterRequest_ValidateBasic(t *testing.T) {
 		{
 			"name length 72 chars",
 			fields{
-				From: hubtypes.TestBech32AccAddr20Bytes,
+				From: base.TestBech32AccAddr20Bytes,
 				Name: strings.Repeat("n", 72),
 			},
 			true,
@@ -92,7 +92,7 @@ func TestMsgRegisterRequest_ValidateBasic(t *testing.T) {
 		{
 			"identity empty",
 			fields{
-				From:     hubtypes.TestBech32AccAddr20Bytes,
+				From:     base.TestBech32AccAddr20Bytes,
 				Name:     "name",
 				Identity: "",
 			},
@@ -101,7 +101,7 @@ func TestMsgRegisterRequest_ValidateBasic(t *testing.T) {
 		{
 			"identity non-empty",
 			fields{
-				From:     hubtypes.TestBech32AccAddr20Bytes,
+				From:     base.TestBech32AccAddr20Bytes,
 				Name:     "name",
 				Identity: "identity",
 			},
@@ -110,7 +110,7 @@ func TestMsgRegisterRequest_ValidateBasic(t *testing.T) {
 		{
 			"identity length 72 chars",
 			fields{
-				From:     hubtypes.TestBech32AccAddr20Bytes,
+				From:     base.TestBech32AccAddr20Bytes,
 				Name:     "name",
 				Identity: strings.Repeat("i", 72),
 			},
@@ -119,7 +119,7 @@ func TestMsgRegisterRequest_ValidateBasic(t *testing.T) {
 		{
 			"website empty",
 			fields{
-				From:     hubtypes.TestBech32AccAddr20Bytes,
+				From:     base.TestBech32AccAddr20Bytes,
 				Name:     "name",
 				Identity: "identity",
 				Website:  "",
@@ -129,7 +129,7 @@ func TestMsgRegisterRequest_ValidateBasic(t *testing.T) {
 		{
 			"website non-empty",
 			fields{
-				From:     hubtypes.TestBech32AccAddr20Bytes,
+				From:     base.TestBech32AccAddr20Bytes,
 				Name:     "name",
 				Identity: "identity",
 				Website:  "https://website",
@@ -139,7 +139,7 @@ func TestMsgRegisterRequest_ValidateBasic(t *testing.T) {
 		{
 			"website length 72 chars",
 			fields{
-				From:     hubtypes.TestBech32AccAddr20Bytes,
+				From:     base.TestBech32AccAddr20Bytes,
 				Name:     "name",
 				Identity: "identity",
 				Website:  strings.Repeat("w", 72),
@@ -149,7 +149,7 @@ func TestMsgRegisterRequest_ValidateBasic(t *testing.T) {
 		{
 			"website invalid",
 			fields{
-				From:     hubtypes.TestBech32AccAddr20Bytes,
+				From:     base.TestBech32AccAddr20Bytes,
 				Name:     "name",
 				Identity: "identity",
 				Website:  "invalid",
@@ -159,7 +159,7 @@ func TestMsgRegisterRequest_ValidateBasic(t *testing.T) {
 		{
 			"description empty",
 			fields{
-				From:        hubtypes.TestBech32AccAddr20Bytes,
+				From:        base.TestBech32AccAddr20Bytes,
 				Name:        "name",
 				Identity:    "identity",
 				Website:     "https://website",
@@ -170,7 +170,7 @@ func TestMsgRegisterRequest_ValidateBasic(t *testing.T) {
 		{
 			"description non-empty",
 			fields{
-				From:        hubtypes.TestBech32AccAddr20Bytes,
+				From:        base.TestBech32AccAddr20Bytes,
 				Name:        "name",
 				Identity:    "identity",
 				Website:     "https://website",
@@ -181,7 +181,7 @@ func TestMsgRegisterRequest_ValidateBasic(t *testing.T) {
 		{
 			"description length 264 chars",
 			fields{
-				From:        hubtypes.TestBech32AccAddr20Bytes,
+				From:        base.TestBech32AccAddr20Bytes,
 				Name:        "name",
 				Identity:    "identity",
 				Website:     "https://website",
@@ -213,7 +213,7 @@ func TestMsgUpdateRequest_ValidateBasic(t *testing.T) {
 		Identity    string
 		Website     string
 		Description string
-		Status      hubtypes.Status
+		Status      base.Status
 	}
 	tests := []struct {
 		name    string
@@ -223,49 +223,49 @@ func TestMsgUpdateRequest_ValidateBasic(t *testing.T) {
 		{
 			"address empty",
 			fields{
-				From: hubtypes.TestAddrEmpty,
+				From: base.TestAddrEmpty,
 			},
 			true,
 		},
 		{
 			"address invalid",
 			fields{
-				From: hubtypes.TestAddrInvalid,
+				From: base.TestAddrInvalid,
 			},
 			true,
 		},
 		{
 			"address invalid prefix",
 			fields{
-				From: hubtypes.TestBech32AccAddr20Bytes,
+				From: base.TestBech32AccAddr20Bytes,
 			},
 			true,
 		},
 		{
 			"address 10 bytes",
 			fields{
-				From: hubtypes.TestBech32ProvAddr10Bytes,
+				From: base.TestBech32ProvAddr10Bytes,
 			},
 			false,
 		},
 		{
 			"address 20 bytes",
 			fields{
-				From: hubtypes.TestBech32ProvAddr20Bytes,
+				From: base.TestBech32ProvAddr20Bytes,
 			},
 			false,
 		},
 		{
 			"address 30 bytes",
 			fields{
-				From: hubtypes.TestBech32ProvAddr30Bytes,
+				From: base.TestBech32ProvAddr30Bytes,
 			},
 			false,
 		},
 		{
 			"name empty",
 			fields{
-				From: hubtypes.TestBech32ProvAddr20Bytes,
+				From: base.TestBech32ProvAddr20Bytes,
 				Name: "",
 			},
 			false,
@@ -273,7 +273,7 @@ func TestMsgUpdateRequest_ValidateBasic(t *testing.T) {
 		{
 			"name non-empty",
 			fields{
-				From: hubtypes.TestBech32ProvAddr20Bytes,
+				From: base.TestBech32ProvAddr20Bytes,
 				Name: "name",
 			},
 			false,
@@ -281,7 +281,7 @@ func TestMsgUpdateRequest_ValidateBasic(t *testing.T) {
 		{
 			"name length 72 chars",
 			fields{
-				From: hubtypes.TestBech32ProvAddr20Bytes,
+				From: base.TestBech32ProvAddr20Bytes,
 				Name: strings.Repeat("n", 72),
 			},
 			true,
@@ -289,7 +289,7 @@ func TestMsgUpdateRequest_ValidateBasic(t *testing.T) {
 		{
 			"identity empty",
 			fields{
-				From:     hubtypes.TestBech32ProvAddr20Bytes,
+				From:     base.TestBech32ProvAddr20Bytes,
 				Identity: "",
 			},
 			false,
@@ -297,7 +297,7 @@ func TestMsgUpdateRequest_ValidateBasic(t *testing.T) {
 		{
 			"identity non-empty",
 			fields{
-				From:     hubtypes.TestBech32ProvAddr20Bytes,
+				From:     base.TestBech32ProvAddr20Bytes,
 				Identity: "identity",
 			},
 			false,
@@ -305,7 +305,7 @@ func TestMsgUpdateRequest_ValidateBasic(t *testing.T) {
 		{
 			"identity length 72 chars",
 			fields{
-				From:     hubtypes.TestBech32ProvAddr20Bytes,
+				From:     base.TestBech32ProvAddr20Bytes,
 				Identity: strings.Repeat("i", 72),
 			},
 			true,
@@ -313,7 +313,7 @@ func TestMsgUpdateRequest_ValidateBasic(t *testing.T) {
 		{
 			"website empty",
 			fields{
-				From:    hubtypes.TestBech32ProvAddr20Bytes,
+				From:    base.TestBech32ProvAddr20Bytes,
 				Website: "",
 			},
 			false,
@@ -321,7 +321,7 @@ func TestMsgUpdateRequest_ValidateBasic(t *testing.T) {
 		{
 			"website non-empty",
 			fields{
-				From:    hubtypes.TestBech32ProvAddr20Bytes,
+				From:    base.TestBech32ProvAddr20Bytes,
 				Website: "https://website",
 			},
 			false,
@@ -329,7 +329,7 @@ func TestMsgUpdateRequest_ValidateBasic(t *testing.T) {
 		{
 			"website length 72 chars",
 			fields{
-				From:    hubtypes.TestBech32ProvAddr20Bytes,
+				From:    base.TestBech32ProvAddr20Bytes,
 				Website: strings.Repeat("w", 72),
 			},
 			true,
@@ -337,7 +337,7 @@ func TestMsgUpdateRequest_ValidateBasic(t *testing.T) {
 		{
 			"website invalid",
 			fields{
-				From:    hubtypes.TestBech32ProvAddr20Bytes,
+				From:    base.TestBech32ProvAddr20Bytes,
 				Website: "invalid",
 			},
 			true,
@@ -345,7 +345,7 @@ func TestMsgUpdateRequest_ValidateBasic(t *testing.T) {
 		{
 			"description empty",
 			fields{
-				From:        hubtypes.TestBech32ProvAddr20Bytes,
+				From:        base.TestBech32ProvAddr20Bytes,
 				Description: "",
 			},
 			false,
@@ -353,7 +353,7 @@ func TestMsgUpdateRequest_ValidateBasic(t *testing.T) {
 		{
 			"description non-empty",
 			fields{
-				From:        hubtypes.TestBech32ProvAddr20Bytes,
+				From:        base.TestBech32ProvAddr20Bytes,
 				Description: "description",
 			},
 			false,
@@ -361,7 +361,7 @@ func TestMsgUpdateRequest_ValidateBasic(t *testing.T) {
 		{
 			"description length 264 chars",
 			fields{
-				From:        hubtypes.TestBech32ProvAddr20Bytes,
+				From:        base.TestBech32ProvAddr20Bytes,
 				Description: strings.Repeat("d", 264),
 			},
 			true,
@@ -369,32 +369,32 @@ func TestMsgUpdateRequest_ValidateBasic(t *testing.T) {
 		{
 			"status unspecified",
 			fields{
-				From:   hubtypes.TestBech32ProvAddr20Bytes,
-				Status: hubtypes.StatusUnspecified,
+				From:   base.TestBech32ProvAddr20Bytes,
+				Status: base.StatusUnspecified,
 			},
 			false,
 		},
 		{
 			"status active",
 			fields{
-				From:   hubtypes.TestBech32ProvAddr20Bytes,
-				Status: hubtypes.StatusActive,
+				From:   base.TestBech32ProvAddr20Bytes,
+				Status: base.StatusActive,
 			},
 			false,
 		},
 		{
 			"status inactive_pending",
 			fields{
-				From:   hubtypes.TestBech32ProvAddr20Bytes,
-				Status: hubtypes.StatusInactivePending,
+				From:   base.TestBech32ProvAddr20Bytes,
+				Status: base.StatusInactivePending,
 			},
 			true,
 		},
 		{
 			"status inactive",
 			fields{
-				From:   hubtypes.TestBech32ProvAddr20Bytes,
-				Status: hubtypes.StatusInactive,
+				From:   base.TestBech32ProvAddr20Bytes,
+				Status: base.StatusInactive,
 			},
 			false,
 		},

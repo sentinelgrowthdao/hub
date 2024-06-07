@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 	nodetypes "github.com/sentinel-official/hub/v12/x/node/types"
 	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types"
 )
@@ -20,13 +20,13 @@ type BankKeeper interface {
 }
 
 type ProviderKeeper interface {
-	HasProvider(ctx sdk.Context, addr hubtypes.ProvAddress) bool
+	HasProvider(ctx sdk.Context, addr base.ProvAddress) bool
 }
 
 type NodeKeeper interface {
-	HasNode(ctx sdk.Context, addr hubtypes.NodeAddress) bool
-	SetNodeForPlan(ctx sdk.Context, id uint64, addr hubtypes.NodeAddress)
-	DeleteNodeForPlan(ctx sdk.Context, id uint64, addr hubtypes.NodeAddress)
+	HasNode(ctx sdk.Context, addr base.NodeAddress) bool
+	SetNodeForPlan(ctx sdk.Context, id uint64, addr base.NodeAddress)
+	DeleteNodeForPlan(ctx sdk.Context, id uint64, addr base.NodeAddress)
 	GetNodesForPlan(ctx sdk.Context, id uint64) nodetypes.Nodes
 }
 

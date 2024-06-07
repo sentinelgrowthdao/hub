@@ -6,7 +6,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 func TestPayout_Validate(t *testing.T) {
@@ -33,8 +33,8 @@ func TestPayout_Validate(t *testing.T) {
 			fields{
 				ID:     1000,
 				Hours:  1000,
-				Price:  hubtypes.TestCoinPositiveAmount,
-				NextAt: hubtypes.TestTimeNow,
+				Price:  base.TestCoinPositiveAmount,
+				NextAt: base.TestTimeNow,
 			},
 			false,
 		},
@@ -59,7 +59,7 @@ func TestPayout_Validate(t *testing.T) {
 			fields{
 				ID:    1000,
 				Hours: 1000,
-				Price: hubtypes.TestCoinPositiveAmount,
+				Price: base.TestCoinPositiveAmount,
 			},
 			false,
 		},
@@ -68,7 +68,7 @@ func TestPayout_Validate(t *testing.T) {
 			fields{
 				ID:    1000,
 				Hours: 1000,
-				Price: hubtypes.TestCoinEmpty,
+				Price: base.TestCoinEmpty,
 			},
 			true,
 		},
@@ -77,7 +77,7 @@ func TestPayout_Validate(t *testing.T) {
 			fields{
 				ID:    1000,
 				Hours: 1000,
-				Price: hubtypes.TestCoinEmpty,
+				Price: base.TestCoinEmpty,
 			},
 			true,
 		},
@@ -86,7 +86,7 @@ func TestPayout_Validate(t *testing.T) {
 			fields{
 				ID:    1000,
 				Hours: 1000,
-				Price: hubtypes.TestCoinInvalidDenom,
+				Price: base.TestCoinInvalidDenom,
 			},
 			true,
 		},
@@ -95,7 +95,7 @@ func TestPayout_Validate(t *testing.T) {
 			fields{
 				ID:    1000,
 				Hours: 1000,
-				Price: hubtypes.TestCoinEmptyAmount,
+				Price: base.TestCoinEmptyAmount,
 			},
 			true,
 		},
@@ -104,7 +104,7 @@ func TestPayout_Validate(t *testing.T) {
 			fields{
 				ID:    1000,
 				Hours: 1000,
-				Price: hubtypes.TestCoinNegativeAmount,
+				Price: base.TestCoinNegativeAmount,
 			},
 			true,
 		},
@@ -113,7 +113,7 @@ func TestPayout_Validate(t *testing.T) {
 			fields{
 				ID:    1000,
 				Hours: 1000,
-				Price: hubtypes.TestCoinZeroAmount,
+				Price: base.TestCoinZeroAmount,
 			},
 			true,
 		},
@@ -122,7 +122,7 @@ func TestPayout_Validate(t *testing.T) {
 			fields{
 				ID:    1000,
 				Hours: 1000,
-				Price: hubtypes.TestCoinPositiveAmount,
+				Price: base.TestCoinPositiveAmount,
 			},
 			false,
 		},
@@ -131,8 +131,8 @@ func TestPayout_Validate(t *testing.T) {
 			fields{
 				ID:     1000,
 				Hours:  1000,
-				Price:  hubtypes.TestCoinPositiveAmount,
-				NextAt: hubtypes.TestTimeZero,
+				Price:  base.TestCoinPositiveAmount,
+				NextAt: base.TestTimeZero,
 			},
 			false,
 		},
@@ -141,8 +141,8 @@ func TestPayout_Validate(t *testing.T) {
 			fields{
 				ID:     1000,
 				Hours:  1000,
-				Price:  hubtypes.TestCoinPositiveAmount,
-				NextAt: hubtypes.TestTimeNow,
+				Price:  base.TestCoinPositiveAmount,
+				NextAt: base.TestTimeNow,
 			},
 			false,
 		},

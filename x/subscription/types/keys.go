@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/address"
@@ -45,11 +45,11 @@ func SubscriptionForAccountKey(addr sdk.AccAddress, id uint64) []byte {
 	return append(GetSubscriptionForAccountKeyPrefix(addr), sdk.Uint64ToBigEndian(id)...)
 }
 
-func GetSubscriptionForNodeKeyPrefix(addr hubtypes.NodeAddress) []byte {
+func GetSubscriptionForNodeKeyPrefix(addr base.NodeAddress) []byte {
 	return append(SubscriptionForNodeKeyPrefix, address.MustLengthPrefix(addr.Bytes())...)
 }
 
-func SubscriptionForNodeKey(addr hubtypes.NodeAddress, id uint64) []byte {
+func SubscriptionForNodeKey(addr base.NodeAddress, id uint64) []byte {
 	return append(GetSubscriptionForNodeKeyPrefix(addr), sdk.Uint64ToBigEndian(id)...)
 }
 
@@ -97,19 +97,19 @@ func PayoutForAccountKey(addr sdk.AccAddress, id uint64) []byte {
 	return append(GetPayoutForAccountKeyPrefix(addr), sdk.Uint64ToBigEndian(id)...)
 }
 
-func GetPayoutForNodeKeyPrefix(addr hubtypes.NodeAddress) []byte {
+func GetPayoutForNodeKeyPrefix(addr base.NodeAddress) []byte {
 	return append(PayoutForNodeKeyPrefix, address.MustLengthPrefix(addr.Bytes())...)
 }
 
-func PayoutForNodeKey(addr hubtypes.NodeAddress, id uint64) []byte {
+func PayoutForNodeKey(addr base.NodeAddress, id uint64) []byte {
 	return append(GetPayoutForNodeKeyPrefix(addr), sdk.Uint64ToBigEndian(id)...)
 }
 
-func GetPayoutForAccountByNodeKeyPrefix(accAddr sdk.AccAddress, nodeAddr hubtypes.NodeAddress) (key []byte) {
+func GetPayoutForAccountByNodeKeyPrefix(accAddr sdk.AccAddress, nodeAddr base.NodeAddress) (key []byte) {
 	return append(append(PayoutForAccountByNodeKeyPrefix, address.MustLengthPrefix(accAddr.Bytes())...), address.MustLengthPrefix(nodeAddr.Bytes())...)
 }
 
-func PayoutForAccountByNodeKey(accAddr sdk.AccAddress, nodeAddr hubtypes.NodeAddress, id uint64) []byte {
+func PayoutForAccountByNodeKey(accAddr sdk.AccAddress, nodeAddr base.NodeAddress, id uint64) []byte {
 	return append(GetPayoutForAccountByNodeKeyPrefix(accAddr, nodeAddr), sdk.Uint64ToBigEndian(id)...)
 }
 

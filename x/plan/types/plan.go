@@ -6,15 +6,15 @@ import (
 	sdkerrors "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
-func (m *Plan) GetProviderAddress() hubtypes.ProvAddress {
+func (m *Plan) GetProviderAddress() base.ProvAddress {
 	if m.ProviderAddress == "" {
 		return nil
 	}
 
-	addr, err := hubtypes.ProvAddressFromBech32(m.ProviderAddress)
+	addr, err := base.ProvAddressFromBech32(m.ProviderAddress)
 	if err != nil {
 		panic(err)
 	}
@@ -39,7 +39,7 @@ func (m *Plan) Validate() error {
 	if m.ProviderAddress == "" {
 		return fmt.Errorf("provider_address cannot be empty")
 	}
-	if _, err := hubtypes.ProvAddressFromBech32(m.ProviderAddress); err != nil {
+	if _, err := base.ProvAddressFromBech32(m.ProviderAddress); err != nil {
 		return sdkerrors.Wrapf(err, "invalid provider_address %s", m.ProviderAddress)
 	}
 	if m.Duration < 0 {
@@ -66,7 +66,7 @@ func (m *Plan) Validate() error {
 	if !m.Prices.IsValid() {
 		return fmt.Errorf("prices must be valid")
 	}
-	if !m.Status.IsOneOf(hubtypes.StatusActive, hubtypes.StatusInactive) {
+	if !m.Status.IsOneOf(base.StatusActive, base.StatusInactive) {
 		return fmt.Errorf("status must be one of [active, inactive]")
 	}
 	if m.StatusAt.IsZero() {

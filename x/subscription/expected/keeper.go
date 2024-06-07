@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 	nodetypes "github.com/sentinel-official/hub/v12/x/node/types"
 	plantypes "github.com/sentinel-official/hub/v12/x/plan/types"
 	sessiontypes "github.com/sentinel-official/hub/v12/x/session/types"
@@ -36,7 +36,7 @@ type ProviderKeeper interface {
 
 type NodeKeeper interface {
 	StakingShare(ctx sdk.Context) sdkmath.LegacyDec
-	GetNode(ctx sdk.Context, addr hubtypes.NodeAddress) (nodetypes.Node, bool)
+	GetNode(ctx sdk.Context, addr base.NodeAddress) (nodetypes.Node, bool)
 }
 
 type PlanKeeper interface {

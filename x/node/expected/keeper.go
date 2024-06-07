@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types"
 )
 
@@ -23,9 +23,9 @@ type DistributionKeeper interface {
 }
 
 type ProviderKeeper interface {
-	HasProvider(ctx sdk.Context, addr hubtypes.ProvAddress) bool
+	HasProvider(ctx sdk.Context, addr base.ProvAddress) bool
 }
 
 type SubscriptionKeeper interface {
-	CreateSubscriptionForNode(ctx sdk.Context, accAddr sdk.AccAddress, nodeAddr hubtypes.NodeAddress, gigabytes, hours int64, denom string) (*subscriptiontypes.NodeSubscription, error)
+	CreateSubscriptionForNode(ctx sdk.Context, accAddr sdk.AccAddress, nodeAddr base.NodeAddress, gigabytes, hours int64, denom string) (*subscriptiontypes.NodeSubscription, error)
 }

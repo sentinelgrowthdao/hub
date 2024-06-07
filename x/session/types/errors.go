@@ -5,7 +5,7 @@ package types
 import (
 	sdkerrors "cosmossdk.io/errors"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 var (
@@ -44,11 +44,11 @@ func NewErrorInvalidNode(addr interface{}) error {
 	return sdkerrors.Wrapf(ErrorInvalidNode, "invalid node %s", addr)
 }
 
-func NewErrorInvalidNodeStatus(addr interface{}, status hubtypes.Status) error {
+func NewErrorInvalidNodeStatus(addr interface{}, status base.Status) error {
 	return sdkerrors.Wrapf(ErrorInvalidNodeStatus, "invalid status %s for node %s", status, addr)
 }
 
-func NewErrorInvalidSessionStatus(id uint64, status hubtypes.Status) error {
+func NewErrorInvalidSessionStatus(id uint64, status base.Status) error {
 	return sdkerrors.Wrapf(ErrorInvalidSessionStatus, "invalid status %s for session %d", status, id)
 }
 
@@ -60,7 +60,7 @@ func NewErrorInvalidSubscription(id uint64) error {
 	return sdkerrors.Wrapf(ErrorInvalidSubscription, "invalid subscription %d", id)
 }
 
-func NewErrorInvalidSubscriptionStatus(id uint64, status hubtypes.Status) error {
+func NewErrorInvalidSubscriptionStatus(id uint64, status base.Status) error {
 	return sdkerrors.Wrapf(ErrorInvalidSubscriptionStatus, "invalid status %s for subscription %d", status, id)
 }
 

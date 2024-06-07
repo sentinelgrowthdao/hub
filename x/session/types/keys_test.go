@@ -8,7 +8,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/address"
 	"github.com/stretchr/testify/require"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 func TestSessionForAccountKey(t *testing.T) {
@@ -40,8 +40,8 @@ func TestSessionForInactiveAtKey(t *testing.T) {
 	for i := 0; i < 512; i += 64 {
 		require.Equal(
 			t,
-			append(append(SessionForInactiveAtKeyPrefix, sdk.FormatTimeBytes(hubtypes.TestTimeNow)...), sdk.Uint64ToBigEndian(uint64(i))...),
-			SessionForInactiveAtKey(hubtypes.TestTimeNow, uint64(i)),
+			append(append(SessionForInactiveAtKeyPrefix, sdk.FormatTimeBytes(base.TestTimeNow)...), sdk.Uint64ToBigEndian(uint64(i))...),
+			SessionForInactiveAtKey(base.TestTimeNow, uint64(i)),
 		)
 	}
 }
@@ -81,7 +81,7 @@ func TestIDFromSessionForInactiveAtKey(t *testing.T) {
 	)
 
 	for i := 1; i <= 256; i += 64 {
-		key = SessionForInactiveAtKey(hubtypes.TestTimeNow, uint64(i))
+		key = SessionForInactiveAtKey(base.TestTimeNow, uint64(i))
 		require.Equal(
 			t,
 			uint64(i),

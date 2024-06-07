@@ -3,7 +3,7 @@ package cli
 import (
 	"github.com/spf13/pflag"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 const (
@@ -11,7 +11,7 @@ const (
 	flagStatus   = "status"
 )
 
-func GetProvider(flags *pflag.FlagSet) (hubtypes.ProvAddress, error) {
+func GetProvider(flags *pflag.FlagSet) (base.ProvAddress, error) {
 	s, err := flags.GetString(flagProvider)
 	if err != nil {
 		return nil, err
@@ -20,17 +20,17 @@ func GetProvider(flags *pflag.FlagSet) (hubtypes.ProvAddress, error) {
 		return nil, nil
 	}
 
-	return hubtypes.ProvAddressFromBech32(s)
+	return base.ProvAddressFromBech32(s)
 }
 
-func GetStatus(flags *pflag.FlagSet) (hubtypes.Status, error) {
+func GetStatus(flags *pflag.FlagSet) (base.Status, error) {
 	s, err := flags.GetString(flagStatus)
 	if err != nil {
-		return hubtypes.StatusUnspecified, err
+		return base.StatusUnspecified, err
 	}
 	if s == "" {
-		return hubtypes.StatusUnspecified, nil
+		return base.StatusUnspecified, nil
 	}
 
-	return hubtypes.StatusFromString(s), nil
+	return base.StatusFromString(s), nil
 }

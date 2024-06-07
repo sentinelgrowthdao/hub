@@ -4,7 +4,7 @@ import (
 	sdkerrors "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 // The `types` package contains custom message types for the Cosmos SDK.
@@ -18,7 +18,7 @@ var (
 )
 
 // NewMsgStartRequest creates a new MsgStartRequest instance with the given parameters.
-func NewMsgStartRequest(from sdk.AccAddress, id uint64, addr hubtypes.NodeAddress) *MsgStartRequest {
+func NewMsgStartRequest(from sdk.AccAddress, id uint64, addr base.NodeAddress) *MsgStartRequest {
 	return &MsgStartRequest{
 		From:    from.String(),
 		ID:      id,
@@ -43,7 +43,7 @@ func (m *MsgStartRequest) ValidateBasic() error {
 	if m.Address == "" {
 		return sdkerrors.Wrap(ErrorInvalidMessage, "address cannot be empty")
 	}
-	if _, err := hubtypes.NodeAddressFromBech32(m.Address); err != nil {
+	if _, err := base.NodeAddressFromBech32(m.Address); err != nil {
 		return sdkerrors.Wrap(ErrorInvalidMessage, err.Error())
 	}
 
@@ -61,7 +61,7 @@ func (m *MsgStartRequest) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgUpdateDetailsRequest creates a new MsgUpdateDetailsRequest instance with the given parameters.
-func NewMsgUpdateDetailsRequest(from hubtypes.NodeAddress, proof Proof, signature []byte) *MsgUpdateDetailsRequest {
+func NewMsgUpdateDetailsRequest(from base.NodeAddress, proof Proof, signature []byte) *MsgUpdateDetailsRequest {
 	return &MsgUpdateDetailsRequest{
 		From:      from.String(),
 		Proof:     proof,
@@ -79,7 +79,7 @@ func (m *MsgUpdateDetailsRequest) ValidateBasic() error {
 	if m.From == "" {
 		return sdkerrors.Wrap(ErrorInvalidMessage, "from cannot be empty")
 	}
-	if _, err := hubtypes.NodeAddressFromBech32(m.From); err != nil {
+	if _, err := base.NodeAddressFromBech32(m.From); err != nil {
 		return sdkerrors.Wrap(ErrorInvalidMessage, err.Error())
 	}
 	if m.Proof.ID == 0 {
@@ -108,7 +108,7 @@ func (m *MsgUpdateDetailsRequest) ValidateBasic() error {
 
 // GetSigners returns an array containing the signer's account address extracted from the 'From' field of the MsgUpdateDetailsRequest.
 func (m *MsgUpdateDetailsRequest) GetSigners() []sdk.AccAddress {
-	from, err := hubtypes.NodeAddressFromBech32(m.From)
+	from, err := base.NodeAddressFromBech32(m.From)
 	if err != nil {
 		panic(err)
 	}

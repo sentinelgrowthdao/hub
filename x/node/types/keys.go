@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/address"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 const (
@@ -22,11 +22,11 @@ var (
 	NodeForPlanKeyPrefix       = []byte{0x12}
 )
 
-func ActiveNodeKey(addr hubtypes.NodeAddress) []byte {
+func ActiveNodeKey(addr base.NodeAddress) []byte {
 	return append(ActiveNodeKeyPrefix, address.MustLengthPrefix(addr.Bytes())...)
 }
 
-func InactiveNodeKey(addr hubtypes.NodeAddress) []byte {
+func InactiveNodeKey(addr base.NodeAddress) []byte {
 	return append(InactiveNodeKeyPrefix, address.MustLengthPrefix(addr.Bytes())...)
 }
 
@@ -34,7 +34,7 @@ func GetNodeForPlanKeyPrefix(id uint64) []byte {
 	return append(NodeForPlanKeyPrefix, sdk.Uint64ToBigEndian(id)...)
 }
 
-func NodeForPlanKey(id uint64, addr hubtypes.NodeAddress) []byte {
+func NodeForPlanKey(id uint64, addr base.NodeAddress) []byte {
 	return append(GetNodeForPlanKeyPrefix(id), address.MustLengthPrefix(addr.Bytes())...)
 }
 
@@ -42,11 +42,11 @@ func GetNodeForInactiveAtKeyPrefix(at time.Time) []byte {
 	return append(NodeForInactiveAtKeyPrefix, sdk.FormatTimeBytes(at)...)
 }
 
-func NodeForInactiveAtKey(at time.Time, addr hubtypes.NodeAddress) []byte {
+func NodeForInactiveAtKey(at time.Time, addr base.NodeAddress) []byte {
 	return append(GetNodeForInactiveAtKeyPrefix(at), address.MustLengthPrefix(addr.Bytes())...)
 }
 
-func AddressFromNodeForPlanKey(key []byte) hubtypes.NodeAddress {
+func AddressFromNodeForPlanKey(key []byte) base.NodeAddress {
 	// prefix (1 byte) | id (8 bytes) | addrLen (1 byte) | addr (addrLen bytes)
 
 	addrLen := int(key[9])
@@ -57,7 +57,7 @@ func AddressFromNodeForPlanKey(key []byte) hubtypes.NodeAddress {
 	return key[10:]
 }
 
-func AddressFromNodeForInactiveAtKey(key []byte) hubtypes.NodeAddress {
+func AddressFromNodeForInactiveAtKey(key []byte) base.NodeAddress {
 	// prefix (1 byte) | at (29 bytes) | addrLen (1 byte) | addr (addrLen bytes)
 
 	addrLen := int(key[30])

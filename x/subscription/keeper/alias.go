@@ -3,7 +3,7 @@ package keeper
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 	nodetypes "github.com/sentinel-official/hub/v12/x/node/types"
 	plantypes "github.com/sentinel-official/hub/v12/x/plan/types"
 	sessiontypes "github.com/sentinel-official/hub/v12/x/session/types"
@@ -57,7 +57,7 @@ func (k *Keeper) SendCoinFromDepositToModule(ctx sdk.Context, fromAddr sdk.AccAd
 	return k.deposit.SendCoinsFromDepositToModule(ctx, fromAddr, toModule, sdk.NewCoins(coin))
 }
 
-func (k *Keeper) GetNode(ctx sdk.Context, address hubtypes.NodeAddress) (nodetypes.Node, bool) {
+func (k *Keeper) GetNode(ctx sdk.Context, address base.NodeAddress) (nodetypes.Node, bool) {
 	return k.node.GetNode(ctx, address)
 }
 

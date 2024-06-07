@@ -8,7 +8,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/gogo/protobuf/proto"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 type (
@@ -19,10 +19,10 @@ type (
 		GetID() uint64
 		GetAddress() sdk.AccAddress
 		GetInactiveAt() time.Time
-		GetStatus() hubtypes.Status
+		GetStatus() base.Status
 		GetStatusAt() time.Time
 		SetInactiveAt(v time.Time)
-		SetStatus(v hubtypes.Status)
+		SetStatus(v base.Status)
 		SetStatusAt(v time.Time)
 	}
 	Subscriptions []Subscription
@@ -33,10 +33,10 @@ var (
 	_ Subscription = (*PlanSubscription)(nil)
 )
 
-func (s *BaseSubscription) GetID() uint64              { return s.ID }
-func (s *BaseSubscription) GetInactiveAt() time.Time   { return s.InactiveAt }
-func (s *BaseSubscription) GetStatus() hubtypes.Status { return s.Status }
-func (s *BaseSubscription) GetStatusAt() time.Time     { return s.StatusAt }
+func (s *BaseSubscription) GetID() uint64            { return s.ID }
+func (s *BaseSubscription) GetInactiveAt() time.Time { return s.InactiveAt }
+func (s *BaseSubscription) GetStatus() base.Status   { return s.Status }
+func (s *BaseSubscription) GetStatusAt() time.Time   { return s.StatusAt }
 
 func (s *BaseSubscription) GetAddress() sdk.AccAddress {
 	if s.Address == "" {
@@ -51,9 +51,9 @@ func (s *BaseSubscription) GetAddress() sdk.AccAddress {
 	return addr
 }
 
-func (s *BaseSubscription) SetInactiveAt(v time.Time)   { s.InactiveAt = v }
-func (s *BaseSubscription) SetStatus(v hubtypes.Status) { s.Status = v }
-func (s *BaseSubscription) SetStatusAt(v time.Time)     { s.StatusAt = v }
+func (s *BaseSubscription) SetInactiveAt(v time.Time) { s.InactiveAt = v }
+func (s *BaseSubscription) SetStatus(v base.Status)   { s.Status = v }
+func (s *BaseSubscription) SetStatusAt(v time.Time)   { s.StatusAt = v }
 
 func (s *BaseSubscription) Validate() error {
 	if s.ID == 0 {
@@ -92,7 +92,7 @@ func (s *NodeSubscription) Validate() error {
 	if s.NodeAddress == "" {
 		return fmt.Errorf("node_address cannot be empty")
 	}
-	if _, err := hubtypes.NodeAddressFromBech32(s.NodeAddress); err != nil {
+	if _, err := base.NodeAddressFromBech32(s.NodeAddress); err != nil {
 		return sdkerrors.Wrapf(err, "invalid node_address %s", s.NodeAddress)
 	}
 	if s.Gigabytes == 0 && s.Hours == 0 {
@@ -127,12 +127,12 @@ func (s *NodeSubscription) Validate() error {
 	return nil
 }
 
-func (s *NodeSubscription) GetNodeAddress() hubtypes.NodeAddress {
+func (s *NodeSubscription) GetNodeAddress() base.NodeAddress {
 	if s.NodeAddress == "" {
 		return nil
 	}
 
-	addr, err := hubtypes.NodeAddressFromBech32(s.NodeAddress)
+	addr, err := base.NodeAddressFromBech32(s.NodeAddress)
 	if err != nil {
 		panic(err)
 	}

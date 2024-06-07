@@ -6,7 +6,7 @@ import (
 	sdkerrors "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 // The `types` package contains custom message types for the Cosmos SDK.
@@ -97,7 +97,7 @@ func (m *MsgRegisterRequest) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgUpdateDetailsRequest creates a new MsgUpdateDetailsRequest instance with the given parameters.
-func NewMsgUpdateDetailsRequest(from hubtypes.NodeAddress, gigabytePrices, hourlyPrices sdk.Coins, remoteURL string) *MsgUpdateDetailsRequest {
+func NewMsgUpdateDetailsRequest(from base.NodeAddress, gigabytePrices, hourlyPrices sdk.Coins, remoteURL string) *MsgUpdateDetailsRequest {
 	return &MsgUpdateDetailsRequest{
 		From:           from.String(),
 		GigabytePrices: gigabytePrices,
@@ -114,7 +114,7 @@ func (m *MsgUpdateDetailsRequest) ValidateBasic() error {
 	if m.From == "" {
 		return sdkerrors.Wrap(ErrorInvalidMessage, "from cannot be empty")
 	}
-	if _, err := hubtypes.NodeAddressFromBech32(m.From); err != nil {
+	if _, err := base.NodeAddressFromBech32(m.From); err != nil {
 		return sdkerrors.Wrap(ErrorInvalidMessage, err.Error())
 	}
 	if m.GigabytePrices != nil {
@@ -161,7 +161,7 @@ func (m *MsgUpdateDetailsRequest) ValidateBasic() error {
 
 // GetSigners returns an array containing the signer's account address extracted from the 'From' field of the MsgUpdateDetailsRequest.
 func (m *MsgUpdateDetailsRequest) GetSigners() []sdk.AccAddress {
-	from, err := hubtypes.NodeAddressFromBech32(m.From)
+	from, err := base.NodeAddressFromBech32(m.From)
 	if err != nil {
 		panic(err)
 	}
@@ -170,7 +170,7 @@ func (m *MsgUpdateDetailsRequest) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgUpdateStatusRequest creates a new MsgUpdateStatusRequest instance with the given parameters.
-func NewMsgUpdateStatusRequest(from hubtypes.NodeAddress, status hubtypes.Status) *MsgUpdateStatusRequest {
+func NewMsgUpdateStatusRequest(from base.NodeAddress, status base.Status) *MsgUpdateStatusRequest {
 	return &MsgUpdateStatusRequest{
 		From:   from.String(),
 		Status: status,
@@ -184,10 +184,10 @@ func (m *MsgUpdateStatusRequest) ValidateBasic() error {
 	if m.From == "" {
 		return sdkerrors.Wrap(ErrorInvalidMessage, "from cannot be empty")
 	}
-	if _, err := hubtypes.NodeAddressFromBech32(m.From); err != nil {
+	if _, err := base.NodeAddressFromBech32(m.From); err != nil {
 		return sdkerrors.Wrap(ErrorInvalidMessage, err.Error())
 	}
-	if !m.Status.IsOneOf(hubtypes.StatusActive, hubtypes.StatusInactive) {
+	if !m.Status.IsOneOf(base.StatusActive, base.StatusInactive) {
 		return sdkerrors.Wrap(ErrorInvalidMessage, "status must be one of [active, inactive]")
 	}
 
@@ -196,7 +196,7 @@ func (m *MsgUpdateStatusRequest) ValidateBasic() error {
 
 // GetSigners returns an array containing the signer's account address extracted from the 'From' field of the MsgUpdateStatusRequest.
 func (m *MsgUpdateStatusRequest) GetSigners() []sdk.AccAddress {
-	from, err := hubtypes.NodeAddressFromBech32(m.From)
+	from, err := base.NodeAddressFromBech32(m.From)
 	if err != nil {
 		panic(err)
 	}
@@ -205,7 +205,7 @@ func (m *MsgUpdateStatusRequest) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgSubscribeRequest creates a new MsgSubscribeRequest instance with the given parameters.
-func NewMsgSubscribeRequest(from sdk.AccAddress, addr hubtypes.NodeAddress, gigabytes, hours int64, denom string) *MsgSubscribeRequest {
+func NewMsgSubscribeRequest(from sdk.AccAddress, addr base.NodeAddress, gigabytes, hours int64, denom string) *MsgSubscribeRequest {
 	return &MsgSubscribeRequest{
 		From:        from.String(),
 		NodeAddress: addr.String(),
@@ -230,7 +230,7 @@ func (m *MsgSubscribeRequest) ValidateBasic() error {
 	if m.NodeAddress == "" {
 		return sdkerrors.Wrap(ErrorInvalidMessage, "node_address cannot be empty")
 	}
-	if _, err := hubtypes.NodeAddressFromBech32(m.NodeAddress); err != nil {
+	if _, err := base.NodeAddressFromBech32(m.NodeAddress); err != nil {
 		return sdkerrors.Wrap(ErrorInvalidMessage, err.Error())
 	}
 	if m.Gigabytes == 0 && m.Hours == 0 {

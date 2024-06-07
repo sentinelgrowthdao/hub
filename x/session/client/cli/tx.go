@@ -11,7 +11,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	"github.com/spf13/cobra"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/session/types"
 )
 
@@ -31,7 +31,7 @@ func txStart() *cobra.Command {
 				return err
 			}
 
-			addr, err := hubtypes.NodeAddressFromBech32(args[0])
+			addr, err := base.NodeAddressFromBech32(args[0])
 			if err != nil {
 				return err
 			}
@@ -96,7 +96,7 @@ func txUpdateDetails() *cobra.Command {
 				types.Proof{
 					ID:        id,
 					Duration:  duration,
-					Bandwidth: hubtypes.NewBandwidthFromInt64(upload, download),
+					Bandwidth: base.NewBandwidthFromInt64(upload, download),
 				},
 				signature,
 			)

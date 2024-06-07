@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/subscription/types"
 )
 
@@ -123,7 +123,7 @@ func (q *queryServer) QuerySubscriptionsForNode(c context.Context, req *types.Qu
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
-	addr, err := hubtypes.NodeAddressFromBech32(req.Address)
+	addr, err := base.NodeAddressFromBech32(req.Address)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "invalid address %s", req.Address)
 	}
@@ -318,7 +318,7 @@ func (q *queryServer) QueryPayoutsForNode(c context.Context, req *types.QueryPay
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
-	addr, err := hubtypes.NodeAddressFromBech32(req.Address)
+	addr, err := base.NodeAddressFromBech32(req.Address)
 	if err != nil {
 		return nil, err
 	}

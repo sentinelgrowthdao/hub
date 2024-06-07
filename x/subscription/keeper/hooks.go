@@ -6,14 +6,14 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 	hubutils "github.com/sentinel-official/hub/v12/utils"
 	"github.com/sentinel-official/hub/v12/x/subscription/types"
 )
 
 // SessionInactiveHook is a function that handles the end of a session.
 // It updates the allocation's utilized bytes, calculates and sends payments, and staking rewards.
-func (k *Keeper) SessionInactiveHook(ctx sdk.Context, id uint64, accAddr sdk.AccAddress, nodeAddr hubtypes.NodeAddress, utilisedBytes sdkmath.Int) error {
+func (k *Keeper) SessionInactiveHook(ctx sdk.Context, id uint64, accAddr sdk.AccAddress, nodeAddr base.NodeAddress, utilisedBytes sdkmath.Int) error {
 	// Retrieve the session associated with the provided session ID.
 	session, found := k.GetSession(ctx, id)
 	if !found {
@@ -21,7 +21,7 @@ func (k *Keeper) SessionInactiveHook(ctx sdk.Context, id uint64, accAddr sdk.Acc
 	}
 
 	// Check if the session has the correct status for processing.
-	if !session.Status.Equal(hubtypes.StatusInactivePending) {
+	if !session.Status.Equal(base.StatusInactivePending) {
 		return fmt.Errorf("invalid status %s for session %d", session.Status, session.ID)
 	}
 

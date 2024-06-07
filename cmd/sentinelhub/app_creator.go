@@ -20,7 +20,7 @@ import (
 	"github.com/spf13/cast"
 
 	"github.com/sentinel-official/hub/v12/app"
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 type appCreator struct {
@@ -61,7 +61,7 @@ func (ac appCreator) NewApp(
 	}
 
 	return app.NewApp(
-		appOpts, hubtypes.Bech32MainPrefix, db, ac.encCfg, homeDir,
+		appOpts, base.Bech32MainPrefix, db, ac.encCfg, homeDir,
 		cast.ToUint(appOpts.Get(server.FlagInvCheckPeriod)), true, logger,
 		cast.ToBool(appOpts.Get(crisis.FlagSkipGenesisInvariants)), skipUpgradeHeights, traceWriter, version.Version,
 		wasmOpts, baseapp.SetChainID(genDoc.ChainID),
@@ -87,7 +87,7 @@ func (ac appCreator) AppExport(
 	modulesToExport []string,
 ) (servertypes.ExportedApp, error) {
 	v := app.NewApp(
-		appOpts, hubtypes.Bech32MainPrefix, db, ac.encCfg, cast.ToString(appOpts.Get(flags.FlagHome)),
+		appOpts, base.Bech32MainPrefix, db, ac.encCfg, cast.ToString(appOpts.Get(flags.FlagHome)),
 		cast.ToUint(appOpts.Get(server.FlagInvCheckPeriod)), height == -1, logger,
 		cast.ToBool(appOpts.Get(crisis.FlagSkipGenesisInvariants)), map[int64]bool{}, traceWriter,
 		version.Version, nil, nil,

@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	protobuf "github.com/gogo/protobuf/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/plan/types"
 )
 
@@ -98,9 +98,9 @@ func (k *Keeper) DeleteInactivePlan(ctx sdk.Context, id uint64) {
 
 func (k *Keeper) SetPlan(ctx sdk.Context, plan types.Plan) {
 	switch plan.Status {
-	case hubtypes.StatusActive:
+	case base.StatusActive:
 		k.SetActivePlan(ctx, plan)
-	case hubtypes.StatusInactive:
+	case base.StatusInactive:
 		k.SetInactivePlan(ctx, plan)
 	default:
 		panic(fmt.Errorf("failed to set the plan %v", plan))
@@ -143,7 +143,7 @@ func (k *Keeper) GetPlans(ctx sdk.Context) (items types.Plans) {
 	return items
 }
 
-func (k *Keeper) SetPlanForProvider(ctx sdk.Context, addr hubtypes.ProvAddress, id uint64) {
+func (k *Keeper) SetPlanForProvider(ctx sdk.Context, addr base.ProvAddress, id uint64) {
 	var (
 		store = k.Store(ctx)
 		key   = types.PlanForProviderKey(addr, id)
@@ -153,7 +153,7 @@ func (k *Keeper) SetPlanForProvider(ctx sdk.Context, addr hubtypes.ProvAddress, 
 	store.Set(key, value)
 }
 
-func (k *Keeper) DeletePlanForProvider(ctx sdk.Context, addr hubtypes.ProvAddress, id uint64) {
+func (k *Keeper) DeletePlanForProvider(ctx sdk.Context, addr base.ProvAddress, id uint64) {
 	var (
 		store = k.Store(ctx)
 		key   = types.PlanForProviderKey(addr, id)
@@ -162,7 +162,7 @@ func (k *Keeper) DeletePlanForProvider(ctx sdk.Context, addr hubtypes.ProvAddres
 	store.Delete(key)
 }
 
-func (k *Keeper) GetPlansForProvider(ctx sdk.Context, addr hubtypes.ProvAddress) (items types.Plans) {
+func (k *Keeper) GetPlansForProvider(ctx sdk.Context, addr base.ProvAddress) (items types.Plans) {
 	var (
 		store = k.Store(ctx)
 		iter  = sdk.KVStorePrefixIterator(store, types.GetPlanForProviderKeyPrefix(addr))

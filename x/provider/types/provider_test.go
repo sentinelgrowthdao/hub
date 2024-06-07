@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 func TestProvider_GetAddress(t *testing.T) {
@@ -19,21 +19,21 @@ func TestProvider_GetAddress(t *testing.T) {
 	tests := []struct {
 		name   string
 		fields fields
-		want   hubtypes.ProvAddress
+		want   base.ProvAddress
 	}{
 		{
 			"empty",
 			fields{
-				Address: hubtypes.TestAddrEmpty,
+				Address: base.TestAddrEmpty,
 			},
 			nil,
 		},
 		{
 			"20 bytes",
 			fields{
-				Address: hubtypes.TestBech32ProvAddr20Bytes,
+				Address: base.TestBech32ProvAddr20Bytes,
 			},
-			hubtypes.ProvAddress{0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x20},
+			base.ProvAddress{0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x20},
 		},
 	}
 	for _, tt := range tests {
@@ -59,7 +59,7 @@ func TestProvider_Validate(t *testing.T) {
 		Identity    string
 		Website     string
 		Description string
-		Status      hubtypes.Status
+		Status      base.Status
 	}
 	tests := []struct {
 		name    string
@@ -69,49 +69,49 @@ func TestProvider_Validate(t *testing.T) {
 		{
 			"empty address",
 			fields{
-				Address: hubtypes.TestAddrEmpty,
+				Address: base.TestAddrEmpty,
 			},
 			true,
 		},
 		{
 			"invalid address",
 			fields{
-				Address: hubtypes.TestAddrInvalid,
+				Address: base.TestAddrInvalid,
 			},
 			true,
 		},
 		{
 			"invalid prefix address",
 			fields{
-				Address: hubtypes.TestBech32AccAddr20Bytes,
+				Address: base.TestBech32AccAddr20Bytes,
 			},
 			true,
 		},
 		{
 			"10 bytes address",
 			fields{
-				Address: hubtypes.TestBech32ProvAddr10Bytes,
+				Address: base.TestBech32ProvAddr10Bytes,
 			},
 			true,
 		},
 		{
 			"20 bytes address",
 			fields{
-				Address: hubtypes.TestBech32ProvAddr20Bytes,
+				Address: base.TestBech32ProvAddr20Bytes,
 			},
 			true,
 		},
 		{
 			"30 bytes address",
 			fields{
-				Address: hubtypes.TestBech32ProvAddr30Bytes,
+				Address: base.TestBech32ProvAddr30Bytes,
 			},
 			true,
 		},
 		{
 			"empty name",
 			fields{
-				Address: hubtypes.TestBech32ProvAddr20Bytes,
+				Address: base.TestBech32ProvAddr20Bytes,
 				Name:    "",
 			},
 			true,
@@ -119,16 +119,16 @@ func TestProvider_Validate(t *testing.T) {
 		{
 			"non-empty name",
 			fields{
-				Address: hubtypes.TestBech32ProvAddr20Bytes,
+				Address: base.TestBech32ProvAddr20Bytes,
 				Name:    "name",
-				Status:  hubtypes.StatusActive,
+				Status:  base.StatusActive,
 			},
 			false,
 		},
 		{
 			"length 72 name",
 			fields{
-				Address: hubtypes.TestBech32ProvAddr20Bytes,
+				Address: base.TestBech32ProvAddr20Bytes,
 				Name:    strings.Repeat("n", 72),
 			},
 			true,
@@ -136,27 +136,27 @@ func TestProvider_Validate(t *testing.T) {
 		{
 			"empty identity",
 			fields{
-				Address:  hubtypes.TestBech32ProvAddr20Bytes,
+				Address:  base.TestBech32ProvAddr20Bytes,
 				Name:     "name",
 				Identity: "",
-				Status:   hubtypes.StatusActive,
+				Status:   base.StatusActive,
 			},
 			false,
 		},
 		{
 			"non-empty identity",
 			fields{
-				Address:  hubtypes.TestBech32ProvAddr20Bytes,
+				Address:  base.TestBech32ProvAddr20Bytes,
 				Name:     "name",
 				Identity: "identity",
-				Status:   hubtypes.StatusActive,
+				Status:   base.StatusActive,
 			},
 			false,
 		},
 		{
 			"length 72 identity",
 			fields{
-				Address:  hubtypes.TestBech32ProvAddr20Bytes,
+				Address:  base.TestBech32ProvAddr20Bytes,
 				Name:     "name",
 				Identity: strings.Repeat("i", 72),
 			},
@@ -165,29 +165,29 @@ func TestProvider_Validate(t *testing.T) {
 		{
 			"empty website",
 			fields{
-				Address:  hubtypes.TestBech32ProvAddr20Bytes,
+				Address:  base.TestBech32ProvAddr20Bytes,
 				Name:     "name",
 				Identity: "identity",
 				Website:  "",
-				Status:   hubtypes.StatusActive,
+				Status:   base.StatusActive,
 			},
 			false,
 		},
 		{
 			"non-empty website",
 			fields{
-				Address:  hubtypes.TestBech32ProvAddr20Bytes,
+				Address:  base.TestBech32ProvAddr20Bytes,
 				Name:     "name",
 				Identity: "identity",
 				Website:  "https://website",
-				Status:   hubtypes.StatusActive,
+				Status:   base.StatusActive,
 			},
 			false,
 		},
 		{
 			"length 72 website",
 			fields{
-				Address:  hubtypes.TestBech32ProvAddr20Bytes,
+				Address:  base.TestBech32ProvAddr20Bytes,
 				Name:     "name",
 				Identity: "identity",
 				Website:  strings.Repeat("w", 72),
@@ -197,7 +197,7 @@ func TestProvider_Validate(t *testing.T) {
 		{
 			"invalid website",
 			fields{
-				Address:  hubtypes.TestBech32ProvAddr20Bytes,
+				Address:  base.TestBech32ProvAddr20Bytes,
 				Name:     "name",
 				Identity: "identity",
 				Website:  "invalid",
@@ -207,31 +207,31 @@ func TestProvider_Validate(t *testing.T) {
 		{
 			"empty description",
 			fields{
-				Address:     hubtypes.TestBech32ProvAddr20Bytes,
+				Address:     base.TestBech32ProvAddr20Bytes,
 				Name:        "name",
 				Identity:    "identity",
 				Website:     "https://website",
 				Description: "",
-				Status:      hubtypes.StatusActive,
+				Status:      base.StatusActive,
 			},
 			false,
 		},
 		{
 			"non-empty description",
 			fields{
-				Address:     hubtypes.TestBech32ProvAddr20Bytes,
+				Address:     base.TestBech32ProvAddr20Bytes,
 				Name:        "name",
 				Identity:    "identity",
 				Website:     "https://website",
 				Description: "description",
-				Status:      hubtypes.StatusActive,
+				Status:      base.StatusActive,
 			},
 			false,
 		},
 		{
 			"length 264 description",
 			fields{
-				Address:     hubtypes.TestBech32ProvAddr20Bytes,
+				Address:     base.TestBech32ProvAddr20Bytes,
 				Name:        "name",
 				Identity:    "identity",
 				Website:     "https://website",
@@ -242,36 +242,36 @@ func TestProvider_Validate(t *testing.T) {
 		{
 			"unspecified status",
 			fields{
-				Address:     hubtypes.TestBech32ProvAddr20Bytes,
+				Address:     base.TestBech32ProvAddr20Bytes,
 				Name:        "name",
 				Identity:    "identity",
 				Website:     "https://website",
 				Description: strings.Repeat("d", 256),
-				Status:      hubtypes.StatusUnspecified,
+				Status:      base.StatusUnspecified,
 			},
 			true,
 		},
 		{
 			"active status",
 			fields{
-				Address:     hubtypes.TestBech32ProvAddr20Bytes,
+				Address:     base.TestBech32ProvAddr20Bytes,
 				Name:        "name",
 				Identity:    "identity",
 				Website:     "https://website",
 				Description: strings.Repeat("d", 256),
-				Status:      hubtypes.StatusActive,
+				Status:      base.StatusActive,
 			},
 			false,
 		},
 		{
 			"inactive status",
 			fields{
-				Address:     hubtypes.TestBech32ProvAddr20Bytes,
+				Address:     base.TestBech32ProvAddr20Bytes,
 				Name:        "name",
 				Identity:    "identity",
 				Website:     "https://website",
 				Description: strings.Repeat("d", 256),
-				Status:      hubtypes.StatusInactive,
+				Status:      base.StatusInactive,
 			},
 			false,
 		},

@@ -4,7 +4,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 func NewQuerySessionRequest(id uint64) *QuerySessionRequest {
@@ -26,7 +26,7 @@ func NewQuerySessionsForAccountRequest(addr sdk.AccAddress, pagination *query.Pa
 	}
 }
 
-func NewQuerySessionsForNodeRequest(addr hubtypes.NodeAddress, pagination *query.PageRequest) *QuerySessionsForNodeRequest {
+func NewQuerySessionsForNodeRequest(addr base.NodeAddress, pagination *query.PageRequest) *QuerySessionsForNodeRequest {
 	return &QuerySessionsForNodeRequest{
 		Address:    addr.String(),
 		Pagination: pagination,

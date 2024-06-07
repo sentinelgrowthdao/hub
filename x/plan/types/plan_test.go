@@ -7,7 +7,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 func TestPlan_GetProviderAddress(t *testing.T) {
@@ -17,21 +17,21 @@ func TestPlan_GetProviderAddress(t *testing.T) {
 	tests := []struct {
 		name   string
 		fields fields
-		want   hubtypes.ProvAddress
+		want   base.ProvAddress
 	}{
 		{
 			"empty",
 			fields{
-				ProviderAddress: hubtypes.TestAddrEmpty,
+				ProviderAddress: base.TestAddrEmpty,
 			},
 			nil,
 		},
 		{
 			"20 bytes",
 			fields{
-				ProviderAddress: hubtypes.TestBech32ProvAddr20Bytes,
+				ProviderAddress: base.TestBech32ProvAddr20Bytes,
 			},
-			hubtypes.ProvAddress{0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x20},
+			base.ProvAddress{0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x20},
 		},
 	}
 	for _, tt := range tests {
@@ -63,100 +63,100 @@ func TestPlan_Price(t *testing.T) {
 		{
 			"nil prices and empty denom",
 			fields{
-				Prices: hubtypes.TestCoinsNil,
+				Prices: base.TestCoinsNil,
 			},
 			args{
-				denom: hubtypes.TestDenomEmpty,
+				denom: base.TestDenomEmpty,
 			},
-			hubtypes.TestCoinEmpty,
+			base.TestCoinEmpty,
 			false,
 		},
 		{
 			"nil prices and one denom",
 			fields{
-				Prices: hubtypes.TestCoinsNil,
+				Prices: base.TestCoinsNil,
 			},
 			args{
-				denom: hubtypes.TestDenomOne,
+				denom: base.TestDenomOne,
 			},
-			hubtypes.TestCoinEmpty,
+			base.TestCoinEmpty,
 			false,
 		},
 		{
 			"nil prices and two denom",
 			fields{
-				Prices: hubtypes.TestCoinsNil,
+				Prices: base.TestCoinsNil,
 			},
 			args{
-				denom: hubtypes.TestDenomTwo,
+				denom: base.TestDenomTwo,
 			},
-			hubtypes.TestCoinEmpty,
+			base.TestCoinEmpty,
 			false,
 		},
 		{
 			"empty prices and empty denom",
 			fields{
-				Prices: hubtypes.TestCoinsEmpty,
+				Prices: base.TestCoinsEmpty,
 			},
 			args{
-				denom: hubtypes.TestDenomEmpty,
+				denom: base.TestDenomEmpty,
 			},
-			hubtypes.TestCoinEmpty,
+			base.TestCoinEmpty,
 			false,
 		},
 		{
 			"empty prices and one denom",
 			fields{
-				Prices: hubtypes.TestCoinsEmpty,
+				Prices: base.TestCoinsEmpty,
 			},
 			args{
-				denom: hubtypes.TestDenomOne,
+				denom: base.TestDenomOne,
 			},
-			hubtypes.TestCoinEmpty,
+			base.TestCoinEmpty,
 			false,
 		},
 		{
 			"empty prices and two denom",
 			fields{
-				Prices: hubtypes.TestCoinsEmpty,
+				Prices: base.TestCoinsEmpty,
 			},
 			args{
-				denom: hubtypes.TestDenomTwo,
+				denom: base.TestDenomTwo,
 			},
-			hubtypes.TestCoinEmpty,
+			base.TestCoinEmpty,
 			false,
 		},
 		{
 			"1000one prices and empty denom",
 			fields{
-				Prices: hubtypes.TestCoinsPositiveAmount,
+				Prices: base.TestCoinsPositiveAmount,
 			},
 			args{
-				denom: hubtypes.TestDenomEmpty,
+				denom: base.TestDenomEmpty,
 			},
-			hubtypes.TestCoinEmpty,
+			base.TestCoinEmpty,
 			false,
 		},
 		{
 			"1000one prices and one denom",
 			fields{
-				Prices: hubtypes.TestCoinsPositiveAmount,
+				Prices: base.TestCoinsPositiveAmount,
 			},
 			args{
-				denom: hubtypes.TestDenomOne,
+				denom: base.TestDenomOne,
 			},
-			hubtypes.TestCoinPositiveAmount,
+			base.TestCoinPositiveAmount,
 			true,
 		},
 		{
 			"1000one prices and two denom",
 			fields{
-				Prices: hubtypes.TestCoinsPositiveAmount,
+				Prices: base.TestCoinsPositiveAmount,
 			},
 			args{
-				denom: hubtypes.TestDenomTwo,
+				denom: base.TestDenomTwo,
 			},
-			hubtypes.TestCoinEmpty,
+			base.TestCoinEmpty,
 			false,
 		},
 	}
@@ -183,7 +183,7 @@ func TestPlan_Validate(t *testing.T) {
 		Duration        time.Duration
 		Gigabytes       int64
 		Prices          sdk.Coins
-		Status          hubtypes.Status
+		Status          base.Status
 		StatusAt        time.Time
 	}
 	tests := []struct {
@@ -202,12 +202,12 @@ func TestPlan_Validate(t *testing.T) {
 			"id positive",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestBech32ProvAddr20Bytes,
+				ProviderAddress: base.TestBech32ProvAddr20Bytes,
 				Duration:        1000,
 				Gigabytes:       1000,
-				Prices:          hubtypes.TestCoinsPositiveAmount,
-				Status:          hubtypes.StatusActive,
-				StatusAt:        hubtypes.TestTimeNow,
+				Prices:          base.TestCoinsPositiveAmount,
+				Status:          base.StatusActive,
+				StatusAt:        base.TestTimeNow,
 			},
 			false,
 		},
@@ -215,7 +215,7 @@ func TestPlan_Validate(t *testing.T) {
 			"provider_address empty",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestAddrEmpty,
+				ProviderAddress: base.TestAddrEmpty,
 			},
 			true,
 		},
@@ -223,7 +223,7 @@ func TestPlan_Validate(t *testing.T) {
 			"provider_address invalid",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestAddrInvalid,
+				ProviderAddress: base.TestAddrInvalid,
 			},
 			true,
 		},
@@ -231,7 +231,7 @@ func TestPlan_Validate(t *testing.T) {
 			"provider_address invalid prefix",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestBech32AccAddr20Bytes,
+				ProviderAddress: base.TestBech32AccAddr20Bytes,
 			},
 			true,
 		},
@@ -239,12 +239,12 @@ func TestPlan_Validate(t *testing.T) {
 			"provider_address 10 bytes",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestBech32ProvAddr10Bytes,
+				ProviderAddress: base.TestBech32ProvAddr10Bytes,
 				Duration:        1000,
 				Gigabytes:       1000,
-				Prices:          hubtypes.TestCoinsPositiveAmount,
-				Status:          hubtypes.StatusActive,
-				StatusAt:        hubtypes.TestTimeNow,
+				Prices:          base.TestCoinsPositiveAmount,
+				Status:          base.StatusActive,
+				StatusAt:        base.TestTimeNow,
 			},
 			false,
 		},
@@ -252,12 +252,12 @@ func TestPlan_Validate(t *testing.T) {
 			"provider_address 20 bytes",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestBech32ProvAddr20Bytes,
+				ProviderAddress: base.TestBech32ProvAddr20Bytes,
 				Duration:        1000,
 				Gigabytes:       1000,
-				Prices:          hubtypes.TestCoinsPositiveAmount,
-				Status:          hubtypes.StatusActive,
-				StatusAt:        hubtypes.TestTimeNow,
+				Prices:          base.TestCoinsPositiveAmount,
+				Status:          base.StatusActive,
+				StatusAt:        base.TestTimeNow,
 			},
 			false,
 		},
@@ -265,12 +265,12 @@ func TestPlan_Validate(t *testing.T) {
 			"provider_address 30 bytes",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestBech32ProvAddr30Bytes,
+				ProviderAddress: base.TestBech32ProvAddr30Bytes,
 				Duration:        1000,
 				Gigabytes:       1000,
-				Prices:          hubtypes.TestCoinsPositiveAmount,
-				Status:          hubtypes.StatusActive,
-				StatusAt:        hubtypes.TestTimeNow,
+				Prices:          base.TestCoinsPositiveAmount,
+				Status:          base.StatusActive,
+				StatusAt:        base.TestTimeNow,
 			},
 			false,
 		},
@@ -278,7 +278,7 @@ func TestPlan_Validate(t *testing.T) {
 			"duration negative",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestBech32ProvAddr20Bytes,
+				ProviderAddress: base.TestBech32ProvAddr20Bytes,
 				Duration:        -1000,
 			},
 			true,
@@ -287,7 +287,7 @@ func TestPlan_Validate(t *testing.T) {
 			"duration zero",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestBech32ProvAddr20Bytes,
+				ProviderAddress: base.TestBech32ProvAddr20Bytes,
 				Duration:        0,
 			},
 			true,
@@ -296,12 +296,12 @@ func TestPlan_Validate(t *testing.T) {
 			"duration positive",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestBech32ProvAddr20Bytes,
+				ProviderAddress: base.TestBech32ProvAddr20Bytes,
 				Duration:        1000,
 				Gigabytes:       1000,
-				Prices:          hubtypes.TestCoinsPositiveAmount,
-				Status:          hubtypes.StatusActive,
-				StatusAt:        hubtypes.TestTimeNow,
+				Prices:          base.TestCoinsPositiveAmount,
+				Status:          base.StatusActive,
+				StatusAt:        base.TestTimeNow,
 			},
 			false,
 		},
@@ -309,7 +309,7 @@ func TestPlan_Validate(t *testing.T) {
 			"gigabytes negative",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestBech32ProvAddr20Bytes,
+				ProviderAddress: base.TestBech32ProvAddr20Bytes,
 				Duration:        1000,
 				Gigabytes:       -1000,
 			},
@@ -319,7 +319,7 @@ func TestPlan_Validate(t *testing.T) {
 			"gigabytes zero",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestBech32ProvAddr20Bytes,
+				ProviderAddress: base.TestBech32ProvAddr20Bytes,
 				Duration:        1000,
 				Gigabytes:       0,
 			},
@@ -329,12 +329,12 @@ func TestPlan_Validate(t *testing.T) {
 			"gigabytes positive",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestBech32ProvAddr20Bytes,
+				ProviderAddress: base.TestBech32ProvAddr20Bytes,
 				Duration:        1000,
 				Gigabytes:       1000,
-				Prices:          hubtypes.TestCoinsPositiveAmount,
-				Status:          hubtypes.StatusActive,
-				StatusAt:        hubtypes.TestTimeNow,
+				Prices:          base.TestCoinsPositiveAmount,
+				Status:          base.StatusActive,
+				StatusAt:        base.TestTimeNow,
 			},
 			false,
 		},
@@ -342,12 +342,12 @@ func TestPlan_Validate(t *testing.T) {
 			"prices nil",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestBech32ProvAddr20Bytes,
+				ProviderAddress: base.TestBech32ProvAddr20Bytes,
 				Duration:        1000,
 				Gigabytes:       1000,
-				Prices:          hubtypes.TestCoinsNil,
-				Status:          hubtypes.StatusActive,
-				StatusAt:        hubtypes.TestTimeNow,
+				Prices:          base.TestCoinsNil,
+				Status:          base.StatusActive,
+				StatusAt:        base.TestTimeNow,
 			},
 			true,
 		},
@@ -355,10 +355,10 @@ func TestPlan_Validate(t *testing.T) {
 			"prices empty",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestBech32ProvAddr20Bytes,
+				ProviderAddress: base.TestBech32ProvAddr20Bytes,
 				Duration:        1000,
 				Gigabytes:       1000,
-				Prices:          hubtypes.TestCoinsEmpty,
+				Prices:          base.TestCoinsEmpty,
 			},
 			true,
 		},
@@ -366,10 +366,10 @@ func TestPlan_Validate(t *testing.T) {
 			"prices empty denom",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestBech32ProvAddr20Bytes,
+				ProviderAddress: base.TestBech32ProvAddr20Bytes,
 				Duration:        1000,
 				Gigabytes:       1000,
-				Prices:          hubtypes.TestCoinsEmptyDenom,
+				Prices:          base.TestCoinsEmptyDenom,
 			},
 			true,
 		},
@@ -377,10 +377,10 @@ func TestPlan_Validate(t *testing.T) {
 			"prices empty amount",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestBech32ProvAddr20Bytes,
+				ProviderAddress: base.TestBech32ProvAddr20Bytes,
 				Duration:        1000,
 				Gigabytes:       1000,
-				Prices:          hubtypes.TestCoinsEmptyAmount,
+				Prices:          base.TestCoinsEmptyAmount,
 			},
 			true,
 		},
@@ -388,10 +388,10 @@ func TestPlan_Validate(t *testing.T) {
 			"prices invalid denom",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestBech32ProvAddr20Bytes,
+				ProviderAddress: base.TestBech32ProvAddr20Bytes,
 				Duration:        1000,
 				Gigabytes:       1000,
-				Prices:          hubtypes.TestCoinsInvalidDenom,
+				Prices:          base.TestCoinsInvalidDenom,
 			},
 			true,
 		},
@@ -399,10 +399,10 @@ func TestPlan_Validate(t *testing.T) {
 			"prices negative amount",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestBech32ProvAddr20Bytes,
+				ProviderAddress: base.TestBech32ProvAddr20Bytes,
 				Duration:        1000,
 				Gigabytes:       1000,
-				Prices:          hubtypes.TestCoinsNegativeAmount,
+				Prices:          base.TestCoinsNegativeAmount,
 			},
 			true,
 		},
@@ -410,10 +410,10 @@ func TestPlan_Validate(t *testing.T) {
 			"prices zero amount",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestBech32ProvAddr20Bytes,
+				ProviderAddress: base.TestBech32ProvAddr20Bytes,
 				Duration:        1000,
 				Gigabytes:       1000,
-				Prices:          hubtypes.TestCoinsZeroAmount,
+				Prices:          base.TestCoinsZeroAmount,
 			},
 			true,
 		},
@@ -421,12 +421,12 @@ func TestPlan_Validate(t *testing.T) {
 			"prices positive amount",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestBech32ProvAddr20Bytes,
+				ProviderAddress: base.TestBech32ProvAddr20Bytes,
 				Duration:        1000,
 				Gigabytes:       1000,
-				Prices:          hubtypes.TestCoinsPositiveAmount,
-				Status:          hubtypes.StatusActive,
-				StatusAt:        hubtypes.TestTimeNow,
+				Prices:          base.TestCoinsPositiveAmount,
+				Status:          base.StatusActive,
+				StatusAt:        base.TestTimeNow,
 			},
 			false,
 		},
@@ -434,11 +434,11 @@ func TestPlan_Validate(t *testing.T) {
 			"status unspecified",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestBech32ProvAddr20Bytes,
+				ProviderAddress: base.TestBech32ProvAddr20Bytes,
 				Duration:        1000,
 				Gigabytes:       1000,
-				Prices:          hubtypes.TestCoinsPositiveAmount,
-				Status:          hubtypes.StatusUnspecified,
+				Prices:          base.TestCoinsPositiveAmount,
+				Status:          base.StatusUnspecified,
 			},
 			true,
 		},
@@ -446,12 +446,12 @@ func TestPlan_Validate(t *testing.T) {
 			"status active",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestBech32ProvAddr20Bytes,
+				ProviderAddress: base.TestBech32ProvAddr20Bytes,
 				Duration:        1000,
 				Gigabytes:       1000,
-				Prices:          hubtypes.TestCoinsPositiveAmount,
-				Status:          hubtypes.StatusActive,
-				StatusAt:        hubtypes.TestTimeNow,
+				Prices:          base.TestCoinsPositiveAmount,
+				Status:          base.StatusActive,
+				StatusAt:        base.TestTimeNow,
 			},
 			false,
 		},
@@ -459,11 +459,11 @@ func TestPlan_Validate(t *testing.T) {
 			"status inactive pending",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestBech32ProvAddr20Bytes,
+				ProviderAddress: base.TestBech32ProvAddr20Bytes,
 				Duration:        1000,
 				Gigabytes:       1000,
-				Prices:          hubtypes.TestCoinsPositiveAmount,
-				Status:          hubtypes.StatusInactivePending,
+				Prices:          base.TestCoinsPositiveAmount,
+				Status:          base.StatusInactivePending,
 			},
 			true,
 		},
@@ -471,12 +471,12 @@ func TestPlan_Validate(t *testing.T) {
 			"status inactive",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestBech32ProvAddr20Bytes,
+				ProviderAddress: base.TestBech32ProvAddr20Bytes,
 				Duration:        1000,
 				Gigabytes:       1000,
-				Prices:          hubtypes.TestCoinsPositiveAmount,
-				Status:          hubtypes.StatusInactive,
-				StatusAt:        hubtypes.TestTimeNow,
+				Prices:          base.TestCoinsPositiveAmount,
+				Status:          base.StatusInactive,
+				StatusAt:        base.TestTimeNow,
 			},
 			false,
 		},
@@ -484,12 +484,12 @@ func TestPlan_Validate(t *testing.T) {
 			"status_at zero",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestBech32ProvAddr20Bytes,
+				ProviderAddress: base.TestBech32ProvAddr20Bytes,
 				Duration:        1000,
 				Gigabytes:       1000,
-				Prices:          hubtypes.TestCoinsPositiveAmount,
-				Status:          hubtypes.StatusActive,
-				StatusAt:        hubtypes.TestTimeZero,
+				Prices:          base.TestCoinsPositiveAmount,
+				Status:          base.StatusActive,
+				StatusAt:        base.TestTimeZero,
 			},
 			true,
 		},
@@ -497,12 +497,12 @@ func TestPlan_Validate(t *testing.T) {
 			"status_at positive",
 			fields{
 				ID:              1000,
-				ProviderAddress: hubtypes.TestBech32ProvAddr20Bytes,
+				ProviderAddress: base.TestBech32ProvAddr20Bytes,
 				Duration:        1000,
 				Gigabytes:       1000,
-				Prices:          hubtypes.TestCoinsPositiveAmount,
-				Status:          hubtypes.StatusActive,
-				StatusAt:        hubtypes.TestTimeNow,
+				Prices:          base.TestCoinsPositiveAmount,
+				Status:          base.StatusActive,
+				StatusAt:        base.TestTimeNow,
 			},
 			false,
 		},

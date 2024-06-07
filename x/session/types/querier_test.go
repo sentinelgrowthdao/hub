@@ -8,7 +8,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"github.com/stretchr/testify/require"
 
-	hubtypes "github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 func TestNewQueryParamsRequest(t *testing.T) {
@@ -103,7 +103,7 @@ func TestNewQuerySessionsForNodeRequest(t *testing.T) {
 		require.Equal(
 			t,
 			&QuerySessionsForNodeRequest{
-				Address:    hubtypes.NodeAddress(addr).String(),
+				Address:    base.NodeAddress(addr).String(),
 				Pagination: pagination,
 			},
 			NewQuerySessionsForNodeRequest(addr, pagination),
