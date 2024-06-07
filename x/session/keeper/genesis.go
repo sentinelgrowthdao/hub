@@ -1,13 +1,12 @@
-package session
+package keeper
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/sentinel-official/hub/v12/x/session/keeper"
 	"github.com/sentinel-official/hub/v12/x/session/types"
 )
 
-func InitGenesis(ctx sdk.Context, k keeper.Keeper, state *types.GenesisState) {
+func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) {
 	k.SetParams(ctx, state.Params)
 
 	for _, item := range state.Sessions {
@@ -34,7 +33,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, state *types.GenesisState) {
 	k.SetCount(ctx, count)
 }
 
-func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
+func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	return types.NewGenesisState(
 		k.GetSessions(ctx),
 		k.GetParams(ctx),

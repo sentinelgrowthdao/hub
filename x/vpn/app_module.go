@@ -97,22 +97,22 @@ func (a AppModule) ValidateGenesis(jsonCodec codec.JSONCodec, _ client.TxEncodin
 func (a AppModule) InitGenesis(ctx sdk.Context, jsonCodec codec.JSONCodec, message json.RawMessage) []abcitypes.ValidatorUpdate {
 	var state types.GenesisState
 	jsonCodec.MustUnmarshalJSON(message, &state)
-	InitGenesis(ctx, a.k, &state)
+	a.k.InitGenesis(ctx, &state)
 
 	return nil
 }
 
 func (a AppModule) ExportGenesis(ctx sdk.Context, jsonCodec codec.JSONCodec) json.RawMessage {
-	state := ExportGenesis(ctx, a.k)
+	state := a.k.ExportGenesis(ctx)
 	return jsonCodec.MustMarshalJSON(state)
 }
 
 func (a AppModule) BeginBlock(ctx sdk.Context, _ abcitypes.RequestBeginBlock) {
-	BeginBlock(ctx, a.k)
+	a.k.BeginBlock(ctx)
 }
 
 func (a AppModule) EndBlock(ctx sdk.Context, _ abcitypes.RequestEndBlock) []abcitypes.ValidatorUpdate {
-	return EndBlock(ctx, a.k)
+	return a.k.EndBlock(ctx)
 }
 
 func (a AppModule) GenerateGenesisState(_ *module.SimulationState) {}

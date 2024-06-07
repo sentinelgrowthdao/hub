@@ -1,19 +1,18 @@
-package deposit
+package keeper
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/sentinel-official/hub/v12/x/deposit/keeper"
 	"github.com/sentinel-official/hub/v12/x/deposit/types"
 )
 
-func InitGenesis(ctx sdk.Context, k keeper.Keeper, state *types.GenesisState) {
+func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) {
 	for _, item := range state.Deposits {
 		k.SetDeposit(ctx, item)
 	}
 }
 
-func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
+func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	return types.NewGenesisState(
 		k.GetDeposits(ctx),
 	)

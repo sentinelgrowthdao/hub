@@ -1,13 +1,12 @@
-package provider
+package keeper
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/sentinel-official/hub/v12/x/provider/keeper"
 	"github.com/sentinel-official/hub/v12/x/provider/types"
 )
 
-func InitGenesis(ctx sdk.Context, k keeper.Keeper, state *types.GenesisState) {
+func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) {
 	k.SetParams(ctx, state.Params)
 
 	for _, item := range state.Providers {
@@ -15,7 +14,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, state *types.GenesisState) {
 	}
 }
 
-func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
+func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	return types.NewGenesisState(
 		k.GetProviders(ctx),
 		k.GetParams(ctx),

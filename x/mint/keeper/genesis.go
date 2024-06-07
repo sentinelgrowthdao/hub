@@ -1,19 +1,18 @@
-package mint
+package keeper
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/sentinel-official/hub/v12/x/mint/keeper"
 	"github.com/sentinel-official/hub/v12/x/mint/types"
 )
 
-func InitGenesis(ctx sdk.Context, k keeper.Keeper, state *types.GenesisState) {
+func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) {
 	for _, item := range state.Inflations {
 		k.SetInflation(ctx, item)
 	}
 }
 
-func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
+func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	return types.NewGenesisState(
 		k.GetInflations(ctx),
 	)

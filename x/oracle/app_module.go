@@ -64,7 +64,7 @@ func (a AppModule) DefaultGenesis(jsonCodec codec.JSONCodec) json.RawMessage {
 	return jsonCodec.MustMarshalJSON(state)
 }
 
-func (a AppModule) ValidateGenesis(jsonCodec codec.JSONCodec, config client.TxEncodingConfig, message json.RawMessage) error {
+func (a AppModule) ValidateGenesis(jsonCodec codec.JSONCodec, _ client.TxEncodingConfig, message json.RawMessage) error {
 	var state types.GenesisState
 	if err := jsonCodec.UnmarshalJSON(message, &state); err != nil {
 		return err
@@ -76,13 +76,13 @@ func (a AppModule) ValidateGenesis(jsonCodec codec.JSONCodec, config client.TxEn
 func (a AppModule) InitGenesis(ctx sdk.Context, jsonCodec codec.JSONCodec, message json.RawMessage) []abcitypes.ValidatorUpdate {
 	var state types.GenesisState
 	jsonCodec.MustUnmarshalJSON(message, &state)
-	InitGenesis(ctx, a.k, &state)
+	a.k.InitGenesis(ctx, &state)
 
 	return nil
 }
 
 func (a AppModule) ExportGenesis(ctx sdk.Context, jsonCodec codec.JSONCodec) json.RawMessage {
-	state := ExportGenesis(ctx, a.k)
+	state := a.k.ExportGenesis(ctx)
 	return jsonCodec.MustMarshalJSON(state)
 }
 
