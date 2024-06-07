@@ -9,7 +9,7 @@ import (
 	protobuf "github.com/gogo/protobuf/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
-	hubutils "github.com/sentinel-official/hub/v12/utils"
+	baseutils "github.com/sentinel-official/hub/v12/utils"
 	"github.com/sentinel-official/hub/v12/x/subscription/types"
 )
 
@@ -304,7 +304,7 @@ func (k *Keeper) CreateSubscriptionForNode(ctx sdk.Context, accAddr sdk.AccAddre
 		subscription.InactiveAt = ctx.BlockTime().Add(90 * types.Day) // TODO: move to params
 		subscription.Deposit = sdk.NewCoin(
 			price.Denom,
-			hubutils.AmountForBytes(price.Amount, base.Gigabyte.MulRaw(gigabytes)),
+			baseutils.AmountForBytes(price.Amount, base.Gigabyte.MulRaw(gigabytes)),
 		)
 	}
 	if hours != 0 {
@@ -404,7 +404,7 @@ func (k *Keeper) CreateSubscriptionForPlan(ctx sdk.Context, accAddr sdk.AccAddre
 	// Calculate the staking reward based on the plan price and staking share.
 	var (
 		stakingShare  = k.provider.StakingShare(ctx)
-		stakingReward = hubutils.GetProportionOfCoin(price, stakingShare)
+		stakingReward = baseutils.GetProportionOfCoin(price, stakingShare)
 	)
 
 	// Move the staking reward from the account to the fee collector module account.

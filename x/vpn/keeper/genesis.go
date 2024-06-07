@@ -18,10 +18,10 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) {
 func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	return &types.GenesisState{
 		Deposits:      k.Deposit.ExportGenesis(ctx),
-		Providers:     k.Provider.ExportGenesis(ctx),
 		Nodes:         k.Node.ExportGenesis(ctx),
 		Plans:         k.Plan.ExportGenesis(ctx),
-		Subscriptions: k.Subscription.ExportGenesis(ctx),
+		Providers:     k.Provider.ExportGenesis(ctx),
 		Sessions:      k.Session.ExportGenesis(ctx),
+		Subscriptions: k.Subscription.ExportGenesis(ctx),
 	}
 }

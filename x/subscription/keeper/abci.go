@@ -8,7 +8,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
-	hubutils "github.com/sentinel-official/hub/v12/utils"
+	baseutils "github.com/sentinel-official/hub/v12/utils"
 	"github.com/sentinel-official/hub/v12/x/subscription/types"
 )
 
@@ -27,7 +27,7 @@ func (k *Keeper) BeginBlock(ctx sdk.Context) {
 			accAddr       = item.GetAddress()
 			nodeAddr      = item.GetNodeAddress()
 			stakingShare  = k.node.StakingShare(ctx)
-			stakingReward = hubutils.GetProportionOfCoin(item.Price, stakingShare)
+			stakingReward = baseutils.GetProportionOfCoin(item.Price, stakingShare)
 		)
 
 		// Move the staking reward from the deposit to the fee collector module account.
@@ -158,7 +158,7 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 
 				// Calculate the amount paid based on the gigabyte price and utilized bandwidth.
 				var (
-					paidAmount = hubutils.AmountForBytes(gigabytePrice.Amount, alloc.UtilisedBytes)
+					paidAmount = baseutils.AmountForBytes(gigabytePrice.Amount, alloc.UtilisedBytes)
 					refund     = sdk.NewCoin(
 						s.Deposit.Denom,
 						s.Deposit.Amount.Sub(paidAmount),

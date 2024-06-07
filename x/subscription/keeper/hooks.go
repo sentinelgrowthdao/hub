@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
-	hubutils "github.com/sentinel-official/hub/v12/utils"
+	baseutils "github.com/sentinel-official/hub/v12/utils"
 	"github.com/sentinel-official/hub/v12/x/subscription/types"
 )
 
@@ -53,7 +53,7 @@ func (k *Keeper) SessionInactiveHook(ctx sdk.Context, id uint64, accAddr sdk.Acc
 			s.Deposit.Denom,
 			s.Deposit.Amount.QuoRaw(s.Gigabytes),
 		)
-		previousAmount = hubutils.AmountForBytes(gigabytePrice.Amount, alloc.UtilisedBytes)
+		previousAmount = baseutils.AmountForBytes(gigabytePrice.Amount, alloc.UtilisedBytes)
 	}
 
 	// Update the allocation's utilized bytes by adding the provided bytes.
@@ -78,10 +78,10 @@ func (k *Keeper) SessionInactiveHook(ctx sdk.Context, id uint64, accAddr sdk.Acc
 	if s, ok := subscription.(*types.NodeSubscription); ok && s.Gigabytes != 0 {
 		// Calculate the payment to be made for the current utilization.
 		var (
-			currentAmount = hubutils.AmountForBytes(gigabytePrice.Amount, alloc.UtilisedBytes)
+			currentAmount = baseutils.AmountForBytes(gigabytePrice.Amount, alloc.UtilisedBytes)
 			payment       = sdk.NewCoin(gigabytePrice.Denom, currentAmount.Sub(previousAmount))
 			stakingShare  = k.node.StakingShare(ctx)
-			stakingReward = hubutils.GetProportionOfCoin(payment, stakingShare)
+			stakingReward = baseutils.GetProportionOfCoin(payment, stakingShare)
 		)
 
 		// Move the staking reward from the deposit to the fee collector module account.
