@@ -9,8 +9,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/module"
-	sdksimtypes "github.com/cosmos/cosmos-sdk/types/simulation"
+	sdkmodule "github.com/cosmos/cosmos-sdk/types/module"
+	sdksimulation "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 
@@ -20,50 +20,52 @@ import (
 )
 
 var (
-	_ module.AppModuleBasic      = AppModuleBasic{}
-	_ module.AppModuleGenesis    = AppModule{}
-	_ module.BeginBlockAppModule = AppModule{}
-	_ module.EndBlockAppModule   = AppModule{}
-	_ module.AppModuleSimulation = AppModule{}
+	_ sdkmodule.AppModuleBasic      = AppModuleBasic{}
+	_ sdkmodule.AppModuleGenesis    = AppModule{}
+	_ sdkmodule.AppModuleSimulation = AppModule{}
+	_ sdkmodule.BeginBlockAppModule = AppModule{}
+	_ sdkmodule.EndBlockAppModule   = AppModule{}
+	_ sdkmodule.HasConsensusVersion = AppModule{}
+	_ sdkmodule.HasServices         = AppModule{}
 )
 
 type AppModuleBasic struct{}
 
-func (a AppModuleBasic) Name() string { return types.ModuleName }
+func (amb AppModuleBasic) Name() string { return types.ModuleName }
 
-func (a AppModuleBasic) RegisterLegacyAminoCodec(_ *codec.LegacyAmino) {}
+func (amb AppModuleBasic) RegisterLegacyAminoCodec(_ *codec.LegacyAmino) {}
 
-func (a AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry) {
+func (amb AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry) {
 	types.RegisterInterfaces(registry)
 }
 
-func (a AppModuleBasic) RegisterGRPCGatewayRoutes(ctx client.Context, mux *runtime.ServeMux) {
+func (amb AppModuleBasic) RegisterGRPCGatewayRoutes(ctx client.Context, mux *runtime.ServeMux) {
 	_ = types.RegisterQueryServiceHandlerClient(context.Background(), mux, types.NewQueryServiceClient(ctx))
 }
 
-func (a AppModuleBasic) GetTxCmd() *cobra.Command { return cli.GetTxCmd() }
+func (amb AppModuleBasic) GetTxCmd() *cobra.Command { return cli.GetTxCmd() }
 
-func (a AppModuleBasic) GetQueryCmd() *cobra.Command { return cli.GetQueryCmd() }
+func (amb AppModuleBasic) GetQueryCmd() *cobra.Command { return cli.GetQueryCmd() }
 
 type AppModule struct {
 	AppModuleBasic
-	cdc codec.Codec
-	k   keeper.Keeper
+	cdc    codec.Codec
+	keeper keeper.Keeper
 }
 
 func NewAppModule(cdc codec.Codec, k keeper.Keeper) AppModule {
 	return AppModule{
-		cdc: cdc,
-		k:   k,
+		cdc:    cdc,
+		keeper: k,
 	}
 }
 
-func (a AppModule) DefaultGenesis(jsonCodec codec.JSONCodec) json.RawMessage {
+func (am AppModule) DefaultGenesis(jsonCodec codec.JSONCodec) json.RawMessage {
 	state := types.DefaultGenesisState()
 	return jsonCodec.MustMarshalJSON(state)
 }
 
-func (a AppModule) ValidateGenesis(jsonCodec codec.JSONCodec, _ client.TxEncodingConfig, message json.RawMessage) error {
+func (am AppModule) ValidateGenesis(jsonCodec codec.JSONCodec, _ client.TxEncodingConfig, message json.RawMessage) error {
 	var state types.GenesisState
 	if err := jsonCodec.UnmarshalJSON(message, &state); err != nil {
 		return err
@@ -72,38 +74,38 @@ func (a AppModule) ValidateGenesis(jsonCodec codec.JSONCodec, _ client.TxEncodin
 	return state.Validate()
 }
 
-func (a AppModule) InitGenesis(ctx sdk.Context, jsonCodec codec.JSONCodec, message json.RawMessage) []abcitypes.ValidatorUpdate {
+func (am AppModule) InitGenesis(ctx sdk.Context, jsonCodec codec.JSONCodec, message json.RawMessage) []abcitypes.ValidatorUpdate {
 	var state types.GenesisState
 	jsonCodec.MustUnmarshalJSON(message, &state)
-	a.k.InitGenesis(ctx, &state)
+	am.keeper.InitGenesis(ctx, &state)
 
 	return nil
 }
 
-func (a AppModule) ExportGenesis(ctx sdk.Context, jsonCodec codec.JSONCodec) json.RawMessage {
-	state := a.k.ExportGenesis(ctx)
+func (am AppModule) ExportGenesis(ctx sdk.Context, jsonCodec codec.JSONCodec) json.RawMessage {
+	state := am.keeper.ExportGenesis(ctx)
 	return jsonCodec.MustMarshalJSON(state)
 }
 
-func (a AppModule) BeginBlock(_ sdk.Context, _ abcitypes.RequestBeginBlock) {}
+func (am AppModule) BeginBlock(_ sdk.Context, _ abcitypes.RequestBeginBlock) {}
 
-func (a AppModule) EndBlock(_ sdk.Context, _ abcitypes.RequestEndBlock) []abcitypes.ValidatorUpdate {
+func (am AppModule) EndBlock(_ sdk.Context, _ abcitypes.RequestEndBlock) []abcitypes.ValidatorUpdate {
 	return nil
 }
 
-func (AppModule) GenerateGenesisState(_ *module.SimulationState) {}
+func (AppModule) GenerateGenesisState(_ *sdkmodule.SimulationState) {}
 
-func (a AppModule) RegisterStoreDecoder(_ sdk.StoreDecoderRegistry) {}
+func (am AppModule) RegisterStoreDecoder(_ sdk.StoreDecoderRegistry) {}
 
-func (a AppModule) WeightedOperations(_ module.SimulationState) []sdksimtypes.WeightedOperation {
+func (am AppModule) WeightedOperations(_ sdkmodule.SimulationState) []sdksimulation.WeightedOperation {
 	return nil
 }
 
-func (a AppModule) ConsensusVersion() uint64 { return 1 }
+func (am AppModule) ConsensusVersion() uint64 { return 1 }
 
-func (a AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
+func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
 
-func (a AppModule) RegisterServices(configurator module.Configurator) {
-	types.RegisterMsgServiceServer(configurator.MsgServer(), keeper.NewMsgServiceServer(a.k))
-	types.RegisterQueryServiceServer(configurator.QueryServer(), keeper.NewQueryServiceServer(a.k))
+func (am AppModule) RegisterServices(configurator sdkmodule.Configurator) {
+	types.RegisterMsgServiceServer(configurator.MsgServer(), keeper.NewMsgServiceServer(am.keeper))
+	types.RegisterQueryServiceServer(configurator.QueryServer(), keeper.NewQueryServiceServer(am.keeper))
 }

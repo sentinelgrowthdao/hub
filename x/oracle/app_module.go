@@ -30,41 +30,41 @@ var (
 
 type AppModuleBasic struct{}
 
-func (a AppModuleBasic) Name() string { return types.ModuleName }
+func (amb AppModuleBasic) Name() string { return types.ModuleName }
 
-func (a AppModuleBasic) RegisterLegacyAminoCodec(_ *codec.LegacyAmino) {}
+func (amb AppModuleBasic) RegisterLegacyAminoCodec(_ *codec.LegacyAmino) {}
 
-func (a AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry) {
+func (amb AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry) {
 	types.RegisterInterfaces(registry)
 }
 
-func (a AppModuleBasic) RegisterGRPCGatewayRoutes(context client.Context, mux *runtime.ServeMux) {}
+func (amb AppModuleBasic) RegisterGRPCGatewayRoutes(context client.Context, mux *runtime.ServeMux) {}
 
-func (a AppModuleBasic) GetTxCmd() *cobra.Command {
+func (amb AppModuleBasic) GetTxCmd() *cobra.Command {
 	return cli.GetTxCmd()
 }
 
-func (a AppModuleBasic) GetQueryCmd() *cobra.Command {
+func (amb AppModuleBasic) GetQueryCmd() *cobra.Command {
 	return cli.GetQueryCmd()
 }
 
 type AppModule struct {
 	AppModuleBasic
-	k keeper.Keeper
+	keeper keeper.Keeper
 }
 
 func NewAppModule(k keeper.Keeper) AppModule {
 	return AppModule{
-		k: k,
+		keeper: k,
 	}
 }
 
-func (a AppModule) DefaultGenesis(jsonCodec codec.JSONCodec) json.RawMessage {
+func (am AppModule) DefaultGenesis(jsonCodec codec.JSONCodec) json.RawMessage {
 	state := types.DefaultGenesisState()
 	return jsonCodec.MustMarshalJSON(state)
 }
 
-func (a AppModule) ValidateGenesis(jsonCodec codec.JSONCodec, _ client.TxEncodingConfig, message json.RawMessage) error {
+func (am AppModule) ValidateGenesis(jsonCodec codec.JSONCodec, _ client.TxEncodingConfig, message json.RawMessage) error {
 	var state types.GenesisState
 	if err := jsonCodec.UnmarshalJSON(message, &state); err != nil {
 		return err
@@ -73,35 +73,35 @@ func (a AppModule) ValidateGenesis(jsonCodec codec.JSONCodec, _ client.TxEncodin
 	return state.Validate()
 }
 
-func (a AppModule) InitGenesis(ctx sdk.Context, jsonCodec codec.JSONCodec, message json.RawMessage) []abcitypes.ValidatorUpdate {
+func (am AppModule) InitGenesis(ctx sdk.Context, jsonCodec codec.JSONCodec, message json.RawMessage) []abcitypes.ValidatorUpdate {
 	var state types.GenesisState
 	jsonCodec.MustUnmarshalJSON(message, &state)
-	a.k.InitGenesis(ctx, &state)
+	am.keeper.InitGenesis(ctx, &state)
 
 	return nil
 }
 
-func (a AppModule) ExportGenesis(ctx sdk.Context, jsonCodec codec.JSONCodec) json.RawMessage {
-	state := a.k.ExportGenesis(ctx)
+func (am AppModule) ExportGenesis(ctx sdk.Context, jsonCodec codec.JSONCodec) json.RawMessage {
+	state := am.keeper.ExportGenesis(ctx)
 	return jsonCodec.MustMarshalJSON(state)
 }
 
-func (a AppModule) GenerateGenesisState(_ *sdkmodule.SimulationState) {}
+func (am AppModule) GenerateGenesisState(_ *sdkmodule.SimulationState) {}
 
-func (a AppModule) RegisterStoreDecoder(_ sdk.StoreDecoderRegistry) {}
+func (am AppModule) RegisterStoreDecoder(_ sdk.StoreDecoderRegistry) {}
 
-func (a AppModule) WeightedOperations(_ sdkmodule.SimulationState) []sdksimulation.WeightedOperation {
+func (am AppModule) WeightedOperations(_ sdkmodule.SimulationState) []sdksimulation.WeightedOperation {
 	return nil
 }
 
-func (a AppModule) BeginBlock(ctx sdk.Context, req abcitypes.RequestBeginBlock) {}
+func (am AppModule) BeginBlock(ctx sdk.Context, req abcitypes.RequestBeginBlock) {}
 
-func (a AppModule) EndBlock(ctx sdk.Context, req abcitypes.RequestEndBlock) []abcitypes.ValidatorUpdate {
+func (am AppModule) EndBlock(ctx sdk.Context, req abcitypes.RequestEndBlock) []abcitypes.ValidatorUpdate {
 	return nil
 }
 
-func (a AppModule) ConsensusVersion() uint64 { return 1 }
+func (am AppModule) ConsensusVersion() uint64 { return 1 }
 
-func (a AppModule) RegisterServices(configurator sdkmodule.Configurator) {
-	types.RegisterMsgServiceServer(configurator.MsgServer(), keeper.NewMsgServiceServer(a.k))
+func (am AppModule) RegisterServices(configurator sdkmodule.Configurator) {
+	types.RegisterMsgServiceServer(configurator.MsgServer(), keeper.NewMsgServiceServer(am.keeper))
 }

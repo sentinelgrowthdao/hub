@@ -22,8 +22,8 @@ var (
 )
 
 type IBCModule struct {
-	cdc codec.Codec
-	k   keeper.Keeper
+	cdc    codec.Codec
+	keeper keeper.Keeper
 }
 
 func (im IBCModule) OnChanOpenInit(
@@ -41,12 +41,12 @@ func (im IBCModule) OnChanOpenInit(
 		return "", types.NewErrorInvalidChannelOrdering(order, ibcchanneltypes.ORDERED)
 	}
 
-	boundPortID := im.k.GetPortID(ctx)
+	boundPortID := im.keeper.GetPortID(ctx)
 	if boundPortID != portID {
 		return "", types.NewErrorInvalidPort(portID, boundPortID)
 	}
 
-	if err := im.k.ClaimCapability(ctx, channelCap, ibchost.ChannelCapabilityPath(portID, channelID)); err != nil {
+	if err := im.keeper.ClaimCapability(ctx, channelCap, ibchost.ChannelCapabilityPath(portID, channelID)); err != nil {
 		return "", err
 	}
 
@@ -65,12 +65,12 @@ func (im IBCModule) OnChanOpenTry(
 		return "", types.NewErrorInvalidChannelOrdering(order, ibcchanneltypes.ORDERED)
 	}
 
-	boundPortID := im.k.GetPortID(ctx)
+	boundPortID := im.keeper.GetPortID(ctx)
 	if boundPortID != portID {
 		return "", types.NewErrorInvalidPort(portID, boundPortID)
 	}
 
-	if err := im.k.ClaimCapability(ctx, channelCap, ibchost.ChannelCapabilityPath(portID, channelID)); err != nil {
+	if err := im.keeper.ClaimCapability(ctx, channelCap, ibchost.ChannelCapabilityPath(portID, channelID)); err != nil {
 		return "", err
 	}
 
@@ -106,7 +106,7 @@ func (im IBCModule) OnAcknowledgementPacket(
 		return err
 	}
 
-	return im.k.OnAcknowledgementPacket(ctx, packet, ack)
+	return im.keeper.OnAcknowledgementPacket(ctx, packet, ack)
 }
 
 func (im IBCModule) OnTimeoutPacket(_ sdk.Context, _ ibcchanneltypes.Packet, _ sdk.AccAddress) error {
