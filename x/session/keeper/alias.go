@@ -7,7 +7,7 @@ import (
 	base "github.com/sentinel-official/hub/v12/types"
 	nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v2"
 	plantypes "github.com/sentinel-official/hub/v12/x/plan/types/v2"
-	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types"
+	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types/v2"
 )
 
 func (k *Keeper) GetAccount(ctx sdk.Context, addr sdk.AccAddress) authtypes.AccountI {

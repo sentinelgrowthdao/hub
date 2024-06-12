@@ -12,7 +12,7 @@ import (
 	v21 "github.com/sentinel-official/hub/v12/x/plan/types/v2"
 	v22 "github.com/sentinel-official/hub/v12/x/provider/types/v2"
 	v23 "github.com/sentinel-official/hub/v12/x/session/types/v2"
-	types1 "github.com/sentinel-official/hub/v12/x/subscription/types"
+	v24 "github.com/sentinel-official/hub/v12/x/subscription/types/v2"
 	io "io"
 	math "math"
 	math_bits "math/bits"
@@ -44,7 +44,7 @@ type GenesisState struct {
 	// Field 5: Genesis state for sessions in the Sentinel module.
 	Sessions *v23.GenesisState `protobuf:"bytes,5,opt,name=sessions,proto3" json:"sessions,omitempty"`
 	// Field 6: Genesis state for subscriptions in the Sentinel module.
-	Subscriptions *types1.GenesisState `protobuf:"bytes,6,opt,name=subscriptions,proto3" json:"subscriptions,omitempty"`
+	Subscriptions *v24.GenesisState `protobuf:"bytes,6,opt,name=subscriptions,proto3" json:"subscriptions,omitempty"`
 }
 
 func (m *GenesisState) Reset()         { *m = GenesisState{} }
@@ -497,7 +497,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Subscriptions == nil {
-				m.Subscriptions = &types1.GenesisState{}
+				m.Subscriptions = &v24.GenesisState{}
 			}
 			if err := m.Subscriptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err

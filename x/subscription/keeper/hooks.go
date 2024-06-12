@@ -8,7 +8,7 @@ import (
 
 	base "github.com/sentinel-official/hub/v12/types"
 	baseutils "github.com/sentinel-official/hub/v12/utils"
-	"github.com/sentinel-official/hub/v12/x/subscription/types"
+	"github.com/sentinel-official/hub/v12/x/subscription/types/v2"
 )
 
 // SessionInactiveHook is a function that handles the end of a session.
@@ -32,7 +32,7 @@ func (k *Keeper) SessionInactiveHook(ctx sdk.Context, id uint64, accAddr sdk.Acc
 	}
 
 	// If the subscription is a NodeSubscription with non-zero duration (hours), no further action is needed.
-	if s, ok := subscription.(*types.NodeSubscription); ok && s.Hours != 0 {
+	if s, ok := subscription.(*v2.NodeSubscription); ok && s.Hours != 0 {
 		return nil
 	}
 
@@ -48,7 +48,7 @@ func (k *Keeper) SessionInactiveHook(ctx sdk.Context, id uint64, accAddr sdk.Acc
 	)
 
 	// Calculate payment amounts based on the subscription type (NodeSubscription).
-	if s, ok := subscription.(*types.NodeSubscription); ok && s.Gigabytes != 0 {
+	if s, ok := subscription.(*v2.NodeSubscription); ok && s.Gigabytes != 0 {
 		gigabytePrice = sdk.NewCoin(
 			s.Deposit.Denom,
 			s.Deposit.Amount.QuoRaw(s.Gigabytes),
@@ -66,7 +66,7 @@ func (k *Keeper) SessionInactiveHook(ctx sdk.Context, id uint64, accAddr sdk.Acc
 	// Save the updated allocation to the store.
 	k.SetAllocation(ctx, alloc)
 	ctx.EventManager().EmitTypedEvent(
-		&types.EventAllocate{
+		&v2.EventAllocate{
 			Address:       alloc.Address,
 			GrantedBytes:  alloc.GrantedBytes,
 			UtilisedBytes: alloc.UtilisedBytes,
@@ -75,7 +75,7 @@ func (k *Keeper) SessionInactiveHook(ctx sdk.Context, id uint64, accAddr sdk.Acc
 	)
 
 	// Calculate the current payment amount based on the subscription type (NodeSubscription).
-	if s, ok := subscription.(*types.NodeSubscription); ok && s.Gigabytes != 0 {
+	if s, ok := subscription.(*v2.NodeSubscription); ok && s.Gigabytes != 0 {
 		// Calculate the payment to be made for the current utilization.
 		var (
 			currentAmount = baseutils.AmountForBytes(gigabytePrice.Amount, alloc.UtilisedBytes)
@@ -99,7 +99,7 @@ func (k *Keeper) SessionInactiveHook(ctx sdk.Context, id uint64, accAddr sdk.Acc
 
 		// Emit an event for the session payment.
 		ctx.EventManager().EmitTypedEvent(
-			&types.EventPayForSession{
+			&v2.EventPayForSession{
 				Address:        session.Address,
 				NodeAddress:    session.NodeAddress,
 				Payment:        payment.String(),

@@ -9,9 +9,10 @@ import (
 
 	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/subscription/types"
+	"github.com/sentinel-official/hub/v12/x/subscription/types/v2"
 )
 
-func (k *Keeper) SetPayout(ctx sdk.Context, payout types.Payout) {
+func (k *Keeper) SetPayout(ctx sdk.Context, payout v2.Payout) {
 	var (
 		store = k.Store(ctx)
 		key   = types.PayoutKey(payout.ID)
@@ -30,7 +31,7 @@ func (k *Keeper) HasPayout(ctx sdk.Context, id uint64) bool {
 	return store.Has(key)
 }
 
-func (k *Keeper) GetPayout(ctx sdk.Context, id uint64) (payout types.Payout, found bool) {
+func (k *Keeper) GetPayout(ctx sdk.Context, id uint64) (payout v2.Payout, found bool) {
 	var (
 		store = k.Store(ctx)
 		key   = types.PayoutKey(id)
@@ -54,7 +55,7 @@ func (k *Keeper) DeletePayout(ctx sdk.Context, id uint64) {
 	store.Delete(key)
 }
 
-func (k *Keeper) GetPayouts(ctx sdk.Context) (items types.Payouts) {
+func (k *Keeper) GetPayouts(ctx sdk.Context) (items v2.Payouts) {
 	var (
 		store = k.Store(ctx)
 		iter  = sdk.KVStorePrefixIterator(store, types.PayoutKeyPrefix)
@@ -63,7 +64,7 @@ func (k *Keeper) GetPayouts(ctx sdk.Context) (items types.Payouts) {
 	defer iter.Close()
 
 	for ; iter.Valid(); iter.Next() {
-		var item types.Payout
+		var item v2.Payout
 		k.cdc.MustUnmarshal(iter.Value(), &item)
 		items = append(items, item)
 	}
@@ -71,14 +72,14 @@ func (k *Keeper) GetPayouts(ctx sdk.Context) (items types.Payouts) {
 	return items
 }
 
-func (k *Keeper) IteratePayouts(ctx sdk.Context, fn func(index int, item types.Payout) (stop bool)) {
+func (k *Keeper) IteratePayouts(ctx sdk.Context, fn func(index int, item v2.Payout) (stop bool)) {
 	store := k.Store(ctx)
 
 	iter := sdk.KVStorePrefixIterator(store, types.PayoutKeyPrefix)
 	defer iter.Close()
 
 	for i := 0; iter.Valid(); iter.Next() {
-		var item types.Payout
+		var item v2.Payout
 		k.cdc.MustUnmarshal(iter.Value(), &item)
 
 		if stop := fn(i, item); stop {
@@ -172,7 +173,7 @@ func (k *Keeper) DeletePayoutForAccountByNode(ctx sdk.Context, accAddr sdk.AccAd
 	store.Delete(key)
 }
 
-func (k *Keeper) GetLatestPayoutForAccountByNode(ctx sdk.Context, accAddr sdk.AccAddress, nodeAddr base.NodeAddress) (payout types.Payout, found bool) {
+func (k *Keeper) GetLatestPayoutForAccountByNode(ctx sdk.Context, accAddr sdk.AccAddress, nodeAddr base.NodeAddress) (payout v2.Payout, found bool) {
 	store := k.Store(ctx)
 
 	iter := sdk.KVStoreReversePrefixIterator(store, types.GetPayoutForAccountByNodeKeyPrefix(accAddr, nodeAddr))
@@ -207,7 +208,7 @@ func (k *Keeper) DeletePayoutForNextAt(ctx sdk.Context, at time.Time, id uint64)
 	store.Delete(key)
 }
 
-func (k *Keeper) IteratePayoutsForNextAt(ctx sdk.Context, at time.Time, fn func(index int, item types.Payout) (stop bool)) {
+func (k *Keeper) IteratePayoutsForNextAt(ctx sdk.Context, at time.Time, fn func(index int, item v2.Payout) (stop bool)) {
 	store := k.Store(ctx)
 
 	iter := store.Iterator(types.PayoutForNextAtKeyPrefix, sdk.PrefixEndBytes(types.GetPayoutForNextAtKeyPrefix(at)))

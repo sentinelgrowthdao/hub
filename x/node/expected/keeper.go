@@ -7,7 +7,7 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
-	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types"
+	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types/v2"
 )
 
 type AccountKeeper interface {

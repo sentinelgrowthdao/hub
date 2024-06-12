@@ -9,14 +9,14 @@ import (
 
 	base "github.com/sentinel-official/hub/v12/types"
 	baseutils "github.com/sentinel-official/hub/v12/utils"
-	"github.com/sentinel-official/hub/v12/x/subscription/types"
+	"github.com/sentinel-official/hub/v12/x/subscription/types/v2"
 )
 
 // BeginBlock is a function that gets called at the beginning of every block.
 // It processes the payouts scheduled to be made and performs the necessary actions accordingly.
 func (k *Keeper) BeginBlock(ctx sdk.Context) {
 	// Iterate over all payouts that are scheduled to happen at the current block time.
-	k.IteratePayoutsForNextAt(ctx, ctx.BlockTime(), func(_ int, item types.Payout) (stop bool) {
+	k.IteratePayoutsForNextAt(ctx, ctx.BlockTime(), func(_ int, item v2.Payout) (stop bool) {
 		k.Logger(ctx).Info("Found a scheduled payout", "id", item.ID)
 
 		// Delete the payout from the NextAt index before updating the NextAt value.
@@ -45,7 +45,7 @@ func (k *Keeper) BeginBlock(ctx sdk.Context) {
 
 		// Emit an event for the payout payment.
 		ctx.EventManager().EmitTypedEvent(
-			&types.EventPayForPayout{
+			&v2.EventPayForPayout{
 				Address:       item.Address,
 				NodeAddress:   item.NodeAddress,
 				Payment:       payment.String(),
@@ -82,7 +82,7 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 	statusChangeDelay := k.StatusChangeDelay(ctx)
 
 	// Iterate over all subscriptions that have become inactive at the current block time.
-	k.IterateSubscriptionsForInactiveAt(ctx, ctx.BlockTime(), func(_ int, item types.Subscription) bool {
+	k.IterateSubscriptionsForInactiveAt(ctx, ctx.BlockTime(), func(_ int, item v2.Subscription) bool {
 		k.Logger(ctx).Info("Found an inactive subscription", "id", item.GetID(), "status", item.GetStatus())
 
 		// Delete the subscription from the InactiveAt index before updating the InactiveAt value.
@@ -105,7 +105,7 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 
 			// Emit an event to notify that the subscription status has been updated.
 			ctx.EventManager().EmitTypedEvent(
-				&types.EventUpdateStatus{
+				&v2.EventUpdateStatus{
 					Status:  base.StatusInactivePending,
 					Address: item.GetAddress().String(),
 					ID:      item.GetID(),
@@ -114,7 +114,7 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 			)
 
 			// If the subscription is a NodeSubscription and the duration is specified in hours (non-zero), update the associated payout.
-			if s, ok := item.(*types.NodeSubscription); ok && s.Hours != 0 {
+			if s, ok := item.(*v2.NodeSubscription); ok && s.Hours != 0 {
 				payout, found := k.GetPayout(ctx, s.GetID())
 				if !found {
 					panic(fmt.Errorf("payout for subscription %d does not exist", s.GetID()))
@@ -138,7 +138,7 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 		}
 
 		// If the subscription status is not 'Active', handle the different types of subscriptions based on their attributes.
-		if s, ok := item.(*types.NodeSubscription); ok {
+		if s, ok := item.(*v2.NodeSubscription); ok {
 			// Check if it has a non-zero bandwidth (Gigabytes != 0).
 			if s.Gigabytes != 0 {
 				// Calculate the gigabyte price based on the deposit amount and gigabytes.
@@ -172,7 +172,7 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 
 				// Emit an event for the refund.
 				ctx.EventManager().EmitTypedEvent(
-					&types.EventRefund{
+					&v2.EventRefund{
 						Address: s.Address,
 						Amount:  refund.String(),
 						ID:      s.ID,
@@ -204,7 +204,7 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 
 				// Emit an event for the refund.
 				ctx.EventManager().EmitTypedEvent(
-					&types.EventRefund{
+					&v2.EventRefund{
 						Address: s.Address,
 						Amount:  refund.String(),
 						ID:      s.ID,
@@ -215,7 +215,7 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 
 		// Based on the subscription type, perform additional cleanup actions.
 		switch s := item.(type) {
-		case *types.NodeSubscription:
+		case *v2.NodeSubscription:
 			// For node-level subscriptions, delete the subscription from the NodeAddress index.
 			k.DeleteSubscriptionForNode(ctx, s.GetNodeAddress(), s.GetID())
 
@@ -225,12 +225,12 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 
 			// Delete the node-level subscription from the Account index.
 			k.DeleteSubscriptionForAccount(ctx, accAddr, s.GetID())
-		case *types.PlanSubscription:
+		case *v2.PlanSubscription:
 			// For plan-level subscriptions, delete the subscription from the PlanID index.
 			k.DeleteSubscriptionForPlan(ctx, s.PlanID, s.GetID())
 
 			// Iterate over all allocations associated with the plan-level subscription and delete them from the store.
-			k.IterateAllocationsForSubscription(ctx, s.GetID(), func(_ int, alloc types.Allocation) bool {
+			k.IterateAllocationsForSubscription(ctx, s.GetID(), func(_ int, alloc v2.Allocation) bool {
 				accAddr := alloc.GetAddress()
 
 				// Delete the allocation associated with the plan-level subscription.
@@ -249,7 +249,7 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 		// Finally, delete the subscription from the store and emit an event to notify its status change to 'Inactive'.
 		k.DeleteSubscription(ctx, item.GetID())
 		ctx.EventManager().EmitTypedEvent(
-			&types.EventUpdateStatus{
+			&v2.EventUpdateStatus{
 				Status:  base.StatusInactive,
 				Address: item.GetAddress().String(),
 				ID:      item.GetID(),
@@ -259,7 +259,7 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 
 		// If the subscription is a NodeSubscription and the duration is specified in hours (non-zero),
 		// delete the payout from the store and its associated indexes.
-		if s, ok := item.(*types.NodeSubscription); ok && s.Hours != 0 {
+		if s, ok := item.(*v2.NodeSubscription); ok && s.Hours != 0 {
 			payout, found := k.GetPayout(ctx, item.GetID())
 			if !found {
 				// If the payout is not found, panic with an error indicating the missing payout.

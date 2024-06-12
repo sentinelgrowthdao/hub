@@ -1,9 +1,11 @@
-package types
+package v2
 
 import (
 	sdkerrors "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/sentinel-official/hub/v12/x/subscription/types"
 )
 
 // The `types` package contains custom message types for the Cosmos SDK.
@@ -28,13 +30,13 @@ func NewMsgCancelRequest(from sdk.AccAddress, id uint64) *MsgCancelRequest {
 // and if the 'ID' field is not zero.
 func (m *MsgCancelRequest) ValidateBasic() error {
 	if m.From == "" {
-		return sdkerrors.Wrap(ErrorInvalidMessage, "from cannot be empty")
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
 	}
 	if _, err := sdk.AccAddressFromBech32(m.From); err != nil {
-		return sdkerrors.Wrapf(ErrorInvalidMessage, "invalid from %s", err)
+		return sdkerrors.Wrapf(types.ErrorInvalidMessage, "invalid from %s", err)
 	}
 	if m.ID == 0 {
-		return sdkerrors.Wrap(ErrorInvalidMessage, "id cannot be zero")
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "id cannot be zero")
 	}
 
 	return nil
@@ -67,25 +69,25 @@ func NewMsgAllocateRequest(from sdk.AccAddress, id uint64, addr sdk.AccAddress, 
 // and if the 'Bytes' field is not nil and not negative.
 func (m *MsgAllocateRequest) ValidateBasic() error {
 	if m.From == "" {
-		return sdkerrors.Wrap(ErrorInvalidMessage, "from cannot be empty")
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
 	}
 	if _, err := sdk.AccAddressFromBech32(m.From); err != nil {
-		return sdkerrors.Wrapf(ErrorInvalidMessage, "invalid from %s", err)
+		return sdkerrors.Wrapf(types.ErrorInvalidMessage, "invalid from %s", err)
 	}
 	if m.ID == 0 {
-		return sdkerrors.Wrap(ErrorInvalidMessage, "id cannot be zero")
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "id cannot be zero")
 	}
 	if m.Address == "" {
-		return sdkerrors.Wrap(ErrorInvalidMessage, "address cannot be empty")
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "address cannot be empty")
 	}
 	if _, err := sdk.AccAddressFromBech32(m.Address); err != nil {
-		return sdkerrors.Wrapf(ErrorInvalidMessage, "invalid address %s", err)
+		return sdkerrors.Wrapf(types.ErrorInvalidMessage, "invalid address %s", err)
 	}
 	if m.Bytes.IsNil() {
-		return sdkerrors.Wrap(ErrorInvalidMessage, "bytes cannot be nil")
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "bytes cannot be nil")
 	}
 	if m.Bytes.IsNegative() {
-		return sdkerrors.Wrap(ErrorInvalidMessage, "bytes cannot be negative")
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "bytes cannot be negative")
 	}
 
 	return nil

@@ -4,7 +4,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
-	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types"
+	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types/v2"
 )
 
 func (k *Keeper) FundCommunityPool(ctx sdk.Context, fromAddr sdk.AccAddress, coin sdk.Coin) error {

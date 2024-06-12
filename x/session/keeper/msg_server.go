@@ -8,7 +8,7 @@ import (
 	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/session/types"
 	"github.com/sentinel-official/hub/v12/x/session/types/v2"
-	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types"
+	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types/v2"
 )
 
 // The following line asserts that the `msgServer` type implements the `types.MsgServiceServer` interface.

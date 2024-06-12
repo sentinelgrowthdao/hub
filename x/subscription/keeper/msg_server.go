@@ -9,26 +9,27 @@ import (
 
 	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/subscription/types"
+	"github.com/sentinel-official/hub/v12/x/subscription/types/v2"
 )
 
-// The following line asserts that the `msgServer` type implements the `types.MsgServiceServer` interface.
+// The following line asserts that the `msgServer` type implements the `v2.MsgServiceServer` interface.
 var (
-	_ types.MsgServiceServer = (*msgServer)(nil)
+	_ v2.MsgServiceServer = (*msgServer)(nil)
 )
 
-// msgServer is a message server that implements the `types.MsgServiceServer` interface.
+// msgServer is a message server that implements the `v2.MsgServiceServer` interface.
 type msgServer struct {
 	Keeper // Keeper is an instance of the main keeper for the module.
 }
 
-// NewMsgServiceServer creates a new instance of `types.MsgServiceServer` using the provided Keeper.
-func NewMsgServiceServer(k Keeper) types.MsgServiceServer {
+// NewMsgServiceServer creates a new instance of `v2.MsgServiceServer` using the provided Keeper.
+func NewMsgServiceServer(k Keeper) v2.MsgServiceServer {
 	return &msgServer{k}
 }
 
 // MsgCancel cancels an active subscription.
 // It validates the cancel request and performs necessary operations to set the subscription to the inactive state.
-func (k *msgServer) MsgCancel(c context.Context, msg *types.MsgCancelRequest) (*types.MsgCancelResponse, error) {
+func (k *msgServer) MsgCancel(c context.Context, msg *v2.MsgCancelRequest) (*v2.MsgCancelResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
 
 	// Convert the `msg.From` address (in Bech32 format) to an `sdk.AccAddress`.
@@ -77,7 +78,7 @@ func (k *msgServer) MsgCancel(c context.Context, msg *types.MsgCancelRequest) (*
 
 	// Emit an event to notify that the subscription status has been updated.
 	ctx.EventManager().EmitTypedEvent(
-		&types.EventUpdateStatus{
+		&v2.EventUpdateStatus{
 			Status:  base.StatusInactivePending,
 			Address: subscription.GetAddress().String(),
 			ID:      subscription.GetID(),
@@ -86,7 +87,7 @@ func (k *msgServer) MsgCancel(c context.Context, msg *types.MsgCancelRequest) (*
 	)
 
 	// If the subscription is a NodeSubscription and the duration is specified in hours (non-zero), update the associated payout.
-	if s, ok := subscription.(*types.NodeSubscription); ok && s.Hours != 0 {
+	if s, ok := subscription.(*v2.NodeSubscription); ok && s.Hours != 0 {
 		payout, found := k.GetPayout(ctx, s.GetID())
 		if !found {
 			return nil, types.NewErrorPayoutNotFound(s.GetID())
@@ -106,12 +107,12 @@ func (k *msgServer) MsgCancel(c context.Context, msg *types.MsgCancelRequest) (*
 		k.SetPayout(ctx, payout)
 	}
 
-	return &types.MsgCancelResponse{}, nil
+	return &v2.MsgCancelResponse{}, nil
 }
 
 // MsgAllocate allocates bandwidth to another address.
 // It validates the allocation request and updates the granted bytes for both the sender and receiver of the bandwidth.
-func (k *msgServer) MsgAllocate(c context.Context, msg *types.MsgAllocateRequest) (*types.MsgAllocateResponse, error) {
+func (k *msgServer) MsgAllocate(c context.Context, msg *v2.MsgAllocateRequest) (*v2.MsgAllocateResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
 
 	// Convert the `msg.From` address (in Bech32 format) to an `sdk.AccAddress`.
@@ -127,7 +128,7 @@ func (k *msgServer) MsgAllocate(c context.Context, msg *types.MsgAllocateRequest
 	}
 
 	// Check if the subscription type is a plan. If not, return an error.
-	if _, ok := subscription.(*types.PlanSubscription); !ok {
+	if _, ok := subscription.(*v2.PlanSubscription); !ok {
 		return nil, types.NewErrorInvalidSubscription(subscription.GetID())
 	}
 
@@ -152,7 +153,7 @@ func (k *msgServer) MsgAllocate(c context.Context, msg *types.MsgAllocateRequest
 	toAlloc, found := k.GetAllocation(ctx, subscription.GetID(), toAddr)
 	if !found {
 		// If the receiver has no existing allocation, create a new one.
-		toAlloc = types.Allocation{
+		toAlloc = v2.Allocation{
 			ID:            subscription.GetID(),
 			Address:       toAddr.String(),
 			GrantedBytes:  sdkmath.ZeroInt(),
@@ -183,7 +184,7 @@ func (k *msgServer) MsgAllocate(c context.Context, msg *types.MsgAllocateRequest
 
 	// Emit an event to notify that the sender's allocation has been updated.
 	ctx.EventManager().EmitTypedEvent(
-		&types.EventAllocate{
+		&v2.EventAllocate{
 			Address:       fromAlloc.Address,
 			GrantedBytes:  fromAlloc.GrantedBytes,
 			UtilisedBytes: fromAlloc.UtilisedBytes,
@@ -202,7 +203,7 @@ func (k *msgServer) MsgAllocate(c context.Context, msg *types.MsgAllocateRequest
 
 	// Emit an event to notify that the receiver's allocation has been updated.
 	ctx.EventManager().EmitTypedEvent(
-		&types.EventAllocate{
+		&v2.EventAllocate{
 			Address:       toAlloc.Address,
 			GrantedBytes:  toAlloc.GrantedBytes,
 			UtilisedBytes: toAlloc.UtilisedBytes,
@@ -210,5 +211,5 @@ func (k *msgServer) MsgAllocate(c context.Context, msg *types.MsgAllocateRequest
 		},
 	)
 
-	return &types.MsgAllocateResponse{}, nil
+	return &v2.MsgAllocateResponse{}, nil
 }

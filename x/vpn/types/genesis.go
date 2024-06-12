@@ -8,7 +8,7 @@ import (
 	plantypes "github.com/sentinel-official/hub/v12/x/plan/types/v2"
 	providertypes "github.com/sentinel-official/hub/v12/x/provider/types/v2"
 	sessiontypes "github.com/sentinel-official/hub/v12/x/session/types/v2"
-	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types"
+	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types/v2"
 )
 
 func NewGenesisState(

@@ -11,9 +11,10 @@ import (
 	base "github.com/sentinel-official/hub/v12/types"
 	baseutils "github.com/sentinel-official/hub/v12/utils"
 	"github.com/sentinel-official/hub/v12/x/subscription/types"
+	"github.com/sentinel-official/hub/v12/x/subscription/types/v2"
 )
 
-func (k *Keeper) SetSubscription(ctx sdk.Context, subscription types.Subscription) {
+func (k *Keeper) SetSubscription(ctx sdk.Context, subscription v2.Subscription) {
 	var (
 		store = k.Store(ctx)
 		key   = types.SubscriptionKey(subscription.GetID())
@@ -27,7 +28,7 @@ func (k *Keeper) SetSubscription(ctx sdk.Context, subscription types.Subscriptio
 	store.Set(key, value)
 }
 
-func (k *Keeper) GetSubscription(ctx sdk.Context, id uint64) (subscription types.Subscription, found bool) {
+func (k *Keeper) GetSubscription(ctx sdk.Context, id uint64) (subscription v2.Subscription, found bool) {
 	var (
 		store = k.Store(ctx)
 		key   = types.SubscriptionKey(id)
@@ -51,7 +52,7 @@ func (k *Keeper) DeleteSubscription(ctx sdk.Context, id uint64) {
 	store.Delete(key)
 }
 
-func (k *Keeper) GetSubscriptions(ctx sdk.Context) (items types.Subscriptions) {
+func (k *Keeper) GetSubscriptions(ctx sdk.Context) (items v2.Subscriptions) {
 	var (
 		store = k.Store(ctx)
 		iter  = sdk.KVStorePrefixIterator(store, types.SubscriptionKeyPrefix)
@@ -60,7 +61,7 @@ func (k *Keeper) GetSubscriptions(ctx sdk.Context) (items types.Subscriptions) {
 	defer iter.Close()
 
 	for ; iter.Valid(); iter.Next() {
-		var item types.Subscription
+		var item v2.Subscription
 		if err := k.cdc.UnmarshalInterface(iter.Value(), &item); err != nil {
 			panic(err)
 		}
@@ -71,14 +72,14 @@ func (k *Keeper) GetSubscriptions(ctx sdk.Context) (items types.Subscriptions) {
 	return items
 }
 
-func (k *Keeper) IterateSubscriptions(ctx sdk.Context, fn func(index int, item types.Subscription) (stop bool)) {
+func (k *Keeper) IterateSubscriptions(ctx sdk.Context, fn func(index int, item v2.Subscription) (stop bool)) {
 	store := k.Store(ctx)
 
 	iter := sdk.KVStorePrefixIterator(store, types.SubscriptionKeyPrefix)
 	defer iter.Close()
 
 	for i := 0; iter.Valid(); iter.Next() {
-		var subscription types.Subscription
+		var subscription v2.Subscription
 		if err := k.cdc.UnmarshalInterface(iter.Value(), &subscription); err != nil {
 			panic(err)
 		}
@@ -118,7 +119,7 @@ func (k *Keeper) DeleteSubscriptionForAccount(ctx sdk.Context, addr sdk.AccAddre
 	store.Delete(key)
 }
 
-func (k *Keeper) GetSubscriptionsForAccount(ctx sdk.Context, addr sdk.AccAddress) (items types.Subscriptions) {
+func (k *Keeper) GetSubscriptionsForAccount(ctx sdk.Context, addr sdk.AccAddress) (items v2.Subscriptions) {
 	var (
 		store = k.Store(ctx)
 		iter  = sdk.KVStorePrefixIterator(store, types.GetSubscriptionForAccountKeyPrefix(addr))
@@ -166,7 +167,7 @@ func (k *Keeper) DeleteSubscriptionForNode(ctx sdk.Context, addr base.NodeAddres
 	store.Delete(key)
 }
 
-func (k *Keeper) GetSubscriptionsForNode(ctx sdk.Context, addr base.NodeAddress) (items types.Subscriptions) {
+func (k *Keeper) GetSubscriptionsForNode(ctx sdk.Context, addr base.NodeAddress) (items v2.Subscriptions) {
 	var (
 		store = k.Store(ctx)
 		iter  = sdk.KVStorePrefixIterator(store, types.GetSubscriptionForNodeKeyPrefix(addr))
@@ -214,7 +215,7 @@ func (k *Keeper) DeleteSubscriptionForPlan(ctx sdk.Context, planID, subscription
 	store.Delete(key)
 }
 
-func (k *Keeper) GetSubscriptionsForPlan(ctx sdk.Context, id uint64) (items types.Subscriptions) {
+func (k *Keeper) GetSubscriptionsForPlan(ctx sdk.Context, id uint64) (items v2.Subscriptions) {
 	var (
 		store = k.Store(ctx)
 		iter  = sdk.KVStorePrefixIterator(store, types.GetSubscriptionForPlanKeyPrefix(id))
@@ -249,7 +250,7 @@ func (k *Keeper) DeleteSubscriptionForInactiveAt(ctx sdk.Context, at time.Time, 
 	store.Delete(key)
 }
 
-func (k *Keeper) IterateSubscriptionsForInactiveAt(ctx sdk.Context, endTime time.Time, fn func(index int, item types.Subscription) (stop bool)) {
+func (k *Keeper) IterateSubscriptionsForInactiveAt(ctx sdk.Context, endTime time.Time, fn func(index int, item v2.Subscription) (stop bool)) {
 	store := k.Store(ctx)
 
 	iter := store.Iterator(types.SubscriptionForInactiveAtKeyPrefix, sdk.PrefixEndBytes(types.GetSubscriptionForInactiveAtKeyPrefix(endTime)))
@@ -269,7 +270,7 @@ func (k *Keeper) IterateSubscriptionsForInactiveAt(ctx sdk.Context, endTime time
 }
 
 // CreateSubscriptionForNode creates a new NodeSubscription for a specific node and account.
-func (k *Keeper) CreateSubscriptionForNode(ctx sdk.Context, accAddr sdk.AccAddress, nodeAddr base.NodeAddress, gigabytes, hours int64, denom string) (*types.NodeSubscription, error) {
+func (k *Keeper) CreateSubscriptionForNode(ctx sdk.Context, accAddr sdk.AccAddress, nodeAddr base.NodeAddress, gigabytes, hours int64, denom string) (*v2.NodeSubscription, error) {
 	// Check if the node exists and is in an active status.
 	node, found := k.GetNode(ctx, nodeAddr)
 	if !found {
@@ -281,8 +282,8 @@ func (k *Keeper) CreateSubscriptionForNode(ctx sdk.Context, accAddr sdk.AccAddre
 
 	// Retrieve the current count and create a new NodeSubscription.
 	count := k.GetCount(ctx)
-	subscription := &types.NodeSubscription{
-		BaseSubscription: &types.BaseSubscription{
+	subscription := &v2.NodeSubscription{
+		BaseSubscription: &v2.BaseSubscription{
 			ID:         count + 1,
 			Address:    accAddr.String(),
 			InactiveAt: time.Time{},
@@ -335,7 +336,7 @@ func (k *Keeper) CreateSubscriptionForNode(ctx sdk.Context, accAddr sdk.AccAddre
 
 	// If the subscription is based on gigabytes, create an allocation and emit an event.
 	if gigabytes != 0 {
-		alloc := types.Allocation{
+		alloc := v2.Allocation{
 			ID:            subscription.GetID(),
 			Address:       accAddr.String(),
 			GrantedBytes:  base.Gigabyte.MulRaw(gigabytes),
@@ -344,7 +345,7 @@ func (k *Keeper) CreateSubscriptionForNode(ctx sdk.Context, accAddr sdk.AccAddre
 
 		k.SetAllocation(ctx, alloc)
 		ctx.EventManager().EmitTypedEvent(
-			&types.EventAllocate{
+			&v2.EventAllocate{
 				Address:       alloc.Address,
 				GrantedBytes:  alloc.GrantedBytes,
 				UtilisedBytes: alloc.UtilisedBytes,
@@ -355,7 +356,7 @@ func (k *Keeper) CreateSubscriptionForNode(ctx sdk.Context, accAddr sdk.AccAddre
 
 	// If the subscription is based on hours, create a payout and emit an event.
 	if hours != 0 {
-		payout := types.Payout{
+		payout := v2.Payout{
 			ID:          subscription.GetID(),
 			Address:     accAddr.String(),
 			NodeAddress: nodeAddr.String(),
@@ -373,7 +374,7 @@ func (k *Keeper) CreateSubscriptionForNode(ctx sdk.Context, accAddr sdk.AccAddre
 		k.SetPayoutForAccountByNode(ctx, accAddr, nodeAddr, payout.ID)
 		k.SetPayoutForNextAt(ctx, payout.NextAt, payout.ID)
 		ctx.EventManager().EmitTypedEvent(
-			&types.EventCreatePayout{
+			&v2.EventCreatePayout{
 				Address:     payout.Address,
 				NodeAddress: payout.NodeAddress,
 				ID:          payout.ID,
@@ -385,7 +386,7 @@ func (k *Keeper) CreateSubscriptionForNode(ctx sdk.Context, accAddr sdk.AccAddre
 }
 
 // CreateSubscriptionForPlan creates a new PlanSubscription for a specific plan and account.
-func (k *Keeper) CreateSubscriptionForPlan(ctx sdk.Context, accAddr sdk.AccAddress, id uint64, denom string) (*types.PlanSubscription, error) {
+func (k *Keeper) CreateSubscriptionForPlan(ctx sdk.Context, accAddr sdk.AccAddress, id uint64, denom string) (*v2.PlanSubscription, error) {
 	// Check if the plan exists and is in an active status.
 	plan, found := k.GetPlan(ctx, id)
 	if !found {
@@ -425,7 +426,7 @@ func (k *Keeper) CreateSubscriptionForPlan(ctx sdk.Context, accAddr sdk.AccAddre
 
 	// Emit an event for the plan payment.
 	ctx.EventManager().EmitTypedEvent(
-		&types.EventPayForPlan{
+		&v2.EventPayForPlan{
 			Address:         accAddr.String(),
 			Payment:         payment.String(),
 			ProviderAddress: plan.ProviderAddress,
@@ -436,8 +437,8 @@ func (k *Keeper) CreateSubscriptionForPlan(ctx sdk.Context, accAddr sdk.AccAddre
 
 	// Retrieve the current count and create a new PlanSubscription.
 	count := k.GetCount(ctx)
-	subscription := &types.PlanSubscription{
-		BaseSubscription: &types.BaseSubscription{
+	subscription := &v2.PlanSubscription{
+		BaseSubscription: &v2.BaseSubscription{
 			ID:         count + 1,
 			Address:    accAddr.String(),
 			InactiveAt: ctx.BlockTime().Add(plan.Duration),
@@ -456,7 +457,7 @@ func (k *Keeper) CreateSubscriptionForPlan(ctx sdk.Context, accAddr sdk.AccAddre
 	k.SetSubscriptionForInactiveAt(ctx, subscription.GetInactiveAt(), subscription.GetID())
 
 	// Create an allocation for the plan subscription and emit an event.
-	alloc := types.Allocation{
+	alloc := v2.Allocation{
 		ID:            subscription.GetID(),
 		Address:       accAddr.String(),
 		GrantedBytes:  base.Gigabyte.MulRaw(plan.Gigabytes),
@@ -465,7 +466,7 @@ func (k *Keeper) CreateSubscriptionForPlan(ctx sdk.Context, accAddr sdk.AccAddre
 
 	k.SetAllocation(ctx, alloc)
 	ctx.EventManager().EmitTypedEvent(
-		&types.EventAllocate{
+		&v2.EventAllocate{
 			Address:       alloc.Address,
 			GrantedBytes:  alloc.GrantedBytes,
 			UtilisedBytes: alloc.UtilisedBytes,

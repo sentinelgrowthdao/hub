@@ -11,7 +11,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cobra"
 
-	"github.com/sentinel-official/hub/v12/x/subscription/types"
+	"github.com/sentinel-official/hub/v12/x/subscription/types/v2"
 )
 
 func querySubscription() *cobra.Command {
@@ -31,12 +31,12 @@ func querySubscription() *cobra.Command {
 			}
 
 			var (
-				qc = types.NewQueryServiceClient(ctx)
+				qc = v2.NewQueryServiceClient(ctx)
 			)
 
 			res, err := qc.QuerySubscription(
 				context.Background(),
-				types.NewQuerySubscriptionRequest(
+				v2.NewQuerySubscriptionRequest(
 					id,
 				),
 			)
@@ -84,13 +84,13 @@ func querySubscriptions() *cobra.Command {
 			}
 
 			var (
-				qc = types.NewQueryServiceClient(ctx)
+				qc = v2.NewQueryServiceClient(ctx)
 			)
 
 			if accAddr != nil {
 				res, err := qc.QuerySubscriptionsForAccount(
 					context.Background(),
-					types.NewQuerySubscriptionsForAccountRequest(
+					v2.NewQuerySubscriptionsForAccountRequest(
 						accAddr,
 						pagination,
 					),
@@ -104,7 +104,7 @@ func querySubscriptions() *cobra.Command {
 			if nodeAddr != nil {
 				res, err := qc.QuerySubscriptionsForNode(
 					context.Background(),
-					types.NewQuerySubscriptionsForNodeRequest(
+					v2.NewQuerySubscriptionsForNodeRequest(
 						nodeAddr,
 						pagination,
 					),
@@ -118,7 +118,7 @@ func querySubscriptions() *cobra.Command {
 			if planID != 0 {
 				res, err := qc.QuerySubscriptionsForPlan(
 					context.Background(),
-					types.NewQuerySubscriptionsForPlanRequest(
+					v2.NewQuerySubscriptionsForPlanRequest(
 						planID,
 						pagination,
 					),
@@ -132,7 +132,7 @@ func querySubscriptions() *cobra.Command {
 
 			res, err := qc.QuerySubscriptions(
 				context.Background(),
-				types.NewQuerySubscriptionsRequest(
+				v2.NewQuerySubscriptionsRequest(
 					pagination,
 				),
 			)
@@ -175,12 +175,12 @@ func queryAllocation() *cobra.Command {
 			}
 
 			var (
-				qc = types.NewQueryServiceClient(ctx)
+				qc = v2.NewQueryServiceClient(ctx)
 			)
 
 			res, err := qc.QueryAllocation(
 				context.Background(),
-				types.NewQueryAllocationRequest(
+				v2.NewQueryAllocationRequest(
 					id,
 					addr,
 				),
@@ -220,12 +220,12 @@ func queryAllocations() *cobra.Command {
 			}
 
 			var (
-				qc = types.NewQueryServiceClient(ctx)
+				qc = v2.NewQueryServiceClient(ctx)
 			)
 
 			res, err := qc.QueryAllocations(
 				context.Background(),
-				types.NewQueryAllocationsRequest(
+				v2.NewQueryAllocationsRequest(
 					id,
 					pagination,
 				),
@@ -261,12 +261,12 @@ func queryPayout() *cobra.Command {
 			}
 
 			var (
-				qc = types.NewQueryServiceClient(ctx)
+				qc = v2.NewQueryServiceClient(ctx)
 			)
 
 			res, err := qc.QueryPayout(
 				context.Background(),
-				types.NewQueryPayoutRequest(
+				v2.NewQueryPayoutRequest(
 					id,
 				),
 			)
@@ -309,13 +309,13 @@ func queryPayouts() *cobra.Command {
 			}
 
 			var (
-				qc = types.NewQueryServiceClient(ctx)
+				qc = v2.NewQueryServiceClient(ctx)
 			)
 
 			if accAddr != nil {
 				res, err := qc.QueryPayoutsForAccount(
 					context.Background(),
-					types.NewQueryPayoutsForAccountRequest(
+					v2.NewQueryPayoutsForAccountRequest(
 						accAddr,
 						pagination,
 					),
@@ -329,7 +329,7 @@ func queryPayouts() *cobra.Command {
 			if nodeAddr != nil {
 				res, err := qc.QueryPayoutsForNode(
 					context.Background(),
-					types.NewQueryPayoutsForNodeRequest(
+					v2.NewQueryPayoutsForNodeRequest(
 						nodeAddr,
 						pagination,
 					),
@@ -343,7 +343,7 @@ func queryPayouts() *cobra.Command {
 
 			res, err := qc.QueryPayouts(
 				context.Background(),
-				types.NewQueryPayoutsRequest(
+				v2.NewQueryPayoutsRequest(
 					pagination,
 				),
 			)
@@ -374,12 +374,12 @@ func queryParams() *cobra.Command {
 			}
 
 			var (
-				qc = types.NewQueryServiceClient(ctx)
+				qc = v2.NewQueryServiceClient(ctx)
 			)
 
 			res, err := qc.QueryParams(
 				context.Background(),
-				types.NewQueryParamsRequest(),
+				v2.NewQueryParamsRequest(),
 			)
 			if err != nil {
 				return err

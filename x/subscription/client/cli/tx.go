@@ -12,7 +12,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cobra"
 
-	"github.com/sentinel-official/hub/v12/x/subscription/types"
+	"github.com/sentinel-official/hub/v12/x/subscription/types/v2"
 )
 
 func txAllocate() *cobra.Command {
@@ -41,7 +41,7 @@ func txAllocate() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgAllocateRequest(
+			msg := v2.NewMsgAllocateRequest(
 				ctx.FromAddress,
 				id,
 				addr,
@@ -76,7 +76,7 @@ func txCancel() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgCancelRequest(
+			msg := v2.NewMsgCancelRequest(
 				ctx.FromAddress,
 				id,
 			)
