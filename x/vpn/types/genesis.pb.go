@@ -11,8 +11,8 @@ import (
 	v2 "github.com/sentinel-official/hub/v12/x/node/types/v2"
 	v21 "github.com/sentinel-official/hub/v12/x/plan/types/v2"
 	v22 "github.com/sentinel-official/hub/v12/x/provider/types/v2"
-	types1 "github.com/sentinel-official/hub/v12/x/session/types"
-	types2 "github.com/sentinel-official/hub/v12/x/subscription/types"
+	v23 "github.com/sentinel-official/hub/v12/x/session/types/v2"
+	types1 "github.com/sentinel-official/hub/v12/x/subscription/types"
 	io "io"
 	math "math"
 	math_bits "math/bits"
@@ -42,9 +42,9 @@ type GenesisState struct {
 	// Field 4: Genesis state for providers in the Sentinel module.
 	Providers *v22.GenesisState `protobuf:"bytes,4,opt,name=providers,proto3" json:"providers,omitempty"`
 	// Field 5: Genesis state for sessions in the Sentinel module.
-	Sessions *types1.GenesisState `protobuf:"bytes,5,opt,name=sessions,proto3" json:"sessions,omitempty"`
+	Sessions *v23.GenesisState `protobuf:"bytes,5,opt,name=sessions,proto3" json:"sessions,omitempty"`
 	// Field 6: Genesis state for subscriptions in the Sentinel module.
-	Subscriptions *types2.GenesisState `protobuf:"bytes,6,opt,name=subscriptions,proto3" json:"subscriptions,omitempty"`
+	Subscriptions *types1.GenesisState `protobuf:"bytes,6,opt,name=subscriptions,proto3" json:"subscriptions,omitempty"`
 }
 
 func (m *GenesisState) Reset()         { *m = GenesisState{} }
@@ -461,7 +461,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Sessions == nil {
-				m.Sessions = &types1.GenesisState{}
+				m.Sessions = &v23.GenesisState{}
 			}
 			if err := m.Sessions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -497,7 +497,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Subscriptions == nil {
-				m.Subscriptions = &types2.GenesisState{}
+				m.Subscriptions = &types1.GenesisState{}
 			}
 			if err := m.Subscriptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err

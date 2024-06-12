@@ -5,7 +5,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
-	"github.com/sentinel-official/hub/v12/x/session/types"
+	"github.com/sentinel-official/hub/v12/x/session/types/v2"
 )
 
 // EndBlock is a function that gets called at the end of every block.
@@ -16,7 +16,7 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 	statusChangeDelay := k.StatusChangeDelay(ctx)
 
 	// Iterate over all sessions that have become inactive at the current block time.
-	k.IterateSessionsForInactiveAt(ctx, ctx.BlockTime(), func(_ int, item types.Session) bool {
+	k.IterateSessionsForInactiveAt(ctx, ctx.BlockTime(), func(_ int, item v2.Session) bool {
 		k.Logger(ctx).Info("Found an inactive session", "id", item.ID, "status", item.Status)
 
 		// Delete the session from the InactiveAt index before updating the InactiveAt value.
@@ -35,7 +35,7 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 
 			// Emit an event to notify that the session status has been updated.
 			ctx.EventManager().EmitTypedEvent(
-				&types.EventUpdateStatus{
+				&v2.EventUpdateStatus{
 					Status:         base.StatusInactivePending,
 					Address:        item.Address,
 					NodeAddress:    item.NodeAddress,
@@ -75,7 +75,7 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 
 		// Emit an event to notify that the session has been terminated.
 		ctx.EventManager().EmitTypedEvent(
-			&types.EventUpdateStatus{
+			&v2.EventUpdateStatus{
 				Status:         base.StatusInactive,
 				Address:        item.Address,
 				NodeAddress:    item.NodeAddress,

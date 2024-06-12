@@ -5,10 +5,10 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/sentinel-official/hub/v12/x/session/types"
+	"github.com/sentinel-official/hub/v12/x/session/types/v2"
 )
 
-func (k *Keeper) VerifySignature(ctx sdk.Context, addr sdk.AccAddress, proof types.Proof, signature []byte) error {
+func (k *Keeper) VerifySignature(ctx sdk.Context, addr sdk.AccAddress, proof v2.Proof, signature []byte) error {
 	acc := k.GetAccount(ctx, addr)
 	if acc == nil {
 		return fmt.Errorf("account for address %s does not exist", addr)

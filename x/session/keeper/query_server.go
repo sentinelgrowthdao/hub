@@ -12,21 +12,22 @@ import (
 
 	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/session/types"
+	"github.com/sentinel-official/hub/v12/x/session/types/v2"
 )
 
 var (
-	_ types.QueryServiceServer = (*queryServer)(nil)
+	_ v2.QueryServiceServer = (*queryServer)(nil)
 )
 
 type queryServer struct {
 	Keeper
 }
 
-func NewQueryServiceServer(keeper Keeper) types.QueryServiceServer {
+func NewQueryServiceServer(keeper Keeper) v2.QueryServiceServer {
 	return &queryServer{Keeper: keeper}
 }
 
-func (q *queryServer) QuerySession(c context.Context, req *types.QuerySessionRequest) (*types.QuerySessionResponse, error) {
+func (q *queryServer) QuerySession(c context.Context, req *v2.QuerySessionRequest) (*v2.QuerySessionResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -38,22 +39,22 @@ func (q *queryServer) QuerySession(c context.Context, req *types.QuerySessionReq
 		return nil, status.Errorf(codes.NotFound, "session does not exist for id %d", req.Id)
 	}
 
-	return &types.QuerySessionResponse{Session: item}, nil
+	return &v2.QuerySessionResponse{Session: item}, nil
 }
 
-func (q *queryServer) QuerySessions(c context.Context, req *types.QuerySessionsRequest) (*types.QuerySessionsResponse, error) {
+func (q *queryServer) QuerySessions(c context.Context, req *v2.QuerySessionsRequest) (*v2.QuerySessionsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	var (
-		items types.Sessions
+		items v2.Sessions
 		ctx   = sdk.UnwrapSDKContext(c)
 		store = prefix.NewStore(q.Store(ctx), types.SessionKeyPrefix)
 	)
 
 	pagination, err := query.Paginate(store, req.Pagination, func(_, value []byte) error {
-		var item types.Session
+		var item v2.Session
 		if err := q.cdc.Unmarshal(value, &item); err != nil {
 			return err
 		}
@@ -66,10 +67,10 @@ func (q *queryServer) QuerySessions(c context.Context, req *types.QuerySessionsR
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QuerySessionsResponse{Sessions: items, Pagination: pagination}, nil
+	return &v2.QuerySessionsResponse{Sessions: items, Pagination: pagination}, nil
 }
 
-func (q *queryServer) QuerySessionsForAccount(c context.Context, req *types.QuerySessionsForAccountRequest) (*types.QuerySessionsForAccountResponse, error) {
+func (q *queryServer) QuerySessionsForAccount(c context.Context, req *v2.QuerySessionsForAccountRequest) (*v2.QuerySessionsForAccountResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -80,7 +81,7 @@ func (q *queryServer) QuerySessionsForAccount(c context.Context, req *types.Quer
 	}
 
 	var (
-		items types.Sessions
+		items v2.Sessions
 		ctx   = sdk.UnwrapSDKContext(c)
 		store = prefix.NewStore(q.Store(ctx), types.GetSessionForAccountKeyPrefix(addr))
 	)
@@ -99,10 +100,10 @@ func (q *queryServer) QuerySessionsForAccount(c context.Context, req *types.Quer
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QuerySessionsForAccountResponse{Sessions: items, Pagination: pagination}, nil
+	return &v2.QuerySessionsForAccountResponse{Sessions: items, Pagination: pagination}, nil
 }
 
-func (q *queryServer) QuerySessionsForNode(c context.Context, req *types.QuerySessionsForNodeRequest) (*types.QuerySessionsForNodeResponse, error) {
+func (q *queryServer) QuerySessionsForNode(c context.Context, req *v2.QuerySessionsForNodeRequest) (*v2.QuerySessionsForNodeResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -113,7 +114,7 @@ func (q *queryServer) QuerySessionsForNode(c context.Context, req *types.QuerySe
 	}
 
 	var (
-		items types.Sessions
+		items v2.Sessions
 		ctx   = sdk.UnwrapSDKContext(c)
 		store = prefix.NewStore(q.Store(ctx), types.GetSessionForNodeKeyPrefix(addr))
 	)
@@ -132,16 +133,16 @@ func (q *queryServer) QuerySessionsForNode(c context.Context, req *types.QuerySe
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QuerySessionsForNodeResponse{Sessions: items, Pagination: pagination}, nil
+	return &v2.QuerySessionsForNodeResponse{Sessions: items, Pagination: pagination}, nil
 }
 
-func (q *queryServer) QuerySessionsForSubscription(c context.Context, req *types.QuerySessionsForSubscriptionRequest) (*types.QuerySessionsForSubscriptionResponse, error) {
+func (q *queryServer) QuerySessionsForSubscription(c context.Context, req *v2.QuerySessionsForSubscriptionRequest) (*v2.QuerySessionsForSubscriptionResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	var (
-		items types.Sessions
+		items v2.Sessions
 		ctx   = sdk.UnwrapSDKContext(c)
 		store = prefix.NewStore(q.Store(ctx), types.GetSessionForSubscriptionKeyPrefix(req.Id))
 	)
@@ -160,10 +161,10 @@ func (q *queryServer) QuerySessionsForSubscription(c context.Context, req *types
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QuerySessionsForSubscriptionResponse{Sessions: items, Pagination: pagination}, nil
+	return &v2.QuerySessionsForSubscriptionResponse{Sessions: items, Pagination: pagination}, nil
 }
 
-func (q *queryServer) QuerySessionsForAllocation(c context.Context, req *types.QuerySessionsForAllocationRequest) (*types.QuerySessionsForAllocationResponse, error) {
+func (q *queryServer) QuerySessionsForAllocation(c context.Context, req *v2.QuerySessionsForAllocationRequest) (*v2.QuerySessionsForAllocationResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -174,7 +175,7 @@ func (q *queryServer) QuerySessionsForAllocation(c context.Context, req *types.Q
 	}
 
 	var (
-		items types.Sessions
+		items v2.Sessions
 		ctx   = sdk.UnwrapSDKContext(c)
 		store = prefix.NewStore(q.Store(ctx), types.GetSessionForAllocationKeyPrefix(req.Id, addr))
 	)
@@ -193,14 +194,14 @@ func (q *queryServer) QuerySessionsForAllocation(c context.Context, req *types.Q
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QuerySessionsForAllocationResponse{Sessions: items, Pagination: pagination}, nil
+	return &v2.QuerySessionsForAllocationResponse{Sessions: items, Pagination: pagination}, nil
 }
 
-func (q *queryServer) QueryParams(c context.Context, _ *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
+func (q *queryServer) QueryParams(c context.Context, _ *v2.QueryParamsRequest) (*v2.QueryParamsResponse, error) {
 	var (
 		ctx    = sdk.UnwrapSDKContext(c)
 		params = q.GetParams(ctx)
 	)
 
-	return &types.QueryParamsResponse{Params: params}, nil
+	return &v2.QueryParamsResponse{Params: params}, nil
 }

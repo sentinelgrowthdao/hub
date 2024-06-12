@@ -7,7 +7,7 @@ import (
 	nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v2"
 	plantypes "github.com/sentinel-official/hub/v12/x/plan/types/v2"
 	providertypes "github.com/sentinel-official/hub/v12/x/provider/types/v2"
-	sessiontypes "github.com/sentinel-official/hub/v12/x/session/types"
+	sessiontypes "github.com/sentinel-official/hub/v12/x/session/types/v2"
 	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types"
 )
 

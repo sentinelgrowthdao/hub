@@ -5,6 +5,7 @@ import (
 	"time"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	"github.com/sentinel-official/hub/v12/x/session/types/v2"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	protobuf "github.com/gogo/protobuf/types"
@@ -12,7 +13,7 @@ import (
 	"github.com/sentinel-official/hub/v12/x/session/types"
 )
 
-func (k *Keeper) SetSession(ctx sdk.Context, session types.Session) {
+func (k *Keeper) SetSession(ctx sdk.Context, session v2.Session) {
 	var (
 		store = k.Store(ctx)
 		key   = types.SessionKey(session.ID)
@@ -22,7 +23,7 @@ func (k *Keeper) SetSession(ctx sdk.Context, session types.Session) {
 	store.Set(key, value)
 }
 
-func (k *Keeper) GetSession(ctx sdk.Context, id uint64) (session types.Session, found bool) {
+func (k *Keeper) GetSession(ctx sdk.Context, id uint64) (session v2.Session, found bool) {
 	var (
 		store = k.Store(ctx)
 		key   = types.SessionKey(id)
@@ -46,7 +47,7 @@ func (k *Keeper) DeleteSession(ctx sdk.Context, id uint64) {
 	store.Delete(key)
 }
 
-func (k *Keeper) GetSessions(ctx sdk.Context) (items types.Sessions) {
+func (k *Keeper) GetSessions(ctx sdk.Context) (items v2.Sessions) {
 	var (
 		store = k.Store(ctx)
 		iter  = sdk.KVStorePrefixIterator(store, types.SessionKeyPrefix)
@@ -55,7 +56,7 @@ func (k *Keeper) GetSessions(ctx sdk.Context) (items types.Sessions) {
 	defer iter.Close()
 
 	for ; iter.Valid(); iter.Next() {
-		var item types.Session
+		var item v2.Session
 		k.cdc.MustUnmarshal(iter.Value(), &item)
 		items = append(items, item)
 	}
@@ -63,14 +64,14 @@ func (k *Keeper) GetSessions(ctx sdk.Context) (items types.Sessions) {
 	return items
 }
 
-func (k *Keeper) IterateSessions(ctx sdk.Context, fn func(index int, item types.Session) (stop bool)) {
+func (k *Keeper) IterateSessions(ctx sdk.Context, fn func(index int, item v2.Session) (stop bool)) {
 	store := k.Store(ctx)
 
 	iter := sdk.KVStorePrefixIterator(store, types.SessionKeyPrefix)
 	defer iter.Close()
 
 	for i := 0; iter.Valid(); iter.Next() {
-		var session types.Session
+		var session v2.Session
 		k.cdc.MustUnmarshal(iter.Value(), &session)
 
 		if stop := fn(i, session); stop {
@@ -99,7 +100,7 @@ func (k *Keeper) DeleteSessionForAccount(ctx sdk.Context, addr sdk.AccAddress, i
 	store.Delete(key)
 }
 
-func (k *Keeper) GetSessionsForAccount(ctx sdk.Context, addr sdk.AccAddress) (items types.Sessions) {
+func (k *Keeper) GetSessionsForAccount(ctx sdk.Context, addr sdk.AccAddress) (items v2.Sessions) {
 	var (
 		store = k.Store(ctx)
 		iter  = sdk.KVStorePrefixIterator(store, types.GetSessionForAccountKeyPrefix(addr))
@@ -138,7 +139,7 @@ func (k *Keeper) DeleteSessionForNode(ctx sdk.Context, addr base.NodeAddress, id
 	store.Delete(key)
 }
 
-func (k *Keeper) GetSessionsForNode(ctx sdk.Context, addr base.NodeAddress) (items types.Sessions) {
+func (k *Keeper) GetSessionsForNode(ctx sdk.Context, addr base.NodeAddress) (items v2.Sessions) {
 	var (
 		store = k.Store(ctx)
 		iter  = sdk.KVStorePrefixIterator(store, types.GetSessionForNodeKeyPrefix(addr))
@@ -177,7 +178,7 @@ func (k *Keeper) DeleteSessionForSubscription(ctx sdk.Context, subscriptionID, s
 	store.Delete(key)
 }
 
-func (k *Keeper) GetSessionsForSubscription(ctx sdk.Context, id uint64) (items types.Sessions) {
+func (k *Keeper) GetSessionsForSubscription(ctx sdk.Context, id uint64) (items v2.Sessions) {
 	var (
 		store = k.Store(ctx)
 		iter  = sdk.KVStorePrefixIterator(store, types.GetSessionForSubscriptionKeyPrefix(id))
@@ -197,7 +198,7 @@ func (k *Keeper) GetSessionsForSubscription(ctx sdk.Context, id uint64) (items t
 	return items
 }
 
-func (k *Keeper) IterateSessionsForSubscription(ctx sdk.Context, id uint64, fn func(index int, item types.Session) (stop bool)) {
+func (k *Keeper) IterateSessionsForSubscription(ctx sdk.Context, id uint64, fn func(index int, item v2.Session) (stop bool)) {
 	store := k.Store(ctx)
 
 	iter := sdk.KVStoreReversePrefixIterator(store, types.GetSessionForSubscriptionKeyPrefix(id))
@@ -235,7 +236,7 @@ func (k *Keeper) DeleteSessionForAllocation(ctx sdk.Context, subscriptionID uint
 	store.Delete(key)
 }
 
-func (k *Keeper) IterateSessionsForAllocation(ctx sdk.Context, id uint64, addr sdk.AccAddress, fn func(index int, item types.Session) (stop bool)) {
+func (k *Keeper) IterateSessionsForAllocation(ctx sdk.Context, id uint64, addr sdk.AccAddress, fn func(index int, item v2.Session) (stop bool)) {
 	store := k.Store(ctx)
 
 	iter := sdk.KVStoreReversePrefixIterator(store, types.GetSessionForAllocationKeyPrefix(id, addr))
@@ -269,7 +270,7 @@ func (k *Keeper) DeleteSessionForInactiveAt(ctx sdk.Context, at time.Time, id ui
 	store.Delete(key)
 }
 
-func (k *Keeper) IterateSessionsForInactiveAt(ctx sdk.Context, end time.Time, fn func(index int, item types.Session) (stop bool)) {
+func (k *Keeper) IterateSessionsForInactiveAt(ctx sdk.Context, end time.Time, fn func(index int, item v2.Session) (stop bool)) {
 	store := k.Store(ctx)
 
 	iter := store.Iterator(types.SessionForInactiveAtKeyPrefix, sdk.PrefixEndBytes(types.GetSessionForInactiveAtKeyPrefix(end)))
@@ -288,7 +289,7 @@ func (k *Keeper) IterateSessionsForInactiveAt(ctx sdk.Context, end time.Time, fn
 	}
 }
 
-func (k *Keeper) GetLatestSessionForSubscription(ctx sdk.Context, subscriptionID uint64) (session types.Session, found bool) {
+func (k *Keeper) GetLatestSessionForSubscription(ctx sdk.Context, subscriptionID uint64) (session v2.Session, found bool) {
 	store := k.Store(ctx)
 
 	iter := sdk.KVStoreReversePrefixIterator(store, types.GetSessionForSubscriptionKeyPrefix(subscriptionID))
@@ -304,7 +305,7 @@ func (k *Keeper) GetLatestSessionForSubscription(ctx sdk.Context, subscriptionID
 	return session, false
 }
 
-func (k *Keeper) GetLatestSessionForAllocation(ctx sdk.Context, subscriptionID uint64, addr sdk.AccAddress) (session types.Session, found bool) {
+func (k *Keeper) GetLatestSessionForAllocation(ctx sdk.Context, subscriptionID uint64, addr sdk.AccAddress) (session v2.Session, found bool) {
 	store := k.Store(ctx)
 
 	iter := sdk.KVStoreReversePrefixIterator(store, types.GetSessionForAllocationKeyPrefix(subscriptionID, addr))

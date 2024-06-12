@@ -7,12 +7,13 @@ import (
 
 	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/session/types"
+	"github.com/sentinel-official/hub/v12/x/session/types/v2"
 	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types"
 )
 
 // The following line asserts that the `msgServer` type implements the `types.MsgServiceServer` interface.
 var (
-	_ types.MsgServiceServer = (*msgServer)(nil)
+	_ v2.MsgServiceServer = (*msgServer)(nil)
 )
 
 // msgServer is a message server that implements the `types.MsgServiceServer` interface.
@@ -21,13 +22,13 @@ type msgServer struct {
 }
 
 // NewMsgServiceServer creates a new instance of `types.MsgServiceServer` using the provided Keeper.
-func NewMsgServiceServer(keeper Keeper) types.MsgServiceServer {
+func NewMsgServiceServer(keeper Keeper) v2.MsgServiceServer {
 	return &msgServer{Keeper: keeper}
 }
 
 // MsgStart starts a new session for a subscription.
 // It validates the start request, checks subscription and node status, and creates a new session.
-func (k *msgServer) MsgStart(c context.Context, msg *types.MsgStartRequest) (*types.MsgStartResponse, error) {
+func (k *msgServer) MsgStart(c context.Context, msg *v2.MsgStartRequest) (*v2.MsgStartResponse, error) {
 	// Unwrap the SDK context from the standard context.
 	ctx := sdk.UnwrapSDKContext(c)
 
@@ -139,7 +140,7 @@ func (k *msgServer) MsgStart(c context.Context, msg *types.MsgStartRequest) (*ty
 
 	// Increment the session count to assign a new session ID.
 	count := k.GetCount(ctx)
-	session = types.Session{
+	session = v2.Session{
 		ID:             count + 1,
 		SubscriptionID: subscription.GetID(),
 		NodeAddress:    nodeAddr.String(),
@@ -162,7 +163,7 @@ func (k *msgServer) MsgStart(c context.Context, msg *types.MsgStartRequest) (*ty
 
 	// Emit an event to notify that a new session has started.
 	ctx.EventManager().EmitTypedEvent(
-		&types.EventStart{
+		&v2.EventStart{
 			Address:        session.Address,
 			NodeAddress:    session.NodeAddress,
 			ID:             session.ID,
@@ -172,13 +173,13 @@ func (k *msgServer) MsgStart(c context.Context, msg *types.MsgStartRequest) (*ty
 	)
 
 	// Return an empty MsgStartResponse, indicating the successful completion of the message.
-	return &types.MsgStartResponse{}, nil
+	return &v2.MsgStartResponse{}, nil
 }
 
 // MsgUpdateDetails updates the details of an active session.
 // It validates the update details request, verifies the signature if proof verification is enabled,
 // and updates the bandwidth and duration of the session.
-func (k *msgServer) MsgUpdateDetails(c context.Context, msg *types.MsgUpdateDetailsRequest) (*types.MsgUpdateDetailsResponse, error) {
+func (k *msgServer) MsgUpdateDetails(c context.Context, msg *v2.MsgUpdateDetailsRequest) (*v2.MsgUpdateDetailsResponse, error) {
 	// Unwrap the SDK context from the standard context.
 	ctx := sdk.UnwrapSDKContext(c)
 
@@ -233,7 +234,7 @@ func (k *msgServer) MsgUpdateDetails(c context.Context, msg *types.MsgUpdateDeta
 
 	// Emit an event to notify that the session details have been updated.
 	ctx.EventManager().EmitTypedEvent(
-		&types.EventUpdateDetails{
+		&v2.EventUpdateDetails{
 			Address:        session.Address,
 			NodeAddress:    session.NodeAddress,
 			ID:             session.ID,
@@ -243,12 +244,12 @@ func (k *msgServer) MsgUpdateDetails(c context.Context, msg *types.MsgUpdateDeta
 	)
 
 	// Return an empty MsgUpdateDetailsResponse, indicating the successful completion of the message.
-	return &types.MsgUpdateDetailsResponse{}, nil
+	return &v2.MsgUpdateDetailsResponse{}, nil
 }
 
 // MsgEnd ends an active session.
 // It validates the end request, updates the session status to inactive-pending, and sets the inactive time.
-func (k *msgServer) MsgEnd(c context.Context, msg *types.MsgEndRequest) (*types.MsgEndResponse, error) {
+func (k *msgServer) MsgEnd(c context.Context, msg *v2.MsgEndRequest) (*v2.MsgEndResponse, error) {
 	// Unwrap the SDK context from the standard context.
 	ctx := sdk.UnwrapSDKContext(c)
 
@@ -294,7 +295,7 @@ func (k *msgServer) MsgEnd(c context.Context, msg *types.MsgEndRequest) (*types.
 
 	// Emit an event to notify that the session status has been updated.
 	ctx.EventManager().EmitTypedEvent(
-		&types.EventUpdateStatus{
+		&v2.EventUpdateStatus{
 			Status:         base.StatusInactivePending,
 			Address:        session.Address,
 			NodeAddress:    session.NodeAddress,
@@ -305,5 +306,5 @@ func (k *msgServer) MsgEnd(c context.Context, msg *types.MsgEndRequest) (*types.
 	)
 
 	// Return an empty MsgEndResponse, indicating the successful completion of the message.
-	return &types.MsgEndResponse{}, nil
+	return &v2.MsgEndResponse{}, nil
 }

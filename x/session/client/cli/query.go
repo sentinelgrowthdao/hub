@@ -10,7 +10,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
 
-	"github.com/sentinel-official/hub/v12/x/session/types"
+	"github.com/sentinel-official/hub/v12/x/session/types/v2"
 )
 
 func querySession() *cobra.Command {
@@ -30,12 +30,12 @@ func querySession() *cobra.Command {
 			}
 
 			var (
-				qc = types.NewQueryServiceClient(ctx)
+				qc = v2.NewQueryServiceClient(ctx)
 			)
 
 			res, err := qc.QuerySession(
 				context.Background(),
-				types.NewQuerySessionRequest(
+				v2.NewQuerySessionRequest(
 					id,
 				),
 			)
@@ -83,13 +83,13 @@ func querySessions() *cobra.Command {
 			}
 
 			var (
-				qc = types.NewQueryServiceClient(ctx)
+				qc = v2.NewQueryServiceClient(ctx)
 			)
 
 			if accAddr != nil {
 				res, err := qc.QuerySessionsForAccount(
 					context.Background(),
-					types.NewQuerySessionsForAccountRequest(
+					v2.NewQuerySessionsForAccountRequest(
 						accAddr,
 						pagination,
 					),
@@ -104,7 +104,7 @@ func querySessions() *cobra.Command {
 			if nodeAddr != nil {
 				res, err := qc.QuerySessionsForNode(
 					context.Background(),
-					types.NewQuerySessionsForNodeRequest(
+					v2.NewQuerySessionsForNodeRequest(
 						nodeAddr,
 						pagination,
 					),
@@ -119,7 +119,7 @@ func querySessions() *cobra.Command {
 			if subscriptionID != 0 {
 				res, err := qc.QuerySessionsForSubscription(
 					context.Background(),
-					types.NewQuerySessionsForSubscriptionRequest(
+					v2.NewQuerySessionsForSubscriptionRequest(
 						subscriptionID,
 						pagination,
 					),
@@ -133,7 +133,7 @@ func querySessions() *cobra.Command {
 
 			res, err := qc.QuerySessions(
 				context.Background(),
-				types.NewQuerySessionsRequest(
+				v2.NewQuerySessionsRequest(
 					pagination,
 				),
 			)
@@ -165,12 +165,12 @@ func queryParams() *cobra.Command {
 			}
 
 			var (
-				qc = types.NewQueryServiceClient(ctx)
+				qc = v2.NewQueryServiceClient(ctx)
 			)
 
 			res, err := qc.QueryParams(
 				context.Background(),
-				types.NewQueryParamsRequest(),
+				v2.NewQueryParamsRequest(),
 			)
 			if err != nil {
 				return err

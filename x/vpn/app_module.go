@@ -26,7 +26,8 @@ import (
 	v1providertypes "github.com/sentinel-official/hub/v12/x/provider/types/v1"
 	v2providertypes "github.com/sentinel-official/hub/v12/x/provider/types/v2"
 	sessionkeeper "github.com/sentinel-official/hub/v12/x/session/keeper"
-	sessiontypes "github.com/sentinel-official/hub/v12/x/session/types"
+	v1sessiontypes "github.com/sentinel-official/hub/v12/x/session/types/v1"
+	v2sessiontypes "github.com/sentinel-official/hub/v12/x/session/types/v2"
 	subscriptionkeeper "github.com/sentinel-official/hub/v12/x/subscription/keeper"
 	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types"
 	"github.com/sentinel-official/hub/v12/x/vpn/client/cli"
@@ -57,14 +58,15 @@ func (amb AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegist
 
 func (amb AppModuleBasic) RegisterGRPCGatewayRoutes(ctx client.Context, mux *runtime.ServeMux) {
 	_ = deposittypes.RegisterQueryServiceHandlerClient(context.Background(), mux, deposittypes.NewQueryServiceClient(ctx))
-	_ = sessiontypes.RegisterQueryServiceHandlerClient(context.Background(), mux, sessiontypes.NewQueryServiceClient(ctx))
 	_ = subscriptiontypes.RegisterQueryServiceHandlerClient(context.Background(), mux, subscriptiontypes.NewQueryServiceClient(ctx))
 	_ = v1nodetypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v1nodetypes.NewQueryServiceClient(ctx))
 	_ = v1plantypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v1plantypes.NewQueryServiceClient(ctx))
 	_ = v1providertypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v1providertypes.NewQueryServiceClient(ctx))
+	_ = v1sessiontypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v1sessiontypes.NewQueryServiceClient(ctx))
 	_ = v2nodetypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v2nodetypes.NewQueryServiceClient(ctx))
 	_ = v2plantypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v2plantypes.NewQueryServiceClient(ctx))
 	_ = v2providertypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v2providertypes.NewQueryServiceClient(ctx))
+	_ = v2sessiontypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v2sessiontypes.NewQueryServiceClient(ctx))
 }
 
 func (amb AppModuleBasic) GetTxCmd() *cobra.Command { return cli.GetTxCmd() }
@@ -137,8 +139,6 @@ func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
 
 func (am AppModule) RegisterServices(configurator sdkmodule.Configurator) {
 	deposittypes.RegisterQueryServiceServer(configurator.QueryServer(), depositkeeper.NewQueryServiceServer(am.keeper.Deposit))
-	sessiontypes.RegisterMsgServiceServer(configurator.MsgServer(), sessionkeeper.NewMsgServiceServer(am.keeper.Session))
-	sessiontypes.RegisterQueryServiceServer(configurator.QueryServer(), sessionkeeper.NewQueryServiceServer(am.keeper.Session))
 	subscriptiontypes.RegisterMsgServiceServer(configurator.MsgServer(), subscriptionkeeper.NewMsgServiceServer(am.keeper.Subscription))
 	subscriptiontypes.RegisterQueryServiceServer(configurator.QueryServer(), subscriptionkeeper.NewQueryServiceServer(am.keeper.Subscription))
 	v1nodetypes.RegisterMsgServiceServer(configurator.MsgServer(), nil)
@@ -147,10 +147,14 @@ func (am AppModule) RegisterServices(configurator sdkmodule.Configurator) {
 	v1plantypes.RegisterQueryServiceServer(configurator.QueryServer(), nil)
 	v1providertypes.RegisterMsgServiceServer(configurator.MsgServer(), nil)
 	v1providertypes.RegisterQueryServiceServer(configurator.QueryServer(), nil)
+	v1sessiontypes.RegisterMsgServiceServer(configurator.MsgServer(), nil)
+	v1sessiontypes.RegisterQueryServiceServer(configurator.QueryServer(), nil)
 	v2nodetypes.RegisterMsgServiceServer(configurator.MsgServer(), nodekeeper.NewMsgServiceServer(am.keeper.Node))
 	v2nodetypes.RegisterQueryServiceServer(configurator.QueryServer(), nodekeeper.NewQueryServiceServer(am.keeper.Node))
 	v2plantypes.RegisterMsgServiceServer(configurator.MsgServer(), plankeeper.NewMsgServiceServer(am.keeper.Plan))
 	v2plantypes.RegisterQueryServiceServer(configurator.QueryServer(), plankeeper.NewQueryServiceServer(am.keeper.Plan))
 	v2providertypes.RegisterMsgServiceServer(configurator.MsgServer(), providerkeeper.NewMsgServiceServer(am.keeper.Provider))
 	v2providertypes.RegisterQueryServiceServer(configurator.QueryServer(), providerkeeper.NewQueryServiceServer(am.keeper.Provider))
+	v2sessiontypes.RegisterMsgServiceServer(configurator.MsgServer(), sessionkeeper.NewMsgServiceServer(am.keeper.Session))
+	v2sessiontypes.RegisterQueryServiceServer(configurator.QueryServer(), sessionkeeper.NewQueryServiceServer(am.keeper.Session))
 }

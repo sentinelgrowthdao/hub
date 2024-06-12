@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/cobra"
 
 	base "github.com/sentinel-official/hub/v12/types"
-	"github.com/sentinel-official/hub/v12/x/session/types"
+	"github.com/sentinel-official/hub/v12/x/session/types/v2"
 )
 
 func txStart() *cobra.Command {
@@ -36,7 +36,7 @@ func txStart() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgStartRequest(
+			msg := v2.NewMsgStartRequest(
 				ctx.FromAddress,
 				id,
 				addr,
@@ -91,9 +91,9 @@ func txUpdateDetails() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgUpdateDetailsRequest(
+			msg := v2.NewMsgUpdateDetailsRequest(
 				ctx.FromAddress.Bytes(),
-				types.Proof{
+				v2.Proof{
 					ID:        id,
 					Duration:  duration,
 					Bandwidth: base.NewBandwidthFromInt64(upload, download),
@@ -135,7 +135,7 @@ func txEnd() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgEndRequest(
+			msg := v2.NewMsgEndRequest(
 				ctx.FromAddress,
 				id,
 				rating,
