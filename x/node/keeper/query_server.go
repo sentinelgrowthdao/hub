@@ -12,21 +12,22 @@ import (
 
 	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/node/types"
+	"github.com/sentinel-official/hub/v12/x/node/types/v2"
 )
 
 var (
-	_ types.QueryServiceServer = (*queryServer)(nil)
+	_ v2.QueryServiceServer = (*queryServer)(nil)
 )
 
 type queryServer struct {
 	Keeper
 }
 
-func NewQueryServiceServer(k Keeper) types.QueryServiceServer {
+func NewQueryServiceServer(k Keeper) v2.QueryServiceServer {
 	return &queryServer{k}
 }
 
-func (q *queryServer) QueryNode(c context.Context, req *types.QueryNodeRequest) (*types.QueryNodeResponse, error) {
+func (q *queryServer) QueryNode(c context.Context, req *v2.QueryNodeRequest) (*v2.QueryNodeResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -43,16 +44,16 @@ func (q *queryServer) QueryNode(c context.Context, req *types.QueryNodeRequest) 
 		return nil, status.Errorf(codes.NotFound, "node does not exist for address %s", req.Address)
 	}
 
-	return &types.QueryNodeResponse{Node: item}, nil
+	return &v2.QueryNodeResponse{Node: item}, nil
 }
 
-func (q *queryServer) QueryNodes(c context.Context, req *types.QueryNodesRequest) (res *types.QueryNodesResponse, err error) {
+func (q *queryServer) QueryNodes(c context.Context, req *v2.QueryNodesRequest) (res *v2.QueryNodesResponse, err error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	var (
-		items     types.Nodes
+		items     v2.Nodes
 		keyPrefix []byte
 		ctx       = sdk.UnwrapSDKContext(c)
 	)
@@ -68,7 +69,7 @@ func (q *queryServer) QueryNodes(c context.Context, req *types.QueryNodesRequest
 
 	store := prefix.NewStore(q.Store(ctx), keyPrefix)
 	pagination, err := query.Paginate(store, req.Pagination, func(_, value []byte) error {
-		var item types.Node
+		var item v2.Node
 		if err := q.cdc.Unmarshal(value, &item); err != nil {
 			return err
 		}
@@ -81,16 +82,16 @@ func (q *queryServer) QueryNodes(c context.Context, req *types.QueryNodesRequest
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QueryNodesResponse{Nodes: items, Pagination: pagination}, nil
+	return &v2.QueryNodesResponse{Nodes: items, Pagination: pagination}, nil
 }
 
-func (q *queryServer) QueryNodesForPlan(c context.Context, req *types.QueryNodesForPlanRequest) (*types.QueryNodesForPlanResponse, error) {
+func (q *queryServer) QueryNodesForPlan(c context.Context, req *v2.QueryNodesForPlanRequest) (*v2.QueryNodesForPlanResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	var (
-		items types.Nodes
+		items v2.Nodes
 		ctx   = sdk.UnwrapSDKContext(c)
 		store = prefix.NewStore(q.Store(ctx), types.GetNodeForPlanKeyPrefix(req.Id))
 	)
@@ -117,14 +118,14 @@ func (q *queryServer) QueryNodesForPlan(c context.Context, req *types.QueryNodes
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QueryNodesForPlanResponse{Nodes: items, Pagination: pagination}, nil
+	return &v2.QueryNodesForPlanResponse{Nodes: items, Pagination: pagination}, nil
 }
 
-func (q *queryServer) QueryParams(c context.Context, _ *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
+func (q *queryServer) QueryParams(c context.Context, _ *v2.QueryParamsRequest) (*v2.QueryParamsResponse, error) {
 	var (
 		ctx    = sdk.UnwrapSDKContext(c)
 		params = q.GetParams(ctx)
 	)
 
-	return &types.QueryParamsResponse{Params: params}, nil
+	return &v2.QueryParamsResponse{Params: params}, nil
 }

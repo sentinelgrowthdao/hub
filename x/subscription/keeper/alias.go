@@ -4,7 +4,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
-	nodetypes "github.com/sentinel-official/hub/v12/x/node/types"
+	nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v2"
 	plantypes "github.com/sentinel-official/hub/v12/x/plan/types"
 	sessiontypes "github.com/sentinel-official/hub/v12/x/session/types"
 )

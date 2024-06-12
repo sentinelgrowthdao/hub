@@ -4,7 +4,7 @@ import (
 	sdkerrors "cosmossdk.io/errors"
 
 	deposittypes "github.com/sentinel-official/hub/v12/x/deposit/types"
-	nodetypes "github.com/sentinel-official/hub/v12/x/node/types"
+	nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v2"
 	plantypes "github.com/sentinel-official/hub/v12/x/plan/types"
 	providertypes "github.com/sentinel-official/hub/v12/x/provider/types"
 	sessiontypes "github.com/sentinel-official/hub/v12/x/session/types"

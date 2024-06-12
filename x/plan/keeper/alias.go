@@ -4,7 +4,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
-	nodetypes "github.com/sentinel-official/hub/v12/x/node/types"
+	nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v2"
 	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types"
 )
 

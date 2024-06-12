@@ -5,7 +5,7 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
-	nodetypes "github.com/sentinel-official/hub/v12/x/node/types"
+	nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v2"
 	plantypes "github.com/sentinel-official/hub/v12/x/plan/types"
 	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types"
 )

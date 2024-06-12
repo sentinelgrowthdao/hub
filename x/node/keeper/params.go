@@ -6,70 +6,70 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/sentinel-official/hub/v12/x/node/types"
+	"github.com/sentinel-official/hub/v12/x/node/types/v2"
 )
 
 func (k *Keeper) Deposit(ctx sdk.Context) (v sdk.Coin) {
-	k.params.Get(ctx, types.KeyDeposit, &v)
+	k.params.Get(ctx, v2.KeyDeposit, &v)
 	return
 }
 
 func (k *Keeper) ActiveDuration(ctx sdk.Context) (v time.Duration) {
-	k.params.Get(ctx, types.KeyActiveDuration, &v)
+	k.params.Get(ctx, v2.KeyActiveDuration, &v)
 	return
 }
 
 func (k *Keeper) MaxGigabytePrices(ctx sdk.Context) (v sdk.Coins) {
-	k.params.Get(ctx, types.KeyMaxGigabytePrices, &v)
+	k.params.Get(ctx, v2.KeyMaxGigabytePrices, &v)
 	return
 }
 
 func (k *Keeper) MinGigabytePrices(ctx sdk.Context) (v sdk.Coins) {
-	k.params.Get(ctx, types.KeyMinGigabytePrices, &v)
+	k.params.Get(ctx, v2.KeyMinGigabytePrices, &v)
 	return
 }
 
 func (k *Keeper) MaxHourlyPrices(ctx sdk.Context) (v sdk.Coins) {
-	k.params.Get(ctx, types.KeyMaxHourlyPrices, &v)
+	k.params.Get(ctx, v2.KeyMaxHourlyPrices, &v)
 	return
 }
 
 func (k *Keeper) MinHourlyPrices(ctx sdk.Context) (v sdk.Coins) {
-	k.params.Get(ctx, types.KeyMinHourlyPrices, &v)
+	k.params.Get(ctx, v2.KeyMinHourlyPrices, &v)
 	return
 }
 
 func (k *Keeper) MaxSubscriptionGigabytes(ctx sdk.Context) (v int64) {
-	k.params.Get(ctx, types.KeyMaxSubscriptionGigabytes, &v)
+	k.params.Get(ctx, v2.KeyMaxSubscriptionGigabytes, &v)
 	return
 }
 
 func (k *Keeper) MinSubscriptionGigabytes(ctx sdk.Context) (v int64) {
-	k.params.Get(ctx, types.KeyMinSubscriptionGigabytes, &v)
+	k.params.Get(ctx, v2.KeyMinSubscriptionGigabytes, &v)
 	return
 }
 
 func (k *Keeper) MaxSubscriptionHours(ctx sdk.Context) (v int64) {
-	k.params.Get(ctx, types.KeyMaxSubscriptionHours, &v)
+	k.params.Get(ctx, v2.KeyMaxSubscriptionHours, &v)
 	return
 }
 
 func (k *Keeper) MinSubscriptionHours(ctx sdk.Context) (v int64) {
-	k.params.Get(ctx, types.KeyMinSubscriptionHours, &v)
+	k.params.Get(ctx, v2.KeyMinSubscriptionHours, &v)
 	return
 }
 
 func (k *Keeper) StakingShare(ctx sdk.Context) (v sdkmath.LegacyDec) {
-	k.params.Get(ctx, types.KeyStakingShare, &v)
+	k.params.Get(ctx, v2.KeyStakingShare, &v)
 	return
 }
 
-func (k *Keeper) SetParams(ctx sdk.Context, params types.Params) {
+func (k *Keeper) SetParams(ctx sdk.Context, params v2.Params) {
 	k.params.SetParamSet(ctx, &params)
 }
 
-func (k *Keeper) GetParams(ctx sdk.Context) types.Params {
-	return types.NewParams(
+func (k *Keeper) GetParams(ctx sdk.Context) v2.Params {
+	return v2.NewParams(
 		k.Deposit(ctx),
 		k.ActiveDuration(ctx),
 		k.MaxGigabytePrices(ctx),
@@ -147,17 +147,17 @@ func (k *Keeper) IsValidSubscriptionHours(ctx sdk.Context, hours int64) bool {
 }
 
 func (k *Keeper) IsMaxGigabytePricesModified(ctx sdk.Context) bool {
-	return k.params.Modified(ctx, types.KeyMaxGigabytePrices)
+	return k.params.Modified(ctx, v2.KeyMaxGigabytePrices)
 }
 
 func (k *Keeper) IsMinGigabytePricesModified(ctx sdk.Context) bool {
-	return k.params.Modified(ctx, types.KeyMinGigabytePrices)
+	return k.params.Modified(ctx, v2.KeyMinGigabytePrices)
 }
 
 func (k *Keeper) IsMaxHourlyPricesModified(ctx sdk.Context) bool {
-	return k.params.Modified(ctx, types.KeyMaxHourlyPrices)
+	return k.params.Modified(ctx, v2.KeyMaxHourlyPrices)
 }
 
 func (k *Keeper) IsMinHourlyPricesModified(ctx sdk.Context) bool {
-	return k.params.Modified(ctx, types.KeyMinHourlyPrices)
+	return k.params.Modified(ctx, v2.KeyMinHourlyPrices)
 }

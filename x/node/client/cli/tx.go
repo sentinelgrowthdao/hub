@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	base "github.com/sentinel-official/hub/v12/types"
-	"github.com/sentinel-official/hub/v12/x/node/types"
+	"github.com/sentinel-official/hub/v12/x/node/types/v2"
 )
 
 func txRegister() *cobra.Command {
@@ -33,7 +33,7 @@ func txRegister() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgRegisterRequest(
+			msg := v2.NewMsgRegisterRequest(
 				ctx.FromAddress,
 				gigabytePrices,
 				hourlyPrice,
@@ -79,7 +79,7 @@ func txUpdateDetails() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgUpdateDetailsRequest(
+			msg := v2.NewMsgUpdateDetailsRequest(
 				ctx.FromAddress.Bytes(),
 				gigabytePrices,
 				hourlyPrice,
@@ -112,7 +112,7 @@ func txUpdateStatus() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgUpdateStatusRequest(
+			msg := v2.NewMsgUpdateStatusRequest(
 				ctx.FromAddress.Bytes(),
 				base.StatusFromString(args[0]),
 			)
@@ -155,7 +155,7 @@ func txSubscribe() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgSubscribeRequest(
+			msg := v2.NewMsgSubscribeRequest(
 				ctx.FromAddress,
 				addr,
 				gigabytes,

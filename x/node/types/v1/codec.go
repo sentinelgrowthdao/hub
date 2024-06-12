@@ -1,6 +1,6 @@
 // DO NOT COVER
 
-package v1types
+package v1
 
 import (
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"

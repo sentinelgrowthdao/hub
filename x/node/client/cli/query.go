@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 
 	base "github.com/sentinel-official/hub/v12/types"
-	"github.com/sentinel-official/hub/v12/x/node/types"
+	"github.com/sentinel-official/hub/v12/x/node/types/v2"
 )
 
 func queryNode() *cobra.Command {
@@ -30,12 +30,12 @@ func queryNode() *cobra.Command {
 			}
 
 			var (
-				qc = types.NewQueryServiceClient(ctx)
+				qc = v2.NewQueryServiceClient(ctx)
 			)
 
 			res, err := qc.QueryNode(
 				context.Background(),
-				types.NewQueryNodeRequest(
+				v2.NewQueryNodeRequest(
 					addr,
 				),
 			)
@@ -78,13 +78,13 @@ func queryNodes() *cobra.Command {
 			}
 
 			var (
-				qc = types.NewQueryServiceClient(ctx)
+				qc = v2.NewQueryServiceClient(ctx)
 			)
 
 			if id != 0 {
 				res, err := qc.QueryNodesForPlan(
 					context.Background(),
-					types.NewQueryNodesForPlanRequest(
+					v2.NewQueryNodesForPlanRequest(
 						id,
 						status,
 						pagination,
@@ -99,7 +99,7 @@ func queryNodes() *cobra.Command {
 
 			res, err := qc.QueryNodes(
 				context.Background(),
-				types.NewQueryNodesRequest(
+				v2.NewQueryNodesRequest(
 					status,
 					pagination,
 				),
@@ -131,12 +131,12 @@ func queryParams() *cobra.Command {
 			}
 
 			var (
-				qc = types.NewQueryServiceClient(ctx)
+				qc = v2.NewQueryServiceClient(ctx)
 			)
 
 			res, err := qc.QueryParams(
 				context.Background(),
-				types.NewQueryParamsRequest(),
+				v2.NewQueryParamsRequest(),
 			)
 			if err != nil {
 				return err

@@ -8,11 +8,12 @@ import (
 
 	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/node/types"
+	"github.com/sentinel-official/hub/v12/x/node/types/v2"
 )
 
 // The following line asserts that the `msgServer` type implements the `types.MsgServiceServer` interface.
 var (
-	_ types.MsgServiceServer = (*msgServer)(nil)
+	_ v2.MsgServiceServer = (*msgServer)(nil)
 )
 
 // msgServer is a message server that implements the `types.MsgServiceServer` interface.
@@ -21,13 +22,13 @@ type msgServer struct {
 }
 
 // NewMsgServiceServer creates a new instance of `types.MsgServiceServer` using the provided Keeper.
-func NewMsgServiceServer(k Keeper) types.MsgServiceServer {
+func NewMsgServiceServer(k Keeper) v2.MsgServiceServer {
 	return &msgServer{k}
 }
 
 // MsgRegister registers a new node in the network.
 // It validates the registration request, checks prices, and creates a new node.
-func (k *msgServer) MsgRegister(c context.Context, msg *types.MsgRegisterRequest) (*types.MsgRegisterResponse, error) {
+func (k *msgServer) MsgRegister(c context.Context, msg *v2.MsgRegisterRequest) (*v2.MsgRegisterResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
 
 	// Check if the provided GigabytePrices are valid, if not, return an error.
@@ -63,7 +64,7 @@ func (k *msgServer) MsgRegister(c context.Context, msg *types.MsgRegisterRequest
 	}
 
 	// Create a new node with the provided information and set its status to `Inactive`.
-	node := types.Node{
+	node := v2.Node{
 		Address:        nodeAddr.String(),
 		GigabytePrices: msg.GigabytePrices,
 		HourlyPrices:   msg.HourlyPrices,
@@ -78,17 +79,17 @@ func (k *msgServer) MsgRegister(c context.Context, msg *types.MsgRegisterRequest
 
 	// Emit an event to notify that a new node has been registered.
 	ctx.EventManager().EmitTypedEvent(
-		&types.EventRegister{
+		&v2.EventRegister{
 			Address: node.Address,
 		},
 	)
 
-	return &types.MsgRegisterResponse{}, nil
+	return &v2.MsgRegisterResponse{}, nil
 }
 
 // MsgUpdateDetails updates the details of a registered node.
 // It validates the update details request, checks prices, and updates the node information.
-func (k *msgServer) MsgUpdateDetails(c context.Context, msg *types.MsgUpdateDetailsRequest) (*types.MsgUpdateDetailsResponse, error) {
+func (k *msgServer) MsgUpdateDetails(c context.Context, msg *v2.MsgUpdateDetailsRequest) (*v2.MsgUpdateDetailsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
 
 	// Check if the provided GigabytePrices are valid, if not, return an error.
@@ -133,17 +134,17 @@ func (k *msgServer) MsgUpdateDetails(c context.Context, msg *types.MsgUpdateDeta
 
 	// Emit an event to notify that the node details have been updated.
 	ctx.EventManager().EmitTypedEvent(
-		&types.EventUpdateDetails{
+		&v2.EventUpdateDetails{
 			Address: node.Address,
 		},
 	)
 
-	return &types.MsgUpdateDetailsResponse{}, nil
+	return &v2.MsgUpdateDetailsResponse{}, nil
 }
 
 // MsgUpdateStatus updates the status of a registered node.
 // It validates the update status request, checks the node's current status, and updates the status and inactive time accordingly.
-func (k *msgServer) MsgUpdateStatus(c context.Context, msg *types.MsgUpdateStatusRequest) (*types.MsgUpdateStatusResponse, error) {
+func (k *msgServer) MsgUpdateStatus(c context.Context, msg *v2.MsgUpdateStatusRequest) (*v2.MsgUpdateStatusResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
 
 	// Convert the `msg.From` address (in Bech32 format) to a `base.NodeAddress`.
@@ -195,18 +196,18 @@ func (k *msgServer) MsgUpdateStatus(c context.Context, msg *types.MsgUpdateStatu
 
 	// Emit an event to notify that the node status has been updated.
 	ctx.EventManager().EmitTypedEvent(
-		&types.EventUpdateStatus{
+		&v2.EventUpdateStatus{
 			Status:  node.Status,
 			Address: node.Address,
 		},
 	)
 
-	return &types.MsgUpdateStatusResponse{}, nil
+	return &v2.MsgUpdateStatusResponse{}, nil
 }
 
 // MsgSubscribe subscribes to a node for a specific amount of gigabytes or hours.
 // It validates the subscription request and creates a new subscription for the provided node and user account.
-func (k *msgServer) MsgSubscribe(c context.Context, msg *types.MsgSubscribeRequest) (*types.MsgSubscribeResponse, error) {
+func (k *msgServer) MsgSubscribe(c context.Context, msg *v2.MsgSubscribeRequest) (*v2.MsgSubscribeResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
 
 	// Check if the provided Gigabytes value is valid, if not, return an error.
@@ -243,12 +244,12 @@ func (k *msgServer) MsgSubscribe(c context.Context, msg *types.MsgSubscribeReque
 
 	// Emit an event to notify that a new subscription has been created.
 	ctx.EventManager().EmitTypedEvent(
-		&types.EventCreateSubscription{
+		&v2.EventCreateSubscription{
 			Address:     subscription.Address,
 			NodeAddress: subscription.NodeAddress,
 			ID:          subscription.ID,
 		},
 	)
 
-	return &types.MsgSubscribeResponse{}, nil
+	return &v2.MsgSubscribeResponse{}, nil
 }

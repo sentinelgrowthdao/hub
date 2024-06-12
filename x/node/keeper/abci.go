@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
-	"github.com/sentinel-official/hub/v12/x/node/types"
+	"github.com/sentinel-official/hub/v12/x/node/types/v2"
 )
 
 func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
@@ -39,7 +39,7 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 			minHourlyPrices = k.MinHourlyPrices(ctx)
 		}
 
-		k.IterateNodes(ctx, func(_ int, item types.Node) bool {
+		k.IterateNodes(ctx, func(_ int, item v2.Node) bool {
 			k.Logger(ctx).Info("Updating prices for node", "address", item.Address)
 
 			if maxGigabytePricesModified {
@@ -88,7 +88,7 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 
 			k.SetNode(ctx, item)
 			ctx.EventManager().EmitTypedEvent(
-				&types.EventUpdateDetails{
+				&v2.EventUpdateDetails{
 					Address:        item.Address,
 					GigabytePrices: item.GigabytePrices.String(),
 					HourlyPrices:   item.HourlyPrices.String(),
@@ -99,7 +99,7 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 		})
 	}
 
-	k.IterateNodesForInactiveAt(ctx, ctx.BlockTime(), func(_ int, item types.Node) bool {
+	k.IterateNodesForInactiveAt(ctx, ctx.BlockTime(), func(_ int, item v2.Node) bool {
 		k.Logger(ctx).Info("Found an inactive node", "address", item.Address)
 
 		nodeAddr := item.GetAddress()
@@ -112,7 +112,7 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 
 		k.SetNode(ctx, item)
 		ctx.EventManager().EmitTypedEvent(
-			&types.EventUpdateStatus{
+			&v2.EventUpdateStatus{
 				Status:  base.StatusInactive,
 				Address: item.Address,
 			},

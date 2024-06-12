@@ -9,9 +9,10 @@ import (
 
 	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/node/types"
+	"github.com/sentinel-official/hub/v12/x/node/types/v2"
 )
 
-func (k *Keeper) SetActiveNode(ctx sdk.Context, node types.Node) {
+func (k *Keeper) SetActiveNode(ctx sdk.Context, node v2.Node) {
 	var (
 		store = k.Store(ctx)
 		key   = types.ActiveNodeKey(node.GetAddress())
@@ -30,7 +31,7 @@ func (k *Keeper) HasActiveNode(ctx sdk.Context, addr base.NodeAddress) bool {
 	return store.Has(key)
 }
 
-func (k *Keeper) GetActiveNode(ctx sdk.Context, addr base.NodeAddress) (v types.Node, found bool) {
+func (k *Keeper) GetActiveNode(ctx sdk.Context, addr base.NodeAddress) (v v2.Node, found bool) {
 	var (
 		store = k.Store(ctx)
 		key   = types.ActiveNodeKey(addr)
@@ -54,7 +55,7 @@ func (k *Keeper) DeleteActiveNode(ctx sdk.Context, addr base.NodeAddress) {
 	store.Delete(key)
 }
 
-func (k *Keeper) SetInactiveNode(ctx sdk.Context, node types.Node) {
+func (k *Keeper) SetInactiveNode(ctx sdk.Context, node v2.Node) {
 	var (
 		store = k.Store(ctx)
 		key   = types.InactiveNodeKey(node.GetAddress())
@@ -73,7 +74,7 @@ func (k *Keeper) HasInactiveNode(ctx sdk.Context, addr base.NodeAddress) bool {
 	return store.Has(key)
 }
 
-func (k *Keeper) GetInactiveNode(ctx sdk.Context, addr base.NodeAddress) (v types.Node, found bool) {
+func (k *Keeper) GetInactiveNode(ctx sdk.Context, addr base.NodeAddress) (v v2.Node, found bool) {
 	var (
 		store = k.Store(ctx)
 		key   = types.InactiveNodeKey(addr)
@@ -97,7 +98,7 @@ func (k *Keeper) DeleteInactiveNode(ctx sdk.Context, addr base.NodeAddress) {
 	store.Delete(key)
 }
 
-func (k *Keeper) SetNode(ctx sdk.Context, node types.Node) {
+func (k *Keeper) SetNode(ctx sdk.Context, node v2.Node) {
 	switch node.Status {
 	case base.StatusActive:
 		k.SetActiveNode(ctx, node)
@@ -112,7 +113,7 @@ func (k *Keeper) HasNode(ctx sdk.Context, addr base.NodeAddress) bool {
 	return k.HasActiveNode(ctx, addr) || k.HasInactiveNode(ctx, addr)
 }
 
-func (k *Keeper) GetNode(ctx sdk.Context, addr base.NodeAddress) (node types.Node, found bool) {
+func (k *Keeper) GetNode(ctx sdk.Context, addr base.NodeAddress) (node v2.Node, found bool) {
 	node, found = k.GetActiveNode(ctx, addr)
 	if found {
 		return
@@ -126,7 +127,7 @@ func (k *Keeper) GetNode(ctx sdk.Context, addr base.NodeAddress) (node types.Nod
 	return node, false
 }
 
-func (k *Keeper) GetNodes(ctx sdk.Context) (items types.Nodes) {
+func (k *Keeper) GetNodes(ctx sdk.Context) (items v2.Nodes) {
 	var (
 		store = k.Store(ctx)
 		iter  = sdk.KVStorePrefixIterator(store, types.NodeKeyPrefix)
@@ -135,7 +136,7 @@ func (k *Keeper) GetNodes(ctx sdk.Context) (items types.Nodes) {
 	defer iter.Close()
 
 	for ; iter.Valid(); iter.Next() {
-		var item types.Node
+		var item v2.Node
 		k.cdc.MustUnmarshal(iter.Value(), &item)
 		items = append(items, item)
 	}
@@ -143,14 +144,14 @@ func (k *Keeper) GetNodes(ctx sdk.Context) (items types.Nodes) {
 	return items
 }
 
-func (k *Keeper) IterateNodes(ctx sdk.Context, fn func(index int, item types.Node) (stop bool)) {
+func (k *Keeper) IterateNodes(ctx sdk.Context, fn func(index int, item v2.Node) (stop bool)) {
 	store := k.Store(ctx)
 
 	iter := sdk.KVStorePrefixIterator(store, types.NodeKeyPrefix)
 	defer iter.Close()
 
 	for i := 0; iter.Valid(); iter.Next() {
-		var node types.Node
+		var node v2.Node
 		k.cdc.MustUnmarshal(iter.Value(), &node)
 
 		if stop := fn(i, node); stop {
@@ -179,7 +180,7 @@ func (k *Keeper) DeleteNodeForInactiveAt(ctx sdk.Context, at time.Time, addr bas
 	store.Delete(key)
 }
 
-func (k *Keeper) IterateNodesForInactiveAt(ctx sdk.Context, at time.Time, fn func(index int, item types.Node) (stop bool)) {
+func (k *Keeper) IterateNodesForInactiveAt(ctx sdk.Context, at time.Time, fn func(index int, item v2.Node) (stop bool)) {
 	store := k.Store(ctx)
 
 	iter := store.Iterator(types.NodeForInactiveAtKeyPrefix, sdk.PrefixEndBytes(types.GetNodeForInactiveAtKeyPrefix(at)))
@@ -226,7 +227,7 @@ func (k *Keeper) DeleteNodeForPlan(ctx sdk.Context, id uint64, addr base.NodeAdd
 	store.Delete(key)
 }
 
-func (k *Keeper) GetNodesForPlan(ctx sdk.Context, id uint64) (items types.Nodes) {
+func (k *Keeper) GetNodesForPlan(ctx sdk.Context, id uint64) (items v2.Nodes) {
 	var (
 		store = k.Store(ctx)
 		iter  = sdk.KVStorePrefixIterator(store, types.GetNodeForPlanKeyPrefix(id))

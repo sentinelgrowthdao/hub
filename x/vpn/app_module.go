@@ -17,7 +17,8 @@ import (
 	depositkeeper "github.com/sentinel-official/hub/v12/x/deposit/keeper"
 	deposittypes "github.com/sentinel-official/hub/v12/x/deposit/types"
 	nodekeeper "github.com/sentinel-official/hub/v12/x/node/keeper"
-	nodetypes "github.com/sentinel-official/hub/v12/x/node/types"
+	v1nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v1"
+	v2nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v2"
 	plankeeper "github.com/sentinel-official/hub/v12/x/plan/keeper"
 	plantypes "github.com/sentinel-official/hub/v12/x/plan/types"
 	providerkeeper "github.com/sentinel-official/hub/v12/x/provider/keeper"
@@ -54,11 +55,12 @@ func (amb AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegist
 
 func (amb AppModuleBasic) RegisterGRPCGatewayRoutes(ctx client.Context, mux *runtime.ServeMux) {
 	_ = deposittypes.RegisterQueryServiceHandlerClient(context.Background(), mux, deposittypes.NewQueryServiceClient(ctx))
-	_ = nodetypes.RegisterQueryServiceHandlerClient(context.Background(), mux, nodetypes.NewQueryServiceClient(ctx))
 	_ = plantypes.RegisterQueryServiceHandlerClient(context.Background(), mux, plantypes.NewQueryServiceClient(ctx))
 	_ = providertypes.RegisterQueryServiceHandlerClient(context.Background(), mux, providertypes.NewQueryServiceClient(ctx))
 	_ = sessiontypes.RegisterQueryServiceHandlerClient(context.Background(), mux, sessiontypes.NewQueryServiceClient(ctx))
 	_ = subscriptiontypes.RegisterQueryServiceHandlerClient(context.Background(), mux, subscriptiontypes.NewQueryServiceClient(ctx))
+	_ = v1nodetypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v1nodetypes.NewQueryServiceClient(ctx))
+	_ = v2nodetypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v2nodetypes.NewQueryServiceClient(ctx))
 }
 
 func (amb AppModuleBasic) GetTxCmd() *cobra.Command { return cli.GetTxCmd() }
@@ -130,16 +132,17 @@ func (am AppModule) ConsensusVersion() uint64 { return 3 }
 func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
 
 func (am AppModule) RegisterServices(configurator sdkmodule.Configurator) {
-	nodetypes.RegisterMsgServiceServer(configurator.MsgServer(), nodekeeper.NewMsgServiceServer(am.keeper.Node))
-	plantypes.RegisterMsgServiceServer(configurator.MsgServer(), plankeeper.NewMsgServiceServer(am.keeper.Plan))
-	providertypes.RegisterMsgServiceServer(configurator.MsgServer(), providerkeeper.NewMsgServiceServer(am.keeper.Provider))
-	sessiontypes.RegisterMsgServiceServer(configurator.MsgServer(), sessionkeeper.NewMsgServiceServer(am.keeper.Session))
-	subscriptiontypes.RegisterMsgServiceServer(configurator.MsgServer(), subscriptionkeeper.NewMsgServiceServer(am.keeper.Subscription))
-
 	deposittypes.RegisterQueryServiceServer(configurator.QueryServer(), depositkeeper.NewQueryServiceServer(am.keeper.Deposit))
-	nodetypes.RegisterQueryServiceServer(configurator.QueryServer(), nodekeeper.NewQueryServiceServer(am.keeper.Node))
+	plantypes.RegisterMsgServiceServer(configurator.MsgServer(), plankeeper.NewMsgServiceServer(am.keeper.Plan))
 	plantypes.RegisterQueryServiceServer(configurator.QueryServer(), plankeeper.NewQueryServiceServer(am.keeper.Plan))
+	providertypes.RegisterMsgServiceServer(configurator.MsgServer(), providerkeeper.NewMsgServiceServer(am.keeper.Provider))
 	providertypes.RegisterQueryServiceServer(configurator.QueryServer(), providerkeeper.NewQueryServiceServer(am.keeper.Provider))
+	sessiontypes.RegisterMsgServiceServer(configurator.MsgServer(), sessionkeeper.NewMsgServiceServer(am.keeper.Session))
 	sessiontypes.RegisterQueryServiceServer(configurator.QueryServer(), sessionkeeper.NewQueryServiceServer(am.keeper.Session))
+	subscriptiontypes.RegisterMsgServiceServer(configurator.MsgServer(), subscriptionkeeper.NewMsgServiceServer(am.keeper.Subscription))
 	subscriptiontypes.RegisterQueryServiceServer(configurator.QueryServer(), subscriptionkeeper.NewQueryServiceServer(am.keeper.Subscription))
+	v1nodetypes.RegisterMsgServiceServer(configurator.MsgServer(), nil)
+	v1nodetypes.RegisterQueryServiceServer(configurator.QueryServer(), nil)
+	v2nodetypes.RegisterMsgServiceServer(configurator.MsgServer(), nodekeeper.NewMsgServiceServer(am.keeper.Node))
+	v2nodetypes.RegisterQueryServiceServer(configurator.QueryServer(), nodekeeper.NewQueryServiceServer(am.keeper.Node))
 }
