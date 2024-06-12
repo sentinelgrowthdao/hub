@@ -13,7 +13,7 @@ import (
 	"github.com/spf13/cobra"
 
 	base "github.com/sentinel-official/hub/v12/types"
-	"github.com/sentinel-official/hub/v12/x/plan/types"
+	"github.com/sentinel-official/hub/v12/x/plan/types/v2"
 )
 
 func txCreate() *cobra.Command {
@@ -42,7 +42,7 @@ func txCreate() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgCreateRequest(
+			msg := v2.NewMsgCreateRequest(
 				ctx.FromAddress.Bytes(),
 				duration,
 				gigabytes,
@@ -77,7 +77,7 @@ func txUpdateStatus() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgUpdateStatusRequest(
+			msg := v2.NewMsgUpdateStatusRequest(
 				ctx.FromAddress.Bytes(),
 				id,
 				base.StatusFromString(args[1]),
@@ -116,7 +116,7 @@ func txLinkNode() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgLinkNodeRequest(
+			msg := v2.NewMsgLinkNodeRequest(
 				ctx.FromAddress.Bytes(),
 				id,
 				addr,
@@ -155,7 +155,7 @@ func txUnlinkNode() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgUnlinkNodeRequest(
+			msg := v2.NewMsgUnlinkNodeRequest(
 				ctx.FromAddress.Bytes(),
 				id,
 				addr,
@@ -189,7 +189,7 @@ func txSubscribe() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgSubscribeRequest(
+			msg := v2.NewMsgSubscribeRequest(
 				ctx.FromAddress,
 				id,
 				args[1],

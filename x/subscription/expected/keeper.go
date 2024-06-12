@@ -9,7 +9,7 @@ import (
 
 	base "github.com/sentinel-official/hub/v12/types"
 	nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v2"
-	plantypes "github.com/sentinel-official/hub/v12/x/plan/types"
+	plantypes "github.com/sentinel-official/hub/v12/x/plan/types/v2"
 	sessiontypes "github.com/sentinel-official/hub/v12/x/session/types"
 )
 

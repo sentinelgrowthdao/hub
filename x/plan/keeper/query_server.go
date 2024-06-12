@@ -12,21 +12,22 @@ import (
 
 	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/plan/types"
+	"github.com/sentinel-official/hub/v12/x/plan/types/v2"
 )
 
 var (
-	_ types.QueryServiceServer = (*queryServer)(nil)
+	_ v2.QueryServiceServer = (*queryServer)(nil)
 )
 
 type queryServer struct {
 	Keeper
 }
 
-func NewQueryServiceServer(keeper Keeper) types.QueryServiceServer {
+func NewQueryServiceServer(keeper Keeper) v2.QueryServiceServer {
 	return &queryServer{Keeper: keeper}
 }
 
-func (q *queryServer) QueryPlan(c context.Context, req *types.QueryPlanRequest) (*types.QueryPlanResponse, error) {
+func (q *queryServer) QueryPlan(c context.Context, req *v2.QueryPlanRequest) (*v2.QueryPlanResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -38,16 +39,16 @@ func (q *queryServer) QueryPlan(c context.Context, req *types.QueryPlanRequest) 
 		return nil, status.Errorf(codes.NotFound, "plan does not exist for id %d", req.Id)
 	}
 
-	return &types.QueryPlanResponse{Plan: item}, nil
+	return &v2.QueryPlanResponse{Plan: item}, nil
 }
 
-func (q *queryServer) QueryPlans(c context.Context, req *types.QueryPlansRequest) (res *types.QueryPlansResponse, err error) {
+func (q *queryServer) QueryPlans(c context.Context, req *v2.QueryPlansRequest) (res *v2.QueryPlansResponse, err error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	var (
-		items     types.Plans
+		items     v2.Plans
 		keyPrefix []byte
 		ctx       = sdk.UnwrapSDKContext(c)
 	)
@@ -63,7 +64,7 @@ func (q *queryServer) QueryPlans(c context.Context, req *types.QueryPlansRequest
 
 	store := prefix.NewStore(q.Store(ctx), keyPrefix)
 	pagination, err := query.Paginate(store, req.Pagination, func(_, value []byte) error {
-		var item types.Plan
+		var item v2.Plan
 		if err := q.cdc.Unmarshal(value, &item); err != nil {
 			return err
 		}
@@ -76,10 +77,10 @@ func (q *queryServer) QueryPlans(c context.Context, req *types.QueryPlansRequest
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QueryPlansResponse{Plans: items, Pagination: pagination}, nil
+	return &v2.QueryPlansResponse{Plans: items, Pagination: pagination}, nil
 }
 
-func (q *queryServer) QueryPlansForProvider(c context.Context, req *types.QueryPlansForProviderRequest) (res *types.QueryPlansForProviderResponse, err error) {
+func (q *queryServer) QueryPlansForProvider(c context.Context, req *v2.QueryPlansForProviderRequest) (res *v2.QueryPlansForProviderResponse, err error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -90,7 +91,7 @@ func (q *queryServer) QueryPlansForProvider(c context.Context, req *types.QueryP
 	}
 
 	var (
-		items types.Plans
+		items v2.Plans
 		ctx   = sdk.UnwrapSDKContext(c)
 		store = prefix.NewStore(q.Store(ctx), types.GetPlanForProviderKeyPrefix(addr))
 	)
@@ -117,5 +118,5 @@ func (q *queryServer) QueryPlansForProvider(c context.Context, req *types.QueryP
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QueryPlansForProviderResponse{Plans: items, Pagination: pagination}, nil
+	return &v2.QueryPlansForProviderResponse{Plans: items, Pagination: pagination}, nil
 }

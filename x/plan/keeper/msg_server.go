@@ -7,11 +7,12 @@ import (
 
 	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/plan/types"
+	"github.com/sentinel-official/hub/v12/x/plan/types/v2"
 )
 
 // The following line asserts that the `msgServer` type implements the `types.MsgServiceServer` interface.
 var (
-	_ types.MsgServiceServer = (*msgServer)(nil)
+	_ v2.MsgServiceServer = (*msgServer)(nil)
 )
 
 // msgServer is a message server that implements the `types.MsgServiceServer` interface.
@@ -20,13 +21,13 @@ type msgServer struct {
 }
 
 // NewMsgServiceServer creates a new instance of `types.MsgServiceServer` using the provided Keeper.
-func NewMsgServiceServer(k Keeper) types.MsgServiceServer {
+func NewMsgServiceServer(k Keeper) v2.MsgServiceServer {
 	return &msgServer{k}
 }
 
 // MsgCreate creates a new plan with the provided details and stores it in the Store.
 // It validates the creation request, checks for provider existence, and assigns a unique ID to the plan.
-func (k *msgServer) MsgCreate(c context.Context, msg *types.MsgCreateRequest) (*types.MsgCreateResponse, error) {
+func (k *msgServer) MsgCreate(c context.Context, msg *v2.MsgCreateRequest) (*v2.MsgCreateResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
 
 	// Convert the `msg.From` address (in Bech32 format) to a `base.ProvAddress`.
@@ -42,7 +43,7 @@ func (k *msgServer) MsgCreate(c context.Context, msg *types.MsgCreateRequest) (*
 
 	// Get the current count of plans to assign a unique ID to the new plan.
 	count := k.GetCount(ctx)
-	plan := types.Plan{
+	plan := v2.Plan{
 		ID:              count + 1,
 		ProviderAddress: provAddr.String(),
 		Duration:        msg.Duration,
@@ -59,18 +60,18 @@ func (k *msgServer) MsgCreate(c context.Context, msg *types.MsgCreateRequest) (*
 
 	// Emit an event to notify that a new plan has been created.
 	ctx.EventManager().EmitTypedEvent(
-		&types.EventCreate{
+		&v2.EventCreate{
 			Address: plan.ProviderAddress,
 			ID:      plan.ID,
 		},
 	)
 
-	return &types.MsgCreateResponse{}, nil
+	return &v2.MsgCreateResponse{}, nil
 }
 
 // MsgUpdateStatus updates the status of a plan.
 // It validates the status update request, checks for plan existence, and updates the plan status and timestamp accordingly.
-func (k *msgServer) MsgUpdateStatus(c context.Context, msg *types.MsgUpdateStatusRequest) (*types.MsgUpdateStatusResponse, error) {
+func (k *msgServer) MsgUpdateStatus(c context.Context, msg *v2.MsgUpdateStatusRequest) (*v2.MsgUpdateStatusResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
 
 	// Get the plan from the Store based on the provided plan ID.
@@ -107,19 +108,19 @@ func (k *msgServer) MsgUpdateStatus(c context.Context, msg *types.MsgUpdateStatu
 
 	// Emit an event to notify that the plan status has been updated.
 	ctx.EventManager().EmitTypedEvent(
-		&types.EventUpdateStatus{
+		&v2.EventUpdateStatus{
 			Status:  plan.Status,
 			Address: plan.ProviderAddress,
 			ID:      plan.ID,
 		},
 	)
 
-	return &types.MsgUpdateStatusResponse{}, nil
+	return &v2.MsgUpdateStatusResponse{}, nil
 }
 
 // MsgLinkNode links a node to a plan.
 // It validates the link node request, checks for plan and node existence, and links the node to the plan.
-func (k *msgServer) MsgLinkNode(c context.Context, msg *types.MsgLinkNodeRequest) (*types.MsgLinkNodeResponse, error) {
+func (k *msgServer) MsgLinkNode(c context.Context, msg *v2.MsgLinkNodeRequest) (*v2.MsgLinkNodeResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
 
 	// Get the plan from the Store based on the provided plan ID.
@@ -149,19 +150,19 @@ func (k *msgServer) MsgLinkNode(c context.Context, msg *types.MsgLinkNodeRequest
 
 	// Emit an event to notify that a node has been linked to the plan.
 	ctx.EventManager().EmitTypedEvent(
-		&types.EventLinkNode{
+		&v2.EventLinkNode{
 			Address:     plan.ProviderAddress,
 			NodeAddress: msg.NodeAddress,
 			ID:          plan.ID,
 		},
 	)
 
-	return &types.MsgLinkNodeResponse{}, nil
+	return &v2.MsgLinkNodeResponse{}, nil
 }
 
 // MsgUnlinkNode unlinks a node from a plan.
 // It validates the unlink node request, checks for plan and node existence, and unlinks the node from the plan.
-func (k *msgServer) MsgUnlinkNode(c context.Context, msg *types.MsgUnlinkNodeRequest) (*types.MsgUnlinkNodeResponse, error) {
+func (k *msgServer) MsgUnlinkNode(c context.Context, msg *v2.MsgUnlinkNodeRequest) (*v2.MsgUnlinkNodeResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
 
 	// Get the plan from the Store based on the provided plan ID.
@@ -186,19 +187,19 @@ func (k *msgServer) MsgUnlinkNode(c context.Context, msg *types.MsgUnlinkNodeReq
 
 	// Emit an event to notify that a node has been unlinked from the plan.
 	ctx.EventManager().EmitTypedEvent(
-		&types.EventUnlinkNode{
+		&v2.EventUnlinkNode{
 			Address:     plan.ProviderAddress,
 			NodeAddress: msg.NodeAddress,
 			ID:          plan.ID,
 		},
 	)
 
-	return &types.MsgUnlinkNodeResponse{}, nil
+	return &v2.MsgUnlinkNodeResponse{}, nil
 }
 
 // MsgSubscribe subscribes to a plan for a specific user account.
 // It validates the subscription request and creates a new subscription for the provided plan and user account.
-func (k *msgServer) MsgSubscribe(c context.Context, msg *types.MsgSubscribeRequest) (*types.MsgSubscribeResponse, error) {
+func (k *msgServer) MsgSubscribe(c context.Context, msg *v2.MsgSubscribeRequest) (*v2.MsgSubscribeResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
 
 	// Convert the `msg.From` address (in Bech32 format) to an `sdk.AccAddress`.
@@ -215,7 +216,7 @@ func (k *msgServer) MsgSubscribe(c context.Context, msg *types.MsgSubscribeReque
 
 	// Emit an event to notify that a new subscription has been created.
 	ctx.EventManager().EmitTypedEvent(
-		&types.EventCreateSubscription{
+		&v2.EventCreateSubscription{
 			Address:         subscription.Address,
 			ProviderAddress: "",
 			ID:              subscription.ID,
@@ -223,5 +224,5 @@ func (k *msgServer) MsgSubscribe(c context.Context, msg *types.MsgSubscribeReque
 		},
 	)
 
-	return &types.MsgSubscribeResponse{}, nil
+	return &v2.MsgSubscribeResponse{}, nil
 }

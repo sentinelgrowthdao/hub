@@ -10,7 +10,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
 
-	"github.com/sentinel-official/hub/v12/x/plan/types"
+	"github.com/sentinel-official/hub/v12/x/plan/types/v2"
 )
 
 func queryPlan() *cobra.Command {
@@ -30,12 +30,12 @@ func queryPlan() *cobra.Command {
 			}
 
 			var (
-				qc = types.NewQueryServiceClient(ctx)
+				qc = v2.NewQueryServiceClient(ctx)
 			)
 
 			res, err := qc.QueryPlan(
 				context.Background(),
-				types.NewQueryPlanRequest(
+				v2.NewQueryPlanRequest(
 					id,
 				),
 			)
@@ -78,13 +78,13 @@ func queryPlans() *cobra.Command {
 			}
 
 			var (
-				qc = types.NewQueryServiceClient(ctx)
+				qc = v2.NewQueryServiceClient(ctx)
 			)
 
 			if provAddr != nil {
 				res, err := qc.QueryPlansForProvider(
 					context.Background(),
-					types.NewQueryPlansForProviderRequest(
+					v2.NewQueryPlansForProviderRequest(
 						provAddr,
 						status,
 						pagination,
@@ -99,7 +99,7 @@ func queryPlans() *cobra.Command {
 
 			res, err := qc.QueryPlans(
 				context.Background(),
-				types.NewQueryPlansRequest(
+				v2.NewQueryPlansRequest(
 					status,
 					pagination,
 				),

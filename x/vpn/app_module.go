@@ -20,7 +20,8 @@ import (
 	v1nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v1"
 	v2nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v2"
 	plankeeper "github.com/sentinel-official/hub/v12/x/plan/keeper"
-	plantypes "github.com/sentinel-official/hub/v12/x/plan/types"
+	v1plantypes "github.com/sentinel-official/hub/v12/x/plan/types/v1"
+	v2plantypes "github.com/sentinel-official/hub/v12/x/plan/types/v2"
 	providerkeeper "github.com/sentinel-official/hub/v12/x/provider/keeper"
 	providertypes "github.com/sentinel-official/hub/v12/x/provider/types"
 	sessionkeeper "github.com/sentinel-official/hub/v12/x/session/keeper"
@@ -55,12 +56,13 @@ func (amb AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegist
 
 func (amb AppModuleBasic) RegisterGRPCGatewayRoutes(ctx client.Context, mux *runtime.ServeMux) {
 	_ = deposittypes.RegisterQueryServiceHandlerClient(context.Background(), mux, deposittypes.NewQueryServiceClient(ctx))
-	_ = plantypes.RegisterQueryServiceHandlerClient(context.Background(), mux, plantypes.NewQueryServiceClient(ctx))
 	_ = providertypes.RegisterQueryServiceHandlerClient(context.Background(), mux, providertypes.NewQueryServiceClient(ctx))
 	_ = sessiontypes.RegisterQueryServiceHandlerClient(context.Background(), mux, sessiontypes.NewQueryServiceClient(ctx))
 	_ = subscriptiontypes.RegisterQueryServiceHandlerClient(context.Background(), mux, subscriptiontypes.NewQueryServiceClient(ctx))
 	_ = v1nodetypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v1nodetypes.NewQueryServiceClient(ctx))
+	_ = v1plantypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v1plantypes.NewQueryServiceClient(ctx))
 	_ = v2nodetypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v2nodetypes.NewQueryServiceClient(ctx))
+	_ = v2plantypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v2plantypes.NewQueryServiceClient(ctx))
 }
 
 func (amb AppModuleBasic) GetTxCmd() *cobra.Command { return cli.GetTxCmd() }
@@ -133,8 +135,6 @@ func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
 
 func (am AppModule) RegisterServices(configurator sdkmodule.Configurator) {
 	deposittypes.RegisterQueryServiceServer(configurator.QueryServer(), depositkeeper.NewQueryServiceServer(am.keeper.Deposit))
-	plantypes.RegisterMsgServiceServer(configurator.MsgServer(), plankeeper.NewMsgServiceServer(am.keeper.Plan))
-	plantypes.RegisterQueryServiceServer(configurator.QueryServer(), plankeeper.NewQueryServiceServer(am.keeper.Plan))
 	providertypes.RegisterMsgServiceServer(configurator.MsgServer(), providerkeeper.NewMsgServiceServer(am.keeper.Provider))
 	providertypes.RegisterQueryServiceServer(configurator.QueryServer(), providerkeeper.NewQueryServiceServer(am.keeper.Provider))
 	sessiontypes.RegisterMsgServiceServer(configurator.MsgServer(), sessionkeeper.NewMsgServiceServer(am.keeper.Session))
@@ -143,6 +143,10 @@ func (am AppModule) RegisterServices(configurator sdkmodule.Configurator) {
 	subscriptiontypes.RegisterQueryServiceServer(configurator.QueryServer(), subscriptionkeeper.NewQueryServiceServer(am.keeper.Subscription))
 	v1nodetypes.RegisterMsgServiceServer(configurator.MsgServer(), nil)
 	v1nodetypes.RegisterQueryServiceServer(configurator.QueryServer(), nil)
+	v1plantypes.RegisterMsgServiceServer(configurator.MsgServer(), nil)
+	v1plantypes.RegisterQueryServiceServer(configurator.QueryServer(), nil)
 	v2nodetypes.RegisterMsgServiceServer(configurator.MsgServer(), nodekeeper.NewMsgServiceServer(am.keeper.Node))
 	v2nodetypes.RegisterQueryServiceServer(configurator.QueryServer(), nodekeeper.NewQueryServiceServer(am.keeper.Node))
+	v2plantypes.RegisterMsgServiceServer(configurator.MsgServer(), plankeeper.NewMsgServiceServer(am.keeper.Plan))
+	v2plantypes.RegisterQueryServiceServer(configurator.QueryServer(), plankeeper.NewQueryServiceServer(am.keeper.Plan))
 }

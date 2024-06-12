@@ -9,10 +9,10 @@ import (
 	proto "github.com/cosmos/gogoproto/proto"
 	types "github.com/sentinel-official/hub/v12/x/deposit/types"
 	v2 "github.com/sentinel-official/hub/v12/x/node/types/v2"
-	types1 "github.com/sentinel-official/hub/v12/x/plan/types"
-	types2 "github.com/sentinel-official/hub/v12/x/provider/types"
-	types3 "github.com/sentinel-official/hub/v12/x/session/types"
-	types4 "github.com/sentinel-official/hub/v12/x/subscription/types"
+	v21 "github.com/sentinel-official/hub/v12/x/plan/types/v2"
+	types1 "github.com/sentinel-official/hub/v12/x/provider/types"
+	types2 "github.com/sentinel-official/hub/v12/x/session/types"
+	types3 "github.com/sentinel-official/hub/v12/x/subscription/types"
 	io "io"
 	math "math"
 	math_bits "math/bits"
@@ -38,13 +38,13 @@ type GenesisState struct {
 	Nodes *v2.GenesisState `protobuf:"bytes,2,opt,name=nodes,proto3" json:"nodes,omitempty"`
 	// Field 3: List of plans associated with the Sentinel module.
 	// This field is not nullable.
-	Plans *types1.GenesisState `protobuf:"bytes,3,opt,name=plans,proto3" json:"plans,omitempty"`
+	Plans *v21.GenesisState `protobuf:"bytes,3,opt,name=plans,proto3" json:"plans,omitempty"`
 	// Field 4: Genesis state for providers in the Sentinel module.
-	Providers *types2.GenesisState `protobuf:"bytes,4,opt,name=providers,proto3" json:"providers,omitempty"`
+	Providers *types1.GenesisState `protobuf:"bytes,4,opt,name=providers,proto3" json:"providers,omitempty"`
 	// Field 5: Genesis state for sessions in the Sentinel module.
-	Sessions *types3.GenesisState `protobuf:"bytes,5,opt,name=sessions,proto3" json:"sessions,omitempty"`
+	Sessions *types2.GenesisState `protobuf:"bytes,5,opt,name=sessions,proto3" json:"sessions,omitempty"`
 	// Field 6: Genesis state for subscriptions in the Sentinel module.
-	Subscriptions *types4.GenesisState `protobuf:"bytes,6,opt,name=subscriptions,proto3" json:"subscriptions,omitempty"`
+	Subscriptions *types3.GenesisState `protobuf:"bytes,6,opt,name=subscriptions,proto3" json:"subscriptions,omitempty"`
 }
 
 func (m *GenesisState) Reset()         { *m = GenesisState{} }
@@ -389,7 +389,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Plans == nil {
-				m.Plans = &types1.GenesisState{}
+				m.Plans = &v21.GenesisState{}
 			}
 			if err := m.Plans.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -425,7 +425,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Providers == nil {
-				m.Providers = &types2.GenesisState{}
+				m.Providers = &types1.GenesisState{}
 			}
 			if err := m.Providers.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -461,7 +461,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Sessions == nil {
-				m.Sessions = &types3.GenesisState{}
+				m.Sessions = &types2.GenesisState{}
 			}
 			if err := m.Sessions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -497,7 +497,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Subscriptions == nil {
-				m.Subscriptions = &types4.GenesisState{}
+				m.Subscriptions = &types3.GenesisState{}
 			}
 			if err := m.Subscriptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err

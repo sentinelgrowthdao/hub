@@ -8,9 +8,10 @@ import (
 
 	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/plan/types"
+	"github.com/sentinel-official/hub/v12/x/plan/types/v2"
 )
 
-func (k *Keeper) SetActivePlan(ctx sdk.Context, plan types.Plan) {
+func (k *Keeper) SetActivePlan(ctx sdk.Context, plan v2.Plan) {
 	var (
 		store = k.Store(ctx)
 		key   = types.ActivePlanKey(plan.ID)
@@ -29,7 +30,7 @@ func (k *Keeper) HasActivePlan(ctx sdk.Context, id uint64) bool {
 	return store.Has(key)
 }
 
-func (k *Keeper) GetActivePlan(ctx sdk.Context, id uint64) (plan types.Plan, found bool) {
+func (k *Keeper) GetActivePlan(ctx sdk.Context, id uint64) (plan v2.Plan, found bool) {
 	var (
 		store = k.Store(ctx)
 		key   = types.ActivePlanKey(id)
@@ -53,7 +54,7 @@ func (k *Keeper) DeleteActivePlan(ctx sdk.Context, id uint64) {
 	store.Delete(key)
 }
 
-func (k *Keeper) SetInactivePlan(ctx sdk.Context, plan types.Plan) {
+func (k *Keeper) SetInactivePlan(ctx sdk.Context, plan v2.Plan) {
 	var (
 		store = k.Store(ctx)
 		key   = types.InactivePlanKey(plan.ID)
@@ -72,7 +73,7 @@ func (k *Keeper) HasInactivePlan(ctx sdk.Context, id uint64) bool {
 	return store.Has(key)
 }
 
-func (k *Keeper) GetInactivePlan(ctx sdk.Context, id uint64) (plan types.Plan, found bool) {
+func (k *Keeper) GetInactivePlan(ctx sdk.Context, id uint64) (plan v2.Plan, found bool) {
 	var (
 		store = k.Store(ctx)
 		key   = types.InactivePlanKey(id)
@@ -96,7 +97,7 @@ func (k *Keeper) DeleteInactivePlan(ctx sdk.Context, id uint64) {
 	store.Delete(key)
 }
 
-func (k *Keeper) SetPlan(ctx sdk.Context, plan types.Plan) {
+func (k *Keeper) SetPlan(ctx sdk.Context, plan v2.Plan) {
 	switch plan.Status {
 	case base.StatusActive:
 		k.SetActivePlan(ctx, plan)
@@ -112,7 +113,7 @@ func (k *Keeper) HasPlan(ctx sdk.Context, id uint64) bool {
 		k.HasInactivePlan(ctx, id)
 }
 
-func (k *Keeper) GetPlan(ctx sdk.Context, id uint64) (plan types.Plan, found bool) {
+func (k *Keeper) GetPlan(ctx sdk.Context, id uint64) (plan v2.Plan, found bool) {
 	plan, found = k.GetActivePlan(ctx, id)
 	if found {
 		return
@@ -126,7 +127,7 @@ func (k *Keeper) GetPlan(ctx sdk.Context, id uint64) (plan types.Plan, found boo
 	return plan, false
 }
 
-func (k *Keeper) GetPlans(ctx sdk.Context) (items types.Plans) {
+func (k *Keeper) GetPlans(ctx sdk.Context) (items v2.Plans) {
 	var (
 		store = k.Store(ctx)
 		iter  = sdk.KVStorePrefixIterator(store, types.PlanKeyPrefix)
@@ -135,7 +136,7 @@ func (k *Keeper) GetPlans(ctx sdk.Context) (items types.Plans) {
 	defer iter.Close()
 
 	for ; iter.Valid(); iter.Next() {
-		var item types.Plan
+		var item v2.Plan
 		k.cdc.MustUnmarshal(iter.Value(), &item)
 		items = append(items, item)
 	}
@@ -162,7 +163,7 @@ func (k *Keeper) DeletePlanForProvider(ctx sdk.Context, addr base.ProvAddress, i
 	store.Delete(key)
 }
 
-func (k *Keeper) GetPlansForProvider(ctx sdk.Context, addr base.ProvAddress) (items types.Plans) {
+func (k *Keeper) GetPlansForProvider(ctx sdk.Context, addr base.ProvAddress) (items v2.Plans) {
 	var (
 		store = k.Store(ctx)
 		iter  = sdk.KVStorePrefixIterator(store, types.GetPlanForProviderKeyPrefix(addr))
