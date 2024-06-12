@@ -7,11 +7,12 @@ import (
 
 	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/provider/types"
+	"github.com/sentinel-official/hub/v12/x/provider/types/v2"
 )
 
 // The following line asserts that the `msgServer` type implements the `types.MsgServiceServer` interface.
 var (
-	_ types.MsgServiceServer = (*msgServer)(nil)
+	_ v2.MsgServiceServer = (*msgServer)(nil)
 )
 
 // msgServer is a message server that implements the `types.MsgServiceServer` interface.
@@ -20,13 +21,13 @@ type msgServer struct {
 }
 
 // NewMsgServiceServer creates a new instance of `types.MsgServiceServer` using the provided Keeper.
-func NewMsgServiceServer(k Keeper) types.MsgServiceServer {
+func NewMsgServiceServer(k Keeper) v2.MsgServiceServer {
 	return &msgServer{k}
 }
 
 // MsgRegister registers a new provider with the provided details and stores it in the Store.
 // It validates the registration request, checks for provider existence, and assigns a unique address to the provider.
-func (k *msgServer) MsgRegister(c context.Context, msg *types.MsgRegisterRequest) (*types.MsgRegisterResponse, error) {
+func (k *msgServer) MsgRegister(c context.Context, msg *v2.MsgRegisterRequest) (*v2.MsgRegisterResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
 
 	// Convert the `msg.From` address (in Bech32 format) to an `sdk.AccAddress`.
@@ -50,7 +51,7 @@ func (k *msgServer) MsgRegister(c context.Context, msg *types.MsgRegisterRequest
 	}
 
 	// Create a new provider with the provided details and set its status as `Inactive`.
-	provider := types.Provider{
+	provider := v2.Provider{
 		Address:     provAddr.String(),
 		Name:        msg.Name,
 		Identity:    msg.Identity,
@@ -65,17 +66,17 @@ func (k *msgServer) MsgRegister(c context.Context, msg *types.MsgRegisterRequest
 
 	// Emit an event to notify that a new provider has been registered.
 	ctx.EventManager().EmitTypedEvent(
-		&types.EventRegister{
+		&v2.EventRegister{
 			Address: provider.Address,
 		},
 	)
 
-	return &types.MsgRegisterResponse{}, nil
+	return &v2.MsgRegisterResponse{}, nil
 }
 
 // MsgUpdate updates the details of a provider.
 // It validates the update request, checks for provider existence, and updates the provider's details and status.
-func (k *msgServer) MsgUpdate(c context.Context, msg *types.MsgUpdateRequest) (*types.MsgUpdateResponse, error) {
+func (k *msgServer) MsgUpdate(c context.Context, msg *v2.MsgUpdateRequest) (*v2.MsgUpdateResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
 
 	// Convert the `msg.From` address (in Bech32 format) to a `base.ProvAddress`.
@@ -123,10 +124,10 @@ func (k *msgServer) MsgUpdate(c context.Context, msg *types.MsgUpdateRequest) (*
 
 	// Emit an event to notify that the provider details have been updated.
 	ctx.EventManager().EmitTypedEvent(
-		&types.EventUpdate{
+		&v2.EventUpdate{
 			Address: provider.Address,
 		},
 	)
 
-	return &types.MsgUpdateResponse{}, nil
+	return &v2.MsgUpdateResponse{}, nil
 }

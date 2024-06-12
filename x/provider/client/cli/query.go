@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 
 	base "github.com/sentinel-official/hub/v12/types"
-	"github.com/sentinel-official/hub/v12/x/provider/types"
+	"github.com/sentinel-official/hub/v12/x/provider/types/v2"
 )
 
 func queryProvider() *cobra.Command {
@@ -30,12 +30,12 @@ func queryProvider() *cobra.Command {
 			}
 
 			var (
-				qc = types.NewQueryServiceClient(ctx)
+				qc = v2.NewQueryServiceClient(ctx)
 			)
 
 			res, err := qc.QueryProvider(
 				context.Background(),
-				types.NewQueryProviderRequest(
+				v2.NewQueryProviderRequest(
 					addr,
 				),
 			)
@@ -73,12 +73,12 @@ func queryProviders() *cobra.Command {
 			}
 
 			var (
-				qc = types.NewQueryServiceClient(ctx)
+				qc = v2.NewQueryServiceClient(ctx)
 			)
 
 			res, err := qc.QueryProviders(
 				context.Background(),
-				types.NewQueryProvidersRequest(
+				v2.NewQueryProvidersRequest(
 					status,
 					pagination,
 				),
@@ -110,12 +110,12 @@ func queryParams() *cobra.Command {
 			}
 
 			var (
-				qc = types.NewQueryServiceClient(ctx)
+				qc = v2.NewQueryServiceClient(ctx)
 			)
 
 			res, err := qc.QueryParams(
 				context.Background(),
-				types.NewQueryParamsRequest(),
+				v2.NewQueryParamsRequest(),
 			)
 			if err != nil {
 				return err

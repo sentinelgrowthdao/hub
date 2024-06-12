@@ -12,6 +12,7 @@ import (
 
 	"github.com/sentinel-official/hub/v12/x/provider/expected"
 	"github.com/sentinel-official/hub/v12/x/provider/types"
+	"github.com/sentinel-official/hub/v12/x/provider/types/v2"
 )
 
 type Keeper struct {
@@ -25,7 +26,7 @@ func NewKeeper(cdc codec.BinaryCodec, key storetypes.StoreKey, params paramstype
 	return Keeper{
 		cdc:    cdc,
 		key:    key,
-		params: params.WithKeyTable(types.ParamsKeyTable()),
+		params: params.WithKeyTable(v2.ParamsKeyTable()),
 	}
 }
 

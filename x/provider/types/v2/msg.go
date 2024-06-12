@@ -1,4 +1,4 @@
-package types
+package v2
 
 import (
 	"net/url"
@@ -7,6 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	"github.com/sentinel-official/hub/v12/x/provider/types"
 )
 
 // The `types` package contains custom message types for the Cosmos SDK.
@@ -38,30 +39,30 @@ func NewMsgRegisterRequest(from sdk.AccAddress, name, identity, website, descrip
 // and if the 'Description' field's length is not greater than 256 characters.
 func (m *MsgRegisterRequest) ValidateBasic() error {
 	if m.From == "" {
-		return sdkerrors.Wrap(ErrorInvalidMessage, "from cannot be empty")
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
 	}
 	if _, err := sdk.AccAddressFromBech32(m.From); err != nil {
-		return sdkerrors.Wrap(ErrorInvalidMessage, err.Error())
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
 	}
 	if m.Name == "" {
-		return sdkerrors.Wrap(ErrorInvalidMessage, "name cannot be empty")
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "name cannot be empty")
 	}
 	if len(m.Name) > 64 {
-		return sdkerrors.Wrapf(ErrorInvalidMessage, "name length cannot be greater than %d chars", 64)
+		return sdkerrors.Wrapf(types.ErrorInvalidMessage, "name length cannot be greater than %d chars", 64)
 	}
 	if len(m.Identity) > 64 {
-		return sdkerrors.Wrapf(ErrorInvalidMessage, "identity length cannot be greater than %d chars", 64)
+		return sdkerrors.Wrapf(types.ErrorInvalidMessage, "identity length cannot be greater than %d chars", 64)
 	}
 	if len(m.Website) > 64 {
-		return sdkerrors.Wrapf(ErrorInvalidMessage, "website length cannot be greater than %d chars", 64)
+		return sdkerrors.Wrapf(types.ErrorInvalidMessage, "website length cannot be greater than %d chars", 64)
 	}
 	if m.Website != "" {
 		if _, err := url.ParseRequestURI(m.Website); err != nil {
-			return sdkerrors.Wrap(ErrorInvalidMessage, err.Error())
+			return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
 		}
 	}
 	if len(m.Description) > 256 {
-		return sdkerrors.Wrapf(ErrorInvalidMessage, "description length cannot be greater than %d chars", 256)
+		return sdkerrors.Wrapf(types.ErrorInvalidMessage, "description length cannot be greater than %d chars", 256)
 	}
 
 	return nil
@@ -99,30 +100,30 @@ func NewMsgUpdateRequest(from base.ProvAddress, name, identity, website, descrip
 // and if the 'Status' field is one of the allowed values [unspecified, active, inactive].
 func (m *MsgUpdateRequest) ValidateBasic() error {
 	if m.From == "" {
-		return sdkerrors.Wrap(ErrorInvalidMessage, "from cannot be empty")
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
 	}
 	if _, err := base.ProvAddressFromBech32(m.From); err != nil {
-		return sdkerrors.Wrap(ErrorInvalidMessage, err.Error())
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
 	}
 	if len(m.Name) > 64 {
-		return sdkerrors.Wrapf(ErrorInvalidMessage, "name length cannot be greater than %d chars", 64)
+		return sdkerrors.Wrapf(types.ErrorInvalidMessage, "name length cannot be greater than %d chars", 64)
 	}
 	if len(m.Identity) > 64 {
-		return sdkerrors.Wrapf(ErrorInvalidMessage, "identity length cannot be greater than %d chars", 64)
+		return sdkerrors.Wrapf(types.ErrorInvalidMessage, "identity length cannot be greater than %d chars", 64)
 	}
 	if len(m.Website) > 64 {
-		return sdkerrors.Wrapf(ErrorInvalidMessage, "website length cannot be greater than %d chars", 64)
+		return sdkerrors.Wrapf(types.ErrorInvalidMessage, "website length cannot be greater than %d chars", 64)
 	}
 	if m.Website != "" {
 		if _, err := url.ParseRequestURI(m.Website); err != nil {
-			return sdkerrors.Wrap(ErrorInvalidMessage, err.Error())
+			return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
 		}
 	}
 	if len(m.Description) > 256 {
-		return sdkerrors.Wrapf(ErrorInvalidMessage, "description length cannot be greater than %d chars", 256)
+		return sdkerrors.Wrapf(types.ErrorInvalidMessage, "description length cannot be greater than %d chars", 256)
 	}
 	if !m.Status.IsOneOf(base.StatusUnspecified, base.StatusActive, base.StatusInactive) {
-		return sdkerrors.Wrap(ErrorInvalidMessage, "status must be one of [unspecified, active, inactive]")
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "status must be one of [unspecified, active, inactive]")
 	}
 
 	return nil

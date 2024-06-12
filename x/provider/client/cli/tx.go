@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	base "github.com/sentinel-official/hub/v12/types"
-	"github.com/sentinel-official/hub/v12/x/provider/types"
+	"github.com/sentinel-official/hub/v12/x/provider/types/v2"
 )
 
 func txRegister() *cobra.Command {
@@ -38,7 +38,7 @@ func txRegister() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgRegisterRequest(
+			msg := v2.NewMsgRegisterRequest(
 				ctx.FromAddress,
 				args[0],
 				identity,
@@ -96,7 +96,7 @@ func txUpdate() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgUpdateRequest(
+			msg := v2.NewMsgUpdateRequest(
 				ctx.FromAddress.Bytes(),
 				name,
 				identity,

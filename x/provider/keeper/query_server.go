@@ -11,21 +11,22 @@ import (
 
 	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/provider/types"
+	"github.com/sentinel-official/hub/v12/x/provider/types/v2"
 )
 
 var (
-	_ types.QueryServiceServer = (*queryServer)(nil)
+	_ v2.QueryServiceServer = (*queryServer)(nil)
 )
 
 type queryServer struct {
 	Keeper
 }
 
-func NewQueryServiceServer(k Keeper) types.QueryServiceServer {
+func NewQueryServiceServer(k Keeper) v2.QueryServiceServer {
 	return &queryServer{k}
 }
 
-func (q *queryServer) QueryProvider(c context.Context, req *types.QueryProviderRequest) (*types.QueryProviderResponse, error) {
+func (q *queryServer) QueryProvider(c context.Context, req *v2.QueryProviderRequest) (*v2.QueryProviderResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -42,16 +43,16 @@ func (q *queryServer) QueryProvider(c context.Context, req *types.QueryProviderR
 		return nil, status.Errorf(codes.NotFound, "provider %s does not exist", req.Address)
 	}
 
-	return &types.QueryProviderResponse{Provider: item}, nil
+	return &v2.QueryProviderResponse{Provider: item}, nil
 }
 
-func (q *queryServer) QueryProviders(c context.Context, req *types.QueryProvidersRequest) (*types.QueryProvidersResponse, error) {
+func (q *queryServer) QueryProviders(c context.Context, req *v2.QueryProvidersRequest) (*v2.QueryProvidersResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	var (
-		items     types.Providers
+		items     v2.Providers
 		keyPrefix []byte
 		ctx       = sdk.UnwrapSDKContext(c)
 	)
@@ -67,7 +68,7 @@ func (q *queryServer) QueryProviders(c context.Context, req *types.QueryProvider
 
 	store := prefix.NewStore(q.Store(ctx), keyPrefix)
 	pagination, err := query.Paginate(store, req.Pagination, func(_, value []byte) error {
-		var item types.Provider
+		var item v2.Provider
 		if err := q.cdc.Unmarshal(value, &item); err != nil {
 			return err
 		}
@@ -80,14 +81,14 @@ func (q *queryServer) QueryProviders(c context.Context, req *types.QueryProvider
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QueryProvidersResponse{Providers: items, Pagination: pagination}, nil
+	return &v2.QueryProvidersResponse{Providers: items, Pagination: pagination}, nil
 }
 
-func (q *queryServer) QueryParams(c context.Context, _ *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
+func (q *queryServer) QueryParams(c context.Context, _ *v2.QueryParamsRequest) (*v2.QueryParamsResponse, error) {
 	var (
 		ctx    = sdk.UnwrapSDKContext(c)
 		params = q.GetParams(ctx)
 	)
 
-	return &types.QueryParamsResponse{Params: params}, nil
+	return &v2.QueryParamsResponse{Params: params}, nil
 }

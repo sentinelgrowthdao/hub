@@ -10,14 +10,16 @@ import (
 	v2nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v2"
 	v1plantypes "github.com/sentinel-official/hub/v12/x/plan/types/v1"
 	v2plantypes "github.com/sentinel-official/hub/v12/x/plan/types/v2"
-	providertypes "github.com/sentinel-official/hub/v12/x/provider/types"
+	v1providertypes "github.com/sentinel-official/hub/v12/x/provider/types/v1"
+	v2providertypes "github.com/sentinel-official/hub/v12/x/provider/types/v2"
 	sessiontypes "github.com/sentinel-official/hub/v12/x/session/types"
 	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types"
 )
 
 func RegisterInterfaces(registry codectypes.InterfaceRegistry) {
 	deposittypes.RegisterInterfaces(registry)
-	providertypes.RegisterInterfaces(registry)
+	v2providertypes.RegisterInterfaces(registry)
+	v1providertypes.RegisterInterfaces(registry)
 	sessiontypes.RegisterInterfaces(registry)
 	subscriptiontypes.RegisterInterfaces(registry)
 	v1nodetypes.RegisterInterfaces(registry)
