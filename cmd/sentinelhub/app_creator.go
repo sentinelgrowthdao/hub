@@ -28,10 +28,7 @@ type appCreator struct {
 }
 
 func (ac appCreator) NewApp(
-	logger tmlog.Logger,
-	db tmdb.DB,
-	traceWriter io.Writer,
-	appOpts servertypes.AppOptions,
+	logger tmlog.Logger, db tmdb.DB, traceWriter io.Writer, appOpts servertypes.AppOptions,
 ) servertypes.Application {
 	var cache sdk.MultiStorePersistentCache
 	if cast.ToBool(appOpts.Get(server.FlagInterBlockCache)) {
@@ -77,14 +74,8 @@ func (ac appCreator) NewApp(
 }
 
 func (ac appCreator) AppExport(
-	logger tmlog.Logger,
-	db tmdb.DB,
-	traceWriter io.Writer,
-	height int64,
-	forZeroHeight bool,
-	jailWhitelist []string,
-	appOpts servertypes.AppOptions,
-	modulesToExport []string,
+	logger tmlog.Logger, db tmdb.DB, traceWriter io.Writer, height int64, forZeroHeight bool, jailWhitelist []string,
+	appOpts servertypes.AppOptions, modulesToExport []string,
 ) (servertypes.ExportedApp, error) {
 	v := app.NewApp(
 		appOpts, base.Bech32MainPrefix, db, ac.encCfg, cast.ToString(appOpts.Get(flags.FlagHome)),

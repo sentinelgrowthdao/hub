@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"github.com/cosmos/cosmos-sdk/types/query"
+	sdkquery "github.com/cosmos/cosmos-sdk/types/query"
 
 	"github.com/sentinel-official/hub/v12/x/swap/types"
 )
@@ -12,7 +12,7 @@ func NewQuerySwapRequest(txHash types.EthereumHash) *QuerySwapRequest {
 	}
 }
 
-func NewQuerySwapsRequest(pagination *query.PageRequest) *QuerySwapsRequest {
+func NewQuerySwapsRequest(pagination *sdkquery.PageRequest) *QuerySwapsRequest {
 	return &QuerySwapsRequest{
 		Pagination: pagination,
 	}

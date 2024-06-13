@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/address"
+	sdkaddress "github.com/cosmos/cosmos-sdk/types/address"
 	"github.com/stretchr/testify/require"
 
 	base "github.com/sentinel-official/hub/v12/types"
@@ -23,7 +23,7 @@ func TestSessionForAccountKey(t *testing.T) {
 		if i < 256 {
 			require.Equal(
 				t,
-				append(append(SessionForAccountKeyPrefix, address.MustLengthPrefix(addr)...), sdk.Uint64ToBigEndian(uint64(i))...),
+				append(append(SessionForAccountKeyPrefix, sdkaddress.MustLengthPrefix(addr)...), sdk.Uint64ToBigEndian(uint64(i))...),
 				SessionForAccountKey(addr, uint64(i)),
 			)
 
@@ -155,7 +155,7 @@ func TestSessionForNodeKey(t *testing.T) {
 		if i < 256 {
 			require.Equal(
 				t,
-				append(append(SessionForNodeKeyPrefix, address.MustLengthPrefix(addr)...), sdk.Uint64ToBigEndian(uint64(i))...),
+				append(append(SessionForNodeKeyPrefix, sdkaddress.MustLengthPrefix(addr)...), sdk.Uint64ToBigEndian(uint64(i))...),
 				SessionForNodeKey(addr, uint64(i)),
 			)
 
@@ -180,7 +180,7 @@ func TestSessionForAllocationKey(t *testing.T) {
 		if i < 256 {
 			require.Equal(
 				t,
-				append(append(append(SessionForAllocationKeyPrefix, sdk.Uint64ToBigEndian(uint64(i))...), address.MustLengthPrefix(addr)...), sdk.Uint64ToBigEndian(uint64(i+64))...),
+				append(append(append(SessionForAllocationKeyPrefix, sdk.Uint64ToBigEndian(uint64(i))...), sdkaddress.MustLengthPrefix(addr)...), sdk.Uint64ToBigEndian(uint64(i+64))...),
 				SessionForAllocationKey(uint64(i), addr, uint64(i+64)),
 			)
 

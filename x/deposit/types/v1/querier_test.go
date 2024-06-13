@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/query"
+	sdkquery "github.com/cosmos/cosmos-sdk/types/query"
 	"github.com/stretchr/testify/require"
 )
 
@@ -30,11 +30,11 @@ func TestNewQueryDepositRequest(t *testing.T) {
 
 func TestNewQueryDepositsRequest(t *testing.T) {
 	var (
-		pagination *query.PageRequest
+		pagination *sdkquery.PageRequest
 	)
 
 	for i := 0; i < 20; i++ {
-		pagination = &query.PageRequest{
+		pagination = &sdkquery.PageRequest{
 			Key:        make([]byte, i),
 			Offset:     uint64(i),
 			Limit:      uint64(i),

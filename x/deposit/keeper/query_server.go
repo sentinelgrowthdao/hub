@@ -5,7 +5,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/query"
+	sdkquery "github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -56,7 +56,7 @@ func (q *queryServer) QueryDeposits(c context.Context, req *v1.QueryDepositsRequ
 		store = prefix.NewStore(q.Store(ctx), types.DepositKeyPrefix)
 	)
 
-	pagination, err := query.Paginate(store, req.Pagination, func(_ []byte, value []byte) error {
+	pagination, err := sdkquery.Paginate(store, req.Pagination, func(_ []byte, value []byte) error {
 		var item v1.Deposit
 		if err := q.cdc.Unmarshal(value, &item); err != nil {
 			return err

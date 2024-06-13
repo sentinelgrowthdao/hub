@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/address"
+	sdkaddress "github.com/cosmos/cosmos-sdk/types/address"
 	"github.com/stretchr/testify/require"
 
 	base "github.com/sentinel-official/hub/v12/types"
@@ -33,7 +33,7 @@ func TestAllocationKey(t *testing.T) {
 		if i < 256 {
 			require.Equal(
 				t,
-				append(append(AllocationKeyPrefix, sdk.Uint64ToBigEndian(uint64(i))...), address.MustLengthPrefix(addr)...),
+				append(append(AllocationKeyPrefix, sdk.Uint64ToBigEndian(uint64(i))...), sdkaddress.MustLengthPrefix(addr)...),
 				AllocationKey(uint64(i), addr),
 			)
 
@@ -58,7 +58,7 @@ func TestSubscriptionForAccountKey(t *testing.T) {
 		if i < 256 {
 			require.Equal(
 				t,
-				append(append(SubscriptionForAccountKeyPrefix, address.MustLengthPrefix(addr)...), sdk.Uint64ToBigEndian(uint64(i))...),
+				append(append(SubscriptionForAccountKeyPrefix, sdkaddress.MustLengthPrefix(addr)...), sdk.Uint64ToBigEndian(uint64(i))...),
 				SubscriptionForAccountKey(addr, uint64(i)),
 			)
 
@@ -83,7 +83,7 @@ func TestSubscriptionForNodeKey(t *testing.T) {
 		if i < 256 {
 			require.Equal(
 				t,
-				append(append(SubscriptionForNodeKeyPrefix, address.MustLengthPrefix(addr)...), sdk.Uint64ToBigEndian(uint64(i))...),
+				append(append(SubscriptionForNodeKeyPrefix, sdkaddress.MustLengthPrefix(addr)...), sdk.Uint64ToBigEndian(uint64(i))...),
 				SubscriptionForNodeKey(addr, uint64(i)),
 			)
 
@@ -255,7 +255,7 @@ func TestPayoutForAccountKey(t *testing.T) {
 		if i < 256 {
 			require.Equal(
 				t,
-				append(append(PayoutForAccountKeyPrefix, address.MustLengthPrefix(addr)...), sdk.Uint64ToBigEndian(id)...),
+				append(append(PayoutForAccountKeyPrefix, sdkaddress.MustLengthPrefix(addr)...), sdk.Uint64ToBigEndian(id)...),
 				PayoutForAccountKey(addr, id),
 			)
 
@@ -282,7 +282,7 @@ func TestPayoutForNodeKey(t *testing.T) {
 		if i < 256 {
 			require.Equal(
 				t,
-				append(append(PayoutForNodeKeyPrefix, address.MustLengthPrefix(addr)...), sdk.Uint64ToBigEndian(id)...),
+				append(append(PayoutForNodeKeyPrefix, sdkaddress.MustLengthPrefix(addr)...), sdk.Uint64ToBigEndian(id)...),
 				PayoutForNodeKey(addr, id),
 			)
 

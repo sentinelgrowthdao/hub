@@ -5,7 +5,7 @@ import (
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	abcitypes "github.com/cometbft/cometbft/abci/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
-	"github.com/cosmos/cosmos-sdk/types/module"
+	sdkmodule "github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	authvesting "github.com/cosmos/cosmos-sdk/x/auth/vesting"
@@ -71,7 +71,7 @@ import (
 )
 
 var (
-	ModuleBasics = module.NewBasicManager(
+	ModuleBasics = sdkmodule.NewBasicManager(
 		// Cosmos SDK module basics
 		auth.AppModuleBasic{},
 		authvesting.AppModuleBasic{},
@@ -161,13 +161,10 @@ func BlockedAccAddrs() map[string]bool {
 }
 
 func NewModuleManager(
-	deliverTxFunc func(abcitypes.RequestDeliverTx) abcitypes.ResponseDeliverTx,
-	encCfg EncodingConfig,
-	k Keepers,
-	msgRouter *baseapp.MsgServiceRouter,
-	skipGenesisInvariants bool,
-) *module.Manager {
-	manager := module.NewManager(
+	deliverTxFunc func(abcitypes.RequestDeliverTx) abcitypes.ResponseDeliverTx, encCfg EncodingConfig, k Keepers,
+	msgRouter *baseapp.MsgServiceRouter, skipGenesisInvariants bool,
+) *sdkmodule.Manager {
+	manager := sdkmodule.NewManager(
 		// Cosmos SDK modules
 		auth.NewAppModule(encCfg.Codec, k.AccountKeeper, nil, k.Subspace(authtypes.ModuleName)),
 		authvesting.NewAppModule(k.AccountKeeper, k.BankKeeper),
@@ -331,8 +328,10 @@ func NewModuleManager(
 	return manager
 }
 
-func NewSimulationManager(encCfg EncodingConfig, k Keepers, msgRouter *baseapp.MsgServiceRouter) *module.SimulationManager {
-	return module.NewSimulationManager(
+func NewSimulationManager(
+	encCfg EncodingConfig, k Keepers, msgRouter *baseapp.MsgServiceRouter,
+) *sdkmodule.SimulationManager {
+	return sdkmodule.NewSimulationManager(
 		// Cosmos SDK modules
 		auth.NewAppModule(encCfg.Codec, k.AccountKeeper, nil, k.Subspace(authtypes.ModuleName)),
 		authzmodule.NewAppModule(encCfg.Codec, k.AuthzKeeper, k.AccountKeeper, k.BankKeeper, encCfg.InterfaceRegistry),

@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/query"
+	sdkquery "github.com/cosmos/cosmos-sdk/types/query"
 	"github.com/stretchr/testify/require"
 
 	base "github.com/sentinel-official/hub/v12/types"
@@ -40,11 +40,11 @@ func TestNewQueryAllocationRequest(t *testing.T) {
 
 func TestNewQueryAllocationsRequest(t *testing.T) {
 	var (
-		pagination *query.PageRequest
+		pagination *sdkquery.PageRequest
 	)
 
 	for i := 0; i < 512; i += 64 {
-		pagination = &query.PageRequest{
+		pagination = &sdkquery.PageRequest{
 			Key:        make([]byte, i),
 			Offset:     uint64(i),
 			Limit:      uint64(i),
@@ -77,12 +77,12 @@ func TestNewQuerySubscriptionRequest(t *testing.T) {
 func TestNewQuerySubscriptionsForAccountRequest(t *testing.T) {
 	var (
 		addr       []byte
-		pagination *query.PageRequest
+		pagination *sdkquery.PageRequest
 	)
 
 	for i := 0; i < 512; i += 64 {
 		addr = make([]byte, i)
-		pagination = &query.PageRequest{
+		pagination = &sdkquery.PageRequest{
 			Key:        make([]byte, i),
 			Offset:     uint64(i),
 			Limit:      uint64(i),
@@ -106,12 +106,12 @@ func TestNewQuerySubscriptionsForAccountRequest(t *testing.T) {
 func TestNewQuerySubscriptionsForNodeRequest(t *testing.T) {
 	var (
 		addr       []byte
-		pagination *query.PageRequest
+		pagination *sdkquery.PageRequest
 	)
 
 	for i := 0; i < 512; i += 64 {
 		addr = make([]byte, i)
-		pagination = &query.PageRequest{
+		pagination = &sdkquery.PageRequest{
 			Key:        make([]byte, i),
 			Offset:     uint64(i),
 			Limit:      uint64(i),
@@ -134,11 +134,11 @@ func TestNewQuerySubscriptionsForNodeRequest(t *testing.T) {
 
 func TestNewQuerySubscriptionsForPlanRequest(t *testing.T) {
 	var (
-		pagination *query.PageRequest
+		pagination *sdkquery.PageRequest
 	)
 
 	for i := 0; i < 512; i += 64 {
-		pagination = &query.PageRequest{
+		pagination = &sdkquery.PageRequest{
 			Key:        make([]byte, i),
 			Offset:     uint64(i),
 			Limit:      uint64(i),
@@ -159,11 +159,11 @@ func TestNewQuerySubscriptionsForPlanRequest(t *testing.T) {
 
 func TestNewQuerySubscriptionsRequest(t *testing.T) {
 	var (
-		pagination *query.PageRequest
+		pagination *sdkquery.PageRequest
 	)
 
 	for i := 0; i < 512; i += 64 {
-		pagination = &query.PageRequest{
+		pagination = &sdkquery.PageRequest{
 			Key:        make([]byte, i),
 			Offset:     uint64(i),
 			Limit:      uint64(i),

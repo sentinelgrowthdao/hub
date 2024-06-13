@@ -4,7 +4,7 @@ import (
 	"crypto/rand"
 	"testing"
 
-	"github.com/cosmos/cosmos-sdk/types/query"
+	sdkquery "github.com/cosmos/cosmos-sdk/types/query"
 	"github.com/stretchr/testify/require"
 
 	base "github.com/sentinel-official/hub/v12/types"
@@ -33,12 +33,12 @@ func TestNewQueryNodeRequest(t *testing.T) {
 func TestNewQueryNodesRequest(t *testing.T) {
 	var (
 		status     v1base.Status
-		pagination *query.PageRequest
+		pagination *sdkquery.PageRequest
 	)
 
 	for i := 1; i <= 16; i++ {
 		status = v1base.Status(i % 4)
-		pagination = &query.PageRequest{
+		pagination = &sdkquery.PageRequest{
 			Key:        make([]byte, i),
 			Offset:     uint64(i),
 			Limit:      uint64(i),

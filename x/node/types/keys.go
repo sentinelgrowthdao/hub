@@ -5,7 +5,7 @@ import (
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/address"
+	sdkaddress "github.com/cosmos/cosmos-sdk/types/address"
 
 	base "github.com/sentinel-official/hub/v12/types"
 )
@@ -23,11 +23,11 @@ var (
 )
 
 func ActiveNodeKey(addr base.NodeAddress) []byte {
-	return append(ActiveNodeKeyPrefix, address.MustLengthPrefix(addr.Bytes())...)
+	return append(ActiveNodeKeyPrefix, sdkaddress.MustLengthPrefix(addr.Bytes())...)
 }
 
 func InactiveNodeKey(addr base.NodeAddress) []byte {
-	return append(InactiveNodeKeyPrefix, address.MustLengthPrefix(addr.Bytes())...)
+	return append(InactiveNodeKeyPrefix, sdkaddress.MustLengthPrefix(addr.Bytes())...)
 }
 
 func GetNodeForPlanKeyPrefix(id uint64) []byte {
@@ -35,7 +35,7 @@ func GetNodeForPlanKeyPrefix(id uint64) []byte {
 }
 
 func NodeForPlanKey(id uint64, addr base.NodeAddress) []byte {
-	return append(GetNodeForPlanKeyPrefix(id), address.MustLengthPrefix(addr.Bytes())...)
+	return append(GetNodeForPlanKeyPrefix(id), sdkaddress.MustLengthPrefix(addr.Bytes())...)
 }
 
 func GetNodeForInactiveAtKeyPrefix(at time.Time) []byte {
@@ -43,7 +43,7 @@ func GetNodeForInactiveAtKeyPrefix(at time.Time) []byte {
 }
 
 func NodeForInactiveAtKey(at time.Time, addr base.NodeAddress) []byte {
-	return append(GetNodeForInactiveAtKeyPrefix(at), address.MustLengthPrefix(addr.Bytes())...)
+	return append(GetNodeForInactiveAtKeyPrefix(at), sdkaddress.MustLengthPrefix(addr.Bytes())...)
 }
 
 func AddressFromNodeForPlanKey(key []byte) base.NodeAddress {

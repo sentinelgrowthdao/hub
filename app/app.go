@@ -23,7 +23,7 @@ import (
 	serverconfig "github.com/cosmos/cosmos-sdk/server/config"
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/module"
+	sdkmodule "github.com/cosmos/cosmos-sdk/types/module"
 	authante "github.com/cosmos/cosmos-sdk/x/auth/ante"
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -46,24 +46,14 @@ type App struct {
 	EncodingConfig
 	Keepers
 	StoreKeys
-	mm *module.Manager
-	sm *module.SimulationManager
+	mm *sdkmodule.Manager
+	sm *sdkmodule.SimulationManager
 }
 
 func NewApp(
-	appOpts servertypes.AppOptions,
-	bech32Prefix string,
-	db tmdb.DB,
-	encCfg EncodingConfig,
-	homeDir string,
-	invCheckPeriod uint,
-	loadLatest bool,
-	logger tmlog.Logger,
-	skipGenesisInvariants bool,
-	skipUpgradeHeights map[int64]bool,
-	traceWriter io.Writer,
-	version string,
-	wasmOpts []wasmkeeper.Option,
+	appOpts servertypes.AppOptions, bech32Prefix string, db tmdb.DB, encCfg EncodingConfig, homeDir string,
+	invCheckPeriod uint, loadLatest bool, logger tmlog.Logger, skipGenesisInvariants bool,
+	skipUpgradeHeights map[int64]bool, traceWriter io.Writer, version string, wasmOpts []wasmkeeper.Option,
 	baseAppOpts ...func(*baseapp.BaseApp),
 ) *App {
 	baseApp := baseapp.NewBaseApp(appName, logger, db, encCfg.TxConfig.TxDecoder(), baseAppOpts...)
@@ -97,7 +87,7 @@ func NewApp(
 
 	app.mm.RegisterInvariants(keepers.CrisisKeeper)
 
-	configurator := module.NewConfigurator(encCfg.Codec, app.MsgServiceRouter(), app.GRPCQueryRouter())
+	configurator := sdkmodule.NewConfigurator(encCfg.Codec, app.MsgServiceRouter(), app.GRPCQueryRouter())
 	app.mm.RegisterServices(configurator)
 
 	app.MountKVStores(app.KVKeys())
@@ -152,7 +142,7 @@ func (a *App) LoadHeight(height int64) error {
 	return a.LoadVersion(height)
 }
 
-func (a *App) SimulationManager() *module.SimulationManager {
+func (a *App) SimulationManager() *sdkmodule.SimulationManager {
 	return a.sm
 }
 
@@ -224,7 +214,7 @@ func (a *App) SetUpgradeStoreLoader() {
 	}
 }
 
-func (a *App) SetUpgradeHandler(configurator module.Configurator) {
+func (a *App) SetUpgradeHandler(configurator sdkmodule.Configurator) {
 	a.UpgradeKeeper.SetUpgradeHandler(
 		UpgradeName,
 		UpgradeHandler(a.Codec, a.mm, configurator, a.Keepers),

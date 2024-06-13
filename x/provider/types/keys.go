@@ -1,7 +1,7 @@
 package types
 
 import (
-	"github.com/cosmos/cosmos-sdk/types/address"
+	sdkaddress "github.com/cosmos/cosmos-sdk/types/address"
 
 	base "github.com/sentinel-official/hub/v12/types"
 )
@@ -17,9 +17,9 @@ var (
 )
 
 func ActiveProviderKey(addr base.ProvAddress) []byte {
-	return append(ActiveProviderKeyPrefix, address.MustLengthPrefix(addr.Bytes())...)
+	return append(ActiveProviderKeyPrefix, sdkaddress.MustLengthPrefix(addr.Bytes())...)
 }
 
 func InactiveProviderKey(addr base.ProvAddress) (v []byte) {
-	return append(InactiveProviderKeyPrefix, address.MustLengthPrefix(addr.Bytes())...)
+	return append(InactiveProviderKeyPrefix, sdkaddress.MustLengthPrefix(addr.Bytes())...)
 }

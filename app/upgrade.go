@@ -13,7 +13,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/module"
+	sdkmodule "github.com/cosmos/cosmos-sdk/types/module"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	consensustypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
@@ -54,12 +54,9 @@ var (
 )
 
 func UpgradeHandler(
-	cdc codec.Codec,
-	mm *module.Manager,
-	configurator module.Configurator,
-	keepers Keepers,
+	cdc codec.Codec, mm *sdkmodule.Manager, configurator sdkmodule.Configurator, keepers Keepers,
 ) upgradetypes.UpgradeHandler {
-	return func(ctx sdk.Context, _ upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
+	return func(ctx sdk.Context, _ upgradetypes.Plan, fromVM sdkmodule.VersionMap) (sdkmodule.VersionMap, error) {
 		keyTables := map[string]paramstypes.KeyTable{
 			// Cosmos SDK subspaces
 			authtypes.ModuleName:         authtypes.ParamKeyTable(),
@@ -189,7 +186,9 @@ func deleteInactiveSubscriptionsForAccounts(ctx sdk.Context, k subscriptionkeepe
 	return nil
 }
 
-func completeAllRedelegations(ctx sdk.Context, k *stakingkeeper.Keeper, accAddr sdk.AccAddress, completionTime time.Time) error {
+func completeAllRedelegations(
+	ctx sdk.Context, k *stakingkeeper.Keeper, accAddr sdk.AccAddress, completionTime time.Time,
+) error {
 	for _, item := range k.GetRedelegations(ctx, accAddr, math.MaxInt16) {
 		for i := range item.Entries {
 			item.Entries[i].CompletionTime = completionTime
@@ -257,7 +256,9 @@ func undelegateAllDelegations(ctx sdk.Context, k *stakingkeeper.Keeper, accAddr 
 	return nil
 }
 
-func completeAllUnbondingDelegations(ctx sdk.Context, k *stakingkeeper.Keeper, accAddr sdk.AccAddress, completionTime time.Time) error {
+func completeAllUnbondingDelegations(
+	ctx sdk.Context, k *stakingkeeper.Keeper, accAddr sdk.AccAddress, completionTime time.Time,
+) error {
 	for _, item := range k.GetAllUnbondingDelegations(ctx, accAddr) {
 		for i := range item.Entries {
 			item.Entries[i].CompletionTime = completionTime

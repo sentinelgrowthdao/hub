@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/address"
+	sdkaddress "github.com/cosmos/cosmos-sdk/types/address"
 
 	base "github.com/sentinel-official/hub/v12/types"
 )
@@ -31,7 +31,7 @@ func InactivePlanKey(id uint64) []byte {
 }
 
 func GetPlanForProviderKeyPrefix(addr base.ProvAddress) []byte {
-	return append(PlanForProviderKeyPrefix, address.MustLengthPrefix(addr.Bytes())...)
+	return append(PlanForProviderKeyPrefix, sdkaddress.MustLengthPrefix(addr.Bytes())...)
 }
 
 func PlanForProviderKey(addr base.ProvAddress, id uint64) []byte {

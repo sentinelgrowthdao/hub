@@ -155,17 +155,9 @@ func (k *Keepers) SetParamSubspaces(app *baseapp.BaseApp) {
 }
 
 func NewKeepers(
-	app *baseapp.BaseApp,
-	bech32Prefix string,
-	blockedAddrs map[string]bool,
-	encCfg EncodingConfig,
-	homeDir string,
-	invCheckPeriod uint,
-	keys StoreKeys,
-	mAccPerms map[string][]string,
-	skipUpgradeHeights map[int64]bool,
-	wasmConfig wasmtypes.WasmConfig,
-	wasmOpts []wasmkeeper.Option,
+	app *baseapp.BaseApp, bech32Prefix string, blockedAddrs map[string]bool, encCfg EncodingConfig, homeDir string,
+	invCheckPeriod uint, keys StoreKeys, mAccPerms map[string][]string, skipUpgradeHeights map[int64]bool,
+	wasmConfig wasmtypes.WasmConfig, wasmOpts []wasmkeeper.Option,
 ) (k Keepers) {
 	govModuleAddr := authtypes.NewModuleAddress(govtypes.ModuleName).String()
 

@@ -2,7 +2,7 @@ package v2
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/query"
+	sdkquery "github.com/cosmos/cosmos-sdk/types/query"
 
 	base "github.com/sentinel-official/hub/v12/types"
 )
@@ -13,34 +13,34 @@ func NewQuerySessionRequest(id uint64) *QuerySessionRequest {
 	}
 }
 
-func NewQuerySessionsRequest(pagination *query.PageRequest) *QuerySessionsRequest {
+func NewQuerySessionsRequest(pagination *sdkquery.PageRequest) *QuerySessionsRequest {
 	return &QuerySessionsRequest{
 		Pagination: pagination,
 	}
 }
 
-func NewQuerySessionsForAccountRequest(addr sdk.AccAddress, pagination *query.PageRequest) *QuerySessionsForAccountRequest {
+func NewQuerySessionsForAccountRequest(addr sdk.AccAddress, pagination *sdkquery.PageRequest) *QuerySessionsForAccountRequest {
 	return &QuerySessionsForAccountRequest{
 		Address:    addr.String(),
 		Pagination: pagination,
 	}
 }
 
-func NewQuerySessionsForNodeRequest(addr base.NodeAddress, pagination *query.PageRequest) *QuerySessionsForNodeRequest {
+func NewQuerySessionsForNodeRequest(addr base.NodeAddress, pagination *sdkquery.PageRequest) *QuerySessionsForNodeRequest {
 	return &QuerySessionsForNodeRequest{
 		Address:    addr.String(),
 		Pagination: pagination,
 	}
 }
 
-func NewQuerySessionsForSubscriptionRequest(id uint64, pagination *query.PageRequest) *QuerySessionsForSubscriptionRequest {
+func NewQuerySessionsForSubscriptionRequest(id uint64, pagination *sdkquery.PageRequest) *QuerySessionsForSubscriptionRequest {
 	return &QuerySessionsForSubscriptionRequest{
 		Id:         id,
 		Pagination: pagination,
 	}
 }
 
-func NewQuerySessionsForAllocationRequest(id uint64, addr sdk.AccAddress, pagination *query.PageRequest) *QuerySessionsForAllocationRequest {
+func NewQuerySessionsForAllocationRequest(id uint64, addr sdk.AccAddress, pagination *sdkquery.PageRequest) *QuerySessionsForAllocationRequest {
 	return &QuerySessionsForAllocationRequest{
 		Id:         id,
 		Address:    addr.String(),

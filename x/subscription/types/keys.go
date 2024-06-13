@@ -5,7 +5,7 @@ import (
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/address"
+	sdkaddress "github.com/cosmos/cosmos-sdk/types/address"
 
 	base "github.com/sentinel-official/hub/v12/types"
 )
@@ -38,7 +38,7 @@ func SubscriptionKey(id uint64) []byte {
 }
 
 func GetSubscriptionForAccountKeyPrefix(addr sdk.AccAddress) []byte {
-	return append(SubscriptionForAccountKeyPrefix, address.MustLengthPrefix(addr.Bytes())...)
+	return append(SubscriptionForAccountKeyPrefix, sdkaddress.MustLengthPrefix(addr.Bytes())...)
 }
 
 func SubscriptionForAccountKey(addr sdk.AccAddress, id uint64) []byte {
@@ -46,7 +46,7 @@ func SubscriptionForAccountKey(addr sdk.AccAddress, id uint64) []byte {
 }
 
 func GetSubscriptionForNodeKeyPrefix(addr base.NodeAddress) []byte {
-	return append(SubscriptionForNodeKeyPrefix, address.MustLengthPrefix(addr.Bytes())...)
+	return append(SubscriptionForNodeKeyPrefix, sdkaddress.MustLengthPrefix(addr.Bytes())...)
 }
 
 func SubscriptionForNodeKey(addr base.NodeAddress, id uint64) []byte {
@@ -74,7 +74,7 @@ func GetAllocationForSubscriptionKeyPrefix(id uint64) []byte {
 }
 
 func AllocationKey(id uint64, addr sdk.AccAddress) []byte {
-	return append(GetAllocationForSubscriptionKeyPrefix(id), address.MustLengthPrefix(addr.Bytes())...)
+	return append(GetAllocationForSubscriptionKeyPrefix(id), sdkaddress.MustLengthPrefix(addr.Bytes())...)
 }
 
 func PayoutKey(id uint64) []byte {
@@ -90,7 +90,7 @@ func PayoutForNextAtKey(at time.Time, id uint64) []byte {
 }
 
 func GetPayoutForAccountKeyPrefix(addr sdk.AccAddress) []byte {
-	return append(PayoutForAccountKeyPrefix, address.MustLengthPrefix(addr.Bytes())...)
+	return append(PayoutForAccountKeyPrefix, sdkaddress.MustLengthPrefix(addr.Bytes())...)
 }
 
 func PayoutForAccountKey(addr sdk.AccAddress, id uint64) []byte {
@@ -98,7 +98,7 @@ func PayoutForAccountKey(addr sdk.AccAddress, id uint64) []byte {
 }
 
 func GetPayoutForNodeKeyPrefix(addr base.NodeAddress) []byte {
-	return append(PayoutForNodeKeyPrefix, address.MustLengthPrefix(addr.Bytes())...)
+	return append(PayoutForNodeKeyPrefix, sdkaddress.MustLengthPrefix(addr.Bytes())...)
 }
 
 func PayoutForNodeKey(addr base.NodeAddress, id uint64) []byte {
@@ -106,7 +106,7 @@ func PayoutForNodeKey(addr base.NodeAddress, id uint64) []byte {
 }
 
 func GetPayoutForAccountByNodeKeyPrefix(accAddr sdk.AccAddress, nodeAddr base.NodeAddress) (key []byte) {
-	return append(append(PayoutForAccountByNodeKeyPrefix, address.MustLengthPrefix(accAddr.Bytes())...), address.MustLengthPrefix(nodeAddr.Bytes())...)
+	return append(append(PayoutForAccountByNodeKeyPrefix, sdkaddress.MustLengthPrefix(accAddr.Bytes())...), sdkaddress.MustLengthPrefix(nodeAddr.Bytes())...)
 }
 
 func PayoutForAccountByNodeKey(accAddr sdk.AccAddress, nodeAddr base.NodeAddress, id uint64) []byte {

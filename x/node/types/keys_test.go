@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/address"
+	sdkaddress "github.com/cosmos/cosmos-sdk/types/address"
 	"github.com/stretchr/testify/require"
 
 	base "github.com/sentinel-official/hub/v12/types"
@@ -23,7 +23,7 @@ func TestActiveNodeKey(t *testing.T) {
 		if i < 256 {
 			require.Equal(
 				t,
-				append(ActiveNodeKeyPrefix, address.MustLengthPrefix(addr)...),
+				append(ActiveNodeKeyPrefix, sdkaddress.MustLengthPrefix(addr)...),
 				ActiveNodeKey(addr),
 			)
 
@@ -86,7 +86,7 @@ func TestInactiveNodeKey(t *testing.T) {
 		if i < 256 {
 			require.Equal(
 				t,
-				append(InactiveNodeKeyPrefix, address.MustLengthPrefix(addr)...),
+				append(InactiveNodeKeyPrefix, sdkaddress.MustLengthPrefix(addr)...),
 				InactiveNodeKey(addr),
 			)
 
@@ -111,7 +111,7 @@ func TestNodeForInactiveAtKey(t *testing.T) {
 		if i < 256 {
 			require.Equal(
 				t,
-				append(append(NodeForInactiveAtKeyPrefix, sdk.FormatTimeBytes(base.TestTimeNow)...), address.MustLengthPrefix(addr)...),
+				append(append(NodeForInactiveAtKeyPrefix, sdk.FormatTimeBytes(base.TestTimeNow)...), sdkaddress.MustLengthPrefix(addr)...),
 				NodeForInactiveAtKey(base.TestTimeNow, addr),
 			)
 
@@ -138,7 +138,7 @@ func TestNodeForPlanKey(t *testing.T) {
 		if i < 256 {
 			require.Equal(
 				t,
-				append(append(NodeForPlanKeyPrefix, sdk.Uint64ToBigEndian(id)...), address.MustLengthPrefix(addr)...),
+				append(append(NodeForPlanKeyPrefix, sdk.Uint64ToBigEndian(id)...), sdkaddress.MustLengthPrefix(addr)...),
 				NodeForPlanKey(id, addr),
 			)
 

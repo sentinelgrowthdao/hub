@@ -5,7 +5,7 @@ import (
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/address"
+	sdkaddress "github.com/cosmos/cosmos-sdk/types/address"
 
 	base "github.com/sentinel-official/hub/v12/types"
 )
@@ -30,7 +30,7 @@ func SessionKey(id uint64) []byte {
 }
 
 func GetSessionForAccountKeyPrefix(addr sdk.AccAddress) []byte {
-	return append(SessionForAccountKeyPrefix, address.MustLengthPrefix(addr.Bytes())...)
+	return append(SessionForAccountKeyPrefix, sdkaddress.MustLengthPrefix(addr.Bytes())...)
 }
 
 func SessionForAccountKey(addr sdk.AccAddress, id uint64) []byte {
@@ -38,7 +38,7 @@ func SessionForAccountKey(addr sdk.AccAddress, id uint64) []byte {
 }
 
 func GetSessionForNodeKeyPrefix(addr base.NodeAddress) []byte {
-	return append(SessionForNodeKeyPrefix, address.MustLengthPrefix(addr.Bytes())...)
+	return append(SessionForNodeKeyPrefix, sdkaddress.MustLengthPrefix(addr.Bytes())...)
 }
 
 func SessionForNodeKey(addr base.NodeAddress, id uint64) []byte {
@@ -54,7 +54,7 @@ func SessionForSubscriptionKey(subscriptionID, sessionID uint64) []byte {
 }
 
 func GetSessionForAllocationKeyPrefix(id uint64, addr sdk.AccAddress) []byte {
-	return append(SessionForAllocationKeyPrefix, append(sdk.Uint64ToBigEndian(id), address.MustLengthPrefix(addr)...)...)
+	return append(SessionForAllocationKeyPrefix, append(sdk.Uint64ToBigEndian(id), sdkaddress.MustLengthPrefix(addr)...)...)
 }
 
 func SessionForAllocationKey(subscriptionID uint64, addr sdk.AccAddress, sessionID uint64) []byte {

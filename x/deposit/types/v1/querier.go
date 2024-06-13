@@ -2,7 +2,7 @@ package v1
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/query"
+	sdkquery "github.com/cosmos/cosmos-sdk/types/query"
 )
 
 func NewQueryDepositRequest(addr sdk.AccAddress) *QueryDepositRequest {
@@ -11,7 +11,7 @@ func NewQueryDepositRequest(addr sdk.AccAddress) *QueryDepositRequest {
 	}
 }
 
-func NewQueryDepositsRequest(pagination *query.PageRequest) *QueryDepositsRequest {
+func NewQueryDepositsRequest(pagination *sdkquery.PageRequest) *QueryDepositsRequest {
 	return &QueryDepositsRequest{
 		Pagination: pagination,
 	}

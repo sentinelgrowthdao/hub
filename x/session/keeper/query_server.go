@@ -6,7 +6,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/query"
+	sdkquery "github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -53,7 +53,7 @@ func (q *queryServer) QuerySessions(c context.Context, req *v2.QuerySessionsRequ
 		store = prefix.NewStore(q.Store(ctx), types.SessionKeyPrefix)
 	)
 
-	pagination, err := query.Paginate(store, req.Pagination, func(_, value []byte) error {
+	pagination, err := sdkquery.Paginate(store, req.Pagination, func(_, value []byte) error {
 		var item v2.Session
 		if err := q.cdc.Unmarshal(value, &item); err != nil {
 			return err
@@ -86,7 +86,7 @@ func (q *queryServer) QuerySessionsForAccount(c context.Context, req *v2.QuerySe
 		store = prefix.NewStore(q.Store(ctx), types.GetSessionForAccountKeyPrefix(addr))
 	)
 
-	pagination, err := query.Paginate(store, req.Pagination, func(key, _ []byte) error {
+	pagination, err := sdkquery.Paginate(store, req.Pagination, func(key, _ []byte) error {
 		item, found := q.GetSession(ctx, sdk.BigEndianToUint64(key))
 		if !found {
 			return fmt.Errorf("session for key %X does not exist", key)
@@ -119,7 +119,7 @@ func (q *queryServer) QuerySessionsForNode(c context.Context, req *v2.QuerySessi
 		store = prefix.NewStore(q.Store(ctx), types.GetSessionForNodeKeyPrefix(addr))
 	)
 
-	pagination, err := query.Paginate(store, req.Pagination, func(key, _ []byte) error {
+	pagination, err := sdkquery.Paginate(store, req.Pagination, func(key, _ []byte) error {
 		item, found := q.GetSession(ctx, sdk.BigEndianToUint64(key))
 		if !found {
 			return fmt.Errorf("session for key %X does not exist", key)
@@ -147,7 +147,7 @@ func (q *queryServer) QuerySessionsForSubscription(c context.Context, req *v2.Qu
 		store = prefix.NewStore(q.Store(ctx), types.GetSessionForSubscriptionKeyPrefix(req.Id))
 	)
 
-	pagination, err := query.Paginate(store, req.Pagination, func(key, _ []byte) error {
+	pagination, err := sdkquery.Paginate(store, req.Pagination, func(key, _ []byte) error {
 		item, found := q.GetSession(ctx, sdk.BigEndianToUint64(key))
 		if !found {
 			return fmt.Errorf("session for key %X does not exist", key)
@@ -180,7 +180,7 @@ func (q *queryServer) QuerySessionsForAllocation(c context.Context, req *v2.Quer
 		store = prefix.NewStore(q.Store(ctx), types.GetSessionForAllocationKeyPrefix(req.Id, addr))
 	)
 
-	pagination, err := query.Paginate(store, req.Pagination, func(key, _ []byte) error {
+	pagination, err := sdkquery.Paginate(store, req.Pagination, func(key, _ []byte) error {
 		item, found := q.GetSession(ctx, sdk.BigEndianToUint64(key))
 		if !found {
 			return fmt.Errorf("session for key %X does not exist", key)

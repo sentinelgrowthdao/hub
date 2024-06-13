@@ -7,7 +7,7 @@ import (
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/query"
+	sdkquery "github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -59,7 +59,7 @@ func (q *queryServer) QuerySubscriptions(c context.Context, req *v2.QuerySubscri
 		store = prefix.NewStore(q.Store(ctx), types.SubscriptionKeyPrefix)
 	)
 
-	pagination, err := query.Paginate(store, req.Pagination, func(_, value []byte) error {
+	pagination, err := sdkquery.Paginate(store, req.Pagination, func(_, value []byte) error {
 		var v v2.Subscription
 		if err := q.cdc.UnmarshalInterface(value, &v); err != nil {
 			return err
@@ -97,7 +97,7 @@ func (q *queryServer) QuerySubscriptionsForAccount(c context.Context, req *v2.Qu
 		store = prefix.NewStore(q.Store(ctx), types.GetSubscriptionForAccountKeyPrefix(addr))
 	)
 
-	pagination, err := query.Paginate(store, req.Pagination, func(key, _ []byte) error {
+	pagination, err := sdkquery.Paginate(store, req.Pagination, func(key, _ []byte) error {
 		v, found := q.GetSubscription(ctx, sdk.BigEndianToUint64(key))
 		if !found {
 			return fmt.Errorf("subscription for key %X does not exist", key)
@@ -135,7 +135,7 @@ func (q *queryServer) QuerySubscriptionsForNode(c context.Context, req *v2.Query
 		store = prefix.NewStore(q.Store(ctx), types.GetSubscriptionForNodeKeyPrefix(addr))
 	)
 
-	pagination, err := query.Paginate(store, req.Pagination, func(key, _ []byte) error {
+	pagination, err := sdkquery.Paginate(store, req.Pagination, func(key, _ []byte) error {
 		v, found := q.GetSubscription(ctx, sdk.BigEndianToUint64(key))
 		if !found {
 			return fmt.Errorf("subscription for key %X does not exist", key)
@@ -168,7 +168,7 @@ func (q *queryServer) QuerySubscriptionsForPlan(c context.Context, req *v2.Query
 		store = prefix.NewStore(q.Store(ctx), types.GetSubscriptionForPlanKeyPrefix(req.Id))
 	)
 
-	pagination, err := query.Paginate(store, req.Pagination, func(key, _ []byte) error {
+	pagination, err := sdkquery.Paginate(store, req.Pagination, func(key, _ []byte) error {
 		v, found := q.GetSubscription(ctx, sdk.BigEndianToUint64(key))
 		if !found {
 			return fmt.Errorf("subscription for key %X does not exist", key)
@@ -221,7 +221,7 @@ func (q *queryServer) QueryAllocations(c context.Context, req *v2.QueryAllocatio
 		store = prefix.NewStore(q.Store(ctx), types.GetAllocationForSubscriptionKeyPrefix(req.Id))
 	)
 
-	pagination, err := query.Paginate(store, req.Pagination, func(_, value []byte) error {
+	pagination, err := sdkquery.Paginate(store, req.Pagination, func(_, value []byte) error {
 		var item v2.Allocation
 		if err := q.cdc.Unmarshal(value, &item); err != nil {
 			return err
@@ -264,7 +264,7 @@ func (q *queryServer) QueryPayouts(c context.Context, req *v2.QueryPayoutsReques
 		store = prefix.NewStore(q.Store(ctx), types.PayoutKeyPrefix)
 	)
 
-	pagination, err := query.Paginate(store, req.Pagination, func(_, value []byte) error {
+	pagination, err := sdkquery.Paginate(store, req.Pagination, func(_, value []byte) error {
 		var item v2.Payout
 		if err := q.cdc.Unmarshal(value, &item); err != nil {
 			return err
@@ -297,7 +297,7 @@ func (q *queryServer) QueryPayoutsForAccount(c context.Context, req *v2.QueryPay
 		store = prefix.NewStore(q.Store(ctx), types.GetPayoutForAccountKeyPrefix(addr))
 	)
 
-	pagination, err := query.Paginate(store, req.Pagination, func(key, _ []byte) error {
+	pagination, err := sdkquery.Paginate(store, req.Pagination, func(key, _ []byte) error {
 		item, found := q.GetPayout(ctx, sdk.BigEndianToUint64(key))
 		if !found {
 			return fmt.Errorf("payout for key %X does not exist", key)
@@ -330,7 +330,7 @@ func (q *queryServer) QueryPayoutsForNode(c context.Context, req *v2.QueryPayout
 		store = prefix.NewStore(q.Store(ctx), types.GetPayoutForNodeKeyPrefix(addr))
 	)
 
-	pagination, err := query.Paginate(store, req.Pagination, func(key, _ []byte) error {
+	pagination, err := sdkquery.Paginate(store, req.Pagination, func(key, _ []byte) error {
 		item, found := q.GetPayout(ctx, sdk.BigEndianToUint64(key))
 		if !found {
 			return fmt.Errorf("payout for key %X does not exist", key)

@@ -6,7 +6,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/query"
+	sdkquery "github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -64,7 +64,7 @@ func (q *queryServer) QueryPlans(c context.Context, req *v2.QueryPlansRequest) (
 	}
 
 	store := prefix.NewStore(q.Store(ctx), keyPrefix)
-	pagination, err := query.Paginate(store, req.Pagination, func(_, value []byte) error {
+	pagination, err := sdkquery.Paginate(store, req.Pagination, func(_, value []byte) error {
 		var item v2.Plan
 		if err := q.cdc.Unmarshal(value, &item); err != nil {
 			return err
@@ -97,7 +97,7 @@ func (q *queryServer) QueryPlansForProvider(c context.Context, req *v2.QueryPlan
 		store = prefix.NewStore(q.Store(ctx), types.GetPlanForProviderKeyPrefix(addr))
 	)
 
-	pagination, err := query.FilteredPaginate(store, req.Pagination, func(key, _ []byte, accumulate bool) (bool, error) {
+	pagination, err := sdkquery.FilteredPaginate(store, req.Pagination, func(key, _ []byte, accumulate bool) (bool, error) {
 		if !accumulate {
 			return false, nil
 		}

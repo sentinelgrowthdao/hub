@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/bech32"
+	sdkbech32 "github.com/cosmos/cosmos-sdk/types/bech32"
 	"gopkg.in/yaml.v3"
 )
 
@@ -95,7 +95,7 @@ func (p ProvAddress) String() string {
 		return ""
 	}
 
-	str, err := bech32.ConvertAndEncode(GetConfig().GetBech32ProviderAddrPrefix(), p.Bytes())
+	str, err := sdkbech32.ConvertAndEncode(GetConfig().GetBech32ProviderAddrPrefix(), p.Bytes())
 	if err != nil {
 		panic(err)
 	}
@@ -201,7 +201,7 @@ func (n NodeAddress) String() string {
 		return ""
 	}
 
-	str, err := bech32.ConvertAndEncode(GetConfig().GetBech32NodeAddrPrefix(), n.Bytes())
+	str, err := sdkbech32.ConvertAndEncode(GetConfig().GetBech32NodeAddrPrefix(), n.Bytes())
 	if err != nil {
 		panic(err)
 	}
