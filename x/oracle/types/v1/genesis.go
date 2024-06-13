@@ -1,4 +1,4 @@
-package types
+package v1
 
 func NewGenesisState() *GenesisState {
 	return &GenesisState{}

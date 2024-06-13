@@ -1,4 +1,4 @@
-package types
+package v1
 
 import (
 	abcitypes "github.com/cometbft/cometbft/abci/types"

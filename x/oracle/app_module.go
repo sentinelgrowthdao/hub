@@ -16,6 +16,7 @@ import (
 	"github.com/sentinel-official/hub/v12/x/oracle/client/cli"
 	"github.com/sentinel-official/hub/v12/x/oracle/keeper"
 	"github.com/sentinel-official/hub/v12/x/oracle/types"
+	"github.com/sentinel-official/hub/v12/x/oracle/types/v1"
 )
 
 var (
@@ -35,7 +36,7 @@ func (amb AppModuleBasic) Name() string { return types.ModuleName }
 func (amb AppModuleBasic) RegisterLegacyAminoCodec(_ *codec.LegacyAmino) {}
 
 func (amb AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry) {
-	types.RegisterInterfaces(registry)
+	v1.RegisterInterfaces(registry)
 }
 
 func (amb AppModuleBasic) RegisterGRPCGatewayRoutes(context client.Context, mux *runtime.ServeMux) {}
@@ -60,12 +61,12 @@ func NewAppModule(k keeper.Keeper) AppModule {
 }
 
 func (am AppModule) DefaultGenesis(jsonCodec codec.JSONCodec) json.RawMessage {
-	state := types.DefaultGenesisState()
+	state := v1.DefaultGenesisState()
 	return jsonCodec.MustMarshalJSON(state)
 }
 
 func (am AppModule) ValidateGenesis(jsonCodec codec.JSONCodec, _ client.TxEncodingConfig, message json.RawMessage) error {
-	var state types.GenesisState
+	var state v1.GenesisState
 	if err := jsonCodec.UnmarshalJSON(message, &state); err != nil {
 		return err
 	}
@@ -74,7 +75,7 @@ func (am AppModule) ValidateGenesis(jsonCodec codec.JSONCodec, _ client.TxEncodi
 }
 
 func (am AppModule) InitGenesis(ctx sdk.Context, jsonCodec codec.JSONCodec, message json.RawMessage) []abcitypes.ValidatorUpdate {
-	var state types.GenesisState
+	var state v1.GenesisState
 	jsonCodec.MustUnmarshalJSON(message, &state)
 	am.keeper.InitGenesis(ctx, &state)
 
@@ -103,5 +104,5 @@ func (am AppModule) EndBlock(ctx sdk.Context, req abcitypes.RequestEndBlock) []a
 func (am AppModule) ConsensusVersion() uint64 { return 1 }
 
 func (am AppModule) RegisterServices(configurator sdkmodule.Configurator) {
-	types.RegisterMsgServiceServer(configurator.MsgServer(), keeper.NewMsgServiceServer(am.keeper))
+	v1.RegisterMsgServiceServer(configurator.MsgServer(), keeper.NewMsgServiceServer(am.keeper))
 }

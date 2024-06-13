@@ -6,9 +6,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sentinel-official/hub/v12/x/oracle/types"
+	"github.com/sentinel-official/hub/v12/x/oracle/types/v1"
 )
 
-func (k *Keeper) SetParams(ctx sdk.Context, params types.Params) {
+func (k *Keeper) SetParams(ctx sdk.Context, params v1.Params) {
 	var (
 		store = k.Store(ctx)
 		value = k.cdc.MustMarshal(&params)
@@ -17,7 +18,7 @@ func (k *Keeper) SetParams(ctx sdk.Context, params types.Params) {
 	store.Set(types.ParamsKey, value)
 }
 
-func (k *Keeper) GetParams(ctx sdk.Context) (v types.Params) {
+func (k *Keeper) GetParams(ctx sdk.Context) (v v1.Params) {
 	var (
 		store = k.Store(ctx)
 		value = store.Get(types.ParamsKey)

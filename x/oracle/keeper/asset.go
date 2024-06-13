@@ -6,9 +6,10 @@ import (
 	protobuf "github.com/gogo/protobuf/types"
 
 	"github.com/sentinel-official/hub/v12/x/oracle/types"
+	"github.com/sentinel-official/hub/v12/x/oracle/types/v1"
 )
 
-func (k *Keeper) SetAsset(ctx sdk.Context, asset types.Asset) {
+func (k *Keeper) SetAsset(ctx sdk.Context, asset v1.Asset) {
 	var (
 		store = k.Store(ctx)
 		key   = types.AssetKey(asset.Denom)
@@ -18,7 +19,7 @@ func (k *Keeper) SetAsset(ctx sdk.Context, asset types.Asset) {
 	store.Set(key, value)
 }
 
-func (k *Keeper) GetAsset(ctx sdk.Context, denom string) (v types.Asset, found bool) {
+func (k *Keeper) GetAsset(ctx sdk.Context, denom string) (v v1.Asset, found bool) {
 	var (
 		store = k.Store(ctx)
 		key   = types.AssetKey(denom)
@@ -42,14 +43,14 @@ func (k *Keeper) DeleteAsset(ctx sdk.Context, denom string) {
 	store.Delete(key)
 }
 
-func (k *Keeper) IterateAssets(ctx sdk.Context, fn func(int, types.Asset) bool) {
+func (k *Keeper) IterateAssets(ctx sdk.Context, fn func(int, v1.Asset) bool) {
 	store := k.Store(ctx)
 
 	iter := sdk.KVStorePrefixIterator(store, types.AssetKeyPrefix)
 	defer iter.Close()
 
 	for i := 0; iter.Valid(); iter.Next() {
-		var item types.Asset
+		var item v1.Asset
 		k.cdc.MustUnmarshal(iter.Value(), &item)
 
 		if stop := fn(i, item); stop {
@@ -96,7 +97,7 @@ func (k *Keeper) DeleteDenomForPacket(ctx sdk.Context, portID, channelID string,
 	store.Delete(key)
 }
 
-func (k *Keeper) GetAssetForPacket(ctx sdk.Context, portID, channelID string, sequence uint64) (v types.Asset, err error) {
+func (k *Keeper) GetAssetForPacket(ctx sdk.Context, portID, channelID string, sequence uint64) (v v1.Asset, err error) {
 	denom, found := k.GetDenomForPacket(ctx, portID, channelID, sequence)
 	if !found {
 		return v, types.NewErrorDenomtNotFound(portID, channelID, sequence)
