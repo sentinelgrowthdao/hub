@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/sentinel-official/hub/v12/x/swap/types"
+	"github.com/sentinel-official/hub/v12/x/swap/types/v1"
 )
 
 func querySwap() *cobra.Command {
@@ -30,12 +31,12 @@ func querySwap() *cobra.Command {
 			}
 
 			var (
-				qc = types.NewQueryServiceClient(ctx)
+				qc = v1.NewQueryServiceClient(ctx)
 			)
 
 			res, err := qc.QuerySwap(
 				context.Background(),
-				types.NewQuerySwapRequest(
+				v1.NewQuerySwapRequest(
 					types.BytesToHash(txHash),
 				),
 			)
@@ -68,12 +69,12 @@ func querySwaps() *cobra.Command {
 			}
 
 			var (
-				qc = types.NewQueryServiceClient(ctx)
+				qc = v1.NewQueryServiceClient(ctx)
 			)
 
 			res, err := qc.QuerySwaps(
 				context.Background(),
-				types.NewQuerySwapsRequest(
+				v1.NewQuerySwapsRequest(
 					pagination,
 				),
 			)
@@ -102,12 +103,12 @@ func queryParams() *cobra.Command {
 			}
 
 			var (
-				qc = types.NewQueryServiceClient(ctx)
+				qc = v1.NewQueryServiceClient(ctx)
 			)
 
 			res, err := qc.QueryParams(
 				context.Background(),
-				types.NewQueryParamsRequest(),
+				v1.NewQueryParamsRequest(),
 			)
 			if err != nil {
 				return err

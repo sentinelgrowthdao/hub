@@ -14,6 +14,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/sentinel-official/hub/v12/x/swap/types"
+	"github.com/sentinel-official/hub/v12/x/swap/types/v1"
 )
 
 func txSwap() *cobra.Command {
@@ -42,7 +43,7 @@ func txSwap() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgSwapRequest(
+			msg := v1.NewMsgSwapRequest(
 				ctx.FromAddress,
 				types.BytesToHash(txHash),
 				receiver,

@@ -1,4 +1,4 @@
-package types
+package v1
 
 import (
 	"crypto/rand"
@@ -6,6 +6,8 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"github.com/stretchr/testify/require"
+
+	"github.com/sentinel-official/hub/v12/x/swap/types"
 )
 
 func TestNewQueryParamsRequest(t *testing.T) {
@@ -28,9 +30,9 @@ func TestNewQuerySwapRequest(t *testing.T) {
 		require.Equal(
 			t,
 			&QuerySwapRequest{
-				TxHash: BytesToHash(bytes).Bytes(),
+				TxHash: types.BytesToHash(bytes).Bytes(),
 			},
-			NewQuerySwapRequest(BytesToHash(bytes)),
+			NewQuerySwapRequest(types.BytesToHash(bytes)),
 		)
 	}
 }

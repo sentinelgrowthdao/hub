@@ -10,21 +10,22 @@ import (
 	"google.golang.org/grpc/status"
 
 	"github.com/sentinel-official/hub/v12/x/swap/types"
+	"github.com/sentinel-official/hub/v12/x/swap/types/v1"
 )
 
 var (
-	_ types.QueryServiceServer = (*queryServer)(nil)
+	_ v1.QueryServiceServer = (*queryServer)(nil)
 )
 
 type queryServer struct {
 	Keeper
 }
 
-func NewQueryServiceServer(keeper Keeper) types.QueryServiceServer {
+func NewQueryServiceServer(keeper Keeper) v1.QueryServiceServer {
 	return &queryServer{Keeper: keeper}
 }
 
-func (q *queryServer) QuerySwap(c context.Context, req *types.QuerySwapRequest) (*types.QuerySwapResponse, error) {
+func (q *queryServer) QuerySwap(c context.Context, req *v1.QuerySwapRequest) (*v1.QuerySwapResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -39,23 +40,23 @@ func (q *queryServer) QuerySwap(c context.Context, req *types.QuerySwapRequest) 
 		return nil, status.Errorf(codes.NotFound, "swap does not exist for hash %X", req.TxHash)
 	}
 
-	return &types.QuerySwapResponse{Swap: item}, nil
+	return &v1.QuerySwapResponse{Swap: item}, nil
 }
 
-func (q *queryServer) QuerySwaps(c context.Context, req *types.QuerySwapsRequest) (*types.QuerySwapsResponse, error) {
+func (q *queryServer) QuerySwaps(c context.Context, req *v1.QuerySwapsRequest) (*v1.QuerySwapsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	var (
-		items types.Swaps
+		items v1.Swaps
 		ctx   = sdk.UnwrapSDKContext(c)
 		store = prefix.NewStore(q.Store(ctx), types.SwapKeyPrefix)
 	)
 
 	pagination, err := query.FilteredPaginate(store, req.Pagination, func(_, value []byte, accumulate bool) (bool, error) {
 		if accumulate {
-			var item types.Swap
+			var item v1.Swap
 			if err := q.cdc.Unmarshal(value, &item); err != nil {
 				return false, err
 			}
@@ -70,14 +71,14 @@ func (q *queryServer) QuerySwaps(c context.Context, req *types.QuerySwapsRequest
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QuerySwapsResponse{Swaps: items, Pagination: pagination}, nil
+	return &v1.QuerySwapsResponse{Swaps: items, Pagination: pagination}, nil
 }
 
-func (q *queryServer) QueryParams(c context.Context, _ *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
+func (q *queryServer) QueryParams(c context.Context, _ *v1.QueryParamsRequest) (*v1.QueryParamsResponse, error) {
 	var (
 		ctx    = sdk.UnwrapSDKContext(c)
 		params = q.GetParams(ctx)
 	)
 
-	return &types.QueryParamsResponse{Params: params}, nil
+	return &v1.QueryParamsResponse{Params: params}, nil
 }

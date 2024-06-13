@@ -6,21 +6,22 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sentinel-official/hub/v12/x/swap/types"
+	"github.com/sentinel-official/hub/v12/x/swap/types/v1"
 )
 
 var (
-	_ types.MsgServiceServer = (*msgServer)(nil)
+	_ v1.MsgServiceServer = (*msgServer)(nil)
 )
 
 type msgServer struct {
 	Keeper
 }
 
-func NewMsgServiceServer(keeper Keeper) types.MsgServiceServer {
+func NewMsgServiceServer(keeper Keeper) v1.MsgServiceServer {
 	return &msgServer{Keeper: keeper}
 }
 
-func (k msgServer) MsgSwap(c context.Context, msg *types.MsgSwapRequest) (*types.MsgSwapResponse, error) {
+func (k msgServer) MsgSwap(c context.Context, msg *v1.MsgSwapRequest) (*v1.MsgSwapResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
 
 	if !k.SwapEnabled(ctx) {
@@ -35,7 +36,7 @@ func (k msgServer) MsgSwap(c context.Context, msg *types.MsgSwapRequest) (*types
 
 	var (
 		coin = sdk.NewCoin(k.SwapDenom(ctx), msg.Amount.Quo(types.PrecisionLoss))
-		swap = types.Swap{
+		swap = v1.Swap{
 			TxHash:   msg.TxHash,
 			Receiver: msg.Receiver,
 			Amount:   coin,
@@ -56,11 +57,11 @@ func (k msgServer) MsgSwap(c context.Context, msg *types.MsgSwapRequest) (*types
 
 	k.SetSwap(ctx, swap)
 	ctx.EventManager().EmitTypedEvent(
-		&types.EventSwap{
+		&v1.EventSwap{
 			TxHash:   swap.TxHash,
 			Receiver: swap.Receiver,
 		},
 	)
 
-	return &types.MsgSwapResponse{}, nil
+	return &v1.MsgSwapResponse{}, nil
 }

@@ -1,10 +1,12 @@
-package types
+package v1
 
 import (
 	"github.com/cosmos/cosmos-sdk/types/query"
+
+	"github.com/sentinel-official/hub/v12/x/swap/types"
 )
 
-func NewQuerySwapRequest(txHash EthereumHash) *QuerySwapRequest {
+func NewQuerySwapRequest(txHash types.EthereumHash) *QuerySwapRequest {
 	return &QuerySwapRequest{
 		TxHash: txHash.Bytes(),
 	}
