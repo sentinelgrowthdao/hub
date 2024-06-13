@@ -8,7 +8,7 @@ import (
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	proto "github.com/cosmos/gogoproto/proto"
 	github_com_cosmos_gogoproto_types "github.com/cosmos/gogoproto/types"
-	types "github.com/sentinel-official/hub/v12/types"
+	v1 "github.com/sentinel-official/hub/v12/types/v1"
 	_ "google.golang.org/protobuf/types/known/durationpb"
 	io "io"
 	math "math"
@@ -33,7 +33,7 @@ type Proof struct {
 	// Field 1: Identifier of the proof.
 	ID uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	// Field 2: Bandwidth information for the proof.
-	Bandwidth types.Bandwidth `protobuf:"bytes,2,opt,name=bandwidth,proto3" json:"bandwidth"`
+	Bandwidth v1.Bandwidth `protobuf:"bytes,2,opt,name=bandwidth,proto3" json:"bandwidth"`
 	// Field 3: Duration of the proof.
 	Duration time.Duration `protobuf:"bytes,3,opt,name=duration,proto3,stdduration" json:"duration"`
 }

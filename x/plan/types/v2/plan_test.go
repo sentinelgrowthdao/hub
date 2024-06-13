@@ -8,6 +8,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 )
 
 func TestPlan_GetProviderAddress(t *testing.T) {
@@ -183,7 +184,7 @@ func TestPlan_Validate(t *testing.T) {
 		Duration        time.Duration
 		Gigabytes       int64
 		Prices          sdk.Coins
-		Status          base.Status
+		Status          v1base.Status
 		StatusAt        time.Time
 	}
 	tests := []struct {
@@ -206,7 +207,7 @@ func TestPlan_Validate(t *testing.T) {
 				Duration:        1000,
 				Gigabytes:       1000,
 				Prices:          base.TestCoinsPositiveAmount,
-				Status:          base.StatusActive,
+				Status:          v1base.StatusActive,
 				StatusAt:        base.TestTimeNow,
 			},
 			false,
@@ -243,7 +244,7 @@ func TestPlan_Validate(t *testing.T) {
 				Duration:        1000,
 				Gigabytes:       1000,
 				Prices:          base.TestCoinsPositiveAmount,
-				Status:          base.StatusActive,
+				Status:          v1base.StatusActive,
 				StatusAt:        base.TestTimeNow,
 			},
 			false,
@@ -256,7 +257,7 @@ func TestPlan_Validate(t *testing.T) {
 				Duration:        1000,
 				Gigabytes:       1000,
 				Prices:          base.TestCoinsPositiveAmount,
-				Status:          base.StatusActive,
+				Status:          v1base.StatusActive,
 				StatusAt:        base.TestTimeNow,
 			},
 			false,
@@ -269,7 +270,7 @@ func TestPlan_Validate(t *testing.T) {
 				Duration:        1000,
 				Gigabytes:       1000,
 				Prices:          base.TestCoinsPositiveAmount,
-				Status:          base.StatusActive,
+				Status:          v1base.StatusActive,
 				StatusAt:        base.TestTimeNow,
 			},
 			false,
@@ -300,7 +301,7 @@ func TestPlan_Validate(t *testing.T) {
 				Duration:        1000,
 				Gigabytes:       1000,
 				Prices:          base.TestCoinsPositiveAmount,
-				Status:          base.StatusActive,
+				Status:          v1base.StatusActive,
 				StatusAt:        base.TestTimeNow,
 			},
 			false,
@@ -333,7 +334,7 @@ func TestPlan_Validate(t *testing.T) {
 				Duration:        1000,
 				Gigabytes:       1000,
 				Prices:          base.TestCoinsPositiveAmount,
-				Status:          base.StatusActive,
+				Status:          v1base.StatusActive,
 				StatusAt:        base.TestTimeNow,
 			},
 			false,
@@ -346,7 +347,7 @@ func TestPlan_Validate(t *testing.T) {
 				Duration:        1000,
 				Gigabytes:       1000,
 				Prices:          base.TestCoinsNil,
-				Status:          base.StatusActive,
+				Status:          v1base.StatusActive,
 				StatusAt:        base.TestTimeNow,
 			},
 			true,
@@ -425,7 +426,7 @@ func TestPlan_Validate(t *testing.T) {
 				Duration:        1000,
 				Gigabytes:       1000,
 				Prices:          base.TestCoinsPositiveAmount,
-				Status:          base.StatusActive,
+				Status:          v1base.StatusActive,
 				StatusAt:        base.TestTimeNow,
 			},
 			false,
@@ -438,7 +439,7 @@ func TestPlan_Validate(t *testing.T) {
 				Duration:        1000,
 				Gigabytes:       1000,
 				Prices:          base.TestCoinsPositiveAmount,
-				Status:          base.StatusUnspecified,
+				Status:          v1base.StatusUnspecified,
 			},
 			true,
 		},
@@ -450,7 +451,7 @@ func TestPlan_Validate(t *testing.T) {
 				Duration:        1000,
 				Gigabytes:       1000,
 				Prices:          base.TestCoinsPositiveAmount,
-				Status:          base.StatusActive,
+				Status:          v1base.StatusActive,
 				StatusAt:        base.TestTimeNow,
 			},
 			false,
@@ -463,7 +464,7 @@ func TestPlan_Validate(t *testing.T) {
 				Duration:        1000,
 				Gigabytes:       1000,
 				Prices:          base.TestCoinsPositiveAmount,
-				Status:          base.StatusInactivePending,
+				Status:          v1base.StatusInactivePending,
 			},
 			true,
 		},
@@ -475,7 +476,7 @@ func TestPlan_Validate(t *testing.T) {
 				Duration:        1000,
 				Gigabytes:       1000,
 				Prices:          base.TestCoinsPositiveAmount,
-				Status:          base.StatusInactive,
+				Status:          v1base.StatusInactive,
 				StatusAt:        base.TestTimeNow,
 			},
 			false,
@@ -488,7 +489,7 @@ func TestPlan_Validate(t *testing.T) {
 				Duration:        1000,
 				Gigabytes:       1000,
 				Prices:          base.TestCoinsPositiveAmount,
-				Status:          base.StatusActive,
+				Status:          v1base.StatusActive,
 				StatusAt:        base.TestTimeZero,
 			},
 			true,
@@ -501,7 +502,7 @@ func TestPlan_Validate(t *testing.T) {
 				Duration:        1000,
 				Gigabytes:       1000,
 				Prices:          base.TestCoinsPositiveAmount,
-				Status:          base.StatusActive,
+				Status:          v1base.StatusActive,
 				StatusAt:        base.TestTimeNow,
 			},
 			false,

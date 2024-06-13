@@ -12,7 +12,7 @@ import (
 	grpc1 "github.com/cosmos/gogoproto/grpc"
 	proto "github.com/cosmos/gogoproto/proto"
 	github_com_cosmos_gogoproto_types "github.com/cosmos/gogoproto/types"
-	types1 "github.com/sentinel-official/hub/v12/types"
+	v1 "github.com/sentinel-official/hub/v12/types/v1"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -87,7 +87,7 @@ type MsgUpdateStatusRequest struct {
 	// Field 2: Identifier of the subscription plan.
 	ID uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	// Field 3: New status for the subscription plan.
-	Status types1.Status `protobuf:"varint,3,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
+	Status v1.Status `protobuf:"varint,3,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
 }
 
 func (m *MsgUpdateStatusRequest) Reset()         { *m = MsgUpdateStatusRequest{} }
@@ -1495,7 +1495,7 @@ func (m *MsgUpdateStatusRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Status |= types1.Status(b&0x7F) << shift
+				m.Status |= v1.Status(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}

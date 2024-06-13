@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 )
 
 func TestNewQueryNodeRequest(t *testing.T) {
@@ -31,12 +32,12 @@ func TestNewQueryNodeRequest(t *testing.T) {
 
 func TestNewQueryNodesRequest(t *testing.T) {
 	var (
-		status     base.Status
+		status     v1base.Status
 		pagination *query.PageRequest
 	)
 
 	for i := 1; i <= 16; i++ {
-		status = base.Status(i % 4)
+		status = v1base.Status(i % 4)
 		pagination = &query.PageRequest{
 			Key:        make([]byte, i),
 			Offset:     uint64(i),

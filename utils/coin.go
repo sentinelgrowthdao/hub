@@ -4,11 +4,11 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/sentinel-official/hub/v12/types"
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 func AmountForBytes(gigabytePrice, bytes sdkmath.Int) sdkmath.Int {
-	bytePrice := sdkmath.LegacyNewDecFromInt(gigabytePrice).QuoInt(types.Gigabyte)
+	bytePrice := sdkmath.LegacyNewDecFromInt(gigabytePrice).QuoInt(base.Gigabyte)
 	return sdkmath.LegacyNewDecFromInt(bytes).Mul(bytePrice).Ceil().TruncateInt()
 }
 

@@ -9,6 +9,7 @@ import (
 	"github.com/gogo/protobuf/proto"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 )
 
 type (
@@ -19,10 +20,10 @@ type (
 		GetID() uint64
 		GetAddress() sdk.AccAddress
 		GetInactiveAt() time.Time
-		GetStatus() base.Status
+		GetStatus() v1base.Status
 		GetStatusAt() time.Time
 		SetInactiveAt(v time.Time)
-		SetStatus(v base.Status)
+		SetStatus(v v1base.Status)
 		SetStatusAt(v time.Time)
 	}
 	Subscriptions []Subscription
@@ -35,7 +36,7 @@ var (
 
 func (s *BaseSubscription) GetID() uint64            { return s.ID }
 func (s *BaseSubscription) GetInactiveAt() time.Time { return s.InactiveAt }
-func (s *BaseSubscription) GetStatus() base.Status   { return s.Status }
+func (s *BaseSubscription) GetStatus() v1base.Status { return s.Status }
 func (s *BaseSubscription) GetStatusAt() time.Time   { return s.StatusAt }
 
 func (s *BaseSubscription) GetAddress() sdk.AccAddress {
@@ -52,7 +53,7 @@ func (s *BaseSubscription) GetAddress() sdk.AccAddress {
 }
 
 func (s *BaseSubscription) SetInactiveAt(v time.Time) { s.InactiveAt = v }
-func (s *BaseSubscription) SetStatus(v base.Status)   { s.Status = v }
+func (s *BaseSubscription) SetStatus(v v1base.Status) { s.Status = v }
 func (s *BaseSubscription) SetStatusAt(v time.Time)   { s.StatusAt = v }
 
 func (s *BaseSubscription) Validate() error {

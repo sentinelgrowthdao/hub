@@ -3,7 +3,7 @@ package keeper
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 	"github.com/sentinel-official/hub/v12/x/session/types/v2"
 )
 
@@ -14,7 +14,7 @@ func (k *Keeper) SubscriptionInactivePendingHook(ctx sdk.Context, id uint64) err
 	// Iterate through sessions associated with the subscription.
 	k.IterateSessionsForSubscription(ctx, id, func(_ int, item v2.Session) (stop bool) {
 		// Skip non-active sessions.
-		if !item.Status.Equal(base.StatusActive) {
+		if !item.Status.Equal(v1base.StatusActive) {
 			return false
 		}
 
@@ -25,7 +25,7 @@ func (k *Keeper) SubscriptionInactivePendingHook(ctx sdk.Context, id uint64) err
 		item.InactiveAt = ctx.BlockTime().Add(statusChangeDelay)
 
 		// Set the session status to 'InactivePending' to mark it for an upcoming status update.
-		item.Status = base.StatusInactivePending
+		item.Status = v1base.StatusInactivePending
 
 		// Record the time of the status update in 'StatusAt' field.
 		item.StatusAt = ctx.BlockTime()
@@ -39,7 +39,7 @@ func (k *Keeper) SubscriptionInactivePendingHook(ctx sdk.Context, id uint64) err
 		// Emit an event to notify that the session status has been updated.
 		ctx.EventManager().EmitTypedEvent(
 			&v2.EventUpdateStatus{
-				Status:         base.StatusInactivePending,
+				Status:         v1base.StatusInactivePending,
 				Address:        item.Address,
 				NodeAddress:    item.NodeAddress,
 				ID:             item.ID,

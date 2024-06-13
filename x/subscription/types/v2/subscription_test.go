@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 )
 
 func TestBaseSubscription_GetAddress(t *testing.T) {
@@ -52,7 +53,7 @@ func TestBaseSubscription_Validate(t *testing.T) {
 		ID         uint64
 		Address    string
 		InactiveAt time.Time
-		Status     base.Status
+		Status     v1base.Status
 		StatusAt   time.Time
 	}
 	tests := []struct {
@@ -73,7 +74,7 @@ func TestBaseSubscription_Validate(t *testing.T) {
 				ID:         1000,
 				Address:    base.TestBech32AccAddr20Bytes,
 				InactiveAt: base.TestTimeNow,
-				Status:     base.StatusActive,
+				Status:     v1base.StatusActive,
 				StatusAt:   base.TestTimeNow,
 			},
 			false,
@@ -108,7 +109,7 @@ func TestBaseSubscription_Validate(t *testing.T) {
 				ID:         1000,
 				Address:    base.TestBech32AccAddr10Bytes,
 				InactiveAt: base.TestTimeNow,
-				Status:     base.StatusActive,
+				Status:     v1base.StatusActive,
 				StatusAt:   base.TestTimeNow,
 			},
 			false,
@@ -119,7 +120,7 @@ func TestBaseSubscription_Validate(t *testing.T) {
 				ID:         1000,
 				Address:    base.TestBech32AccAddr20Bytes,
 				InactiveAt: base.TestTimeNow,
-				Status:     base.StatusActive,
+				Status:     v1base.StatusActive,
 				StatusAt:   base.TestTimeNow,
 			},
 			false,
@@ -130,7 +131,7 @@ func TestBaseSubscription_Validate(t *testing.T) {
 				ID:         1000,
 				Address:    base.TestBech32AccAddr30Bytes,
 				InactiveAt: base.TestTimeNow,
-				Status:     base.StatusActive,
+				Status:     v1base.StatusActive,
 				StatusAt:   base.TestTimeNow,
 			},
 			false,
@@ -150,7 +151,7 @@ func TestBaseSubscription_Validate(t *testing.T) {
 				ID:         1000,
 				Address:    base.TestBech32AccAddr30Bytes,
 				InactiveAt: base.TestTimeNow,
-				Status:     base.StatusActive,
+				Status:     v1base.StatusActive,
 				StatusAt:   base.TestTimeNow,
 			},
 			false,
@@ -160,7 +161,7 @@ func TestBaseSubscription_Validate(t *testing.T) {
 			fields{
 				ID:      1000,
 				Address: base.TestBech32AccAddr20Bytes,
-				Status:  base.StatusUnspecified,
+				Status:  v1base.StatusUnspecified,
 			},
 			true,
 		},
@@ -170,7 +171,7 @@ func TestBaseSubscription_Validate(t *testing.T) {
 				ID:         1000,
 				Address:    base.TestBech32AccAddr20Bytes,
 				InactiveAt: base.TestTimeNow,
-				Status:     base.StatusActive,
+				Status:     v1base.StatusActive,
 				StatusAt:   base.TestTimeNow,
 			},
 			false,
@@ -181,7 +182,7 @@ func TestBaseSubscription_Validate(t *testing.T) {
 				ID:         1000,
 				Address:    base.TestBech32AccAddr20Bytes,
 				InactiveAt: base.TestTimeNow,
-				Status:     base.StatusInactivePending,
+				Status:     v1base.StatusInactivePending,
 				StatusAt:   base.TestTimeNow,
 			},
 			false,
@@ -192,7 +193,7 @@ func TestBaseSubscription_Validate(t *testing.T) {
 				ID:         1000,
 				Address:    base.TestBech32AccAddr20Bytes,
 				InactiveAt: base.TestTimeNow,
-				Status:     base.StatusInactive,
+				Status:     v1base.StatusInactive,
 				StatusAt:   base.TestTimeNow,
 			},
 			false,
@@ -203,7 +204,7 @@ func TestBaseSubscription_Validate(t *testing.T) {
 				ID:         1000,
 				Address:    base.TestBech32AccAddr20Bytes,
 				InactiveAt: base.TestTimeNow,
-				Status:     base.StatusActive,
+				Status:     v1base.StatusActive,
 				StatusAt:   base.TestTimeZero,
 			},
 			true,
@@ -214,7 +215,7 @@ func TestBaseSubscription_Validate(t *testing.T) {
 				ID:         1000,
 				Address:    base.TestBech32AccAddr20Bytes,
 				InactiveAt: base.TestTimeNow,
-				Status:     base.StatusActive,
+				Status:     v1base.StatusActive,
 				StatusAt:   base.TestTimeNow,
 			},
 			false,
@@ -460,7 +461,7 @@ func TestNodeSubscription_Validate(t *testing.T) {
 					ID:         1000,
 					Address:    base.TestBech32AccAddr20Bytes,
 					InactiveAt: base.TestTimeNow,
-					Status:     base.StatusActive,
+					Status:     v1base.StatusActive,
 					StatusAt:   base.TestTimeNow,
 				},
 				NodeAddress: tt.fields.NodeAddress,
@@ -537,7 +538,7 @@ func TestPlanSubscription_Validate(t *testing.T) {
 					ID:         1000,
 					Address:    base.TestBech32AccAddr20Bytes,
 					InactiveAt: base.TestTimeNow,
-					Status:     base.StatusActive,
+					Status:     v1base.StatusActive,
 					StatusAt:   base.TestTimeNow,
 				},
 				PlanID: tt.fields.PlanID,

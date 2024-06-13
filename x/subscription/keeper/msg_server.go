@@ -7,7 +7,7 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 	"github.com/sentinel-official/hub/v12/x/subscription/types"
 	"github.com/sentinel-official/hub/v12/x/subscription/types/v2"
 )
@@ -45,7 +45,7 @@ func (k *msgServer) MsgCancel(c context.Context, msg *v2.MsgCancelRequest) (*v2.
 	}
 
 	// Check if the subscription is in an active state. If not, return an error.
-	if !subscription.GetStatus().Equal(base.StatusActive) {
+	if !subscription.GetStatus().Equal(v1base.StatusActive) {
 		return nil, types.NewErrorInvalidSubscriptionStatus(subscription.GetID(), subscription.GetStatus())
 	}
 
@@ -67,7 +67,7 @@ func (k *msgServer) MsgCancel(c context.Context, msg *v2.MsgCancelRequest) (*v2.
 
 	// Calculate the duration for which the subscription will be in the inactive state.
 	subscription.SetInactiveAt(ctx.BlockTime().Add(statusChangeDelay))
-	subscription.SetStatus(base.StatusInactivePending)
+	subscription.SetStatus(v1base.StatusInactivePending)
 	subscription.SetStatusAt(ctx.BlockTime())
 
 	// Update the subscription in the Store.
@@ -79,7 +79,7 @@ func (k *msgServer) MsgCancel(c context.Context, msg *v2.MsgCancelRequest) (*v2.
 	// Emit an event to notify that the subscription status has been updated.
 	ctx.EventManager().EmitTypedEvent(
 		&v2.EventUpdateStatus{
-			Status:  base.StatusInactivePending,
+			Status:  v1base.StatusInactivePending,
 			Address: subscription.GetAddress().String(),
 			ID:      subscription.GetID(),
 			PlanID:  0,

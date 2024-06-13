@@ -8,7 +8,7 @@ import (
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	proto "github.com/cosmos/gogoproto/proto"
 	github_com_cosmos_gogoproto_types "github.com/cosmos/gogoproto/types"
-	types "github.com/sentinel-official/hub/v12/types"
+	v1 "github.com/sentinel-official/hub/v12/types/v1"
 	_ "google.golang.org/protobuf/types/known/durationpb"
 	_ "google.golang.org/protobuf/types/known/timestamppb"
 	io "io"
@@ -30,14 +30,14 @@ var _ = time.Kitchen
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type Session struct {
-	Id           uint64          `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Subscription uint64          `protobuf:"varint,2,opt,name=subscription,proto3" json:"subscription,omitempty"`
-	Node         string          `protobuf:"bytes,3,opt,name=node,proto3" json:"node,omitempty"`
-	Address      string          `protobuf:"bytes,4,opt,name=address,proto3" json:"address,omitempty"`
-	Duration     time.Duration   `protobuf:"bytes,5,opt,name=duration,proto3,stdduration" json:"duration"`
-	Bandwidth    types.Bandwidth `protobuf:"bytes,6,opt,name=bandwidth,proto3" json:"bandwidth"`
-	Status       types.Status    `protobuf:"varint,7,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
-	StatusAt     time.Time       `protobuf:"bytes,8,opt,name=status_at,json=statusAt,proto3,stdtime" json:"status_at"`
+	Id           uint64        `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Subscription uint64        `protobuf:"varint,2,opt,name=subscription,proto3" json:"subscription,omitempty"`
+	Node         string        `protobuf:"bytes,3,opt,name=node,proto3" json:"node,omitempty"`
+	Address      string        `protobuf:"bytes,4,opt,name=address,proto3" json:"address,omitempty"`
+	Duration     time.Duration `protobuf:"bytes,5,opt,name=duration,proto3,stdduration" json:"duration"`
+	Bandwidth    v1.Bandwidth  `protobuf:"bytes,6,opt,name=bandwidth,proto3" json:"bandwidth"`
+	Status       v1.Status     `protobuf:"varint,7,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
+	StatusAt     time.Time     `protobuf:"bytes,8,opt,name=status_at,json=statusAt,proto3,stdtime" json:"status_at"`
 }
 
 func (m *Session) Reset()         { *m = Session{} }
@@ -447,7 +447,7 @@ func (m *Session) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Status |= types.Status(b&0x7F) << shift
+				m.Status |= v1.Status(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}

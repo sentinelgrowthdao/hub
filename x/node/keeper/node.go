@@ -8,6 +8,7 @@ import (
 	protobuf "github.com/gogo/protobuf/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 	"github.com/sentinel-official/hub/v12/x/node/types"
 	"github.com/sentinel-official/hub/v12/x/node/types/v2"
 )
@@ -100,9 +101,9 @@ func (k *Keeper) DeleteInactiveNode(ctx sdk.Context, addr base.NodeAddress) {
 
 func (k *Keeper) SetNode(ctx sdk.Context, node v2.Node) {
 	switch node.Status {
-	case base.StatusActive:
+	case v1base.StatusActive:
 		k.SetActiveNode(ctx, node)
-	case base.StatusInactive:
+	case v1base.StatusInactive:
 		k.SetInactiveNode(ctx, node)
 	default:
 		panic(fmt.Errorf("failed to set the node %v", node))

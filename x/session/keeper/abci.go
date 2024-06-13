@@ -4,7 +4,7 @@ import (
 	abcitypes "github.com/cometbft/cometbft/abci/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 	"github.com/sentinel-official/hub/v12/x/session/types/v2"
 )
 
@@ -24,9 +24,9 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 
 		// If the session's status is active, set it to inactive-pending and schedule
 		// its next status update based on the status change delay.
-		if item.Status.Equal(base.StatusActive) {
+		if item.Status.Equal(v1base.StatusActive) {
 			item.InactiveAt = ctx.BlockTime().Add(statusChangeDelay)
-			item.Status = base.StatusInactivePending
+			item.Status = v1base.StatusInactivePending
 			item.StatusAt = ctx.BlockTime()
 
 			// Save the updated session to the store.
@@ -36,7 +36,7 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 			// Emit an event to notify that the session status has been updated.
 			ctx.EventManager().EmitTypedEvent(
 				&v2.EventUpdateStatus{
-					Status:         base.StatusInactivePending,
+					Status:         v1base.StatusInactivePending,
 					Address:        item.Address,
 					NodeAddress:    item.NodeAddress,
 					ID:             item.ID,
@@ -76,7 +76,7 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 		// Emit an event to notify that the session has been terminated.
 		ctx.EventManager().EmitTypedEvent(
 			&v2.EventUpdateStatus{
-				Status:         base.StatusInactive,
+				Status:         v1base.StatusInactive,
 				Address:        item.Address,
 				NodeAddress:    item.NodeAddress,
 				ID:             item.ID,

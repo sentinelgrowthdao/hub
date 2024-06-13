@@ -7,6 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 )
 
 func (m *Session) GetAddress() sdk.AccAddress {
@@ -66,7 +67,7 @@ func (m *Session) Validate() error {
 	if m.InactiveAt.IsZero() {
 		return fmt.Errorf("inactive_at cannot be zero")
 	}
-	if !m.Status.IsOneOf(base.StatusActive, base.StatusInactivePending) {
+	if !m.Status.IsOneOf(v1base.StatusActive, v1base.StatusInactivePending) {
 		return fmt.Errorf("status must be oneof [active, inactive_pending]")
 	}
 	if m.StatusAt.IsZero() {

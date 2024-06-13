@@ -10,7 +10,7 @@ import (
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	grpc1 "github.com/cosmos/gogoproto/grpc"
 	proto "github.com/cosmos/gogoproto/proto"
-	types "github.com/sentinel-official/hub/v12/types"
+	v1 "github.com/sentinel-official/hub/v12/types/v1"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
@@ -34,7 +34,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // QueryNodesRequest represents a request to query nodes with a specific status and pagination.
 type QueryNodesRequest struct {
 	// Field 1: Status to filter nodes by.
-	Status types.Status `protobuf:"varint,1,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
+	Status v1.Status `protobuf:"varint,1,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
 	// Field 2: Pagination parameters for the query.
 	Pagination *query.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
@@ -77,7 +77,7 @@ type QueryNodesForPlanRequest struct {
 	// Field 1: Plan ID to filter nodes by.
 	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	// Field 2: Status to filter nodes by.
-	Status types.Status `protobuf:"varint,2,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
+	Status v1.Status `protobuf:"varint,2,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
 	// Field 3: Pagination parameters for the query.
 	Pagination *query.PageRequest `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
@@ -1084,7 +1084,7 @@ func (m *QueryNodesRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Status |= types.Status(b&0x7F) << shift
+				m.Status |= v1.Status(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1208,7 +1208,7 @@ func (m *QueryNodesForPlanRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Status |= types.Status(b&0x7F) << shift
+				m.Status |= v1.Status(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}

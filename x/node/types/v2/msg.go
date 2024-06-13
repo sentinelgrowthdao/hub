@@ -7,6 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 	"github.com/sentinel-official/hub/v12/x/node/types"
 )
 
@@ -171,7 +172,7 @@ func (m *MsgUpdateDetailsRequest) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgUpdateStatusRequest creates a new MsgUpdateStatusRequest instance with the given parameters.
-func NewMsgUpdateStatusRequest(from base.NodeAddress, status base.Status) *MsgUpdateStatusRequest {
+func NewMsgUpdateStatusRequest(from base.NodeAddress, status v1base.Status) *MsgUpdateStatusRequest {
 	return &MsgUpdateStatusRequest{
 		From:   from.String(),
 		Status: status,
@@ -188,7 +189,7 @@ func (m *MsgUpdateStatusRequest) ValidateBasic() error {
 	if _, err := base.NodeAddressFromBech32(m.From); err != nil {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
 	}
-	if !m.Status.IsOneOf(base.StatusActive, base.StatusInactive) {
+	if !m.Status.IsOneOf(v1base.StatusActive, v1base.StatusInactive) {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "status must be one of [active, inactive]")
 	}
 

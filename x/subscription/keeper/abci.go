@@ -7,7 +7,7 @@ import (
 	abcitypes "github.com/cometbft/cometbft/abci/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 	baseutils "github.com/sentinel-official/hub/v12/utils"
 	"github.com/sentinel-official/hub/v12/x/subscription/types/v2"
 )
@@ -89,14 +89,14 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 		k.DeleteSubscriptionForInactiveAt(ctx, item.GetInactiveAt(), item.GetID())
 
 		// If the subscription status is 'Active', update its InactiveAt value and set it to 'InactivePending'.
-		if item.GetStatus().Equal(base.StatusActive) {
+		if item.GetStatus().Equal(v1base.StatusActive) {
 			// Run the SubscriptionInactivePendingHook to perform custom actions before setting the subscription to inactive pending state.
 			if err := k.SubscriptionInactivePendingHook(ctx, item.GetID()); err != nil {
 				panic(err)
 			}
 
 			item.SetInactiveAt(ctx.BlockTime().Add(statusChangeDelay))
-			item.SetStatus(base.StatusInactivePending)
+			item.SetStatus(v1base.StatusInactivePending)
 			item.SetStatusAt(ctx.BlockTime())
 
 			// Save the updated subscription to the store and update the InactiveAt index.
@@ -106,7 +106,7 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 			// Emit an event to notify that the subscription status has been updated.
 			ctx.EventManager().EmitTypedEvent(
 				&v2.EventUpdateStatus{
-					Status:  base.StatusInactivePending,
+					Status:  v1base.StatusInactivePending,
 					Address: item.GetAddress().String(),
 					ID:      item.GetID(),
 					PlanID:  0,
@@ -250,7 +250,7 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 		k.DeleteSubscription(ctx, item.GetID())
 		ctx.EventManager().EmitTypedEvent(
 			&v2.EventUpdateStatus{
-				Status:  base.StatusInactive,
+				Status:  v1base.StatusInactive,
 				Address: item.GetAddress().String(),
 				ID:      item.GetID(),
 				PlanID:  0,

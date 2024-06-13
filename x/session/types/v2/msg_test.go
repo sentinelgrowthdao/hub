@@ -6,6 +6,7 @@ import (
 	sdkmath "cosmossdk.io/math"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 )
 
 func TestMsgStartRequest_ValidateBasic(t *testing.T) {
@@ -215,7 +216,7 @@ func TestMsgUpdateDetailsRequest_ValidateBasic(t *testing.T) {
 				From: base.TestBech32NodeAddr20Bytes,
 				Proof: Proof{
 					ID:        1000,
-					Bandwidth: base.Bandwidth{Upload: sdkmath.NewInt(0), Download: sdkmath.NewInt(0)},
+					Bandwidth: v1base.Bandwidth{Upload: sdkmath.NewInt(0), Download: sdkmath.NewInt(0)},
 				},
 			},
 			false,
@@ -226,7 +227,7 @@ func TestMsgUpdateDetailsRequest_ValidateBasic(t *testing.T) {
 				From: base.TestBech32NodeAddr20Bytes,
 				Proof: Proof{
 					ID:        1000,
-					Bandwidth: base.Bandwidth{Upload: sdkmath.NewInt(-1000), Download: sdkmath.NewInt(-1000)},
+					Bandwidth: v1base.Bandwidth{Upload: sdkmath.NewInt(-1000), Download: sdkmath.NewInt(-1000)},
 				},
 			},
 			true,
@@ -237,7 +238,7 @@ func TestMsgUpdateDetailsRequest_ValidateBasic(t *testing.T) {
 				From: base.TestBech32NodeAddr20Bytes,
 				Proof: Proof{
 					ID:        1000,
-					Bandwidth: base.Bandwidth{Upload: sdkmath.NewInt(-1000), Download: sdkmath.NewInt(0)},
+					Bandwidth: v1base.Bandwidth{Upload: sdkmath.NewInt(-1000), Download: sdkmath.NewInt(0)},
 				},
 			},
 			true,
@@ -248,7 +249,7 @@ func TestMsgUpdateDetailsRequest_ValidateBasic(t *testing.T) {
 				From: base.TestBech32NodeAddr20Bytes,
 				Proof: Proof{
 					ID:        1000,
-					Bandwidth: base.Bandwidth{Upload: sdkmath.NewInt(-1000), Download: sdkmath.NewInt(1000)},
+					Bandwidth: v1base.Bandwidth{Upload: sdkmath.NewInt(-1000), Download: sdkmath.NewInt(1000)},
 				},
 			},
 			true,
@@ -259,7 +260,7 @@ func TestMsgUpdateDetailsRequest_ValidateBasic(t *testing.T) {
 				From: base.TestBech32NodeAddr20Bytes,
 				Proof: Proof{
 					ID:        1000,
-					Bandwidth: base.Bandwidth{Upload: sdkmath.NewInt(0), Download: sdkmath.NewInt(-1000)},
+					Bandwidth: v1base.Bandwidth{Upload: sdkmath.NewInt(0), Download: sdkmath.NewInt(-1000)},
 				},
 			},
 			true,
@@ -270,7 +271,7 @@ func TestMsgUpdateDetailsRequest_ValidateBasic(t *testing.T) {
 				From: base.TestBech32NodeAddr20Bytes,
 				Proof: Proof{
 					ID:        1000,
-					Bandwidth: base.Bandwidth{Upload: sdkmath.NewInt(0), Download: sdkmath.NewInt(0)},
+					Bandwidth: v1base.Bandwidth{Upload: sdkmath.NewInt(0), Download: sdkmath.NewInt(0)},
 				},
 			},
 			false,
@@ -281,7 +282,7 @@ func TestMsgUpdateDetailsRequest_ValidateBasic(t *testing.T) {
 				From: base.TestBech32NodeAddr20Bytes,
 				Proof: Proof{
 					ID:        1000,
-					Bandwidth: base.Bandwidth{Upload: sdkmath.NewInt(0), Download: sdkmath.NewInt(1000)},
+					Bandwidth: v1base.Bandwidth{Upload: sdkmath.NewInt(0), Download: sdkmath.NewInt(1000)},
 				},
 			},
 			false,
@@ -292,7 +293,7 @@ func TestMsgUpdateDetailsRequest_ValidateBasic(t *testing.T) {
 				From: base.TestBech32NodeAddr20Bytes,
 				Proof: Proof{
 					ID:        1000,
-					Bandwidth: base.Bandwidth{Upload: sdkmath.NewInt(1000), Download: sdkmath.NewInt(-1000)},
+					Bandwidth: v1base.Bandwidth{Upload: sdkmath.NewInt(1000), Download: sdkmath.NewInt(-1000)},
 				},
 			},
 			true,
@@ -303,7 +304,7 @@ func TestMsgUpdateDetailsRequest_ValidateBasic(t *testing.T) {
 				From: base.TestBech32NodeAddr20Bytes,
 				Proof: Proof{
 					ID:        1000,
-					Bandwidth: base.Bandwidth{Upload: sdkmath.NewInt(1000), Download: sdkmath.NewInt(0)},
+					Bandwidth: v1base.Bandwidth{Upload: sdkmath.NewInt(1000), Download: sdkmath.NewInt(0)},
 				},
 			},
 			false,
@@ -314,7 +315,7 @@ func TestMsgUpdateDetailsRequest_ValidateBasic(t *testing.T) {
 				From: base.TestBech32NodeAddr20Bytes,
 				Proof: Proof{
 					ID:        1000,
-					Bandwidth: base.Bandwidth{Upload: sdkmath.NewInt(1000), Download: sdkmath.NewInt(1000)},
+					Bandwidth: v1base.Bandwidth{Upload: sdkmath.NewInt(1000), Download: sdkmath.NewInt(1000)},
 				},
 			},
 			false,
@@ -325,7 +326,7 @@ func TestMsgUpdateDetailsRequest_ValidateBasic(t *testing.T) {
 				From: base.TestBech32NodeAddr20Bytes,
 				Proof: Proof{
 					ID:        1000,
-					Bandwidth: base.Bandwidth{Upload: sdkmath.NewInt(0), Download: sdkmath.NewInt(0)},
+					Bandwidth: v1base.Bandwidth{Upload: sdkmath.NewInt(0), Download: sdkmath.NewInt(0)},
 					Duration:  -1000,
 				},
 			},
@@ -337,7 +338,7 @@ func TestMsgUpdateDetailsRequest_ValidateBasic(t *testing.T) {
 				From: base.TestBech32NodeAddr20Bytes,
 				Proof: Proof{
 					ID:        1000,
-					Bandwidth: base.Bandwidth{Upload: sdkmath.NewInt(0), Download: sdkmath.NewInt(0)},
+					Bandwidth: v1base.Bandwidth{Upload: sdkmath.NewInt(0), Download: sdkmath.NewInt(0)},
 					Duration:  0,
 				},
 			},
@@ -349,7 +350,7 @@ func TestMsgUpdateDetailsRequest_ValidateBasic(t *testing.T) {
 				From: base.TestBech32NodeAddr20Bytes,
 				Proof: Proof{
 					ID:        1000,
-					Bandwidth: base.Bandwidth{Upload: sdkmath.NewInt(0), Download: sdkmath.NewInt(0)},
+					Bandwidth: v1base.Bandwidth{Upload: sdkmath.NewInt(0), Download: sdkmath.NewInt(0)},
 					Duration:  1000,
 				},
 			},
@@ -361,7 +362,7 @@ func TestMsgUpdateDetailsRequest_ValidateBasic(t *testing.T) {
 				From: base.TestBech32NodeAddr20Bytes,
 				Proof: Proof{
 					ID:        1000,
-					Bandwidth: base.Bandwidth{Upload: sdkmath.NewInt(1000), Download: sdkmath.NewInt(1000)},
+					Bandwidth: v1base.Bandwidth{Upload: sdkmath.NewInt(1000), Download: sdkmath.NewInt(1000)},
 					Duration:  1000,
 				},
 				Signature: nil,
@@ -374,7 +375,7 @@ func TestMsgUpdateDetailsRequest_ValidateBasic(t *testing.T) {
 				From: base.TestBech32NodeAddr20Bytes,
 				Proof: Proof{
 					ID:        1000,
-					Bandwidth: base.Bandwidth{Upload: sdkmath.NewInt(1000), Download: sdkmath.NewInt(1000)},
+					Bandwidth: v1base.Bandwidth{Upload: sdkmath.NewInt(1000), Download: sdkmath.NewInt(1000)},
 					Duration:  1000,
 				},
 				Signature: []byte{},
@@ -387,7 +388,7 @@ func TestMsgUpdateDetailsRequest_ValidateBasic(t *testing.T) {
 				From: base.TestBech32NodeAddr20Bytes,
 				Proof: Proof{
 					ID:        1000,
-					Bandwidth: base.Bandwidth{Upload: sdkmath.NewInt(1000), Download: sdkmath.NewInt(1000)},
+					Bandwidth: v1base.Bandwidth{Upload: sdkmath.NewInt(1000), Download: sdkmath.NewInt(1000)},
 					Duration:  1000,
 				},
 				Signature: []byte{
@@ -405,7 +406,7 @@ func TestMsgUpdateDetailsRequest_ValidateBasic(t *testing.T) {
 				From: base.TestBech32NodeAddr20Bytes,
 				Proof: Proof{
 					ID:        1000,
-					Bandwidth: base.Bandwidth{Upload: sdkmath.NewInt(1000), Download: sdkmath.NewInt(1000)},
+					Bandwidth: v1base.Bandwidth{Upload: sdkmath.NewInt(1000), Download: sdkmath.NewInt(1000)},
 					Duration:  1000,
 				},
 				Signature: []byte{
@@ -427,7 +428,7 @@ func TestMsgUpdateDetailsRequest_ValidateBasic(t *testing.T) {
 				From: base.TestBech32NodeAddr20Bytes,
 				Proof: Proof{
 					ID:        1000,
-					Bandwidth: base.Bandwidth{Upload: sdkmath.NewInt(1000), Download: sdkmath.NewInt(1000)},
+					Bandwidth: v1base.Bandwidth{Upload: sdkmath.NewInt(1000), Download: sdkmath.NewInt(1000)},
 					Duration:  1000,
 				},
 				Signature: []byte{

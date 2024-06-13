@@ -12,6 +12,7 @@ import (
 	"github.com/spf13/cobra"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 	"github.com/sentinel-official/hub/v12/x/session/types/v2"
 )
 
@@ -96,7 +97,7 @@ func txUpdateDetails() *cobra.Command {
 				v2.Proof{
 					ID:        id,
 					Duration:  duration,
-					Bandwidth: base.NewBandwidthFromInt64(upload, download),
+					Bandwidth: v1base.NewBandwidthFromInt64(upload, download),
 				},
 				signature,
 			)

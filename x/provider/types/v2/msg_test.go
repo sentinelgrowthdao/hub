@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 )
 
 func TestMsgRegisterRequest_ValidateBasic(t *testing.T) {
@@ -213,7 +214,7 @@ func TestMsgUpdateRequest_ValidateBasic(t *testing.T) {
 		Identity    string
 		Website     string
 		Description string
-		Status      base.Status
+		Status      v1base.Status
 	}
 	tests := []struct {
 		name    string
@@ -370,7 +371,7 @@ func TestMsgUpdateRequest_ValidateBasic(t *testing.T) {
 			"status unspecified",
 			fields{
 				From:   base.TestBech32ProvAddr20Bytes,
-				Status: base.StatusUnspecified,
+				Status: v1base.StatusUnspecified,
 			},
 			false,
 		},
@@ -378,7 +379,7 @@ func TestMsgUpdateRequest_ValidateBasic(t *testing.T) {
 			"status active",
 			fields{
 				From:   base.TestBech32ProvAddr20Bytes,
-				Status: base.StatusActive,
+				Status: v1base.StatusActive,
 			},
 			false,
 		},
@@ -386,7 +387,7 @@ func TestMsgUpdateRequest_ValidateBasic(t *testing.T) {
 			"status inactive_pending",
 			fields{
 				From:   base.TestBech32ProvAddr20Bytes,
-				Status: base.StatusInactivePending,
+				Status: v1base.StatusInactivePending,
 			},
 			true,
 		},
@@ -394,7 +395,7 @@ func TestMsgUpdateRequest_ValidateBasic(t *testing.T) {
 			"status inactive",
 			fields{
 				From:   base.TestBech32ProvAddr20Bytes,
-				Status: base.StatusInactive,
+				Status: v1base.StatusInactive,
 			},
 			false,
 		},

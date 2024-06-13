@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 )
 
 func TestProvider_GetAddress(t *testing.T) {
@@ -59,7 +60,7 @@ func TestProvider_Validate(t *testing.T) {
 		Identity    string
 		Website     string
 		Description string
-		Status      base.Status
+		Status      v1base.Status
 	}
 	tests := []struct {
 		name    string
@@ -121,7 +122,7 @@ func TestProvider_Validate(t *testing.T) {
 			fields{
 				Address: base.TestBech32ProvAddr20Bytes,
 				Name:    "name",
-				Status:  base.StatusActive,
+				Status:  v1base.StatusActive,
 			},
 			false,
 		},
@@ -139,7 +140,7 @@ func TestProvider_Validate(t *testing.T) {
 				Address:  base.TestBech32ProvAddr20Bytes,
 				Name:     "name",
 				Identity: "",
-				Status:   base.StatusActive,
+				Status:   v1base.StatusActive,
 			},
 			false,
 		},
@@ -149,7 +150,7 @@ func TestProvider_Validate(t *testing.T) {
 				Address:  base.TestBech32ProvAddr20Bytes,
 				Name:     "name",
 				Identity: "identity",
-				Status:   base.StatusActive,
+				Status:   v1base.StatusActive,
 			},
 			false,
 		},
@@ -169,7 +170,7 @@ func TestProvider_Validate(t *testing.T) {
 				Name:     "name",
 				Identity: "identity",
 				Website:  "",
-				Status:   base.StatusActive,
+				Status:   v1base.StatusActive,
 			},
 			false,
 		},
@@ -180,7 +181,7 @@ func TestProvider_Validate(t *testing.T) {
 				Name:     "name",
 				Identity: "identity",
 				Website:  "https://website",
-				Status:   base.StatusActive,
+				Status:   v1base.StatusActive,
 			},
 			false,
 		},
@@ -212,7 +213,7 @@ func TestProvider_Validate(t *testing.T) {
 				Identity:    "identity",
 				Website:     "https://website",
 				Description: "",
-				Status:      base.StatusActive,
+				Status:      v1base.StatusActive,
 			},
 			false,
 		},
@@ -224,7 +225,7 @@ func TestProvider_Validate(t *testing.T) {
 				Identity:    "identity",
 				Website:     "https://website",
 				Description: "description",
-				Status:      base.StatusActive,
+				Status:      v1base.StatusActive,
 			},
 			false,
 		},
@@ -247,7 +248,7 @@ func TestProvider_Validate(t *testing.T) {
 				Identity:    "identity",
 				Website:     "https://website",
 				Description: strings.Repeat("d", 256),
-				Status:      base.StatusUnspecified,
+				Status:      v1base.StatusUnspecified,
 			},
 			true,
 		},
@@ -259,7 +260,7 @@ func TestProvider_Validate(t *testing.T) {
 				Identity:    "identity",
 				Website:     "https://website",
 				Description: strings.Repeat("d", 256),
-				Status:      base.StatusActive,
+				Status:      v1base.StatusActive,
 			},
 			false,
 		},
@@ -271,7 +272,7 @@ func TestProvider_Validate(t *testing.T) {
 				Identity:    "identity",
 				Website:     "https://website",
 				Description: strings.Repeat("d", 256),
-				Status:      base.StatusInactive,
+				Status:      v1base.StatusInactive,
 			},
 			false,
 		},

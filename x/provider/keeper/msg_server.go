@@ -6,6 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 	"github.com/sentinel-official/hub/v12/x/provider/types"
 	"github.com/sentinel-official/hub/v12/x/provider/types/v2"
 )
@@ -57,7 +58,7 @@ func (k *msgServer) MsgRegister(c context.Context, msg *v2.MsgRegisterRequest) (
 		Identity:    msg.Identity,
 		Website:     msg.Website,
 		Description: msg.Description,
-		Status:      base.StatusInactive,
+		Status:      v1base.StatusInactive,
 		StatusAt:    ctx.BlockTime(),
 	}
 
@@ -100,16 +101,16 @@ func (k *msgServer) MsgUpdate(c context.Context, msg *v2.MsgUpdateRequest) (*v2.
 	provider.Description = msg.Description
 
 	// If the status is provided in the message and it is not `StatusUnspecified`, update the provider's status.
-	if !msg.Status.Equal(base.StatusUnspecified) {
+	if !msg.Status.Equal(v1base.StatusUnspecified) {
 		// If the current status of the provider is `Active`, handle the necessary updates for changing to `Inactive` status.
-		if provider.Status.Equal(base.StatusActive) {
-			if msg.Status.Equal(base.StatusInactive) {
+		if provider.Status.Equal(v1base.StatusActive) {
+			if msg.Status.Equal(v1base.StatusInactive) {
 				k.DeleteActiveProvider(ctx, provAddr)
 			}
 		}
 		// If the current status of the provider is `Inactive`, handle the necessary updates for changing to `Active` status.
-		if provider.Status.Equal(base.StatusInactive) {
-			if msg.Status.Equal(base.StatusActive) {
+		if provider.Status.Equal(v1base.StatusInactive) {
+			if msg.Status.Equal(v1base.StatusActive) {
 				k.DeleteInactiveProvider(ctx, provAddr)
 			}
 		}

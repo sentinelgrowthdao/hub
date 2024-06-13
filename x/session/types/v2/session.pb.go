@@ -8,7 +8,7 @@ import (
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	proto "github.com/cosmos/gogoproto/proto"
 	github_com_cosmos_gogoproto_types "github.com/cosmos/gogoproto/types"
-	types "github.com/sentinel-official/hub/v12/types"
+	v1 "github.com/sentinel-official/hub/v12/types/v1"
 	_ "google.golang.org/protobuf/types/known/durationpb"
 	_ "google.golang.org/protobuf/types/known/timestamppb"
 	io "io"
@@ -40,13 +40,13 @@ type Session struct {
 	// Field 4: Account address.
 	Address string `protobuf:"bytes,4,opt,name=address,proto3" json:"address,omitempty"`
 	// Field 5: Bandwidth details.
-	Bandwidth types.Bandwidth `protobuf:"bytes,5,opt,name=bandwidth,proto3" json:"bandwidth"`
+	Bandwidth v1.Bandwidth `protobuf:"bytes,5,opt,name=bandwidth,proto3" json:"bandwidth"`
 	// Field 6: Session duration.
 	Duration time.Duration `protobuf:"bytes,6,opt,name=duration,proto3,stdduration" json:"duration"`
 	// Field 7: Inactive timestamp.
 	InactiveAt time.Time `protobuf:"bytes,7,opt,name=inactive_at,json=inactiveAt,proto3,stdtime" json:"inactive_at"`
 	// Field 8: Session status.
-	Status types.Status `protobuf:"varint,8,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
+	Status v1.Status `protobuf:"varint,8,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
 	// Field 9: Status timestamp.
 	StatusAt time.Time `protobuf:"bytes,9,opt,name=status_at,json=statusAt,proto3,stdtime" json:"status_at"`
 }
@@ -504,7 +504,7 @@ func (m *Session) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Status |= types.Status(b&0x7F) << shift
+				m.Status |= v1.Status(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}

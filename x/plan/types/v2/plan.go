@@ -7,6 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 )
 
 func (m *Plan) GetProviderAddress() base.ProvAddress {
@@ -66,7 +67,7 @@ func (m *Plan) Validate() error {
 	if !m.Prices.IsValid() {
 		return fmt.Errorf("prices must be valid")
 	}
-	if !m.Status.IsOneOf(base.StatusActive, base.StatusInactive) {
+	if !m.Status.IsOneOf(v1base.StatusActive, v1base.StatusInactive) {
 		return fmt.Errorf("status must be one of [active, inactive]")
 	}
 	if m.StatusAt.IsZero() {

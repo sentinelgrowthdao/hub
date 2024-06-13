@@ -7,6 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 	"github.com/sentinel-official/hub/v12/x/provider/types"
 )
 
@@ -79,7 +80,7 @@ func (m *MsgRegisterRequest) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgUpdateRequest creates a new MsgUpdateRequest instance with the given parameters.
-func NewMsgUpdateRequest(from base.ProvAddress, name, identity, website, description string, status base.Status) *MsgUpdateRequest {
+func NewMsgUpdateRequest(from base.ProvAddress, name, identity, website, description string, status v1base.Status) *MsgUpdateRequest {
 	return &MsgUpdateRequest{
 		From:        from.String(),
 		Name:        name,
@@ -122,7 +123,7 @@ func (m *MsgUpdateRequest) ValidateBasic() error {
 	if len(m.Description) > 256 {
 		return sdkerrors.Wrapf(types.ErrorInvalidMessage, "description length cannot be greater than %d chars", 256)
 	}
-	if !m.Status.IsOneOf(base.StatusUnspecified, base.StatusActive, base.StatusInactive) {
+	if !m.Status.IsOneOf(v1base.StatusUnspecified, v1base.StatusActive, v1base.StatusInactive) {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "status must be one of [unspecified, active, inactive]")
 	}
 

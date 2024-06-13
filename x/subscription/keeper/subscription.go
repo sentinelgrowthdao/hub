@@ -9,6 +9,7 @@ import (
 	protobuf "github.com/gogo/protobuf/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 	baseutils "github.com/sentinel-official/hub/v12/utils"
 	"github.com/sentinel-official/hub/v12/x/subscription/types"
 	"github.com/sentinel-official/hub/v12/x/subscription/types/v2"
@@ -276,7 +277,7 @@ func (k *Keeper) CreateSubscriptionForNode(ctx sdk.Context, accAddr sdk.AccAddre
 	if !found {
 		return nil, types.NewErrorNodeNotFound(nodeAddr)
 	}
-	if !node.Status.Equal(base.StatusActive) {
+	if !node.Status.Equal(v1base.StatusActive) {
 		return nil, types.NewErrorInvalidNodeStatus(nodeAddr, node.Status)
 	}
 
@@ -287,7 +288,7 @@ func (k *Keeper) CreateSubscriptionForNode(ctx sdk.Context, accAddr sdk.AccAddre
 			ID:         count + 1,
 			Address:    accAddr.String(),
 			InactiveAt: time.Time{},
-			Status:     base.StatusActive,
+			Status:     v1base.StatusActive,
 			StatusAt:   ctx.BlockTime(),
 		},
 		NodeAddress: nodeAddr.String(),
@@ -392,7 +393,7 @@ func (k *Keeper) CreateSubscriptionForPlan(ctx sdk.Context, accAddr sdk.AccAddre
 	if !found {
 		return nil, types.NewErrorPlanNotFound(id)
 	}
-	if !plan.Status.Equal(base.StatusActive) {
+	if !plan.Status.Equal(v1base.StatusActive) {
 		return nil, types.NewErrorInvalidPlanStatus(plan.ID, plan.Status)
 	}
 
@@ -442,7 +443,7 @@ func (k *Keeper) CreateSubscriptionForPlan(ctx sdk.Context, accAddr sdk.AccAddre
 			ID:         count + 1,
 			Address:    accAddr.String(),
 			InactiveAt: ctx.BlockTime().Add(plan.Duration),
-			Status:     base.StatusActive,
+			Status:     v1base.StatusActive,
 			StatusAt:   ctx.BlockTime(),
 		},
 		PlanID: plan.ID,

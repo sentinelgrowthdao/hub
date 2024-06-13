@@ -9,6 +9,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 )
 
 func TestNode_GetAddress(t *testing.T) {
@@ -314,7 +315,7 @@ func TestNode_Validate(t *testing.T) {
 		HourlyPrices   sdk.Coins
 		RemoteURL      string
 		InactiveAt     time.Time
-		Status         base.Status
+		Status         v1base.Status
 		StatusAt       time.Time
 	}
 	tests := []struct {
@@ -351,7 +352,7 @@ func TestNode_Validate(t *testing.T) {
 				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
 				InactiveAt:     base.TestTimeNow,
-				Status:         base.StatusActive,
+				Status:         v1base.StatusActive,
 				StatusAt:       base.TestTimeNow,
 			},
 			false,
@@ -364,7 +365,7 @@ func TestNode_Validate(t *testing.T) {
 				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
 				InactiveAt:     base.TestTimeNow,
-				Status:         base.StatusActive,
+				Status:         v1base.StatusActive,
 				StatusAt:       base.TestTimeNow,
 			},
 			false,
@@ -377,7 +378,7 @@ func TestNode_Validate(t *testing.T) {
 				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
 				InactiveAt:     base.TestTimeNow,
-				Status:         base.StatusActive,
+				Status:         v1base.StatusActive,
 				StatusAt:       base.TestTimeNow,
 			},
 			false,
@@ -390,7 +391,7 @@ func TestNode_Validate(t *testing.T) {
 				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
 				InactiveAt:     base.TestTimeNow,
-				Status:         base.StatusActive,
+				Status:         v1base.StatusActive,
 				StatusAt:       base.TestTimeNow,
 			},
 			true,
@@ -451,7 +452,7 @@ func TestNode_Validate(t *testing.T) {
 				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
 				InactiveAt:     base.TestTimeNow,
-				Status:         base.StatusActive,
+				Status:         v1base.StatusActive,
 				StatusAt:       base.TestTimeNow,
 			},
 			false,
@@ -464,7 +465,7 @@ func TestNode_Validate(t *testing.T) {
 				HourlyPrices:   base.TestCoinsNil,
 				RemoteURL:      "https://remote.url:443",
 				InactiveAt:     base.TestTimeNow,
-				Status:         base.StatusActive,
+				Status:         v1base.StatusActive,
 				StatusAt:       base.TestTimeNow,
 			},
 			true,
@@ -531,7 +532,7 @@ func TestNode_Validate(t *testing.T) {
 				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
 				InactiveAt:     base.TestTimeNow,
-				Status:         base.StatusActive,
+				Status:         v1base.StatusActive,
 				StatusAt:       base.TestTimeNow,
 			},
 			false,
@@ -594,7 +595,7 @@ func TestNode_Validate(t *testing.T) {
 				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
 				InactiveAt:     base.TestTimeNow,
-				Status:         base.StatusActive,
+				Status:         v1base.StatusActive,
 				StatusAt:       base.TestTimeNow,
 			},
 			false,
@@ -618,7 +619,7 @@ func TestNode_Validate(t *testing.T) {
 				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
 				InactiveAt:     base.TestTimeNow,
-				Status:         base.StatusActive,
+				Status:         v1base.StatusActive,
 				StatusAt:       base.TestTimeNow,
 			},
 			false,
@@ -631,7 +632,7 @@ func TestNode_Validate(t *testing.T) {
 				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
 				InactiveAt:     base.TestTimeNow,
-				Status:         base.StatusUnspecified,
+				Status:         v1base.StatusUnspecified,
 			},
 			true,
 		},
@@ -643,7 +644,7 @@ func TestNode_Validate(t *testing.T) {
 				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
 				InactiveAt:     base.TestTimeNow,
-				Status:         base.StatusActive,
+				Status:         v1base.StatusActive,
 				StatusAt:       base.TestTimeNow,
 			},
 			false,
@@ -656,7 +657,7 @@ func TestNode_Validate(t *testing.T) {
 				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
 				InactiveAt:     base.TestTimeNow,
-				Status:         base.StatusInactivePending,
+				Status:         v1base.StatusInactivePending,
 			},
 			true,
 		},
@@ -668,7 +669,7 @@ func TestNode_Validate(t *testing.T) {
 				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
 				InactiveAt:     base.TestTimeZero,
-				Status:         base.StatusInactive,
+				Status:         v1base.StatusInactive,
 				StatusAt:       base.TestTimeNow,
 			},
 			false,
@@ -681,7 +682,7 @@ func TestNode_Validate(t *testing.T) {
 				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
 				InactiveAt:     base.TestTimeNow,
-				Status:         base.StatusActive,
+				Status:         v1base.StatusActive,
 				StatusAt:       base.TestTimeZero,
 			},
 			true,
@@ -694,7 +695,7 @@ func TestNode_Validate(t *testing.T) {
 				HourlyPrices:   base.TestCoinsPositiveAmount,
 				RemoteURL:      "https://remote.url:443",
 				InactiveAt:     base.TestTimeNow,
-				Status:         base.StatusActive,
+				Status:         v1base.StatusActive,
 				StatusAt:       base.TestTimeNow,
 			},
 			false,

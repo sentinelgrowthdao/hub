@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"time"
 
-	base "github.com/sentinel-official/hub/v12/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/address"
+
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 const (

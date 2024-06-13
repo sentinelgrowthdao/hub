@@ -7,6 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 	baseutils "github.com/sentinel-official/hub/v12/utils"
 	"github.com/sentinel-official/hub/v12/x/subscription/types/v2"
 )
@@ -21,7 +22,7 @@ func (k *Keeper) SessionInactiveHook(ctx sdk.Context, id uint64, accAddr sdk.Acc
 	}
 
 	// Check if the session has the correct status for processing.
-	if !session.Status.Equal(base.StatusInactivePending) {
+	if !session.Status.Equal(v1base.StatusInactivePending) {
 		return fmt.Errorf("invalid status %s for session %d", session.Status, session.ID)
 	}
 

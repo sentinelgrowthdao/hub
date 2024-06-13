@@ -6,6 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 	"github.com/sentinel-official/hub/v12/x/provider/types"
 	"github.com/sentinel-official/hub/v12/x/provider/types/v2"
 )
@@ -99,9 +100,9 @@ func (k *Keeper) DeleteInactiveProvider(ctx sdk.Context, addr base.ProvAddress) 
 // SetProvider is for inserting a provider into the KVStore.
 func (k *Keeper) SetProvider(ctx sdk.Context, provider v2.Provider) {
 	switch provider.Status {
-	case base.StatusActive:
+	case v1base.StatusActive:
 		k.SetActiveProvider(ctx, provider)
-	case base.StatusInactive:
+	case v1base.StatusInactive:
 		k.SetInactiveProvider(ctx, provider)
 	default:
 		panic(fmt.Errorf("failed to set the provider %v", provider))

@@ -11,6 +11,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 	"github.com/sentinel-official/hub/v12/x/plan/types"
 	"github.com/sentinel-official/hub/v12/x/plan/types/v2"
 )
@@ -54,9 +55,9 @@ func (q *queryServer) QueryPlans(c context.Context, req *v2.QueryPlansRequest) (
 	)
 
 	switch req.Status {
-	case base.StatusActive:
+	case v1base.StatusActive:
 		keyPrefix = types.ActivePlanKeyPrefix
-	case base.StatusInactive:
+	case v1base.StatusInactive:
 		keyPrefix = types.InactivePlanKeyPrefix
 	default:
 		keyPrefix = types.PlanKeyPrefix
@@ -106,7 +107,7 @@ func (q *queryServer) QueryPlansForProvider(c context.Context, req *v2.QueryPlan
 			return false, fmt.Errorf("plan for key %X does not exist", key)
 		}
 
-		if req.Status.Equal(base.StatusUnspecified) || item.Status.Equal(req.Status) {
+		if req.Status.Equal(v1base.StatusUnspecified) || item.Status.Equal(req.Status) {
 			items = append(items, item)
 			return true, nil
 		}

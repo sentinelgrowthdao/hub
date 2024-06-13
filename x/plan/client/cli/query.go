@@ -10,6 +10,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
 
+	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/plan/types/v2"
 )
 
@@ -67,7 +68,7 @@ func queryPlans() *cobra.Command {
 				return err
 			}
 
-			status, err := GetStatus(cmd.Flags())
+			status, err := base.StatusFromFlags(cmd.Flags())
 			if err != nil {
 				return err
 			}
@@ -115,7 +116,7 @@ func queryPlans() *cobra.Command {
 	flags.AddQueryFlagsToCmd(cmd)
 	flags.AddPaginationFlagsToCmd(cmd, "plans")
 	cmd.Flags().String(flagProvider, "", "filter the plans by provider address")
-	cmd.Flags().String(flagStatus, "", "filter the plans by status (active|inactive)")
+	cmd.Flags().String(base.FlagStatus, "", "filter the plans by status (active|inactive)")
 
 	return cmd
 }

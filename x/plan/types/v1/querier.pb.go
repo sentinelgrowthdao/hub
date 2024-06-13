@@ -10,8 +10,8 @@ import (
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	grpc1 "github.com/cosmos/gogoproto/grpc"
 	proto "github.com/cosmos/gogoproto/proto"
-	types "github.com/sentinel-official/hub/v12/types"
-	v1 "github.com/sentinel-official/hub/v12/x/node/types/v1"
+	v1 "github.com/sentinel-official/hub/v12/types/v1"
+	v11 "github.com/sentinel-official/hub/v12/x/node/types/v1"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
@@ -33,7 +33,7 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type QueryPlansRequest struct {
-	Status     types.Status       `protobuf:"varint,1,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
+	Status     v1.Status          `protobuf:"varint,1,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
 	Pagination *query.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -72,7 +72,7 @@ var xxx_messageInfo_QueryPlansRequest proto.InternalMessageInfo
 
 type QueryPlansForProviderRequest struct {
 	Address    string             `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-	Status     types.Status       `protobuf:"varint,2,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
+	Status     v1.Status          `protobuf:"varint,2,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
 	Pagination *query.PageRequest `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -298,7 +298,7 @@ func (m *QueryPlanResponse) XXX_DiscardUnknown() {
 var xxx_messageInfo_QueryPlanResponse proto.InternalMessageInfo
 
 type QueryNodesForPlanResponse struct {
-	Nodes      []v1.Node           `protobuf:"bytes,1,rep,name=nodes,proto3" json:"nodes"`
+	Nodes      []v11.Node          `protobuf:"bytes,1,rep,name=nodes,proto3" json:"nodes"`
 	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -1108,7 +1108,7 @@ func (m *QueryPlansRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Status |= types.Status(b&0x7F) << shift
+				m.Status |= v1.Status(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1245,7 +1245,7 @@ func (m *QueryPlansForProviderRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Status |= types.Status(b&0x7F) << shift
+				m.Status |= v1.Status(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1862,7 +1862,7 @@ func (m *QueryNodesForPlanResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Nodes = append(m.Nodes, v1.Node{})
+			m.Nodes = append(m.Nodes, v11.Node{})
 			if err := m.Nodes[len(m.Nodes)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}

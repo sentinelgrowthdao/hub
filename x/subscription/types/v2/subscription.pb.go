@@ -5,11 +5,11 @@ package v2
 
 import (
 	fmt "fmt"
-	types1 "github.com/cosmos/cosmos-sdk/types"
+	types "github.com/cosmos/cosmos-sdk/types"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	proto "github.com/cosmos/gogoproto/proto"
 	github_com_cosmos_gogoproto_types "github.com/cosmos/gogoproto/types"
-	types "github.com/sentinel-official/hub/v12/types"
+	v1 "github.com/sentinel-official/hub/v12/types/v1"
 	_ "google.golang.org/protobuf/types/known/timestamppb"
 	io "io"
 	math "math"
@@ -70,7 +70,7 @@ type BaseSubscription struct {
 	// Field 3: Timestamp indicating when the subscription became inactive.
 	InactiveAt time.Time `protobuf:"bytes,3,opt,name=inactive_at,json=inactiveAt,proto3,stdtime" json:"inactive_at"`
 	// Field 4: Status of the subscription.
-	Status types.Status `protobuf:"varint,4,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
+	Status v1.Status `protobuf:"varint,4,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
 	// Field 5: Timestamp indicating when the subscription status was last updated.
 	StatusAt time.Time `protobuf:"bytes,5,opt,name=status_at,json=statusAt,proto3,stdtime" json:"status_at"`
 }
@@ -120,7 +120,7 @@ type NodeSubscription struct {
 	Hours int64 `protobuf:"varint,4,opt,name=hours,proto3" json:"hours,omitempty"`
 	// Field 5: Deposit required for the subscription, represented as a Cosmos Coin.
 	// This field is not nullable.
-	Deposit types1.Coin `protobuf:"bytes,5,opt,name=deposit,proto3" json:"deposit"`
+	Deposit types.Coin `protobuf:"bytes,5,opt,name=deposit,proto3" json:"deposit"`
 }
 
 func (m *NodeSubscription) Reset()         { *m = NodeSubscription{} }
@@ -630,7 +630,7 @@ func (m *BaseSubscription) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Status |= types.Status(b&0x7F) << shift
+				m.Status |= v1.Status(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}

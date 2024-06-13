@@ -7,6 +7,7 @@ import (
 	sdkerrors "cosmossdk.io/errors"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 )
 
 func (m *Provider) GetAddress() base.ProvAddress {
@@ -49,7 +50,7 @@ func (m *Provider) Validate() error {
 	if len(m.Description) > 256 {
 		return fmt.Errorf("description length cannot be greater than %d chars", 256)
 	}
-	if !m.Status.IsOneOf(base.StatusActive, base.StatusInactive) {
+	if !m.Status.IsOneOf(v1base.StatusActive, v1base.StatusInactive) {
 		return fmt.Errorf("status must be one of [active, inactive]")
 	}
 

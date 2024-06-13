@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 	"github.com/sentinel-official/hub/v12/x/node/types/v2"
 )
 
@@ -114,7 +115,7 @@ func txUpdateStatus() *cobra.Command {
 
 			msg := v2.NewMsgUpdateStatusRequest(
 				ctx.FromAddress.Bytes(),
-				base.StatusFromString(args[0]),
+				v1base.StatusFromString(args[0]),
 			)
 			if err = msg.ValidateBasic(); err != nil {
 				return err

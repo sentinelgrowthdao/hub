@@ -7,6 +7,7 @@ import (
 	protobuf "github.com/gogo/protobuf/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 	"github.com/sentinel-official/hub/v12/x/plan/types"
 	"github.com/sentinel-official/hub/v12/x/plan/types/v2"
 )
@@ -99,9 +100,9 @@ func (k *Keeper) DeleteInactivePlan(ctx sdk.Context, id uint64) {
 
 func (k *Keeper) SetPlan(ctx sdk.Context, plan v2.Plan) {
 	switch plan.Status {
-	case base.StatusActive:
+	case v1base.StatusActive:
 		k.SetActivePlan(ctx, plan)
-	case base.StatusInactive:
+	case v1base.StatusInactive:
 		k.SetInactivePlan(ctx, plan)
 	default:
 		panic(fmt.Errorf("failed to set the plan %v", plan))

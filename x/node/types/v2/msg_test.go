@@ -7,6 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 )
 
 func TestMsgRegisterRequest_ValidateBasic(t *testing.T) {
@@ -572,7 +573,7 @@ func TestMsgUpdateDetailsRequest_ValidateBasic(t *testing.T) {
 func TestMsgUpdateStatusRequest_ValidateBasic(t *testing.T) {
 	type fields struct {
 		From   string
-		Status base.Status
+		Status v1base.Status
 	}
 	tests := []struct {
 		name    string
@@ -604,7 +605,7 @@ func TestMsgUpdateStatusRequest_ValidateBasic(t *testing.T) {
 			"from 10 bytes",
 			fields{
 				From:   base.TestBech32NodeAddr10Bytes,
-				Status: base.StatusActive,
+				Status: v1base.StatusActive,
 			},
 			false,
 		},
@@ -612,7 +613,7 @@ func TestMsgUpdateStatusRequest_ValidateBasic(t *testing.T) {
 			"from 20 bytes",
 			fields{
 				From:   base.TestBech32NodeAddr20Bytes,
-				Status: base.StatusActive,
+				Status: v1base.StatusActive,
 			},
 			false,
 		},
@@ -620,7 +621,7 @@ func TestMsgUpdateStatusRequest_ValidateBasic(t *testing.T) {
 			"from 30 bytes",
 			fields{
 				From:   base.TestBech32NodeAddr30Bytes,
-				Status: base.StatusActive,
+				Status: v1base.StatusActive,
 			},
 			false,
 		},
@@ -628,7 +629,7 @@ func TestMsgUpdateStatusRequest_ValidateBasic(t *testing.T) {
 			"status unspecified",
 			fields{
 				From:   base.TestBech32NodeAddr20Bytes,
-				Status: base.StatusUnspecified,
+				Status: v1base.StatusUnspecified,
 			},
 			true,
 		},
@@ -636,7 +637,7 @@ func TestMsgUpdateStatusRequest_ValidateBasic(t *testing.T) {
 			"status active",
 			fields{
 				From:   base.TestBech32NodeAddr20Bytes,
-				Status: base.StatusActive,
+				Status: v1base.StatusActive,
 			},
 			false,
 		},
@@ -644,7 +645,7 @@ func TestMsgUpdateStatusRequest_ValidateBasic(t *testing.T) {
 			"status inactive_pending",
 			fields{
 				From:   base.TestBech32NodeAddr20Bytes,
-				Status: base.StatusInactivePending,
+				Status: v1base.StatusInactivePending,
 			},
 			true,
 		},
@@ -652,7 +653,7 @@ func TestMsgUpdateStatusRequest_ValidateBasic(t *testing.T) {
 			"status inactive",
 			fields{
 				From:   base.TestBech32NodeAddr20Bytes,
-				Status: base.StatusInactive,
+				Status: v1base.StatusInactive,
 			},
 			false,
 		},

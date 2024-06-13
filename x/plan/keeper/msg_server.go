@@ -6,6 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 	"github.com/sentinel-official/hub/v12/x/plan/types"
 	"github.com/sentinel-official/hub/v12/x/plan/types/v2"
 )
@@ -49,7 +50,7 @@ func (k *msgServer) MsgCreate(c context.Context, msg *v2.MsgCreateRequest) (*v2.
 		Duration:        msg.Duration,
 		Gigabytes:       msg.Gigabytes,
 		Prices:          msg.Prices,
-		Status:          base.StatusInactive,
+		Status:          v1base.StatusInactive,
 		StatusAt:        ctx.BlockTime(),
 	}
 
@@ -86,15 +87,15 @@ func (k *msgServer) MsgUpdateStatus(c context.Context, msg *v2.MsgUpdateStatusRe
 	}
 
 	// If the current status of the plan is `Active`, handle the necessary updates for changing to `Inactive` status.
-	if plan.Status.Equal(base.StatusActive) {
-		if msg.Status.Equal(base.StatusInactive) {
+	if plan.Status.Equal(v1base.StatusActive) {
+		if msg.Status.Equal(v1base.StatusInactive) {
 			k.DeleteActivePlan(ctx, plan.ID)
 		}
 	}
 
 	// If the current status of the plan is `Inactive`, handle the necessary updates for changing to `Active` status.
-	if plan.Status.Equal(base.StatusInactive) {
-		if msg.Status.Equal(base.StatusActive) {
+	if plan.Status.Equal(v1base.StatusInactive) {
+		if msg.Status.Equal(v1base.StatusActive) {
 			k.DeleteInactivePlan(ctx, plan.ID)
 		}
 	}

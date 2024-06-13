@@ -8,7 +8,7 @@ import (
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	proto "github.com/cosmos/gogoproto/proto"
 	github_com_cosmos_gogoproto_types "github.com/cosmos/gogoproto/types"
-	types "github.com/sentinel-official/hub/v12/types"
+	v1 "github.com/sentinel-official/hub/v12/types/v1"
 	_ "google.golang.org/protobuf/types/known/durationpb"
 	io "io"
 	math "math"
@@ -29,9 +29,9 @@ var _ = time.Kitchen
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type Proof struct {
-	Id        uint64          `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Duration  time.Duration   `protobuf:"bytes,2,opt,name=duration,proto3,stdduration" json:"duration"`
-	Bandwidth types.Bandwidth `protobuf:"bytes,3,opt,name=bandwidth,proto3" json:"bandwidth"`
+	Id        uint64        `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Duration  time.Duration `protobuf:"bytes,2,opt,name=duration,proto3,stdduration" json:"duration"`
+	Bandwidth v1.Bandwidth  `protobuf:"bytes,3,opt,name=bandwidth,proto3" json:"bandwidth"`
 }
 
 func (m *Proof) Reset()         { *m = Proof{} }

@@ -12,7 +12,7 @@ import (
 	grpc1 "github.com/cosmos/gogoproto/grpc"
 	proto "github.com/cosmos/gogoproto/proto"
 	github_com_cosmos_gogoproto_types "github.com/cosmos/gogoproto/types"
-	types1 "github.com/sentinel-official/hub/v12/types"
+	v1 "github.com/sentinel-official/hub/v12/types/v1"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -79,9 +79,9 @@ var xxx_messageInfo_MsgAddRequest proto.InternalMessageInfo
 // MsgSetStatusRequest defines the SDK message for modifying the status of a
 // plan
 type MsgSetStatusRequest struct {
-	From   string        `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
-	Id     uint64        `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
-	Status types1.Status `protobuf:"varint,3,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
+	From   string    `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
+	Id     uint64    `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	Status v1.Status `protobuf:"varint,3,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
 }
 
 func (m *MsgSetStatusRequest) Reset()         { *m = MsgSetStatusRequest{} }
@@ -1277,7 +1277,7 @@ func (m *MsgSetStatusRequest) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Status |= types1.Status(b&0x7F) << shift
+				m.Status |= v1.Status(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}

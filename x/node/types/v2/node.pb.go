@@ -10,7 +10,7 @@ import (
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	proto "github.com/cosmos/gogoproto/proto"
 	github_com_cosmos_gogoproto_types "github.com/cosmos/gogoproto/types"
-	types1 "github.com/sentinel-official/hub/v12/types"
+	v1 "github.com/sentinel-official/hub/v12/types/v1"
 	_ "google.golang.org/protobuf/types/known/timestamppb"
 	io "io"
 	math "math"
@@ -52,7 +52,7 @@ type Node struct {
 	// - (gogoproto.stdtime) = true: Use standard time representation for Go.
 	InactiveAt time.Time `protobuf:"bytes,5,opt,name=inactive_at,json=inactiveAt,proto3,stdtime" json:"inactive_at"`
 	// Field 6: Status of the node, using the sentinel.types.v1.Status enum.
-	Status types1.Status `protobuf:"varint,6,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
+	Status v1.Status `protobuf:"varint,6,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
 	// Field 7: Timestamp indicating when the status of the node was last updated.
 	// - (gogoproto.nullable) = false: Field is not nullable.
 	// - (gogoproto.stdtime) = true: Use standard time representation for Go.
@@ -478,7 +478,7 @@ func (m *Node) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Status |= types1.Status(b&0x7F) << shift
+				m.Status |= v1.Status(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}

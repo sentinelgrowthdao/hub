@@ -4,11 +4,11 @@ import (
 	"crypto/rand"
 	"testing"
 
-	base "github.com/sentinel-official/hub/v12/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"github.com/stretchr/testify/require"
+
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 func TestNewQueryParamsRequest(t *testing.T) {

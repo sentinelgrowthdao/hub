@@ -7,6 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 	"github.com/sentinel-official/hub/v12/x/node/types"
 	"github.com/sentinel-official/hub/v12/x/node/types/v2"
 )
@@ -70,7 +71,7 @@ func (k *msgServer) MsgRegister(c context.Context, msg *v2.MsgRegisterRequest) (
 		HourlyPrices:   msg.HourlyPrices,
 		RemoteURL:      msg.RemoteURL,
 		InactiveAt:     time.Time{},
-		Status:         base.StatusInactive,
+		Status:         v1base.StatusInactive,
 		StatusAt:       ctx.BlockTime(),
 	}
 
@@ -160,22 +161,22 @@ func (k *msgServer) MsgUpdateStatus(c context.Context, msg *v2.MsgUpdateStatusRe
 	}
 
 	// If the current status of the node is `Active`, handle the necessary updates for changing to `Inactive` status.
-	if node.Status.Equal(base.StatusActive) {
+	if node.Status.Equal(v1base.StatusActive) {
 		k.DeleteNodeForInactiveAt(ctx, node.InactiveAt, nodeAddr)
-		if msg.Status.Equal(base.StatusInactive) {
+		if msg.Status.Equal(v1base.StatusInactive) {
 			k.DeleteActiveNode(ctx, nodeAddr)
 		}
 	}
 
 	// If the current status of the node is `Inactive`, handle the necessary updates for changing to `Active` status.
-	if node.Status.Equal(base.StatusInactive) {
-		if msg.Status.Equal(base.StatusActive) {
+	if node.Status.Equal(v1base.StatusInactive) {
+		if msg.Status.Equal(v1base.StatusActive) {
 			k.DeleteInactiveNode(ctx, nodeAddr)
 		}
 	}
 
 	// If the new status is `Active`, update the node's inactive time based on the active duration.
-	if msg.Status.Equal(base.StatusActive) {
+	if msg.Status.Equal(v1base.StatusActive) {
 		node.InactiveAt = ctx.BlockTime().Add(
 			k.ActiveDuration(ctx),
 		)
@@ -183,7 +184,7 @@ func (k *msgServer) MsgUpdateStatus(c context.Context, msg *v2.MsgUpdateStatusRe
 	}
 
 	// If the new status is `Inactive`, set the node's inactive time to zero.
-	if msg.Status.Equal(base.StatusInactive) {
+	if msg.Status.Equal(v1base.StatusInactive) {
 		node.InactiveAt = time.Time{}
 	}
 

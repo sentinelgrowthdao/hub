@@ -8,6 +8,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 )
 
 func (m *Node) GetAddress() base.NodeAddress {
@@ -73,16 +74,16 @@ func (m *Node) Validate() error {
 	}
 
 	if m.InactiveAt.IsZero() {
-		if !m.Status.Equal(base.StatusInactive) {
+		if !m.Status.Equal(v1base.StatusInactive) {
 			return fmt.Errorf("invalid inactive_at %s; expected positive", m.InactiveAt)
 		}
 	}
 	if !m.InactiveAt.IsZero() {
-		if !m.Status.Equal(base.StatusActive) {
+		if !m.Status.Equal(v1base.StatusActive) {
 			return fmt.Errorf("invalid inactive_at %s; expected zero", m.InactiveAt)
 		}
 	}
-	if !m.Status.IsOneOf(base.StatusActive, base.StatusInactive) {
+	if !m.Status.IsOneOf(v1base.StatusActive, v1base.StatusInactive) {
 		return fmt.Errorf("status must be one of [active, inactive]")
 	}
 	if m.StatusAt.IsZero() {

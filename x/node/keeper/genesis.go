@@ -3,7 +3,7 @@ package keeper
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	base "github.com/sentinel-official/hub/v12/types"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
 	"github.com/sentinel-official/hub/v12/x/node/types/v2"
 )
 
@@ -12,7 +12,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *v2.GenesisState) {
 
 	for _, item := range state.Nodes {
 		k.SetNode(ctx, item)
-		if item.Status.Equal(base.StatusActive) {
+		if item.Status.Equal(v1base.StatusActive) {
 			addr := item.GetAddress()
 			k.SetNodeForInactiveAt(ctx, item.InactiveAt, addr)
 		}

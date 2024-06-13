@@ -5,10 +5,10 @@ package v1
 
 import (
 	fmt "fmt"
-	types1 "github.com/cosmos/cosmos-sdk/types"
+	types "github.com/cosmos/cosmos-sdk/types"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	proto "github.com/cosmos/gogoproto/proto"
-	types "github.com/sentinel-official/hub/v12/types"
+	v1 "github.com/sentinel-official/hub/v12/types/v1"
 	io "io"
 	math "math"
 	math_bits "math/bits"
@@ -104,10 +104,10 @@ func (m *EventUpdate) XXX_DiscardUnknown() {
 var xxx_messageInfo_EventUpdate proto.InternalMessageInfo
 
 type EventSetStatus struct {
-	Id           uint64       `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" yaml:"id"`
-	Node         string       `protobuf:"bytes,2,opt,name=node,proto3" json:"node,omitempty" yaml:"node"`
-	Subscription uint64       `protobuf:"varint,3,opt,name=subscription,proto3" json:"subscription,omitempty" yaml:"subscription"`
-	Status       types.Status `protobuf:"varint,4,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty" yaml:"status"`
+	Id           uint64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" yaml:"id"`
+	Node         string    `protobuf:"bytes,2,opt,name=node,proto3" json:"node,omitempty" yaml:"node"`
+	Subscription uint64    `protobuf:"varint,3,opt,name=subscription,proto3" json:"subscription,omitempty" yaml:"subscription"`
+	Status       v1.Status `protobuf:"varint,4,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty" yaml:"status"`
 }
 
 func (m *EventSetStatus) Reset()         { *m = EventSetStatus{} }
@@ -144,10 +144,10 @@ func (m *EventSetStatus) XXX_DiscardUnknown() {
 var xxx_messageInfo_EventSetStatus proto.InternalMessageInfo
 
 type EventPay struct {
-	Id           uint64      `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" yaml:"id"`
-	Node         string      `protobuf:"bytes,2,opt,name=node,proto3" json:"node,omitempty" yaml:"node"`
-	Subscription uint64      `protobuf:"varint,3,opt,name=subscription,proto3" json:"subscription,omitempty" yaml:"subscription"`
-	Amount       types1.Coin `protobuf:"bytes,4,opt,name=amount,proto3" json:"amount" yaml:"amount"`
+	Id           uint64     `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" yaml:"id"`
+	Node         string     `protobuf:"bytes,2,opt,name=node,proto3" json:"node,omitempty" yaml:"node"`
+	Subscription uint64     `protobuf:"varint,3,opt,name=subscription,proto3" json:"subscription,omitempty" yaml:"subscription"`
+	Amount       types.Coin `protobuf:"bytes,4,opt,name=amount,proto3" json:"amount" yaml:"amount"`
 }
 
 func (m *EventPay) Reset()         { *m = EventPay{} }
@@ -849,7 +849,7 @@ func (m *EventSetStatus) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Status |= types.Status(b&0x7F) << shift
+				m.Status |= v1.Status(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
