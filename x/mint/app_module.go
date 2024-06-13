@@ -15,6 +15,7 @@ import (
 
 	"github.com/sentinel-official/hub/v12/x/mint/keeper"
 	"github.com/sentinel-official/hub/v12/x/mint/types"
+	"github.com/sentinel-official/hub/v12/x/mint/types/v1"
 )
 
 var (
@@ -55,12 +56,12 @@ func NewAppModule(cdc codec.Codec, k keeper.Keeper) AppModule {
 }
 
 func (am AppModule) DefaultGenesis(jsonCodec codec.JSONCodec) json.RawMessage {
-	state := types.DefaultGenesisState()
+	state := v1.DefaultGenesisState()
 	return jsonCodec.MustMarshalJSON(state)
 }
 
 func (am AppModule) ValidateGenesis(jsonCodec codec.JSONCodec, _ client.TxEncodingConfig, message json.RawMessage) error {
-	var state types.GenesisState
+	var state v1.GenesisState
 	if err := jsonCodec.UnmarshalJSON(message, &state); err != nil {
 		return err
 	}
@@ -69,7 +70,7 @@ func (am AppModule) ValidateGenesis(jsonCodec codec.JSONCodec, _ client.TxEncodi
 }
 
 func (am AppModule) InitGenesis(ctx sdk.Context, jsonCodec codec.JSONCodec, message json.RawMessage) []abcitypes.ValidatorUpdate {
-	var state types.GenesisState
+	var state v1.GenesisState
 	jsonCodec.MustUnmarshalJSON(message, &state)
 	am.keeper.InitGenesis(ctx, &state)
 

@@ -6,9 +6,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sentinel-official/hub/v12/x/mint/types"
+	"github.com/sentinel-official/hub/v12/x/mint/types/v1"
 )
 
-func (k *Keeper) SetInflation(ctx sdk.Context, inflation types.Inflation) {
+func (k *Keeper) SetInflation(ctx sdk.Context, inflation v1.Inflation) {
 	var (
 		store = k.Store(ctx)
 		key   = types.InflationKey(inflation.Timestamp)
@@ -18,7 +19,7 @@ func (k *Keeper) SetInflation(ctx sdk.Context, inflation types.Inflation) {
 	store.Set(key, value)
 }
 
-func (k *Keeper) GetInflation(ctx sdk.Context, t time.Time) (inflation types.Inflation, found bool) {
+func (k *Keeper) GetInflation(ctx sdk.Context, t time.Time) (inflation v1.Inflation, found bool) {
 	var (
 		store = k.Store(ctx)
 		key   = types.InflationKey(t)
@@ -42,7 +43,7 @@ func (k *Keeper) DeleteInflation(ctx sdk.Context, t time.Time) {
 	store.Delete(key)
 }
 
-func (k *Keeper) GetInflations(ctx sdk.Context) (items []types.Inflation) {
+func (k *Keeper) GetInflations(ctx sdk.Context) (items []v1.Inflation) {
 	var (
 		store = k.Store(ctx)
 		iter  = sdk.KVStorePrefixIterator(store, types.InflationKeyPrefix)
@@ -51,7 +52,7 @@ func (k *Keeper) GetInflations(ctx sdk.Context) (items []types.Inflation) {
 	defer iter.Close()
 
 	for ; iter.Valid(); iter.Next() {
-		var item types.Inflation
+		var item v1.Inflation
 		k.cdc.MustUnmarshal(iter.Value(), &item)
 		items = append(items, item)
 	}
@@ -59,7 +60,7 @@ func (k *Keeper) GetInflations(ctx sdk.Context) (items []types.Inflation) {
 	return items
 }
 
-func (k *Keeper) IterateInflations(ctx sdk.Context, fn func(index int, item types.Inflation) (stop bool)) {
+func (k *Keeper) IterateInflations(ctx sdk.Context, fn func(index int, item v1.Inflation) (stop bool)) {
 	var (
 		store = k.Store(ctx)
 		iter  = sdk.KVStorePrefixIterator(store, types.InflationKeyPrefix)
@@ -68,7 +69,7 @@ func (k *Keeper) IterateInflations(ctx sdk.Context, fn func(index int, item type
 	defer iter.Close()
 
 	for i := 0; iter.Valid(); iter.Next() {
-		var item types.Inflation
+		var item v1.Inflation
 		k.cdc.MustUnmarshal(iter.Value(), &item)
 
 		if stop := fn(i, item); stop {

@@ -4,11 +4,11 @@ import (
 	abcitypes "github.com/cometbft/cometbft/abci/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/sentinel-official/hub/v12/x/mint/types"
+	"github.com/sentinel-official/hub/v12/x/mint/types/v1"
 )
 
 func (k *Keeper) BeginBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
-	k.IterateInflations(ctx, func(_ int, item types.Inflation) bool {
+	k.IterateInflations(ctx, func(_ int, item v1.Inflation) bool {
 		if item.Timestamp.After(ctx.BlockTime()) {
 			return true
 		}
