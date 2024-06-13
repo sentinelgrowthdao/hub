@@ -10,21 +10,22 @@ import (
 	"google.golang.org/grpc/status"
 
 	"github.com/sentinel-official/hub/v12/x/deposit/types"
+	"github.com/sentinel-official/hub/v12/x/deposit/types/v1"
 )
 
 var (
-	_ types.QueryServiceServer = (*queryServer)(nil)
+	_ v1.QueryServiceServer = (*queryServer)(nil)
 )
 
 type queryServer struct {
 	Keeper
 }
 
-func NewQueryServiceServer(k Keeper) types.QueryServiceServer {
+func NewQueryServiceServer(k Keeper) v1.QueryServiceServer {
 	return &queryServer{k}
 }
 
-func (q *queryServer) QueryDeposit(c context.Context, req *types.QueryDepositRequest) (*types.QueryDepositResponse, error) {
+func (q *queryServer) QueryDeposit(c context.Context, req *v1.QueryDepositRequest) (*v1.QueryDepositResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -41,22 +42,22 @@ func (q *queryServer) QueryDeposit(c context.Context, req *types.QueryDepositReq
 		return nil, status.Errorf(codes.NotFound, "deposit does not exist for address %s", req.Address)
 	}
 
-	return &types.QueryDepositResponse{Deposit: item}, nil
+	return &v1.QueryDepositResponse{Deposit: item}, nil
 }
 
-func (q *queryServer) QueryDeposits(c context.Context, req *types.QueryDepositsRequest) (*types.QueryDepositsResponse, error) {
+func (q *queryServer) QueryDeposits(c context.Context, req *v1.QueryDepositsRequest) (*v1.QueryDepositsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	var (
-		items types.Deposits
+		items v1.Deposits
 		ctx   = sdk.UnwrapSDKContext(c)
 		store = prefix.NewStore(q.Store(ctx), types.DepositKeyPrefix)
 	)
 
 	pagination, err := query.Paginate(store, req.Pagination, func(_ []byte, value []byte) error {
-		var item types.Deposit
+		var item v1.Deposit
 		if err := q.cdc.Unmarshal(value, &item); err != nil {
 			return err
 		}
@@ -69,5 +70,5 @@ func (q *queryServer) QueryDeposits(c context.Context, req *types.QueryDepositsR
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QueryDepositsResponse{Deposits: items, Pagination: pagination}, nil
+	return &v1.QueryDepositsResponse{Deposits: items, Pagination: pagination}, nil
 }

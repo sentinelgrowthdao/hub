@@ -4,10 +4,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sentinel-official/hub/v12/x/deposit/types"
+	"github.com/sentinel-official/hub/v12/x/deposit/types/v1"
 )
 
 // SetDeposit stores a deposit in the module's KVStore.
-func (k *Keeper) SetDeposit(ctx sdk.Context, deposit types.Deposit) {
+func (k *Keeper) SetDeposit(ctx sdk.Context, deposit v1.Deposit) {
 	var (
 		store = k.Store(ctx)
 		key   = types.DepositKey(deposit.GetAddress())
@@ -19,7 +20,7 @@ func (k *Keeper) SetDeposit(ctx sdk.Context, deposit types.Deposit) {
 
 // GetDeposit retrieves a deposit from the module's KVStore based on the account address.
 // If the deposit exists, it returns the deposit and 'found' as true; otherwise, it returns 'found' as false.
-func (k *Keeper) GetDeposit(ctx sdk.Context, addr sdk.AccAddress) (deposit types.Deposit, found bool) {
+func (k *Keeper) GetDeposit(ctx sdk.Context, addr sdk.AccAddress) (deposit v1.Deposit, found bool) {
 	var (
 		store = k.Store(ctx)
 		key   = types.DepositKey(addr)
@@ -35,7 +36,7 @@ func (k *Keeper) GetDeposit(ctx sdk.Context, addr sdk.AccAddress) (deposit types
 }
 
 // GetDeposits retrieves all deposits stored in the module's KVStore.
-func (k *Keeper) GetDeposits(ctx sdk.Context) (items types.Deposits) {
+func (k *Keeper) GetDeposits(ctx sdk.Context) (items v1.Deposits) {
 	var (
 		store = k.Store(ctx)
 		iter  = sdk.KVStorePrefixIterator(store, types.DepositKeyPrefix)
@@ -44,7 +45,7 @@ func (k *Keeper) GetDeposits(ctx sdk.Context) (items types.Deposits) {
 	defer iter.Close()
 
 	for ; iter.Valid(); iter.Next() {
-		var item types.Deposit
+		var item v1.Deposit
 		k.cdc.MustUnmarshal(iter.Value(), &item)
 		items = append(items, item)
 	}
@@ -54,14 +55,14 @@ func (k *Keeper) GetDeposits(ctx sdk.Context) (items types.Deposits) {
 
 // IterateDeposits iterates over all deposits stored in the module's KVStore and calls the provided function for each deposit.
 // The iteration stops when the provided function returns 'true'.
-func (k *Keeper) IterateDeposits(ctx sdk.Context, fn func(index int, item types.Deposit) (stop bool)) {
+func (k *Keeper) IterateDeposits(ctx sdk.Context, fn func(index int, item v1.Deposit) (stop bool)) {
 	store := k.Store(ctx)
 
 	iter := sdk.KVStorePrefixIterator(store, types.DepositKeyPrefix)
 	defer iter.Close()
 
 	for i := 0; iter.Valid(); iter.Next() {
-		var item types.Deposit
+		var item v1.Deposit
 		k.cdc.MustUnmarshal(iter.Value(), &item)
 
 		if stop := fn(i, item); stop {
@@ -81,7 +82,7 @@ func (k *Keeper) SendCoinsFromAccountToDeposit(ctx sdk.Context, fromAddr, toAddr
 
 	deposit, found := k.GetDeposit(ctx, toAddr)
 	if !found {
-		deposit = types.Deposit{
+		deposit = v1.Deposit{
 			Address: toAddr.String(),
 			Coins:   sdk.NewCoins(),
 		}
@@ -94,7 +95,7 @@ func (k *Keeper) SendCoinsFromAccountToDeposit(ctx sdk.Context, fromAddr, toAddr
 
 	k.SetDeposit(ctx, deposit)
 	ctx.EventManager().EmitTypedEvent(
-		&types.EventAdd{
+		&v1.EventAdd{
 			Address: toAddr.String(),
 			Coins:   coins.String(),
 		},
@@ -122,7 +123,7 @@ func (k *Keeper) SendCoinsFromDepositToAccount(ctx sdk.Context, fromAddr, toAddr
 
 	k.SetDeposit(ctx, deposit)
 	ctx.EventManager().EmitTypedEvent(
-		&types.EventSubtract{
+		&v1.EventSubtract{
 			Address: fromAddr.String(),
 			Coins:   coins.String(),
 		},
@@ -150,7 +151,7 @@ func (k *Keeper) SendCoinsFromDepositToModule(ctx sdk.Context, fromAddr sdk.AccA
 
 	k.SetDeposit(ctx, deposit)
 	ctx.EventManager().EmitTypedEvent(
-		&types.EventSubtract{
+		&v1.EventSubtract{
 			Address: fromAddr.String(),
 			Coins:   coins.String(),
 		},

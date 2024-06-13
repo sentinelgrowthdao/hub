@@ -10,7 +10,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cobra"
 
-	"github.com/sentinel-official/hub/v12/x/deposit/types"
+	"github.com/sentinel-official/hub/v12/x/deposit/types/v1"
 )
 
 func queryDeposit() *cobra.Command {
@@ -30,12 +30,12 @@ func queryDeposit() *cobra.Command {
 			}
 
 			var (
-				qc = types.NewQueryServiceClient(ctx)
+				qc = v1.NewQueryServiceClient(ctx)
 			)
 
 			res, err := qc.QueryDeposit(
 				context.Background(),
-				types.NewQueryDepositRequest(
+				v1.NewQueryDepositRequest(
 					addr,
 				),
 			)
@@ -68,12 +68,12 @@ func queryDeposits() *cobra.Command {
 			}
 
 			var (
-				qc = types.NewQueryServiceClient(ctx)
+				qc = v1.NewQueryServiceClient(ctx)
 			)
 
 			res, err := qc.QueryDeposits(
 				context.Background(),
-				types.NewQueryDepositsRequest(
+				v1.NewQueryDepositsRequest(
 					pagination,
 				),
 			)

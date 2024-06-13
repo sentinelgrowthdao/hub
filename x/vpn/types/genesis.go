@@ -3,7 +3,7 @@ package types
 import (
 	sdkerrors "cosmossdk.io/errors"
 
-	deposittypes "github.com/sentinel-official/hub/v12/x/deposit/types"
+	deposittypes "github.com/sentinel-official/hub/v12/x/deposit/types/v1"
 	nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v2"
 	plantypes "github.com/sentinel-official/hub/v12/x/plan/types/v2"
 	providertypes "github.com/sentinel-official/hub/v12/x/provider/types/v2"

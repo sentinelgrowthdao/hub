@@ -15,7 +15,7 @@ import (
 	"github.com/spf13/cobra"
 
 	depositkeeper "github.com/sentinel-official/hub/v12/x/deposit/keeper"
-	deposittypes "github.com/sentinel-official/hub/v12/x/deposit/types"
+	v1deposittypes "github.com/sentinel-official/hub/v12/x/deposit/types/v1"
 	nodekeeper "github.com/sentinel-official/hub/v12/x/node/keeper"
 	v1nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v1"
 	v2nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v2"
@@ -58,8 +58,7 @@ func (amb AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegist
 }
 
 func (amb AppModuleBasic) RegisterGRPCGatewayRoutes(ctx client.Context, mux *runtime.ServeMux) {
-	_ = deposittypes.RegisterQueryServiceHandlerClient(context.Background(), mux, deposittypes.NewQueryServiceClient(ctx))
-
+	_ = v1deposittypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v1deposittypes.NewQueryServiceClient(ctx))
 	_ = v1nodetypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v1nodetypes.NewQueryServiceClient(ctx))
 	_ = v1plantypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v1plantypes.NewQueryServiceClient(ctx))
 	_ = v1providertypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v1providertypes.NewQueryServiceClient(ctx))
@@ -142,8 +141,7 @@ func (am AppModule) ConsensusVersion() uint64 { return 3 }
 func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
 
 func (am AppModule) RegisterServices(configurator sdkmodule.Configurator) {
-	deposittypes.RegisterQueryServiceServer(configurator.QueryServer(), depositkeeper.NewQueryServiceServer(am.keeper.Deposit))
-
+	v1deposittypes.RegisterQueryServiceServer(configurator.QueryServer(), depositkeeper.NewQueryServiceServer(am.keeper.Deposit))
 	v1nodetypes.RegisterMsgServiceServer(configurator.MsgServer(), nil)
 	v1nodetypes.RegisterQueryServiceServer(configurator.QueryServer(), nil)
 	v1plantypes.RegisterMsgServiceServer(configurator.MsgServer(), nil)

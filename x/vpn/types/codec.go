@@ -5,7 +5,7 @@ package types
 import (
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 
-	deposittypes "github.com/sentinel-official/hub/v12/x/deposit/types"
+	v1deposittypes "github.com/sentinel-official/hub/v12/x/deposit/types/v1"
 	v1nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v1"
 	v2nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v2"
 	v1plantypes "github.com/sentinel-official/hub/v12/x/plan/types/v1"
@@ -19,8 +19,7 @@ import (
 )
 
 func RegisterInterfaces(registry codectypes.InterfaceRegistry) {
-	deposittypes.RegisterInterfaces(registry)
-
+	v1deposittypes.RegisterInterfaces(registry)
 	v1nodetypes.RegisterInterfaces(registry)
 	v1plantypes.RegisterInterfaces(registry)
 	v1providertypes.RegisterInterfaces(registry)

@@ -7,7 +7,7 @@ import (
 	fmt "fmt"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	proto "github.com/cosmos/gogoproto/proto"
-	types "github.com/sentinel-official/hub/v12/x/deposit/types"
+	v1 "github.com/sentinel-official/hub/v12/x/deposit/types/v1"
 	v2 "github.com/sentinel-official/hub/v12/x/node/types/v2"
 	v21 "github.com/sentinel-official/hub/v12/x/plan/types/v2"
 	v22 "github.com/sentinel-official/hub/v12/x/provider/types/v2"
@@ -33,7 +33,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 type GenesisState struct {
 	// Field 1: List of deposits associated with the Sentinel module.
 	// This field is not nullable.
-	Deposits *types.GenesisState `protobuf:"bytes,1,opt,name=deposits,proto3" json:"deposits,omitempty"`
+	Deposits *v1.GenesisState `protobuf:"bytes,1,opt,name=deposits,proto3" json:"deposits,omitempty"`
 	// Field 2: Genesis state for nodes in the Sentinel module.
 	Nodes *v2.GenesisState `protobuf:"bytes,2,opt,name=nodes,proto3" json:"nodes,omitempty"`
 	// Field 3: List of plans associated with the Sentinel module.
@@ -317,7 +317,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Deposits == nil {
-				m.Deposits = &types.GenesisState{}
+				m.Deposits = &v1.GenesisState{}
 			}
 			if err := m.Deposits.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
