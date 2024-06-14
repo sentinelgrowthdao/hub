@@ -1,9 +1,10 @@
-package keeper
+package v2
 
 import (
 	"context"
 	"fmt"
 
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkquery "github.com/cosmos/cosmos-sdk/types/query"
@@ -12,6 +13,7 @@ import (
 
 	base "github.com/sentinel-official/hub/v12/types"
 	v1base "github.com/sentinel-official/hub/v12/types/v1"
+	"github.com/sentinel-official/hub/v12/x/node/keeper"
 	"github.com/sentinel-official/hub/v12/x/node/types"
 	"github.com/sentinel-official/hub/v12/x/node/types/v2"
 )
@@ -21,14 +23,18 @@ var (
 )
 
 type queryServer struct {
-	Keeper
+	codec.BinaryCodec
+	keeper.Keeper
 }
 
-func NewQueryServiceServer(k Keeper) v2.QueryServiceServer {
-	return &queryServer{k}
+func NewQueryServiceServer(cdc codec.BinaryCodec, k keeper.Keeper) v2.QueryServiceServer {
+	return &queryServer{
+		BinaryCodec: cdc,
+		Keeper:      k,
+	}
 }
 
-func (q *queryServer) QueryNode(c context.Context, req *v2.QueryNodeRequest) (*v2.QueryNodeResponse, error) {
+func (k *queryServer) QueryNode(c context.Context, req *v2.QueryNodeRequest) (*v2.QueryNodeResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -40,7 +46,7 @@ func (q *queryServer) QueryNode(c context.Context, req *v2.QueryNodeRequest) (*v
 
 	ctx := sdk.UnwrapSDKContext(c)
 
-	item, found := q.GetNode(ctx, addr)
+	item, found := k.GetNode(ctx, addr)
 	if !found {
 		return nil, status.Errorf(codes.NotFound, "node does not exist for address %s", req.Address)
 	}
@@ -48,7 +54,7 @@ func (q *queryServer) QueryNode(c context.Context, req *v2.QueryNodeRequest) (*v
 	return &v2.QueryNodeResponse{Node: item}, nil
 }
 
-func (q *queryServer) QueryNodes(c context.Context, req *v2.QueryNodesRequest) (res *v2.QueryNodesResponse, err error) {
+func (k *queryServer) QueryNodes(c context.Context, req *v2.QueryNodesRequest) (res *v2.QueryNodesResponse, err error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -68,10 +74,10 @@ func (q *queryServer) QueryNodes(c context.Context, req *v2.QueryNodesRequest) (
 		keyPrefix = types.NodeKeyPrefix
 	}
 
-	store := prefix.NewStore(q.Store(ctx), keyPrefix)
+	store := prefix.NewStore(k.Store(ctx), keyPrefix)
 	pagination, err := sdkquery.Paginate(store, req.Pagination, func(_, value []byte) error {
 		var item v2.Node
-		if err := q.cdc.Unmarshal(value, &item); err != nil {
+		if err := k.Unmarshal(value, &item); err != nil {
 			return err
 		}
 
@@ -86,7 +92,7 @@ func (q *queryServer) QueryNodes(c context.Context, req *v2.QueryNodesRequest) (
 	return &v2.QueryNodesResponse{Nodes: items, Pagination: pagination}, nil
 }
 
-func (q *queryServer) QueryNodesForPlan(c context.Context, req *v2.QueryNodesForPlanRequest) (*v2.QueryNodesForPlanResponse, error) {
+func (k *queryServer) QueryNodesForPlan(c context.Context, req *v2.QueryNodesForPlanRequest) (*v2.QueryNodesForPlanResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -94,7 +100,7 @@ func (q *queryServer) QueryNodesForPlan(c context.Context, req *v2.QueryNodesFor
 	var (
 		items v2.Nodes
 		ctx   = sdk.UnwrapSDKContext(c)
-		store = prefix.NewStore(q.Store(ctx), types.GetNodeForPlanKeyPrefix(req.Id))
+		store = prefix.NewStore(k.Store(ctx), types.GetNodeForPlanKeyPrefix(req.Id))
 	)
 
 	pagination, err := sdkquery.FilteredPaginate(store, req.Pagination, func(key, _ []byte, accumulate bool) (bool, error) {
@@ -102,7 +108,7 @@ func (q *queryServer) QueryNodesForPlan(c context.Context, req *v2.QueryNodesFor
 			return false, nil
 		}
 
-		item, found := q.GetNode(ctx, key[1:])
+		item, found := k.GetNode(ctx, key[1:])
 		if !found {
 			return false, fmt.Errorf("node for key %X does not exist", key)
 		}
@@ -122,10 +128,10 @@ func (q *queryServer) QueryNodesForPlan(c context.Context, req *v2.QueryNodesFor
 	return &v2.QueryNodesForPlanResponse{Nodes: items, Pagination: pagination}, nil
 }
 
-func (q *queryServer) QueryParams(c context.Context, _ *v2.QueryParamsRequest) (*v2.QueryParamsResponse, error) {
+func (k *queryServer) QueryParams(c context.Context, _ *v2.QueryParamsRequest) (*v2.QueryParamsResponse, error) {
 	var (
 		ctx    = sdk.UnwrapSDKContext(c)
-		params = q.GetParams(ctx)
+		params = k.GetParams(ctx)
 	)
 
 	return &v2.QueryParamsResponse{Params: params}, nil

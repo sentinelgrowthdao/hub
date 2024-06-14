@@ -1,9 +1,10 @@
-package keeper
+package v2
 
 import (
 	"context"
 	"fmt"
 
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkquery "github.com/cosmos/cosmos-sdk/types/query"
@@ -12,6 +13,7 @@ import (
 
 	base "github.com/sentinel-official/hub/v12/types"
 	v1base "github.com/sentinel-official/hub/v12/types/v1"
+	"github.com/sentinel-official/hub/v12/x/plan/keeper"
 	"github.com/sentinel-official/hub/v12/x/plan/types"
 	"github.com/sentinel-official/hub/v12/x/plan/types/v2"
 )
@@ -21,21 +23,25 @@ var (
 )
 
 type queryServer struct {
-	Keeper
+	codec.BinaryCodec
+	keeper.Keeper
 }
 
-func NewQueryServiceServer(keeper Keeper) v2.QueryServiceServer {
-	return &queryServer{Keeper: keeper}
+func NewQueryServiceServer(cdc codec.BinaryCodec, k keeper.Keeper) v2.QueryServiceServer {
+	return &queryServer{
+		BinaryCodec: cdc,
+		Keeper:      k,
+	}
 }
 
-func (q *queryServer) QueryPlan(c context.Context, req *v2.QueryPlanRequest) (*v2.QueryPlanResponse, error) {
+func (k *queryServer) QueryPlan(c context.Context, req *v2.QueryPlanRequest) (*v2.QueryPlanResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
 
-	item, found := q.GetPlan(ctx, req.Id)
+	item, found := k.GetPlan(ctx, req.Id)
 	if !found {
 		return nil, status.Errorf(codes.NotFound, "plan does not exist for id %d", req.Id)
 	}
@@ -43,7 +49,7 @@ func (q *queryServer) QueryPlan(c context.Context, req *v2.QueryPlanRequest) (*v
 	return &v2.QueryPlanResponse{Plan: item}, nil
 }
 
-func (q *queryServer) QueryPlans(c context.Context, req *v2.QueryPlansRequest) (res *v2.QueryPlansResponse, err error) {
+func (k *queryServer) QueryPlans(c context.Context, req *v2.QueryPlansRequest) (res *v2.QueryPlansResponse, err error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -63,10 +69,10 @@ func (q *queryServer) QueryPlans(c context.Context, req *v2.QueryPlansRequest) (
 		keyPrefix = types.PlanKeyPrefix
 	}
 
-	store := prefix.NewStore(q.Store(ctx), keyPrefix)
+	store := prefix.NewStore(k.Store(ctx), keyPrefix)
 	pagination, err := sdkquery.Paginate(store, req.Pagination, func(_, value []byte) error {
 		var item v2.Plan
-		if err := q.cdc.Unmarshal(value, &item); err != nil {
+		if err := k.Unmarshal(value, &item); err != nil {
 			return err
 		}
 
@@ -81,7 +87,7 @@ func (q *queryServer) QueryPlans(c context.Context, req *v2.QueryPlansRequest) (
 	return &v2.QueryPlansResponse{Plans: items, Pagination: pagination}, nil
 }
 
-func (q *queryServer) QueryPlansForProvider(c context.Context, req *v2.QueryPlansForProviderRequest) (res *v2.QueryPlansForProviderResponse, err error) {
+func (k *queryServer) QueryPlansForProvider(c context.Context, req *v2.QueryPlansForProviderRequest) (res *v2.QueryPlansForProviderResponse, err error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -94,7 +100,7 @@ func (q *queryServer) QueryPlansForProvider(c context.Context, req *v2.QueryPlan
 	var (
 		items v2.Plans
 		ctx   = sdk.UnwrapSDKContext(c)
-		store = prefix.NewStore(q.Store(ctx), types.GetPlanForProviderKeyPrefix(addr))
+		store = prefix.NewStore(k.Store(ctx), types.GetPlanForProviderKeyPrefix(addr))
 	)
 
 	pagination, err := sdkquery.FilteredPaginate(store, req.Pagination, func(key, _ []byte, accumulate bool) (bool, error) {
@@ -102,7 +108,7 @@ func (q *queryServer) QueryPlansForProvider(c context.Context, req *v2.QueryPlan
 			return false, nil
 		}
 
-		item, found := q.GetPlan(ctx, sdk.BigEndianToUint64(key))
+		item, found := k.GetPlan(ctx, sdk.BigEndianToUint64(key))
 		if !found {
 			return false, fmt.Errorf("plan for key %X does not exist", key)
 		}

@@ -1,14 +1,16 @@
-package keeper
+package v1
 
 import (
 	"context"
 
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkquery "github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	"github.com/sentinel-official/hub/v12/x/swap/keeper"
 	"github.com/sentinel-official/hub/v12/x/swap/types"
 	"github.com/sentinel-official/hub/v12/x/swap/types/v1"
 )
@@ -18,14 +20,18 @@ var (
 )
 
 type queryServer struct {
-	Keeper
+	codec.BinaryCodec
+	keeper.Keeper
 }
 
-func NewQueryServiceServer(keeper Keeper) v1.QueryServiceServer {
-	return &queryServer{Keeper: keeper}
+func NewQueryServiceServer(cdc codec.BinaryCodec, k keeper.Keeper) v1.QueryServiceServer {
+	return &queryServer{
+		BinaryCodec: cdc,
+		Keeper:      k,
+	}
 }
 
-func (q *queryServer) QuerySwap(c context.Context, req *v1.QuerySwapRequest) (*v1.QuerySwapResponse, error) {
+func (k *queryServer) QuerySwap(c context.Context, req *v1.QuerySwapRequest) (*v1.QuerySwapResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -35,7 +41,7 @@ func (q *queryServer) QuerySwap(c context.Context, req *v1.QuerySwapRequest) (*v
 		hash = types.BytesToHash(req.TxHash)
 	)
 
-	item, found := q.GetSwap(ctx, hash)
+	item, found := k.GetSwap(ctx, hash)
 	if !found {
 		return nil, status.Errorf(codes.NotFound, "swap does not exist for hash %X", req.TxHash)
 	}
@@ -43,7 +49,7 @@ func (q *queryServer) QuerySwap(c context.Context, req *v1.QuerySwapRequest) (*v
 	return &v1.QuerySwapResponse{Swap: item}, nil
 }
 
-func (q *queryServer) QuerySwaps(c context.Context, req *v1.QuerySwapsRequest) (*v1.QuerySwapsResponse, error) {
+func (k *queryServer) QuerySwaps(c context.Context, req *v1.QuerySwapsRequest) (*v1.QuerySwapsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -51,13 +57,13 @@ func (q *queryServer) QuerySwaps(c context.Context, req *v1.QuerySwapsRequest) (
 	var (
 		items v1.Swaps
 		ctx   = sdk.UnwrapSDKContext(c)
-		store = prefix.NewStore(q.Store(ctx), types.SwapKeyPrefix)
+		store = prefix.NewStore(k.Store(ctx), types.SwapKeyPrefix)
 	)
 
 	pagination, err := sdkquery.FilteredPaginate(store, req.Pagination, func(_, value []byte, accumulate bool) (bool, error) {
 		if accumulate {
 			var item v1.Swap
-			if err := q.cdc.Unmarshal(value, &item); err != nil {
+			if err := k.Unmarshal(value, &item); err != nil {
 				return false, err
 			}
 
@@ -74,10 +80,10 @@ func (q *queryServer) QuerySwaps(c context.Context, req *v1.QuerySwapsRequest) (
 	return &v1.QuerySwapsResponse{Swaps: items, Pagination: pagination}, nil
 }
 
-func (q *queryServer) QueryParams(c context.Context, _ *v1.QueryParamsRequest) (*v1.QueryParamsResponse, error) {
+func (k *queryServer) QueryParams(c context.Context, _ *v1.QueryParamsRequest) (*v1.QueryParamsResponse, error) {
 	var (
 		ctx    = sdk.UnwrapSDKContext(c)
-		params = q.GetParams(ctx)
+		params = k.GetParams(ctx)
 	)
 
 	return &v1.QueryParamsResponse{Params: params}, nil

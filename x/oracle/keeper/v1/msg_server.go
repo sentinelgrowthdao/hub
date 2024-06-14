@@ -1,10 +1,11 @@
-package keeper
+package v1
 
 import (
 	"context"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"github.com/sentinel-official/hub/v12/x/oracle/keeper"
 	"github.com/sentinel-official/hub/v12/x/oracle/types"
 	"github.com/sentinel-official/hub/v12/x/oracle/types/v1"
 )
@@ -14,18 +15,19 @@ var (
 )
 
 type msgServer struct {
-	Keeper
+	keeper.Keeper
 }
 
-func NewMsgServiceServer(k Keeper) v1.MsgServiceServer {
+func NewMsgServiceServer(k keeper.Keeper) v1.MsgServiceServer {
 	return &msgServer{k}
 }
 
 func (k *msgServer) MsgUpdateParams(c context.Context, msg *v1.MsgUpdateParamsRequest) (*v1.MsgUpdateParamsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
 
-	if msg.From != k.authority {
-		return nil, types.NewErrorInvalidSigner(msg.From, k.authority)
+	authority := k.GetAuthority()
+	if msg.From != authority {
+		return nil, types.NewErrorInvalidSigner(msg.From, authority)
 	}
 
 	k.SetParams(ctx, msg.Params)

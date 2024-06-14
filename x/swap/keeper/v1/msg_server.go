@@ -1,10 +1,11 @@
-package keeper
+package v1
 
 import (
 	"context"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"github.com/sentinel-official/hub/v12/x/swap/keeper"
 	"github.com/sentinel-official/hub/v12/x/swap/types"
 	"github.com/sentinel-official/hub/v12/x/swap/types/v1"
 )
@@ -14,14 +15,14 @@ var (
 )
 
 type msgServer struct {
-	Keeper
+	keeper.Keeper
 }
 
-func NewMsgServiceServer(keeper Keeper) v1.MsgServiceServer {
-	return &msgServer{Keeper: keeper}
+func NewMsgServiceServer(k keeper.Keeper) v1.MsgServiceServer {
+	return &msgServer{k}
 }
 
-func (k msgServer) MsgSwap(c context.Context, msg *v1.MsgSwapRequest) (*v1.MsgSwapResponse, error) {
+func (k *msgServer) MsgSwap(c context.Context, msg *v1.MsgSwapRequest) (*v1.MsgSwapResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
 
 	if !k.SwapEnabled(ctx) {

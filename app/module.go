@@ -202,7 +202,7 @@ func NewModuleManager(
 
 		// Sentinel Hub modules
 		custommint.NewAppModule(encCfg.Codec, k.CustomMintKeeper),
-		oracle.NewAppModule(k.OracleKeeper),
+		oracle.NewAppModule(encCfg.Codec, k.OracleKeeper),
 		swap.NewAppModule(encCfg.Codec, k.SwapKeeper),
 		vpn.NewAppModule(encCfg.Codec, k.AccountKeeper, k.BankKeeper, k.VPNKeeper),
 
@@ -363,7 +363,7 @@ func NewSimulationManager(
 
 		// Sentinel Hub modules
 		custommint.NewAppModule(encCfg.Codec, k.CustomMintKeeper),
-		oracle.NewAppModule(k.OracleKeeper),
+		oracle.NewAppModule(encCfg.Codec, k.OracleKeeper),
 		swap.NewAppModule(encCfg.Codec, k.SwapKeeper),
 		vpn.NewAppModule(encCfg.Codec, k.AccountKeeper, k.BankKeeper, k.VPNKeeper),
 

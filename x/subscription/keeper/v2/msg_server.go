@@ -1,4 +1,4 @@
-package keeper
+package v2
 
 import (
 	"context"
@@ -8,6 +8,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	v1base "github.com/sentinel-official/hub/v12/types/v1"
+	"github.com/sentinel-official/hub/v12/x/subscription/keeper"
 	"github.com/sentinel-official/hub/v12/x/subscription/types"
 	"github.com/sentinel-official/hub/v12/x/subscription/types/v2"
 )
@@ -19,11 +20,11 @@ var (
 
 // msgServer is a message server that implements the `v2.MsgServiceServer` interface.
 type msgServer struct {
-	Keeper // Keeper is an instance of the main keeper for the module.
+	keeper.Keeper // Keeper is an instance of the main keeper for the module.
 }
 
 // NewMsgServiceServer creates a new instance of `v2.MsgServiceServer` using the provided Keeper.
-func NewMsgServiceServer(k Keeper) v2.MsgServiceServer {
+func NewMsgServiceServer(k keeper.Keeper) v2.MsgServiceServer {
 	return &msgServer{k}
 }
 

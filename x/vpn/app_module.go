@@ -14,21 +14,15 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 
-	depositkeeper "github.com/sentinel-official/hub/v12/x/deposit/keeper"
 	v1deposittypes "github.com/sentinel-official/hub/v12/x/deposit/types/v1"
-	nodekeeper "github.com/sentinel-official/hub/v12/x/node/keeper"
 	v1nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v1"
 	v2nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v2"
-	plankeeper "github.com/sentinel-official/hub/v12/x/plan/keeper"
 	v1plantypes "github.com/sentinel-official/hub/v12/x/plan/types/v1"
 	v2plantypes "github.com/sentinel-official/hub/v12/x/plan/types/v2"
-	providerkeeper "github.com/sentinel-official/hub/v12/x/provider/keeper"
 	v1providertypes "github.com/sentinel-official/hub/v12/x/provider/types/v1"
 	v2providertypes "github.com/sentinel-official/hub/v12/x/provider/types/v2"
-	sessionkeeper "github.com/sentinel-official/hub/v12/x/session/keeper"
 	v1sessiontypes "github.com/sentinel-official/hub/v12/x/session/types/v1"
 	v2sessiontypes "github.com/sentinel-official/hub/v12/x/session/types/v2"
-	subscriptionkeeper "github.com/sentinel-official/hub/v12/x/subscription/keeper"
 	v1subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types/v1"
 	v2subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types/v2"
 	"github.com/sentinel-official/hub/v12/x/vpn/client/cli"
@@ -142,26 +136,5 @@ func (am AppModule) ConsensusVersion() uint64 { return 3 }
 func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
 
 func (am AppModule) RegisterServices(configurator sdkmodule.Configurator) {
-	v1deposittypes.RegisterQueryServiceServer(configurator.QueryServer(), depositkeeper.NewQueryServiceServer(am.keeper.Deposit))
-	v1nodetypes.RegisterMsgServiceServer(configurator.MsgServer(), nil)
-	v1nodetypes.RegisterQueryServiceServer(configurator.QueryServer(), nil)
-	v1plantypes.RegisterMsgServiceServer(configurator.MsgServer(), nil)
-	v1plantypes.RegisterQueryServiceServer(configurator.QueryServer(), nil)
-	v1providertypes.RegisterMsgServiceServer(configurator.MsgServer(), nil)
-	v1providertypes.RegisterQueryServiceServer(configurator.QueryServer(), nil)
-	v1sessiontypes.RegisterMsgServiceServer(configurator.MsgServer(), nil)
-	v1sessiontypes.RegisterQueryServiceServer(configurator.QueryServer(), nil)
-	v1subscriptiontypes.RegisterMsgServiceServer(configurator.MsgServer(), nil)
-	v1subscriptiontypes.RegisterQueryServiceServer(configurator.QueryServer(), nil)
-
-	v2nodetypes.RegisterMsgServiceServer(configurator.MsgServer(), nodekeeper.NewMsgServiceServer(am.keeper.Node))
-	v2nodetypes.RegisterQueryServiceServer(configurator.QueryServer(), nodekeeper.NewQueryServiceServer(am.keeper.Node))
-	v2plantypes.RegisterMsgServiceServer(configurator.MsgServer(), plankeeper.NewMsgServiceServer(am.keeper.Plan))
-	v2plantypes.RegisterQueryServiceServer(configurator.QueryServer(), plankeeper.NewQueryServiceServer(am.keeper.Plan))
-	v2providertypes.RegisterMsgServiceServer(configurator.MsgServer(), providerkeeper.NewMsgServiceServer(am.keeper.Provider))
-	v2providertypes.RegisterQueryServiceServer(configurator.QueryServer(), providerkeeper.NewQueryServiceServer(am.keeper.Provider))
-	v2sessiontypes.RegisterMsgServiceServer(configurator.MsgServer(), sessionkeeper.NewMsgServiceServer(am.keeper.Session))
-	v2sessiontypes.RegisterQueryServiceServer(configurator.QueryServer(), sessionkeeper.NewQueryServiceServer(am.keeper.Session))
-	v2subscriptiontypes.RegisterMsgServiceServer(configurator.MsgServer(), subscriptionkeeper.NewMsgServiceServer(am.keeper.Subscription))
-	v2subscriptiontypes.RegisterQueryServiceServer(configurator.QueryServer(), subscriptionkeeper.NewQueryServiceServer(am.keeper.Subscription))
+	RegisterServices(configurator, am.cdc, am.keeper)
 }

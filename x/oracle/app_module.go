@@ -51,11 +51,13 @@ func (amb AppModuleBasic) GetQueryCmd() *cobra.Command {
 
 type AppModule struct {
 	AppModuleBasic
+	cdc    codec.BinaryCodec
 	keeper keeper.Keeper
 }
 
-func NewAppModule(k keeper.Keeper) AppModule {
+func NewAppModule(cdc codec.BinaryCodec, k keeper.Keeper) AppModule {
 	return AppModule{
+		cdc:    cdc,
 		keeper: k,
 	}
 }
@@ -104,5 +106,5 @@ func (am AppModule) EndBlock(ctx sdk.Context, req abcitypes.RequestEndBlock) []a
 func (am AppModule) ConsensusVersion() uint64 { return 1 }
 
 func (am AppModule) RegisterServices(configurator sdkmodule.Configurator) {
-	v1.RegisterMsgServiceServer(configurator.MsgServer(), keeper.NewMsgServiceServer(am.keeper))
+	RegisterServices(configurator, am.cdc, am.keeper)
 }

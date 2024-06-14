@@ -107,6 +107,5 @@ func (am AppModule) ConsensusVersion() uint64 { return 1 }
 func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
 
 func (am AppModule) RegisterServices(configurator sdkmodule.Configurator) {
-	v1.RegisterMsgServiceServer(configurator.MsgServer(), keeper.NewMsgServiceServer(am.keeper))
-	v1.RegisterQueryServiceServer(configurator.QueryServer(), keeper.NewQueryServiceServer(am.keeper))
+	RegisterServices(configurator, am.cdc, am.keeper)
 }

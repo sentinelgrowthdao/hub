@@ -1,4 +1,4 @@
-package keeper
+package v2
 
 import (
 	"context"
@@ -7,6 +7,7 @@ import (
 
 	base "github.com/sentinel-official/hub/v12/types"
 	v1base "github.com/sentinel-official/hub/v12/types/v1"
+	"github.com/sentinel-official/hub/v12/x/session/keeper"
 	"github.com/sentinel-official/hub/v12/x/session/types"
 	"github.com/sentinel-official/hub/v12/x/session/types/v2"
 	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types/v2"
@@ -19,12 +20,12 @@ var (
 
 // msgServer is a message server that implements the `types.MsgServiceServer` interface.
 type msgServer struct {
-	Keeper // Keeper is an instance of the main keeper for the module.
+	keeper.Keeper // Keeper is an instance of the main keeper for the module.
 }
 
 // NewMsgServiceServer creates a new instance of `types.MsgServiceServer` using the provided Keeper.
-func NewMsgServiceServer(keeper Keeper) v2.MsgServiceServer {
-	return &msgServer{Keeper: keeper}
+func NewMsgServiceServer(k keeper.Keeper) v2.MsgServiceServer {
+	return &msgServer{k}
 }
 
 // MsgStart starts a new session for a subscription.
