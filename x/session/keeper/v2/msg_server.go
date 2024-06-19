@@ -141,7 +141,7 @@ func (k *msgServer) MsgStart(c context.Context, msg *v2.MsgStartRequest) (*v2.Ms
 	statusChangeDelay := k.StatusChangeDelay(ctx)
 
 	// Increment the session count to assign a new session ID.
-	count := k.GetCount(ctx)
+	count := k.GetSessionCount(ctx)
 	session = v2.Session{
 		ID:             count + 1,
 		SubscriptionID: subscription.GetID(),
@@ -155,7 +155,7 @@ func (k *msgServer) MsgStart(c context.Context, msg *v2.MsgStartRequest) (*v2.Ms
 	}
 
 	// Save the new session to the store.
-	k.SetCount(ctx, count+1)
+	k.SetSessionCount(ctx, count+1)
 	k.SetSession(ctx, session)
 	k.SetSessionForAccount(ctx, accAddr, session.ID)
 	k.SetSessionForNode(ctx, nodeAddr, session.ID)

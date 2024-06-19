@@ -30,7 +30,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *v2.GenesisState) {
 		}
 	}
 
-	k.SetCount(ctx, count)
+	k.SetSessionCount(ctx, count)
 }
 
 func (k *Keeper) ExportGenesis(ctx sdk.Context) *v2.GenesisState {

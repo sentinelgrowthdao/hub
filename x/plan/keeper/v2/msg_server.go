@@ -44,7 +44,7 @@ func (k *msgServer) MsgCreate(c context.Context, msg *v2.MsgCreateRequest) (*v2.
 	}
 
 	// Get the current count of plans to assign a unique ID to the new plan.
-	count := k.GetCount(ctx)
+	count := k.GetPlanCount(ctx)
 	plan := v2.Plan{
 		ID:              count + 1,
 		ProviderAddress: provAddr.String(),
@@ -56,7 +56,7 @@ func (k *msgServer) MsgCreate(c context.Context, msg *v2.MsgCreateRequest) (*v2.
 	}
 
 	// Save the new plan in the Store and update the count for future plans.
-	k.SetCount(ctx, count+1)
+	k.SetPlanCount(ctx, count+1)
 	k.SetPlan(ctx, plan)
 	k.SetPlanForProvider(ctx, provAddr, plan.ID)
 

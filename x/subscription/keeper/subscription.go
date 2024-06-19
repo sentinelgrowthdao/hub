@@ -282,7 +282,7 @@ func (k *Keeper) CreateSubscriptionForNode(ctx sdk.Context, accAddr sdk.AccAddre
 	}
 
 	// Retrieve the current count and create a new NodeSubscription.
-	count := k.GetCount(ctx)
+	count := k.GetSubscriptionCount(ctx)
 	subscription := &v2.NodeSubscription{
 		BaseSubscription: &v2.BaseSubscription{
 			ID:         count + 1,
@@ -329,7 +329,7 @@ func (k *Keeper) CreateSubscriptionForNode(ctx sdk.Context, accAddr sdk.AccAddre
 	}
 
 	// Save the new NodeSubscription to the store and update the count.
-	k.SetCount(ctx, count+1)
+	k.SetSubscriptionCount(ctx, count+1)
 	k.SetSubscription(ctx, subscription)
 	k.SetSubscriptionForAccount(ctx, accAddr, subscription.GetID())
 	k.SetSubscriptionForNode(ctx, nodeAddr, subscription.GetID())
@@ -437,7 +437,7 @@ func (k *Keeper) CreateSubscriptionForPlan(ctx sdk.Context, accAddr sdk.AccAddre
 	)
 
 	// Retrieve the current count and create a new PlanSubscription.
-	count := k.GetCount(ctx)
+	count := k.GetSubscriptionCount(ctx)
 	subscription := &v2.PlanSubscription{
 		BaseSubscription: &v2.BaseSubscription{
 			ID:         count + 1,
@@ -451,7 +451,7 @@ func (k *Keeper) CreateSubscriptionForPlan(ctx sdk.Context, accAddr sdk.AccAddre
 	}
 
 	// Save the new PlanSubscription to the store and update the count.
-	k.SetCount(ctx, count+1)
+	k.SetSubscriptionCount(ctx, count+1)
 	k.SetSubscription(ctx, subscription)
 	k.SetSubscriptionForAccount(ctx, accAddr, subscription.GetID())
 	k.SetSubscriptionForPlan(ctx, plan.ID, subscription.GetID())

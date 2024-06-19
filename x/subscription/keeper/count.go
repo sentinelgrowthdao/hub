@@ -7,9 +7,9 @@ import (
 	"github.com/sentinel-official/hub/v12/x/subscription/types"
 )
 
-func (k *Keeper) SetCount(ctx sdk.Context, count uint64) {
+func (k *Keeper) SetSubscriptionCount(ctx sdk.Context, count uint64) {
 	var (
-		key   = types.CountKey
+		key   = types.SubscriptionCountKey
 		value = k.cdc.MustMarshal(&protobuf.UInt64Value{Value: count})
 		store = k.Store(ctx)
 	)
@@ -17,10 +17,10 @@ func (k *Keeper) SetCount(ctx sdk.Context, count uint64) {
 	store.Set(key, value)
 }
 
-func (k *Keeper) GetCount(ctx sdk.Context) uint64 {
+func (k *Keeper) GetSubscriptionCount(ctx sdk.Context) uint64 {
 	var (
 		store = k.Store(ctx)
-		key   = types.CountKey
+		key   = types.SubscriptionCountKey
 		value = store.Get(key)
 	)
 

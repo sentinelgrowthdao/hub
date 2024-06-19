@@ -15,7 +15,7 @@ const (
 )
 
 var (
-	CountKey = []byte{0x00}
+	SessionCountKey = []byte{0x00}
 
 	SessionKeyPrefix                = []byte{0x10}
 	SessionForInactiveAtKeyPrefix   = []byte{0x11}

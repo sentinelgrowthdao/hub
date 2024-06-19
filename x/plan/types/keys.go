@@ -14,7 +14,7 @@ const (
 )
 
 var (
-	CountKey = []byte{0x00}
+	PlanCountKey = []byte{0x00}
 
 	PlanKeyPrefix            = []byte{0x10}
 	ActivePlanKeyPrefix      = append(PlanKeyPrefix, 0x01)

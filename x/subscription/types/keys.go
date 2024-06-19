@@ -16,7 +16,7 @@ const (
 )
 
 var (
-	CountKey = []byte{0x00}
+	SubscriptionCountKey = []byte{0x00}
 
 	SubscriptionKeyPrefix              = []byte{0x10}
 	SubscriptionForInactiveAtKeyPrefix = []byte{0x11}
