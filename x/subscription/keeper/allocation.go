@@ -61,6 +61,7 @@ func (k *Keeper) GetAllocationsForSubscription(ctx sdk.Context, id uint64) (item
 	for ; iterator.Valid(); iterator.Next() {
 		var item v2.Allocation
 		k.cdc.MustUnmarshal(iterator.Value(), &item)
+
 		items = append(items, item)
 	}
 
@@ -74,10 +75,10 @@ func (k *Keeper) IterateAllocationsForSubscription(ctx sdk.Context, id uint64, f
 	defer iterator.Close()
 
 	for i := 0; iterator.Valid(); iterator.Next() {
-		var alloc v2.Allocation
-		k.cdc.MustUnmarshal(iterator.Value(), &alloc)
+		var item v2.Allocation
+		k.cdc.MustUnmarshal(iterator.Value(), &item)
 
-		if stop := fn(i, alloc); stop {
+		if stop := fn(i, item); stop {
 			break
 		}
 		i++

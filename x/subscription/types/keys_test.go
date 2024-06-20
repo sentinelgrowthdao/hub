@@ -71,31 +71,6 @@ func TestSubscriptionForAccountKey(t *testing.T) {
 	}
 }
 
-func TestSubscriptionForNodeKey(t *testing.T) {
-	var (
-		addr []byte
-	)
-
-	for i := 0; i < 512; i += 64 {
-		addr = make([]byte, i)
-		_, _ = rand.Read(addr)
-
-		if i < 256 {
-			require.Equal(
-				t,
-				append(append(SubscriptionForNodeKeyPrefix, sdkaddress.MustLengthPrefix(addr)...), sdk.Uint64ToBigEndian(uint64(i))...),
-				SubscriptionForNodeKey(addr, uint64(i)),
-			)
-
-			continue
-		}
-
-		require.Panics(t, func() {
-			SubscriptionForNodeKey(addr, uint64(i))
-		})
-	}
-}
-
 func TestSubscriptionForPlanKey(t *testing.T) {
 	for i := 0; i < 512; i += 64 {
 		require.Equal(
@@ -112,44 +87,6 @@ func TestSubscriptionKey(t *testing.T) {
 			t,
 			append(SubscriptionKeyPrefix, sdk.Uint64ToBigEndian(uint64(i))...),
 			SubscriptionKey(uint64(i)),
-		)
-	}
-}
-
-func TestIDFromPayoutForAccountKey(t *testing.T) {
-	var (
-		addr []byte
-		key  []byte
-	)
-
-	for i := 1; i <= 256; i += 64 {
-		addr = make([]byte, i)
-		_, _ = rand.Read(addr)
-
-		key = PayoutForAccountKey(addr, uint64(i))
-		require.Equal(
-			t,
-			uint64(i),
-			IDFromPayoutForAccountKey(key),
-		)
-	}
-}
-
-func TestIDFromPayoutForNodeKey(t *testing.T) {
-	var (
-		addr []byte
-		key  []byte
-	)
-
-	for i := 1; i <= 256; i += 64 {
-		addr = make([]byte, i)
-		_, _ = rand.Read(addr)
-
-		key = PayoutForNodeKey(addr, uint64(i))
-		require.Equal(
-			t,
-			uint64(i),
-			IDFromPayoutForNodeKey(key),
 		)
 	}
 }
@@ -207,25 +144,6 @@ func TestIDFromSubscriptionForInactiveAtKey(t *testing.T) {
 	}
 }
 
-func TestIDFromSubscriptionForNodeKey(t *testing.T) {
-	var (
-		addr []byte
-		key  []byte
-	)
-
-	for i := 1; i <= 256; i += 64 {
-		addr = make([]byte, i)
-		_, _ = rand.Read(addr)
-
-		key = SubscriptionForNodeKey(addr, uint64(i))
-		require.Equal(
-			t,
-			uint64(i),
-			IDFromSubscriptionForNodeKey(key),
-		)
-	}
-}
-
 func TestIDFromSubscriptionForPlanKey(t *testing.T) {
 	var (
 		key []byte
@@ -237,113 +155,6 @@ func TestIDFromSubscriptionForPlanKey(t *testing.T) {
 			t,
 			uint64(i),
 			IDFromSubscriptionForPlanKey(key),
-		)
-	}
-}
-
-func TestPayoutForAccountKey(t *testing.T) {
-	var (
-		addr []byte
-		id   uint64
-	)
-
-	for i := 1; i <= 512; i += 64 {
-		id = uint64(i)
-		addr = make([]byte, i)
-		_, _ = rand.Read(addr)
-
-		if i < 256 {
-			require.Equal(
-				t,
-				append(append(PayoutForAccountKeyPrefix, sdkaddress.MustLengthPrefix(addr)...), sdk.Uint64ToBigEndian(id)...),
-				PayoutForAccountKey(addr, id),
-			)
-
-			continue
-		}
-
-		require.Panics(t, func() {
-			PayoutForAccountKey(addr, id)
-		})
-	}
-}
-
-func TestPayoutForNodeKey(t *testing.T) {
-	var (
-		addr []byte
-		id   uint64
-	)
-
-	for i := 1; i <= 512; i += 64 {
-		id = uint64(i)
-		addr = make([]byte, i)
-		_, _ = rand.Read(addr)
-
-		if i < 256 {
-			require.Equal(
-				t,
-				append(append(PayoutForNodeKeyPrefix, sdkaddress.MustLengthPrefix(addr)...), sdk.Uint64ToBigEndian(id)...),
-				PayoutForNodeKey(addr, id),
-			)
-
-			continue
-		}
-
-		require.Panics(t, func() {
-			PayoutForNodeKey(addr, id)
-		})
-	}
-}
-
-func TestPayoutKey(t *testing.T) {
-	var (
-		id uint64
-	)
-
-	for i := 1; i <= 512; i += 64 {
-		id = uint64(i)
-		require.Equal(
-			t,
-			append(PayoutKeyPrefix, sdk.Uint64ToBigEndian(id)...),
-			PayoutKey(id),
-		)
-	}
-}
-
-func TestIDFromPayoutForAccountByNodeKey(t *testing.T) {
-	var (
-		accAddr  []byte
-		nodeAddr []byte
-		key      []byte
-	)
-
-	for i := 1; i <= 256; i += 64 {
-		accAddr = make([]byte, i)
-		_, _ = rand.Read(accAddr)
-
-		nodeAddr = make([]byte, i)
-		_, _ = rand.Read(nodeAddr)
-
-		key = PayoutForAccountByNodeKey(accAddr, nodeAddr, uint64(i))
-		require.Equal(
-			t,
-			uint64(i),
-			IDFromPayoutForAccountByNodeKey(key),
-		)
-	}
-}
-
-func TestIDFromPayoutForNextAtKey(t *testing.T) {
-	var (
-		key []byte
-	)
-
-	for i := 1; i <= 256; i += 64 {
-		key = PayoutForNextAtKey(base.TestTimeNow, uint64(i))
-		require.Equal(
-			t,
-			uint64(i),
-			IDFromPayoutForNextAtKey(key),
 		)
 	}
 }
