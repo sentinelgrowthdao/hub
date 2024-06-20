@@ -2,7 +2,6 @@ package v2
 
 import (
 	"context"
-	"time"
 
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -46,12 +45,12 @@ func (k *msgServer) MsgCancel(c context.Context, msg *v2.MsgCancelRequest) (*v2.
 	}
 
 	// Check if the subscription is in an active state. If not, return an error.
-	if !subscription.GetStatus().Equal(v1base.StatusActive) {
-		return nil, types.NewErrorInvalidSubscriptionStatus(subscription.GetID(), subscription.GetStatus())
+	if !subscription.Status.Equal(v1base.StatusActive) {
+		return nil, types.NewErrorInvalidSubscriptionStatus(subscription.ID, subscription.Status)
 	}
 
 	// Check if the `msg.From` address matches the owner address of the subscription. If not, return an error.
-	if !fromAddr.Equals(subscription.GetAddress()) {
+	if !fromAddr.Equals(subscription.GetAccAddress()) {
 		return nil, types.NewErrorUnauthorized(msg.From)
 	}
 
@@ -59,54 +58,33 @@ func (k *msgServer) MsgCancel(c context.Context, msg *v2.MsgCancelRequest) (*v2.
 	statusChangeDelay := k.StatusChangeDelay(ctx)
 
 	// Delete the subscription from the Store for the time it becomes inactive.
-	k.DeleteSubscriptionForInactiveAt(ctx, subscription.GetInactiveAt(), subscription.GetID())
+	k.DeleteSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
 
 	// Run the SubscriptionInactivePendingHook to perform custom actions before setting the subscription to inactive pending state.
-	if err = k.SubscriptionInactivePendingHook(ctx, subscription.GetID()); err != nil {
+	if err = k.SubscriptionInactivePendingHook(ctx, subscription.ID); err != nil {
 		return nil, err
 	}
 
 	// Calculate the duration for which the subscription will be in the inactive state.
-	subscription.SetInactiveAt(ctx.BlockTime().Add(statusChangeDelay))
-	subscription.SetStatus(v1base.StatusInactivePending)
-	subscription.SetStatusAt(ctx.BlockTime())
+	subscription.Status = v1base.StatusInactivePending
+	subscription.StatusAt = ctx.BlockTime()
+	subscription.InactiveAt = ctx.BlockTime().Add(statusChangeDelay)
 
 	// Update the subscription in the Store.
 	k.SetSubscription(ctx, subscription)
 
 	// Add the subscription back to the Store with the new inactive time.
-	k.SetSubscriptionForInactiveAt(ctx, subscription.GetInactiveAt(), subscription.GetID())
+	k.SetSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
 
 	// Emit an event to notify that the subscription status has been updated.
 	ctx.EventManager().EmitTypedEvent(
 		&v2.EventUpdateStatus{
 			Status:  v1base.StatusInactivePending,
-			Address: subscription.GetAddress().String(),
-			ID:      subscription.GetID(),
+			Address: subscription.AccAddress,
+			ID:      subscription.ID,
 			PlanID:  0,
 		},
 	)
-
-	// If the subscription is a NodeSubscription and the duration is specified in hours (non-zero), update the associated payout.
-	if s, ok := subscription.(*v2.NodeSubscription); ok && s.Hours != 0 {
-		payout, found := k.GetPayout(ctx, s.GetID())
-		if !found {
-			return nil, types.NewErrorPayoutNotFound(s.GetID())
-		}
-
-		var (
-			accAddr  = payout.GetAddress()
-			nodeAddr = payout.GetNodeAddress()
-		)
-
-		// Delete the payout from the Store for the given account and node.
-		k.DeletePayoutForAccountByNode(ctx, accAddr, nodeAddr, payout.ID)
-		k.DeletePayoutForNextAt(ctx, payout.NextAt, payout.ID)
-
-		// Reset the `NextAt` field of the payout and update it in the Store.
-		payout.NextAt = time.Time{}
-		k.SetPayout(ctx, payout)
-	}
 
 	return &v2.MsgCancelResponse{}, nil
 }
@@ -128,20 +106,15 @@ func (k *msgServer) MsgAllocate(c context.Context, msg *v2.MsgAllocateRequest) (
 		return nil, types.NewErrorSubscriptionNotFound(msg.ID)
 	}
 
-	// Check if the subscription type is a plan. If not, return an error.
-	if _, ok := subscription.(*v2.PlanSubscription); !ok {
-		return nil, types.NewErrorInvalidSubscription(subscription.GetID())
-	}
-
 	// Check if the `msg.From` address matches the owner address of the subscription. If not, return an error.
-	if !fromAddr.Equals(subscription.GetAddress()) {
+	if !fromAddr.Equals(subscription.GetAccAddress()) {
 		return nil, types.NewErrorUnauthorized(msg.From)
 	}
 
 	// Get the existing allocation for the sender.
-	fromAlloc, found := k.GetAllocation(ctx, subscription.GetID(), fromAddr)
+	fromAlloc, found := k.GetAllocation(ctx, subscription.ID, fromAddr)
 	if !found {
-		return nil, types.NewErrorAllocationNotFound(subscription.GetID(), fromAddr)
+		return nil, types.NewErrorAllocationNotFound(subscription.ID, fromAddr)
 	}
 
 	// Convert the `msg.Address` (receiver's address) from Bech32 format to an `sdk.AccAddress`.
@@ -151,18 +124,18 @@ func (k *msgServer) MsgAllocate(c context.Context, msg *v2.MsgAllocateRequest) (
 	}
 
 	// Get the existing allocation for the receiver.
-	toAlloc, found := k.GetAllocation(ctx, subscription.GetID(), toAddr)
+	toAlloc, found := k.GetAllocation(ctx, subscription.ID, toAddr)
 	if !found {
 		// If the receiver has no existing allocation, create a new one.
 		toAlloc = v2.Allocation{
-			ID:            subscription.GetID(),
+			ID:            subscription.ID,
 			Address:       toAddr.String(),
 			GrantedBytes:  sdkmath.ZeroInt(),
 			UtilisedBytes: sdkmath.ZeroInt(),
 		}
 
 		// Update the subscription in the Store to associate it with the new receiver.
-		k.SetSubscriptionForAccount(ctx, toAddr, subscription.GetID())
+		k.SetSubscriptionForAccount(ctx, toAddr, subscription.ID)
 	}
 
 	// Calculate the available bytes for the sender and check if it is sufficient for the allocation.
@@ -171,13 +144,13 @@ func (k *msgServer) MsgAllocate(c context.Context, msg *v2.MsgAllocateRequest) (
 	availableBytes := grantedBytes.Sub(utilisedBytes)
 
 	if msg.Bytes.GT(availableBytes) {
-		return nil, types.NewErrorInsufficientBytes(subscription.GetID(), msg.Bytes)
+		return nil, types.NewErrorInsufficientBytes(subscription.ID, msg.Bytes)
 	}
 
 	// Update the allocation for the sender after deducting the allocated bytes.
 	fromAlloc.GrantedBytes = availableBytes.Sub(msg.Bytes)
 	if fromAlloc.GrantedBytes.LT(fromAlloc.UtilisedBytes) {
-		return nil, types.NewErrorInvalidAllocation(subscription.GetID(), fromAddr)
+		return nil, types.NewErrorInvalidAllocation(subscription.ID, fromAddr)
 	}
 
 	// Update the sender's allocation in the Store.
@@ -196,7 +169,7 @@ func (k *msgServer) MsgAllocate(c context.Context, msg *v2.MsgAllocateRequest) (
 	// Update the allocation for the receiver after adding the allocated bytes.
 	toAlloc.GrantedBytes = msg.Bytes
 	if toAlloc.GrantedBytes.LT(toAlloc.UtilisedBytes) {
-		return nil, types.NewErrorInvalidAllocation(subscription.GetID(), toAddr)
+		return nil, types.NewErrorInvalidAllocation(subscription.ID, toAddr)
 	}
 
 	// Update the receiver's allocation in the Store.
