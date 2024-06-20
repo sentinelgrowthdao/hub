@@ -76,21 +76,21 @@ message QueryParamsResponse {
 service QueryService {
   // RPC method for querying nodes with a specific status and pagination.
   rpc QueryNodes(QueryNodesRequest) returns (QueryNodesResponse) {
-    option (google.api.http).get = "/sentinel/nodes";
+    option (google.api.http).get = "/sentinel/node/v2/nodes";
   }
 
   // RPC method for querying nodes for a specific plan with status and pagination.
   rpc QueryNodesForPlan(QueryNodesForPlanRequest) returns (QueryNodesForPlanResponse) {
-    option (google.api.http).get = "/sentinel/plans/{id}/nodes";
+    option (google.api.http).get = "/sentinel/node/v2/plans/{id}/nodes";
   }
 
   // RPC method for querying information about a specific node.
   rpc QueryNode(QueryNodeRequest) returns (QueryNodeResponse) {
-    option (google.api.http).get = "/sentinel/nodes/{address}";
+    option (google.api.http).get = "/sentinel/node/v2/nodes/{address}";
   }
 
   // RPC method for querying module parameters.
   rpc QueryParams(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/sentinel/modules/node/params";
+    option (google.api.http).get = "/sentinel/node/v2/params";
   }
 }
