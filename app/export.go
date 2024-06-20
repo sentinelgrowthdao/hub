@@ -131,11 +131,11 @@ func (a *App) prepForZeroHeightGenesis(ctx sdk.Context, jailAllowedAddrs []strin
 	})
 
 	store := ctx.KVStore(a.KV(stakingtypes.StoreKey))
-	iter := sdk.KVStoreReversePrefixIterator(store, stakingtypes.ValidatorsKey)
+	iterator := sdk.KVStoreReversePrefixIterator(store, stakingtypes.ValidatorsKey)
 	counter := int16(0)
 
-	for ; iter.Valid(); iter.Next() {
-		addr := sdk.ValAddress(iter.Key()[1:])
+	for ; iterator.Valid(); iterator.Next() {
+		addr := sdk.ValAddress(iterator.Key()[1:])
 		validator, found := a.StakingKeeper.GetValidator(ctx, addr)
 		if !found {
 			panic("expected validator, not found")
@@ -150,7 +150,7 @@ func (a *App) prepForZeroHeightGenesis(ctx sdk.Context, jailAllowedAddrs []strin
 		counter++
 	}
 
-	iter.Close()
+	iterator.Close()
 
 	_, err := a.StakingKeeper.ApplyAndReturnValidatorSetUpdates(ctx)
 	if err != nil {

@@ -132,15 +132,15 @@ func (k *Keeper) GetProvider(ctx sdk.Context, addr base.ProvAddress) (provider v
 // GetProviders is for getting the providers from the KVStore.
 func (k *Keeper) GetProviders(ctx sdk.Context) (items v2.Providers) {
 	var (
-		store = k.Store(ctx)
-		iter  = sdk.KVStorePrefixIterator(store, types.ProviderKeyPrefix)
+		store    = k.Store(ctx)
+		iterator = sdk.KVStorePrefixIterator(store, types.ProviderKeyPrefix)
 	)
 
-	defer iter.Close()
+	defer iterator.Close()
 
-	for ; iter.Valid(); iter.Next() {
+	for ; iterator.Valid(); iterator.Next() {
 		var item v2.Provider
-		k.cdc.MustUnmarshal(iter.Value(), &item)
+		k.cdc.MustUnmarshal(iterator.Value(), &item)
 		items = append(items, item)
 	}
 
@@ -151,12 +151,12 @@ func (k *Keeper) GetProviders(ctx sdk.Context) (items v2.Providers) {
 func (k *Keeper) IterateProviders(ctx sdk.Context, fn func(index int, item v2.Provider) (stop bool)) {
 	store := k.Store(ctx)
 
-	iter := sdk.KVStorePrefixIterator(store, types.ProviderKeyPrefix)
-	defer iter.Close()
+	iterator := sdk.KVStorePrefixIterator(store, types.ProviderKeyPrefix)
+	defer iterator.Close()
 
-	for i := 0; iter.Valid(); iter.Next() {
+	for i := 0; iterator.Valid(); iterator.Next() {
 		var item v2.Provider
-		k.cdc.MustUnmarshal(iter.Value(), &item)
+		k.cdc.MustUnmarshal(iterator.Value(), &item)
 
 		if stop := fn(i, item); stop {
 			break

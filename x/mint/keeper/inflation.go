@@ -45,15 +45,15 @@ func (k *Keeper) DeleteInflation(ctx sdk.Context, t time.Time) {
 
 func (k *Keeper) GetInflations(ctx sdk.Context) (items []v1.Inflation) {
 	var (
-		store = k.Store(ctx)
-		iter  = sdk.KVStorePrefixIterator(store, types.InflationKeyPrefix)
+		store    = k.Store(ctx)
+		iterator = sdk.KVStorePrefixIterator(store, types.InflationKeyPrefix)
 	)
 
-	defer iter.Close()
+	defer iterator.Close()
 
-	for ; iter.Valid(); iter.Next() {
+	for ; iterator.Valid(); iterator.Next() {
 		var item v1.Inflation
-		k.cdc.MustUnmarshal(iter.Value(), &item)
+		k.cdc.MustUnmarshal(iterator.Value(), &item)
 		items = append(items, item)
 	}
 
@@ -62,15 +62,15 @@ func (k *Keeper) GetInflations(ctx sdk.Context) (items []v1.Inflation) {
 
 func (k *Keeper) IterateInflations(ctx sdk.Context, fn func(index int, item v1.Inflation) (stop bool)) {
 	var (
-		store = k.Store(ctx)
-		iter  = sdk.KVStorePrefixIterator(store, types.InflationKeyPrefix)
+		store    = k.Store(ctx)
+		iterator = sdk.KVStorePrefixIterator(store, types.InflationKeyPrefix)
 	)
 
-	defer iter.Close()
+	defer iterator.Close()
 
-	for i := 0; iter.Valid(); iter.Next() {
+	for i := 0; iterator.Valid(); iterator.Next() {
 		var item v1.Inflation
-		k.cdc.MustUnmarshal(iter.Value(), &item)
+		k.cdc.MustUnmarshal(iterator.Value(), &item)
 
 		if stop := fn(i, item); stop {
 			break

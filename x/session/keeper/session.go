@@ -49,15 +49,15 @@ func (k *Keeper) DeleteSession(ctx sdk.Context, id uint64) {
 
 func (k *Keeper) GetSessions(ctx sdk.Context) (items v2.Sessions) {
 	var (
-		store = k.Store(ctx)
-		iter  = sdk.KVStorePrefixIterator(store, types.SessionKeyPrefix)
+		store    = k.Store(ctx)
+		iterator = sdk.KVStorePrefixIterator(store, types.SessionKeyPrefix)
 	)
 
-	defer iter.Close()
+	defer iterator.Close()
 
-	for ; iter.Valid(); iter.Next() {
+	for ; iterator.Valid(); iterator.Next() {
 		var item v2.Session
-		k.cdc.MustUnmarshal(iter.Value(), &item)
+		k.cdc.MustUnmarshal(iterator.Value(), &item)
 		items = append(items, item)
 	}
 
@@ -67,12 +67,12 @@ func (k *Keeper) GetSessions(ctx sdk.Context) (items v2.Sessions) {
 func (k *Keeper) IterateSessions(ctx sdk.Context, fn func(index int, item v2.Session) (stop bool)) {
 	store := k.Store(ctx)
 
-	iter := sdk.KVStorePrefixIterator(store, types.SessionKeyPrefix)
-	defer iter.Close()
+	iterator := sdk.KVStorePrefixIterator(store, types.SessionKeyPrefix)
+	defer iterator.Close()
 
-	for i := 0; iter.Valid(); iter.Next() {
+	for i := 0; iterator.Valid(); iterator.Next() {
 		var session v2.Session
-		k.cdc.MustUnmarshal(iter.Value(), &session)
+		k.cdc.MustUnmarshal(iterator.Value(), &session)
 
 		if stop := fn(i, session); stop {
 			break
@@ -102,16 +102,16 @@ func (k *Keeper) DeleteSessionForAccount(ctx sdk.Context, addr sdk.AccAddress, i
 
 func (k *Keeper) GetSessionsForAccount(ctx sdk.Context, addr sdk.AccAddress) (items v2.Sessions) {
 	var (
-		store = k.Store(ctx)
-		iter  = sdk.KVStorePrefixIterator(store, types.GetSessionForAccountKeyPrefix(addr))
+		store    = k.Store(ctx)
+		iterator = sdk.KVStorePrefixIterator(store, types.GetSessionForAccountKeyPrefix(addr))
 	)
 
-	defer iter.Close()
+	defer iterator.Close()
 
-	for ; iter.Valid(); iter.Next() {
-		item, found := k.GetSession(ctx, types.IDFromSessionForAccountKey(iter.Key()))
+	for ; iterator.Valid(); iterator.Next() {
+		item, found := k.GetSession(ctx, types.IDFromSessionForAccountKey(iterator.Key()))
 		if !found {
-			panic(fmt.Errorf("session for account key %X does not exist", iter.Key()))
+			panic(fmt.Errorf("session for account key %X does not exist", iterator.Key()))
 		}
 
 		items = append(items, item)
@@ -141,16 +141,16 @@ func (k *Keeper) DeleteSessionForNode(ctx sdk.Context, addr base.NodeAddress, id
 
 func (k *Keeper) GetSessionsForNode(ctx sdk.Context, addr base.NodeAddress) (items v2.Sessions) {
 	var (
-		store = k.Store(ctx)
-		iter  = sdk.KVStorePrefixIterator(store, types.GetSessionForNodeKeyPrefix(addr))
+		store    = k.Store(ctx)
+		iterator = sdk.KVStorePrefixIterator(store, types.GetSessionForNodeKeyPrefix(addr))
 	)
 
-	defer iter.Close()
+	defer iterator.Close()
 
-	for ; iter.Valid(); iter.Next() {
-		item, found := k.GetSession(ctx, types.IDFromSessionForNodeKey(iter.Key()))
+	for ; iterator.Valid(); iterator.Next() {
+		item, found := k.GetSession(ctx, types.IDFromSessionForNodeKey(iterator.Key()))
 		if !found {
-			panic(fmt.Errorf("session for node key %X does not exist", iter.Key()))
+			panic(fmt.Errorf("session for node key %X does not exist", iterator.Key()))
 		}
 
 		items = append(items, item)
@@ -180,16 +180,16 @@ func (k *Keeper) DeleteSessionForSubscription(ctx sdk.Context, subscriptionID, s
 
 func (k *Keeper) GetSessionsForSubscription(ctx sdk.Context, id uint64) (items v2.Sessions) {
 	var (
-		store = k.Store(ctx)
-		iter  = sdk.KVStorePrefixIterator(store, types.GetSessionForSubscriptionKeyPrefix(id))
+		store    = k.Store(ctx)
+		iterator = sdk.KVStorePrefixIterator(store, types.GetSessionForSubscriptionKeyPrefix(id))
 	)
 
-	defer iter.Close()
+	defer iterator.Close()
 
-	for ; iter.Valid(); iter.Next() {
-		item, found := k.GetSession(ctx, types.IDFromSessionForSubscriptionKey(iter.Key()))
+	for ; iterator.Valid(); iterator.Next() {
+		item, found := k.GetSession(ctx, types.IDFromSessionForSubscriptionKey(iterator.Key()))
 		if !found {
-			panic(fmt.Errorf("session for subscription key %X does not exist", iter.Key()))
+			panic(fmt.Errorf("session for subscription key %X does not exist", iterator.Key()))
 		}
 
 		items = append(items, item)
@@ -201,13 +201,13 @@ func (k *Keeper) GetSessionsForSubscription(ctx sdk.Context, id uint64) (items v
 func (k *Keeper) IterateSessionsForSubscription(ctx sdk.Context, id uint64, fn func(index int, item v2.Session) (stop bool)) {
 	store := k.Store(ctx)
 
-	iter := sdk.KVStoreReversePrefixIterator(store, types.GetSessionForSubscriptionKeyPrefix(id))
-	defer iter.Close()
+	iterator := sdk.KVStoreReversePrefixIterator(store, types.GetSessionForSubscriptionKeyPrefix(id))
+	defer iterator.Close()
 
-	for i := 0; iter.Valid(); iter.Next() {
-		session, found := k.GetSession(ctx, types.IDFromSessionForSubscriptionKey(iter.Key()))
+	for i := 0; iterator.Valid(); iterator.Next() {
+		session, found := k.GetSession(ctx, types.IDFromSessionForSubscriptionKey(iterator.Key()))
 		if !found {
-			panic(fmt.Errorf("session for subscription key %X does not exist", iter.Key()))
+			panic(fmt.Errorf("session for subscription key %X does not exist", iterator.Key()))
 		}
 
 		if stop := fn(i, session); stop {
@@ -239,13 +239,13 @@ func (k *Keeper) DeleteSessionForAllocation(ctx sdk.Context, subscriptionID uint
 func (k *Keeper) IterateSessionsForAllocation(ctx sdk.Context, id uint64, addr sdk.AccAddress, fn func(index int, item v2.Session) (stop bool)) {
 	store := k.Store(ctx)
 
-	iter := sdk.KVStoreReversePrefixIterator(store, types.GetSessionForAllocationKeyPrefix(id, addr))
-	defer iter.Close()
+	iterator := sdk.KVStoreReversePrefixIterator(store, types.GetSessionForAllocationKeyPrefix(id, addr))
+	defer iterator.Close()
 
-	for i := 0; iter.Valid(); iter.Next() {
-		session, found := k.GetSession(ctx, types.IDFromSessionForAllocationKey(iter.Key()))
+	for i := 0; iterator.Valid(); iterator.Next() {
+		session, found := k.GetSession(ctx, types.IDFromSessionForAllocationKey(iterator.Key()))
 		if !found {
-			panic(fmt.Errorf("session for subscription allocation key %X does not exist", iter.Key()))
+			panic(fmt.Errorf("session for subscription allocation key %X does not exist", iterator.Key()))
 		}
 
 		if stop := fn(i, session); stop {
@@ -273,13 +273,13 @@ func (k *Keeper) DeleteSessionForInactiveAt(ctx sdk.Context, at time.Time, id ui
 func (k *Keeper) IterateSessionsForInactiveAt(ctx sdk.Context, end time.Time, fn func(index int, item v2.Session) (stop bool)) {
 	store := k.Store(ctx)
 
-	iter := store.Iterator(types.SessionForInactiveAtKeyPrefix, sdk.PrefixEndBytes(types.GetSessionForInactiveAtKeyPrefix(end)))
-	defer iter.Close()
+	iterator := store.Iterator(types.SessionForInactiveAtKeyPrefix, sdk.PrefixEndBytes(types.GetSessionForInactiveAtKeyPrefix(end)))
+	defer iterator.Close()
 
-	for i := 0; iter.Valid(); iter.Next() {
-		session, found := k.GetSession(ctx, types.IDFromSessionForInactiveAtKey(iter.Key()))
+	for i := 0; iterator.Valid(); iterator.Next() {
+		session, found := k.GetSession(ctx, types.IDFromSessionForInactiveAtKey(iterator.Key()))
 		if !found {
-			panic(fmt.Errorf("session for inactive at key %X does not exist", iter.Key()))
+			panic(fmt.Errorf("session for inactive at key %X does not exist", iterator.Key()))
 		}
 
 		if stop := fn(i, session); stop {
@@ -292,13 +292,13 @@ func (k *Keeper) IterateSessionsForInactiveAt(ctx sdk.Context, end time.Time, fn
 func (k *Keeper) GetLatestSessionForSubscription(ctx sdk.Context, subscriptionID uint64) (session v2.Session, found bool) {
 	store := k.Store(ctx)
 
-	iter := sdk.KVStoreReversePrefixIterator(store, types.GetSessionForSubscriptionKeyPrefix(subscriptionID))
-	defer iter.Close()
+	iterator := sdk.KVStoreReversePrefixIterator(store, types.GetSessionForSubscriptionKeyPrefix(subscriptionID))
+	defer iterator.Close()
 
-	if iter.Valid() {
-		session, found = k.GetSession(ctx, types.IDFromSessionForSubscriptionKey(iter.Key()))
+	if iterator.Valid() {
+		session, found = k.GetSession(ctx, types.IDFromSessionForSubscriptionKey(iterator.Key()))
 		if !found {
-			panic(fmt.Errorf("session for subscription key %X does not exist", iter.Key()))
+			panic(fmt.Errorf("session for subscription key %X does not exist", iterator.Key()))
 		}
 	}
 
@@ -308,13 +308,13 @@ func (k *Keeper) GetLatestSessionForSubscription(ctx sdk.Context, subscriptionID
 func (k *Keeper) GetLatestSessionForAllocation(ctx sdk.Context, subscriptionID uint64, addr sdk.AccAddress) (session v2.Session, found bool) {
 	store := k.Store(ctx)
 
-	iter := sdk.KVStoreReversePrefixIterator(store, types.GetSessionForAllocationKeyPrefix(subscriptionID, addr))
-	defer iter.Close()
+	iterator := sdk.KVStoreReversePrefixIterator(store, types.GetSessionForAllocationKeyPrefix(subscriptionID, addr))
+	defer iterator.Close()
 
-	if iter.Valid() {
-		session, found = k.GetSession(ctx, types.IDFromSessionForAllocationKey(iter.Key()))
+	if iterator.Valid() {
+		session, found = k.GetSession(ctx, types.IDFromSessionForAllocationKey(iterator.Key()))
 		if !found {
-			panic(fmt.Errorf("session for subscription allocation key %X does not exist", iter.Key()))
+			panic(fmt.Errorf("session for subscription allocation key %X does not exist", iterator.Key()))
 		}
 	}
 

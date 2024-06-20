@@ -57,15 +57,15 @@ func (k *Keeper) DeletePayout(ctx sdk.Context, id uint64) {
 
 func (k *Keeper) GetPayouts(ctx sdk.Context) (items v2.Payouts) {
 	var (
-		store = k.Store(ctx)
-		iter  = sdk.KVStorePrefixIterator(store, types.PayoutKeyPrefix)
+		store    = k.Store(ctx)
+		iterator = sdk.KVStorePrefixIterator(store, types.PayoutKeyPrefix)
 	)
 
-	defer iter.Close()
+	defer iterator.Close()
 
-	for ; iter.Valid(); iter.Next() {
+	for ; iterator.Valid(); iterator.Next() {
 		var item v2.Payout
-		k.cdc.MustUnmarshal(iter.Value(), &item)
+		k.cdc.MustUnmarshal(iterator.Value(), &item)
 		items = append(items, item)
 	}
 
@@ -75,12 +75,12 @@ func (k *Keeper) GetPayouts(ctx sdk.Context) (items v2.Payouts) {
 func (k *Keeper) IteratePayouts(ctx sdk.Context, fn func(index int, item v2.Payout) (stop bool)) {
 	store := k.Store(ctx)
 
-	iter := sdk.KVStorePrefixIterator(store, types.PayoutKeyPrefix)
-	defer iter.Close()
+	iterator := sdk.KVStorePrefixIterator(store, types.PayoutKeyPrefix)
+	defer iterator.Close()
 
-	for i := 0; iter.Valid(); iter.Next() {
+	for i := 0; iterator.Valid(); iterator.Next() {
 		var item v2.Payout
-		k.cdc.MustUnmarshal(iter.Value(), &item)
+		k.cdc.MustUnmarshal(iterator.Value(), &item)
 
 		if stop := fn(i, item); stop {
 			break
@@ -176,13 +176,13 @@ func (k *Keeper) DeletePayoutForAccountByNode(ctx sdk.Context, accAddr sdk.AccAd
 func (k *Keeper) GetLatestPayoutForAccountByNode(ctx sdk.Context, accAddr sdk.AccAddress, nodeAddr base.NodeAddress) (payout v2.Payout, found bool) {
 	store := k.Store(ctx)
 
-	iter := sdk.KVStoreReversePrefixIterator(store, types.GetPayoutForAccountByNodeKeyPrefix(accAddr, nodeAddr))
-	defer iter.Close()
+	iterator := sdk.KVStoreReversePrefixIterator(store, types.GetPayoutForAccountByNodeKeyPrefix(accAddr, nodeAddr))
+	defer iterator.Close()
 
-	if iter.Valid() {
-		payout, found = k.GetPayout(ctx, types.IDFromPayoutForAccountByNodeKey(iter.Key()))
+	if iterator.Valid() {
+		payout, found = k.GetPayout(ctx, types.IDFromPayoutForAccountByNodeKey(iterator.Key()))
 		if !found {
-			panic(fmt.Errorf("payout for account by node key %X does not exist", iter.Key()))
+			panic(fmt.Errorf("payout for account by node key %X does not exist", iterator.Key()))
 		}
 	}
 
@@ -211,13 +211,13 @@ func (k *Keeper) DeletePayoutForNextAt(ctx sdk.Context, at time.Time, id uint64)
 func (k *Keeper) IteratePayoutsForNextAt(ctx sdk.Context, at time.Time, fn func(index int, item v2.Payout) (stop bool)) {
 	store := k.Store(ctx)
 
-	iter := store.Iterator(types.PayoutForNextAtKeyPrefix, sdk.PrefixEndBytes(types.GetPayoutForNextAtKeyPrefix(at)))
-	defer iter.Close()
+	iterator := store.Iterator(types.PayoutForNextAtKeyPrefix, sdk.PrefixEndBytes(types.GetPayoutForNextAtKeyPrefix(at)))
+	defer iterator.Close()
 
-	for i := 0; iter.Valid(); iter.Next() {
-		payout, found := k.GetPayout(ctx, types.IDFromPayoutForNextAtKey(iter.Key()))
+	for i := 0; iterator.Valid(); iterator.Next() {
+		payout, found := k.GetPayout(ctx, types.IDFromPayoutForNextAtKey(iterator.Key()))
 		if !found {
-			panic(fmt.Errorf("payout for next_at key %X does not exist", iter.Key()))
+			panic(fmt.Errorf("payout for next_at key %X does not exist", iterator.Key()))
 		}
 
 		if stop := fn(i, payout); stop {

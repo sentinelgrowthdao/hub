@@ -52,15 +52,15 @@ func (k *Keeper) DeleteAllocation(ctx sdk.Context, id uint64, addr sdk.AccAddres
 
 func (k *Keeper) GetAllocationsForSubscription(ctx sdk.Context, id uint64) (items v2.Allocations) {
 	var (
-		store = k.Store(ctx)
-		iter  = sdk.KVStorePrefixIterator(store, types.GetAllocationForSubscriptionKeyPrefix(id))
+		store    = k.Store(ctx)
+		iterator = sdk.KVStorePrefixIterator(store, types.GetAllocationForSubscriptionKeyPrefix(id))
 	)
 
-	defer iter.Close()
+	defer iterator.Close()
 
-	for ; iter.Valid(); iter.Next() {
+	for ; iterator.Valid(); iterator.Next() {
 		var item v2.Allocation
-		k.cdc.MustUnmarshal(iter.Value(), &item)
+		k.cdc.MustUnmarshal(iterator.Value(), &item)
 		items = append(items, item)
 	}
 
@@ -70,12 +70,12 @@ func (k *Keeper) GetAllocationsForSubscription(ctx sdk.Context, id uint64) (item
 func (k *Keeper) IterateAllocationsForSubscription(ctx sdk.Context, id uint64, fn func(index int, item v2.Allocation) (stop bool)) {
 	store := k.Store(ctx)
 
-	iter := sdk.KVStorePrefixIterator(store, types.GetAllocationForSubscriptionKeyPrefix(id))
-	defer iter.Close()
+	iterator := sdk.KVStorePrefixIterator(store, types.GetAllocationForSubscriptionKeyPrefix(id))
+	defer iterator.Close()
 
-	for i := 0; iter.Valid(); iter.Next() {
+	for i := 0; iterator.Valid(); iterator.Next() {
 		var alloc v2.Allocation
-		k.cdc.MustUnmarshal(iter.Value(), &alloc)
+		k.cdc.MustUnmarshal(iterator.Value(), &alloc)
 
 		if stop := fn(i, alloc); stop {
 			break

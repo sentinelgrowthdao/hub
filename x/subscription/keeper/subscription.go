@@ -55,15 +55,15 @@ func (k *Keeper) DeleteSubscription(ctx sdk.Context, id uint64) {
 
 func (k *Keeper) GetSubscriptions(ctx sdk.Context) (items v2.Subscriptions) {
 	var (
-		store = k.Store(ctx)
-		iter  = sdk.KVStorePrefixIterator(store, types.SubscriptionKeyPrefix)
+		store    = k.Store(ctx)
+		iterator = sdk.KVStorePrefixIterator(store, types.SubscriptionKeyPrefix)
 	)
 
-	defer iter.Close()
+	defer iterator.Close()
 
-	for ; iter.Valid(); iter.Next() {
+	for ; iterator.Valid(); iterator.Next() {
 		var item v2.Subscription
-		if err := k.cdc.UnmarshalInterface(iter.Value(), &item); err != nil {
+		if err := k.cdc.UnmarshalInterface(iterator.Value(), &item); err != nil {
 			panic(err)
 		}
 
@@ -76,12 +76,12 @@ func (k *Keeper) GetSubscriptions(ctx sdk.Context) (items v2.Subscriptions) {
 func (k *Keeper) IterateSubscriptions(ctx sdk.Context, fn func(index int, item v2.Subscription) (stop bool)) {
 	store := k.Store(ctx)
 
-	iter := sdk.KVStorePrefixIterator(store, types.SubscriptionKeyPrefix)
-	defer iter.Close()
+	iterator := sdk.KVStorePrefixIterator(store, types.SubscriptionKeyPrefix)
+	defer iterator.Close()
 
-	for i := 0; iter.Valid(); iter.Next() {
+	for i := 0; iterator.Valid(); iterator.Next() {
 		var subscription v2.Subscription
-		if err := k.cdc.UnmarshalInterface(iter.Value(), &subscription); err != nil {
+		if err := k.cdc.UnmarshalInterface(iterator.Value(), &subscription); err != nil {
 			panic(err)
 		}
 
@@ -122,16 +122,16 @@ func (k *Keeper) DeleteSubscriptionForAccount(ctx sdk.Context, addr sdk.AccAddre
 
 func (k *Keeper) GetSubscriptionsForAccount(ctx sdk.Context, addr sdk.AccAddress) (items v2.Subscriptions) {
 	var (
-		store = k.Store(ctx)
-		iter  = sdk.KVStorePrefixIterator(store, types.GetSubscriptionForAccountKeyPrefix(addr))
+		store    = k.Store(ctx)
+		iterator = sdk.KVStorePrefixIterator(store, types.GetSubscriptionForAccountKeyPrefix(addr))
 	)
 
-	defer iter.Close()
+	defer iterator.Close()
 
-	for ; iter.Valid(); iter.Next() {
-		item, found := k.GetSubscription(ctx, types.IDFromSubscriptionForAccountKey(iter.Key()))
+	for ; iterator.Valid(); iterator.Next() {
+		item, found := k.GetSubscription(ctx, types.IDFromSubscriptionForAccountKey(iterator.Key()))
 		if !found {
-			panic(fmt.Errorf("subscription for account key %X does not exist", iter.Key()))
+			panic(fmt.Errorf("subscription for account key %X does not exist", iterator.Key()))
 		}
 
 		items = append(items, item)
@@ -170,16 +170,16 @@ func (k *Keeper) DeleteSubscriptionForNode(ctx sdk.Context, addr base.NodeAddres
 
 func (k *Keeper) GetSubscriptionsForNode(ctx sdk.Context, addr base.NodeAddress) (items v2.Subscriptions) {
 	var (
-		store = k.Store(ctx)
-		iter  = sdk.KVStorePrefixIterator(store, types.GetSubscriptionForNodeKeyPrefix(addr))
+		store    = k.Store(ctx)
+		iterator = sdk.KVStorePrefixIterator(store, types.GetSubscriptionForNodeKeyPrefix(addr))
 	)
 
-	defer iter.Close()
+	defer iterator.Close()
 
-	for ; iter.Valid(); iter.Next() {
-		item, found := k.GetSubscription(ctx, types.IDFromSubscriptionForNodeKey(iter.Key()))
+	for ; iterator.Valid(); iterator.Next() {
+		item, found := k.GetSubscription(ctx, types.IDFromSubscriptionForNodeKey(iterator.Key()))
 		if !found {
-			panic(fmt.Errorf("subscription for node key %X does not exist", iter.Key()))
+			panic(fmt.Errorf("subscription for node key %X does not exist", iterator.Key()))
 		}
 
 		items = append(items, item)
@@ -218,16 +218,16 @@ func (k *Keeper) DeleteSubscriptionForPlan(ctx sdk.Context, planID, subscription
 
 func (k *Keeper) GetSubscriptionsForPlan(ctx sdk.Context, id uint64) (items v2.Subscriptions) {
 	var (
-		store = k.Store(ctx)
-		iter  = sdk.KVStorePrefixIterator(store, types.GetSubscriptionForPlanKeyPrefix(id))
+		store    = k.Store(ctx)
+		iterator = sdk.KVStorePrefixIterator(store, types.GetSubscriptionForPlanKeyPrefix(id))
 	)
 
-	defer iter.Close()
+	defer iterator.Close()
 
-	for ; iter.Valid(); iter.Next() {
-		item, found := k.GetSubscription(ctx, types.IDFromSubscriptionForPlanKey(iter.Key()))
+	for ; iterator.Valid(); iterator.Next() {
+		item, found := k.GetSubscription(ctx, types.IDFromSubscriptionForPlanKey(iterator.Key()))
 		if !found {
-			panic(fmt.Errorf("subscription for plan key %X does not exist", iter.Key()))
+			panic(fmt.Errorf("subscription for plan key %X does not exist", iterator.Key()))
 		}
 
 		items = append(items, item)
@@ -254,13 +254,13 @@ func (k *Keeper) DeleteSubscriptionForInactiveAt(ctx sdk.Context, at time.Time, 
 func (k *Keeper) IterateSubscriptionsForInactiveAt(ctx sdk.Context, endTime time.Time, fn func(index int, item v2.Subscription) (stop bool)) {
 	store := k.Store(ctx)
 
-	iter := store.Iterator(types.SubscriptionForInactiveAtKeyPrefix, sdk.PrefixEndBytes(types.GetSubscriptionForInactiveAtKeyPrefix(endTime)))
-	defer iter.Close()
+	iterator := store.Iterator(types.SubscriptionForInactiveAtKeyPrefix, sdk.PrefixEndBytes(types.GetSubscriptionForInactiveAtKeyPrefix(endTime)))
+	defer iterator.Close()
 
-	for i := 0; iter.Valid(); iter.Next() {
-		subscription, found := k.GetSubscription(ctx, types.IDFromSubscriptionForInactiveAtKey(iter.Key()))
+	for i := 0; iterator.Valid(); iterator.Next() {
+		subscription, found := k.GetSubscription(ctx, types.IDFromSubscriptionForInactiveAtKey(iterator.Key()))
 		if !found {
-			panic(fmt.Errorf("subscription for inactive at key %X does not exist", iter.Key()))
+			panic(fmt.Errorf("subscription for inactive at key %X does not exist", iterator.Key()))
 		}
 
 		if stop := fn(i, subscription); stop {

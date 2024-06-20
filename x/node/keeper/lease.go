@@ -84,15 +84,15 @@ func (k *Keeper) DeleteLease(ctx sdk.Context, id uint64) {
 
 func (k *Keeper) GetLeases(ctx sdk.Context) (items []v3.Lease) {
 	var (
-		store = k.Store(ctx)
-		iter  = sdk.KVStorePrefixIterator(store, types.LeaseKeyPrefix)
+		store    = k.Store(ctx)
+		iterator = sdk.KVStorePrefixIterator(store, types.LeaseKeyPrefix)
 	)
 
-	defer iter.Close()
+	defer iterator.Close()
 
-	for ; iter.Valid(); iter.Next() {
+	for ; iterator.Valid(); iterator.Next() {
 		var item v3.Lease
-		k.cdc.MustUnmarshal(iter.Value(), &item)
+		k.cdc.MustUnmarshal(iterator.Value(), &item)
 
 		items = append(items, item)
 	}
@@ -103,12 +103,12 @@ func (k *Keeper) GetLeases(ctx sdk.Context) (items []v3.Lease) {
 func (k *Keeper) IterateLeases(ctx sdk.Context, fn func(index int, item v3.Lease) (stop bool)) {
 	store := k.Store(ctx)
 
-	iter := sdk.KVStorePrefixIterator(store, types.LeaseKeyPrefix)
-	defer iter.Close()
+	iterator := sdk.KVStorePrefixIterator(store, types.LeaseKeyPrefix)
+	defer iterator.Close()
 
-	for i := 0; iter.Valid(); iter.Next() {
+	for i := 0; iterator.Valid(); iterator.Next() {
 		var item v3.Lease
-		k.cdc.MustUnmarshal(iter.Value(), &item)
+		k.cdc.MustUnmarshal(iterator.Value(), &item)
 
 		if stop := fn(i, item); stop {
 			break
@@ -204,13 +204,13 @@ func (k *Keeper) DeleteLeaseForProviderByNode(ctx sdk.Context, provAddr base.Pro
 func (k *Keeper) GetLatestLeaseForProviderByNode(ctx sdk.Context, provAddr base.ProvAddress, nodeAddr base.NodeAddress) (lease v3.Lease, found bool) {
 	store := k.Store(ctx)
 
-	iter := sdk.KVStoreReversePrefixIterator(store, types.GetLeaseForProviderByNodeKeyPrefix(provAddr, nodeAddr))
-	defer iter.Close()
+	iterator := sdk.KVStoreReversePrefixIterator(store, types.GetLeaseForProviderByNodeKeyPrefix(provAddr, nodeAddr))
+	defer iterator.Close()
 
-	if iter.Valid() {
-		lease, found = k.GetLease(ctx, types.IDFromLeaseForProviderByNodeKey(iter.Key()))
+	if iterator.Valid() {
+		lease, found = k.GetLease(ctx, types.IDFromLeaseForProviderByNodeKey(iterator.Key()))
 		if !found {
-			panic(fmt.Errorf("lease for provider by node key %X does not exist", iter.Key()))
+			panic(fmt.Errorf("lease for provider by node key %X does not exist", iterator.Key()))
 		}
 	}
 
@@ -239,13 +239,13 @@ func (k *Keeper) DeleteLeasePayoutForNextAt(ctx sdk.Context, at time.Time, id ui
 func (k *Keeper) IterateLeasesForNextAt(ctx sdk.Context, at time.Time, fn func(index int, item v3.Lease) (stop bool)) {
 	store := k.Store(ctx)
 
-	iter := store.Iterator(types.LeasePayoutForNextAtKeyPrefix, sdk.PrefixEndBytes(types.GetLeasePayoutForNextAtKeyPrefix(at)))
-	defer iter.Close()
+	iterator := store.Iterator(types.LeasePayoutForNextAtKeyPrefix, sdk.PrefixEndBytes(types.GetLeasePayoutForNextAtKeyPrefix(at)))
+	defer iterator.Close()
 
-	for i := 0; iter.Valid(); iter.Next() {
-		lease, found := k.GetLease(ctx, types.IDFromLeasePayoutForNextAtKey(iter.Key()))
+	for i := 0; iterator.Valid(); iterator.Next() {
+		lease, found := k.GetLease(ctx, types.IDFromLeasePayoutForNextAtKey(iterator.Key()))
 		if !found {
-			panic(fmt.Errorf("lease for next_at key %X does not exist", iter.Key()))
+			panic(fmt.Errorf("lease for next_at key %X does not exist", iterator.Key()))
 		}
 
 		if stop := fn(i, lease); stop {

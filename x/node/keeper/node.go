@@ -130,15 +130,15 @@ func (k *Keeper) GetNode(ctx sdk.Context, addr base.NodeAddress) (node v2.Node, 
 
 func (k *Keeper) GetNodes(ctx sdk.Context) (items v2.Nodes) {
 	var (
-		store = k.Store(ctx)
-		iter  = sdk.KVStorePrefixIterator(store, types.NodeKeyPrefix)
+		store    = k.Store(ctx)
+		iterator = sdk.KVStorePrefixIterator(store, types.NodeKeyPrefix)
 	)
 
-	defer iter.Close()
+	defer iterator.Close()
 
-	for ; iter.Valid(); iter.Next() {
+	for ; iterator.Valid(); iterator.Next() {
 		var item v2.Node
-		k.cdc.MustUnmarshal(iter.Value(), &item)
+		k.cdc.MustUnmarshal(iterator.Value(), &item)
 		items = append(items, item)
 	}
 
@@ -148,12 +148,12 @@ func (k *Keeper) GetNodes(ctx sdk.Context) (items v2.Nodes) {
 func (k *Keeper) IterateNodes(ctx sdk.Context, fn func(index int, item v2.Node) (stop bool)) {
 	store := k.Store(ctx)
 
-	iter := sdk.KVStorePrefixIterator(store, types.NodeKeyPrefix)
-	defer iter.Close()
+	iterator := sdk.KVStorePrefixIterator(store, types.NodeKeyPrefix)
+	defer iterator.Close()
 
-	for i := 0; iter.Valid(); iter.Next() {
+	for i := 0; iterator.Valid(); iterator.Next() {
 		var node v2.Node
-		k.cdc.MustUnmarshal(iter.Value(), &node)
+		k.cdc.MustUnmarshal(iterator.Value(), &node)
 
 		if stop := fn(i, node); stop {
 			break
@@ -184,13 +184,13 @@ func (k *Keeper) DeleteNodeForInactiveAt(ctx sdk.Context, at time.Time, addr bas
 func (k *Keeper) IterateNodesForInactiveAt(ctx sdk.Context, at time.Time, fn func(index int, item v2.Node) (stop bool)) {
 	store := k.Store(ctx)
 
-	iter := store.Iterator(types.NodeForInactiveAtKeyPrefix, sdk.PrefixEndBytes(types.GetNodeForInactiveAtKeyPrefix(at)))
-	defer iter.Close()
+	iterator := store.Iterator(types.NodeForInactiveAtKeyPrefix, sdk.PrefixEndBytes(types.GetNodeForInactiveAtKeyPrefix(at)))
+	defer iterator.Close()
 
-	for i := 0; iter.Valid(); iter.Next() {
-		node, found := k.GetNode(ctx, types.AddressFromNodeForInactiveAtKey(iter.Key()))
+	for i := 0; iterator.Valid(); iterator.Next() {
+		node, found := k.GetNode(ctx, types.AddressFromNodeForInactiveAtKey(iterator.Key()))
 		if !found {
-			panic(fmt.Errorf("node for inactive at key %X does not exist", iter.Key()))
+			panic(fmt.Errorf("node for inactive at key %X does not exist", iterator.Key()))
 		}
 
 		if stop := fn(i, node); stop {
@@ -230,16 +230,16 @@ func (k *Keeper) DeleteNodeForPlan(ctx sdk.Context, id uint64, addr base.NodeAdd
 
 func (k *Keeper) GetNodesForPlan(ctx sdk.Context, id uint64) (items v2.Nodes) {
 	var (
-		store = k.Store(ctx)
-		iter  = sdk.KVStorePrefixIterator(store, types.GetNodeForPlanKeyPrefix(id))
+		store    = k.Store(ctx)
+		iterator = sdk.KVStorePrefixIterator(store, types.GetNodeForPlanKeyPrefix(id))
 	)
 
-	defer iter.Close()
+	defer iterator.Close()
 
-	for ; iter.Valid(); iter.Next() {
-		item, found := k.GetNode(ctx, types.AddressFromNodeForPlanKey(iter.Key()))
+	for ; iterator.Valid(); iterator.Next() {
+		item, found := k.GetNode(ctx, types.AddressFromNodeForPlanKey(iterator.Key()))
 		if !found {
-			panic(fmt.Errorf("node for plan key %X does not exist", iter.Key()))
+			panic(fmt.Errorf("node for plan key %X does not exist", iterator.Key()))
 		}
 
 		items = append(items, item)

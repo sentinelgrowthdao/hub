@@ -130,15 +130,15 @@ func (k *Keeper) GetPlan(ctx sdk.Context, id uint64) (plan v2.Plan, found bool) 
 
 func (k *Keeper) GetPlans(ctx sdk.Context) (items v2.Plans) {
 	var (
-		store = k.Store(ctx)
-		iter  = sdk.KVStorePrefixIterator(store, types.PlanKeyPrefix)
+		store    = k.Store(ctx)
+		iterator = sdk.KVStorePrefixIterator(store, types.PlanKeyPrefix)
 	)
 
-	defer iter.Close()
+	defer iterator.Close()
 
-	for ; iter.Valid(); iter.Next() {
+	for ; iterator.Valid(); iterator.Next() {
 		var item v2.Plan
-		k.cdc.MustUnmarshal(iter.Value(), &item)
+		k.cdc.MustUnmarshal(iterator.Value(), &item)
 		items = append(items, item)
 	}
 
@@ -166,16 +166,16 @@ func (k *Keeper) DeletePlanForProvider(ctx sdk.Context, addr base.ProvAddress, i
 
 func (k *Keeper) GetPlansForProvider(ctx sdk.Context, addr base.ProvAddress) (items v2.Plans) {
 	var (
-		store = k.Store(ctx)
-		iter  = sdk.KVStorePrefixIterator(store, types.GetPlanForProviderKeyPrefix(addr))
+		store    = k.Store(ctx)
+		iterator = sdk.KVStorePrefixIterator(store, types.GetPlanForProviderKeyPrefix(addr))
 	)
 
-	defer iter.Close()
+	defer iterator.Close()
 
-	for ; iter.Valid(); iter.Next() {
-		item, found := k.GetPlan(ctx, types.IDFromPlanForProviderKey(iter.Key()))
+	for ; iterator.Valid(); iterator.Next() {
+		item, found := k.GetPlan(ctx, types.IDFromPlanForProviderKey(iterator.Key()))
 		if !found {
-			panic(fmt.Errorf("plan for provider key %X does not exist", iter.Key()))
+			panic(fmt.Errorf("plan for provider key %X does not exist", iterator.Key()))
 		}
 
 		items = append(items, item)

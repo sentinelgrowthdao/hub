@@ -164,16 +164,16 @@ func UpgradeHandler(
 
 func deleteInactiveSubscriptionsForAccounts(ctx sdk.Context, k subscriptionkeeper.Keeper) error {
 	var (
-		store = k.Store(ctx)
-		iter  = sdk.KVStorePrefixIterator(store, subscriptiontypes.SubscriptionForAccountKeyPrefix)
+		store    = k.Store(ctx)
+		iterator = sdk.KVStorePrefixIterator(store, subscriptiontypes.SubscriptionForAccountKeyPrefix)
 	)
 
-	defer iter.Close()
+	defer iterator.Close()
 
-	for ; iter.Valid(); iter.Next() {
+	for ; iterator.Valid(); iterator.Next() {
 		var (
-			accAddr = subscriptiontypes.AccAddrFromSubscriptionForAccountKey(iter.Key())
-			id      = subscriptiontypes.IDFromSubscriptionForAccountKey(iter.Key())
+			accAddr = subscriptiontypes.AccAddrFromSubscriptionForAccountKey(iterator.Key())
+			id      = subscriptiontypes.IDFromSubscriptionForAccountKey(iterator.Key())
 		)
 
 		if _, found := k.GetSubscription(ctx, id); found {

@@ -46,12 +46,12 @@ func (k *Keeper) DeleteAsset(ctx sdk.Context, denom string) {
 func (k *Keeper) IterateAssets(ctx sdk.Context, fn func(int, v1.Asset) bool) {
 	store := k.Store(ctx)
 
-	iter := sdk.KVStorePrefixIterator(store, types.AssetKeyPrefix)
-	defer iter.Close()
+	iterator := sdk.KVStorePrefixIterator(store, types.AssetKeyPrefix)
+	defer iterator.Close()
 
-	for i := 0; iter.Valid(); iter.Next() {
+	for i := 0; iterator.Valid(); iterator.Next() {
 		var item v1.Asset
-		k.cdc.MustUnmarshal(iter.Value(), &item)
+		k.cdc.MustUnmarshal(iterator.Value(), &item)
 
 		if stop := fn(i, item); stop {
 			break

@@ -38,15 +38,15 @@ func (k *Keeper) GetDeposit(ctx sdk.Context, addr sdk.AccAddress) (deposit v1.De
 // GetDeposits retrieves all deposits stored in the module's KVStore.
 func (k *Keeper) GetDeposits(ctx sdk.Context) (items v1.Deposits) {
 	var (
-		store = k.Store(ctx)
-		iter  = sdk.KVStorePrefixIterator(store, types.DepositKeyPrefix)
+		store    = k.Store(ctx)
+		iterator = sdk.KVStorePrefixIterator(store, types.DepositKeyPrefix)
 	)
 
-	defer iter.Close()
+	defer iterator.Close()
 
-	for ; iter.Valid(); iter.Next() {
+	for ; iterator.Valid(); iterator.Next() {
 		var item v1.Deposit
-		k.cdc.MustUnmarshal(iter.Value(), &item)
+		k.cdc.MustUnmarshal(iterator.Value(), &item)
 		items = append(items, item)
 	}
 
@@ -58,12 +58,12 @@ func (k *Keeper) GetDeposits(ctx sdk.Context) (items v1.Deposits) {
 func (k *Keeper) IterateDeposits(ctx sdk.Context, fn func(index int, item v1.Deposit) (stop bool)) {
 	store := k.Store(ctx)
 
-	iter := sdk.KVStorePrefixIterator(store, types.DepositKeyPrefix)
-	defer iter.Close()
+	iterator := sdk.KVStorePrefixIterator(store, types.DepositKeyPrefix)
+	defer iterator.Close()
 
-	for i := 0; iter.Valid(); iter.Next() {
+	for i := 0; iterator.Valid(); iterator.Next() {
 		var item v1.Deposit
-		k.cdc.MustUnmarshal(iter.Value(), &item)
+		k.cdc.MustUnmarshal(iterator.Value(), &item)
 
 		if stop := fn(i, item); stop {
 			break
