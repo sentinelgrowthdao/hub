@@ -203,61 +203,61 @@ message QueryParamsResponse {
 service QueryService {
   // RPC method for querying subscriptions.
   rpc QuerySubscriptions(QuerySubscriptionsRequest) returns (QuerySubscriptionsResponse) {
-    option (google.api.http).get = "/sentinel/subscriptions";
+    option (google.api.http).get = "/sentinel/subscription/v2/subscriptions";
   }
 
   // RPC method for querying subscriptions for a specific account.
   rpc QuerySubscriptionsForAccount(QuerySubscriptionsForAccountRequest) returns (QuerySubscriptionsForAccountResponse) {
-    option (google.api.http).get = "/sentinel/accounts/{address}/subscriptions";
+    option (google.api.http).get = "/sentinel/subscription/v2/accounts/{address}/subscriptions";
   }
 
   // RPC method for querying subscriptions for a specific node.
   rpc QuerySubscriptionsForNode(QuerySubscriptionsForNodeRequest) returns (QuerySubscriptionsForNodeResponse) {
-    option (google.api.http).get = "/sentinel/nodes/{address}/subscriptions";
+    option (google.api.http).get = "/sentinel/subscription/v2/nodes/{address}/subscriptions";
   }
 
   // RPC method for querying subscriptions for a specific plan.
   rpc QuerySubscriptionsForPlan(QuerySubscriptionsForPlanRequest) returns (QuerySubscriptionsForPlanResponse) {
-    option (google.api.http).get = "/sentinel/plans/{id}/subscriptions";
+    option (google.api.http).get = "/sentinel/subscription/v2/plans/{id}/subscriptions";
   }
 
   // RPC method for querying a specific subscription.
   rpc QuerySubscription(QuerySubscriptionRequest) returns (QuerySubscriptionResponse) {
-    option (google.api.http).get = "/sentinel/subscriptions/{id}";
+    option (google.api.http).get = "/sentinel/subscription/v2/subscriptions/{id}";
   }
 
   // RPC method for querying allocations associated with a subscription.
   rpc QueryAllocations(QueryAllocationsRequest) returns (QueryAllocationsResponse) {
-    option (google.api.http).get = "/sentinel/subscriptions/{id}/allocations";
+    option (google.api.http).get = "/sentinel/subscription/v2/subscriptions/{id}/allocations";
   }
 
   // RPC method for querying a specific allocation.
   rpc QueryAllocation(QueryAllocationRequest) returns (QueryAllocationResponse) {
-    option (google.api.http).get = "/sentinel/subscriptions/{id}/allocations/{address}";
+    option (google.api.http).get = "/sentinel/subscription/v2/subscriptions/{id}/allocations/{address}";
   }
 
   // RPC method for querying payouts.
   rpc QueryPayouts(QueryPayoutsRequest) returns (QueryPayoutsResponse) {
-    option (google.api.http).get = "/sentinel/payouts";
+    option (google.api.http).get = "/sentinel/subscription/v2/payouts";
   }
 
   // RPC method for querying payouts for a specific account.
   rpc QueryPayoutsForAccount(QueryPayoutsForAccountRequest) returns (QueryPayoutsForAccountResponse) {
-    option (google.api.http).get = "/sentinel/accounts/{address}/payouts";
+    option (google.api.http).get = "/sentinel/subscription/v2/accounts/{address}/payouts";
   }
 
   // RPC method for querying payouts for a specific node.
   rpc QueryPayoutsForNode(QueryPayoutsForNodeRequest) returns (QueryPayoutsForNodeResponse) {
-    option (google.api.http).get = "/sentinel/nodes/{address}/payouts";
+    option (google.api.http).get = "/sentinel/subscription/v2/nodes/{address}/payouts";
   }
 
   // RPC method for querying a specific payout.
   rpc QueryPayout(QueryPayoutRequest) returns (QueryPayoutResponse) {
-    option (google.api.http).get = "/sentinel/payouts/{id}";
+    option (google.api.http).get = "/sentinel/subscription/v2/payouts/{id}";
   }
 
   // RPC method for querying subscription module parameters.
   rpc QueryParams(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/sentinel/modules/subscription/params";
+    option (google.api.http).get = "/sentinel/subscription/v2/params";
   }
 }
