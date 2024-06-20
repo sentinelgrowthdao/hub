@@ -4,6 +4,8 @@ import (
 	"context"
 
 	"github.com/cosmos/cosmos-sdk/codec"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	"github.com/sentinel-official/hub/v12/x/subscription/keeper"
 	"github.com/sentinel-official/hub/v12/x/subscription/types/v1"
@@ -25,26 +27,26 @@ func NewQueryServiceServer(cdc codec.BinaryCodec, k keeper.Keeper) v1.QueryServi
 	}
 }
 
-func (k *queryServer) QuerySubscriptions(c context.Context, req *v1.QuerySubscriptionsRequest) (*v1.QuerySubscriptionsResponse, error) {
-	return &v1.QuerySubscriptionsResponse{}, nil
+func (k *queryServer) QuerySubscriptions(_ context.Context, _ *v1.QuerySubscriptionsRequest) (*v1.QuerySubscriptionsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QuerySubscriptionsForAddress(c context.Context, req *v1.QuerySubscriptionsForAddressRequest) (*v1.QuerySubscriptionsForAddressResponse, error) {
-	return &v1.QuerySubscriptionsForAddressResponse{}, nil
+func (k *queryServer) QuerySubscriptionsForAddress(_ context.Context, _ *v1.QuerySubscriptionsForAddressRequest) (*v1.QuerySubscriptionsForAddressResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QuerySubscription(c context.Context, req *v1.QuerySubscriptionRequest) (*v1.QuerySubscriptionResponse, error) {
-	return &v1.QuerySubscriptionResponse{}, nil
+func (k *queryServer) QuerySubscription(_ context.Context, _ *v1.QuerySubscriptionRequest) (*v1.QuerySubscriptionResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QueryQuota(c context.Context, req *v1.QueryQuotaRequest) (*v1.QueryQuotaResponse, error) {
-	return &v1.QueryQuotaResponse{}, nil
+func (k *queryServer) QueryQuota(_ context.Context, _ *v1.QueryQuotaRequest) (*v1.QueryQuotaResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QueryQuotas(c context.Context, req *v1.QueryQuotasRequest) (*v1.QueryQuotasResponse, error) {
-	return &v1.QueryQuotasResponse{}, nil
+func (k *queryServer) QueryQuotas(_ context.Context, _ *v1.QueryQuotasRequest) (*v1.QueryQuotasResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QueryParams(c context.Context, req *v1.QueryParamsRequest) (*v1.QueryParamsResponse, error) {
-	return &v1.QueryParamsResponse{}, nil
+func (k *queryServer) QueryParams(_ context.Context, _ *v1.QueryParamsRequest) (*v1.QueryParamsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
 }
