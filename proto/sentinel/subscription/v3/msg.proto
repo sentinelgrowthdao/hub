@@ -1,0 +1,20 @@
+syntax = "proto3";
+package sentinel.subscription.v3;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/sentinel-official/hub/v12/x/subscription/types/v3";
+option (gogoproto.equal_all) = false;
+option (gogoproto.goproto_getters_all) = false;
+
+message MsgStartSessionRequest {
+  string from = 1;
+  uint64 subscription_id = 2 [(gogoproto.customname) = "SubscriptionID"];
+  string node_address = 3;
+}
+
+message MsgStartSessionResponse {}
+
+service MsgService {
+  rpc MsgStartSession(MsgStartSessionRequest) returns (MsgStartSessionResponse);
+}
