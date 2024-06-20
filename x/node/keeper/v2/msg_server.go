@@ -5,6 +5,8 @@ import (
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	base "github.com/sentinel-official/hub/v12/types"
 	v1base "github.com/sentinel-official/hub/v12/types/v1"
@@ -207,51 +209,6 @@ func (k *msgServer) MsgUpdateStatus(c context.Context, msg *v2.MsgUpdateStatusRe
 	return &v2.MsgUpdateStatusResponse{}, nil
 }
 
-// MsgSubscribe subscribes to a node for a specific amount of gigabytes or hours.
-// It validates the subscription request and creates a new subscription for the provided node and user account.
-func (k *msgServer) MsgSubscribe(c context.Context, msg *v2.MsgSubscribeRequest) (*v2.MsgSubscribeResponse, error) {
-	ctx := sdk.UnwrapSDKContext(c)
-
-	// Check if the provided Gigabytes value is valid, if not, return an error.
-	if msg.Gigabytes != 0 {
-		if !k.IsValidSubscriptionGigabytes(ctx, msg.Gigabytes) {
-			return nil, types.NewErrorInvalidGigabytes(msg.Gigabytes)
-		}
-	}
-
-	// Check if the provided Hours value is valid, if not, return an error.
-	if msg.Hours != 0 {
-		if !k.IsValidSubscriptionHours(ctx, msg.Hours) {
-			return nil, types.NewErrorInvalidHours(msg.Hours)
-		}
-	}
-
-	// Convert the `msg.From` address (in Bech32 format) to an `sdk.AccAddress`.
-	accAddr, err := sdk.AccAddressFromBech32(msg.From)
-	if err != nil {
-		return nil, err
-	}
-
-	// Convert the `msg.NodeAddress` (node address) to a `base.NodeAddress`.
-	nodeAddr, err := base.NodeAddressFromBech32(msg.NodeAddress)
-	if err != nil {
-		return nil, err
-	}
-
-	// Create a new subscription for the provided node, user account, gigabytes, hours, and denom.
-	subscription, err := k.CreateSubscriptionForNode(ctx, accAddr, nodeAddr, msg.Gigabytes, msg.Hours, msg.Denom)
-	if err != nil {
-		return nil, err
-	}
-
-	// Emit an event to notify that a new subscription has been created.
-	ctx.EventManager().EmitTypedEvent(
-		&v2.EventCreateSubscription{
-			Address:     subscription.Address,
-			NodeAddress: subscription.NodeAddress,
-			ID:          subscription.ID,
-		},
-	)
-
-	return &v2.MsgSubscribeResponse{}, nil
+func (k *msgServer) MsgSubscribe(_ context.Context, _ *v2.MsgSubscribeRequest) (*v2.MsgSubscribeResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
 }

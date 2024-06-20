@@ -28,11 +28,11 @@ func (m *MsgStartLeaseRequest) ValidateBasic() error {
 	if _, err := base.NodeAddressFromBech32(m.NodeAddress); err != nil {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
 	}
+	if m.Hours == 0 {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "hours cannot be empty")
+	}
 	if m.Hours < 0 {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "hours cannot be negative")
-	}
-	if m.Hours == 0 {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, "hours cannot be zero")
 	}
 	if m.Denom == "" {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "denom cannot be empty")
@@ -63,11 +63,11 @@ func (m *MsgRenewLeaseRequest) ValidateBasic() error {
 	if m.ID == 0 {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "id cannot be zero")
 	}
+	if m.Hours == 0 {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "hours cannot be empty")
+	}
 	if m.Hours < 0 {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "hours cannot be negative")
-	}
-	if m.Hours == 0 {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, "hours cannot be zero")
 	}
 	if m.Denom == "" {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "denom cannot be empty")
