@@ -129,10 +129,5 @@ func (k *queryServer) QueryNodesForPlan(c context.Context, req *v2.QueryNodesFor
 }
 
 func (k *queryServer) QueryParams(c context.Context, _ *v2.QueryParamsRequest) (*v2.QueryParamsResponse, error) {
-	var (
-		ctx    = sdk.UnwrapSDKContext(c)
-		params = k.GetParams(ctx)
-	)
-
-	return &v2.QueryParamsResponse{Params: params}, nil
+	return nil, status.Error(codes.Unimplemented, "")
 }

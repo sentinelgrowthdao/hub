@@ -40,9 +40,9 @@ func (k *queryServer) QueryLease(c context.Context, req *v3.QueryLeaseRequest) (
 
 	ctx := sdk.UnwrapSDKContext(c)
 
-	item, found := k.GetLease(ctx, req.Id)
+	item, found := k.GetLease(ctx, req.ID)
 	if !found {
-		return nil, status.Errorf(codes.NotFound, "lease %d does not exist", req.Id)
+		return nil, status.Errorf(codes.NotFound, "lease %d does not exist", req.ID)
 	}
 
 	return &v3.QueryLeaseResponse{Lease: item}, nil
@@ -140,4 +140,13 @@ func (k *queryServer) QueryLeasesForNode(c context.Context, req *v3.QueryLeasesF
 	}
 
 	return &v3.QueryLeasesForNodeResponse{Leases: items, Pagination: pagination}, nil
+}
+
+func (k *queryServer) QueryParams(c context.Context, _ *v3.QueryParamsRequest) (*v3.QueryParamsResponse, error) {
+	var (
+		ctx    = sdk.UnwrapSDKContext(c)
+		params = k.GetParams(ctx)
+	)
+
+	return &v3.QueryParamsResponse{Params: params}, nil
 }
