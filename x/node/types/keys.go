@@ -23,13 +23,13 @@ var (
 	NodeForInactiveAtKeyPrefix = []byte{0x11}
 	NodeForPlanKeyPrefix       = []byte{0x12}
 
-	LeaseKeyPrefix                  = []byte{0x21}
-	LeaseForInactiveAtKeyPrefix     = []byte{0x22}
-	LeaseForNodeKeyPrefix           = []byte{0x23}
+	LeaseKeyPrefix                  = []byte{0x20}
+	LeaseForInactiveAtKeyPrefix     = []byte{0x21}
+	LeaseForNodeKeyPrefix           = []byte{0x22}
+	LeaseForPayoutAtKeyPrefix       = []byte{0x23}
 	LeaseForProviderKeyPrefix       = []byte{0x24}
 	LeaseForProviderByNodeKeyPrefix = []byte{0x25}
-
-	LeasePayoutForNextAtKeyPrefix = []byte{0x31}
+	LeaseForRenewAtKeyPrefix        = []byte{0x26}
 )
 
 func ActiveNodeKey(addr base.NodeAddress) []byte {
@@ -76,6 +76,14 @@ func LeaseForNodeKey(addr base.NodeAddress, id uint64) []byte {
 	return append(GetLeaseForNodeKeyPrefix(addr), sdk.Uint64ToBigEndian(id)...)
 }
 
+func GetLeaseForPayoutAtKeyPrefix(at time.Time) []byte {
+	return append(LeaseForPayoutAtKeyPrefix, sdk.FormatTimeBytes(at)...)
+}
+
+func LeaseForPayoutAtKey(at time.Time, id uint64) []byte {
+	return append(GetLeaseForPayoutAtKeyPrefix(at), sdk.Uint64ToBigEndian(id)...)
+}
+
 func GetLeaseForProviderKeyPrefix(addr base.ProvAddress) []byte {
 	return append(LeaseForProviderKeyPrefix, sdkaddress.MustLengthPrefix(addr.Bytes())...)
 }
@@ -92,23 +100,12 @@ func LeaseForProviderByNodeKey(provAddr base.ProvAddress, nodeAddr base.NodeAddr
 	return append(GetLeaseForProviderByNodeKeyPrefix(provAddr, nodeAddr), sdk.Uint64ToBigEndian(id)...)
 }
 
-func GetLeasePayoutForNextAtKeyPrefix(at time.Time) []byte {
-	return append(LeasePayoutForNextAtKeyPrefix, sdk.FormatTimeBytes(at)...)
+func GetLeaseForRenewAtKeyPrefix(at time.Time) []byte {
+	return append(LeaseForRenewAtKeyPrefix, sdk.FormatTimeBytes(at)...)
 }
 
-func LeasePayoutForNextAtKey(at time.Time, id uint64) []byte {
-	return append(GetLeasePayoutForNextAtKeyPrefix(at), sdk.Uint64ToBigEndian(id)...)
-}
-
-func AddressFromNodeForPlanKey(key []byte) base.NodeAddress {
-	// prefix (1 byte) | id (8 bytes) | addrLen (1 byte) | addr (addrLen bytes)
-
-	addrLen := int(key[9])
-	if len(key) != 10+addrLen {
-		panic(fmt.Errorf("invalid key length %d; expected %d", len(key), 10+addrLen))
-	}
-
-	return key[10:]
+func LeaseForRenewAtKey(at time.Time, id uint64) []byte {
+	return append(GetLeaseForRenewAtKeyPrefix(at), sdk.Uint64ToBigEndian(id)...)
 }
 
 func AddressFromNodeForInactiveAtKey(key []byte) base.NodeAddress {
@@ -122,6 +119,37 @@ func AddressFromNodeForInactiveAtKey(key []byte) base.NodeAddress {
 	return key[31:]
 }
 
+func AddressFromNodeForPlanKey(key []byte) base.NodeAddress {
+	// prefix (1 byte) | id (8 bytes) | addrLen (1 byte) | addr (addrLen bytes)
+
+	addrLen := int(key[9])
+	if len(key) != 10+addrLen {
+		panic(fmt.Errorf("invalid key length %d; expected %d", len(key), 10+addrLen))
+	}
+
+	return key[10:]
+}
+
+func IDFromLeaseForInactiveAtKey(key []byte) uint64 {
+	// prefix (1 byte) | at (29 bytes) | id (8 bytes)
+
+	if len(key) != 38 {
+		panic(fmt.Errorf("invalid key length %d; expected %d", len(key), 38))
+	}
+
+	return sdk.BigEndianToUint64(key[30:])
+}
+
+func IDFromLeaseForPayoutAtKey(key []byte) uint64 {
+	// prefix (1 byte) | at (29 bytes) | id (8 bytes)
+
+	if len(key) != 38 {
+		panic(fmt.Errorf("invalid key length %d; expected %d", len(key), 38))
+	}
+
+	return sdk.BigEndianToUint64(key[30:])
+}
+
 func IDFromLeaseForProviderByNodeKey(key []byte) uint64 {
 	// prefix (1 byte) | provAddrLen(1 byte) | provAddr (provAddrLen bytes) | nodeAddrLen(1 byte) | nodeAddr (nodeAddrLen bytes) | id (8 bytes)
 
@@ -133,7 +161,7 @@ func IDFromLeaseForProviderByNodeKey(key []byte) uint64 {
 	return sdk.BigEndianToUint64(key[3+provAddrLen+nodeAddrLen:])
 }
 
-func IDFromLeasePayoutForNextAtKey(key []byte) uint64 {
+func IDFromLeaseForRenewAtKey(key []byte) uint64 {
 	// prefix (1 byte) | at (29 bytes) | id (8 bytes)
 
 	if len(key) != 38 {

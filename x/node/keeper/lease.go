@@ -127,7 +127,7 @@ func (k *Keeper) SetLeaseForProvider(ctx sdk.Context, addr base.ProvAddress, id 
 	store.Set(key, value)
 }
 
-func (k *Keeper) HashLeaseForProvider(ctx sdk.Context, addr base.ProvAddress, id uint64) bool {
+func (k *Keeper) HasLeaseForProvider(ctx sdk.Context, addr base.ProvAddress, id uint64) bool {
 	var (
 		store = k.Store(ctx)
 		key   = types.LeaseForProviderKey(addr, id)
@@ -155,7 +155,7 @@ func (k *Keeper) SetLeaseForNode(ctx sdk.Context, addr base.NodeAddress, id uint
 	store.Set(key, value)
 }
 
-func (k *Keeper) HashLeaseForNode(ctx sdk.Context, addr base.NodeAddress, id uint64) bool {
+func (k *Keeper) HasLeaseForNode(ctx sdk.Context, addr base.NodeAddress, id uint64) bool {
 	var (
 		store = k.Store(ctx)
 		key   = types.LeaseForNodeKey(addr, id)
@@ -183,7 +183,7 @@ func (k *Keeper) SetLeaseForProviderByNode(ctx sdk.Context, provAddr base.ProvAd
 	store.Set(key, value)
 }
 
-func (k *Keeper) HashLeaseForProviderByNode(ctx sdk.Context, provAddr base.ProvAddress, nodeAddr base.NodeAddress, id uint64) bool {
+func (k *Keeper) HasLeaseForProviderByNode(ctx sdk.Context, provAddr base.ProvAddress, nodeAddr base.NodeAddress, id uint64) bool {
 	var (
 		store = k.Store(ctx)
 		key   = types.LeaseForProviderByNodeKey(provAddr, nodeAddr, id)
@@ -217,35 +217,69 @@ func (k *Keeper) GetLatestLeaseForProviderByNode(ctx sdk.Context, provAddr base.
 	return lease, found
 }
 
-func (k *Keeper) SetLeasePayoutForNextAt(ctx sdk.Context, at time.Time, id uint64) {
+func (k *Keeper) SetLeaseForInactiveAt(ctx sdk.Context, at time.Time, id uint64) {
+	key := types.LeaseForInactiveAtKey(at, id)
+	value := k.cdc.MustMarshal(&protobuf.BoolValue{Value: true})
+
+	store := k.Store(ctx)
+	store.Set(key, value)
+}
+
+func (k *Keeper) DeleteLeaseForInactiveAt(ctx sdk.Context, at time.Time, id uint64) {
+	key := types.LeaseForInactiveAtKey(at, id)
+
+	store := k.Store(ctx)
+	store.Delete(key)
+}
+
+func (k *Keeper) IterateLeasesForInactiveAt(ctx sdk.Context, endTime time.Time, fn func(index int, item v3.Lease) (stop bool)) {
+	store := k.Store(ctx)
+
+	iterator := store.Iterator(types.LeaseForInactiveAtKeyPrefix, sdk.PrefixEndBytes(types.GetLeaseForInactiveAtKeyPrefix(endTime)))
+	defer iterator.Close()
+
+	for i := 0; iterator.Valid(); iterator.Next() {
+		item, found := k.GetLease(ctx, types.IDFromLeaseForInactiveAtKey(iterator.Key()))
+		if !found {
+			panic(fmt.Errorf("lease for inactive at key %X does not exist", iterator.Key()))
+		}
+
+		if stop := fn(i, item); stop {
+			break
+		}
+		i++
+	}
+}
+
+func (k *Keeper) SetLeaseForPayoutAt(ctx sdk.Context, at time.Time, id uint64) {
 	var (
 		store = k.Store(ctx)
-		key   = types.LeasePayoutForNextAtKey(at, id)
+		key   = types.LeaseForPayoutAtKey(at, id)
 		value = k.cdc.MustMarshal(&protobuf.BoolValue{Value: true})
 	)
 
 	store.Set(key, value)
 }
 
-func (k *Keeper) DeleteLeasePayoutForNextAt(ctx sdk.Context, at time.Time, id uint64) {
+func (k *Keeper) DeleteLeaseForPayoutAt(ctx sdk.Context, at time.Time, id uint64) {
 	var (
 		store = k.Store(ctx)
-		key   = types.LeasePayoutForNextAtKey(at, id)
+		key   = types.LeaseForPayoutAtKey(at, id)
 	)
 
 	store.Delete(key)
 }
 
-func (k *Keeper) IterateLeasesForNextAt(ctx sdk.Context, at time.Time, fn func(index int, item v3.Lease) (stop bool)) {
+func (k *Keeper) IterateLeasesForPayoutAt(ctx sdk.Context, at time.Time, fn func(index int, item v3.Lease) (stop bool)) {
 	store := k.Store(ctx)
 
-	iterator := store.Iterator(types.LeasePayoutForNextAtKeyPrefix, sdk.PrefixEndBytes(types.GetLeasePayoutForNextAtKeyPrefix(at)))
+	iterator := store.Iterator(types.LeaseForPayoutAtKeyPrefix, sdk.PrefixEndBytes(types.GetLeaseForPayoutAtKeyPrefix(at)))
 	defer iterator.Close()
 
 	for i := 0; iterator.Valid(); iterator.Next() {
-		lease, found := k.GetLease(ctx, types.IDFromLeasePayoutForNextAtKey(iterator.Key()))
+		lease, found := k.GetLease(ctx, types.IDFromLeaseForPayoutAtKey(iterator.Key()))
 		if !found {
-			panic(fmt.Errorf("lease for next_at key %X does not exist", iterator.Key()))
+			panic(fmt.Errorf("lease for payout_at key %X does not exist", iterator.Key()))
 		}
 
 		if stop := fn(i, lease); stop {
@@ -253,4 +287,106 @@ func (k *Keeper) IterateLeasesForNextAt(ctx sdk.Context, at time.Time, fn func(i
 		}
 		i++
 	}
+}
+
+func (k *Keeper) SetLeaseForRenewAt(ctx sdk.Context, at time.Time, id uint64) {
+	var (
+		store = k.Store(ctx)
+		key   = types.LeaseForRenewAtKey(at, id)
+		value = k.cdc.MustMarshal(&protobuf.BoolValue{Value: true})
+	)
+
+	store.Set(key, value)
+}
+
+func (k *Keeper) DeleteLeaseForRenewAt(ctx sdk.Context, at time.Time, id uint64) {
+	var (
+		store = k.Store(ctx)
+		key   = types.LeaseForRenewAtKey(at, id)
+	)
+
+	store.Delete(key)
+}
+
+func (k *Keeper) IterateLeasesForRenewAt(ctx sdk.Context, at time.Time, fn func(index int, item v3.Lease) (stop bool)) {
+	store := k.Store(ctx)
+
+	iterator := store.Iterator(types.LeaseForRenewAtKeyPrefix, sdk.PrefixEndBytes(types.GetLeaseForRenewAtKeyPrefix(at)))
+	defer iterator.Close()
+
+	for i := 0; iterator.Valid(); iterator.Next() {
+		lease, found := k.GetLease(ctx, types.IDFromLeaseForRenewAtKey(iterator.Key()))
+		if !found {
+			panic(fmt.Errorf("lease for renew key %X does not exist", iterator.Key()))
+		}
+
+		if stop := fn(i, lease); stop {
+			break
+		}
+		i++
+	}
+}
+
+func (k *Keeper) RenewLease(ctx sdk.Context, msg *v3.MsgRenewLeaseRequest) (*v3.Lease, error) {
+	lease, found := k.GetLease(ctx, msg.ID)
+	if !found {
+		return nil, types.NewErrorLeaseNotFound(msg.ID)
+	}
+
+	var (
+		nodeAddr = lease.GetNodeAddress()
+		provAddr = lease.GetProvAddress()
+	)
+
+	node, found := k.GetNode(ctx, nodeAddr)
+	if !found {
+		return nil, types.NewErrorNodeNotFound(nodeAddr)
+	}
+
+	price, found := node.HourlyPrice(msg.Denom)
+	if !found {
+		return nil, types.NewErrorPriceNotFound(msg.Denom)
+	}
+
+	lease = v3.Lease{
+		ID:          lease.ID,
+		ProvAddress: lease.ProvAddress,
+		NodeAddress: lease.NodeAddress,
+		Price:       price,
+		Deposit: sdk.NewCoin(
+			price.Denom,
+			price.Amount.MulRaw(msg.Hours),
+		),
+		Hours:     0,
+		MaxHours:  msg.Hours,
+		CreatedAt: ctx.BlockTime(),
+		PayoutAt:  ctx.BlockTime(),
+	}
+
+	if err := k.AddDeposit(ctx, provAddr.Bytes(), lease.Deposit); err != nil {
+		return nil, err
+	}
+
+	duration := time.Duration(lease.MaxHours) * time.Hour
+	if msg.Renewable {
+		lease.InactiveAt = time.Time{}
+		lease.RenewAt = lease.CreatedAt.Add(duration)
+	} else {
+		lease.RenewAt = time.Time{}
+		lease.InactiveAt = lease.CreatedAt.Add(duration)
+	}
+
+	k.SetLease(ctx, lease)
+	k.SetLeaseForNode(ctx, nodeAddr, lease.ID)
+	k.SetLeaseForPayoutAt(ctx, lease.PayoutAt, lease.ID)
+	k.SetLeaseForProvider(ctx, provAddr, lease.ID)
+	k.SetLeaseForProviderByNode(ctx, provAddr, nodeAddr, lease.ID)
+
+	if msg.Renewable {
+		k.SetLeaseForRenewAt(ctx, lease.RenewAt, lease.ID)
+	} else {
+		k.SetLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
+	}
+
+	return &lease, nil
 }
