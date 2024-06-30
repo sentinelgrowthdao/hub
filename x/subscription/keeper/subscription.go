@@ -141,7 +141,7 @@ func (k *Keeper) SetSubscriptionForPlan(ctx sdk.Context, planID, subscriptionID 
 	store.Set(key, value)
 }
 
-func (k *Keeper) HashSubscriptionForPlan(ctx sdk.Context, planID, subscriptionID uint64) bool {
+func (k *Keeper) HasSubscriptionForPlan(ctx sdk.Context, planID, subscriptionID uint64) bool {
 	var (
 		store = k.Store(ctx)
 		key   = types.SubscriptionForPlanKey(planID, subscriptionID)
