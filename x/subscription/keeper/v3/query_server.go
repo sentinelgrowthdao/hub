@@ -39,9 +39,9 @@ func (k *queryServer) QuerySubscription(c context.Context, req *v3.QuerySubscrip
 
 	ctx := sdk.UnwrapSDKContext(c)
 
-	item, found := k.GetSubscription(ctx, req.Id)
+	item, found := k.GetSubscription(ctx, req.ID)
 	if !found {
-		return nil, status.Errorf(codes.NotFound, "subscription %d does not exist", req.Id)
+		return nil, status.Errorf(codes.NotFound, "subscription %d does not exist", req.ID)
 	}
 
 	return &v3.QuerySubscriptionResponse{Subscription: item}, nil
@@ -116,7 +116,7 @@ func (k *queryServer) QuerySubscriptionsForPlan(c context.Context, req *v3.Query
 	var (
 		items []v3.Subscription
 		ctx   = sdk.UnwrapSDKContext(c)
-		store = prefix.NewStore(k.Store(ctx), types.GetSubscriptionForPlanKeyPrefix(req.Id))
+		store = prefix.NewStore(k.Store(ctx), types.GetSubscriptionForPlanKeyPrefix(req.ID))
 	)
 
 	pagination, err := sdkquery.Paginate(store, req.Pagination, func(key, _ []byte) error {

@@ -24,7 +24,7 @@ func (k *Keeper) DeleteNodeForPlan(ctx sdk.Context, id uint64, addr base.NodeAdd
 	k.node.DeleteNodeForPlan(ctx, id, addr)
 }
 
-func (k *Keeper) GetNodesForPlan(ctx sdk.Context, id uint64) nodetypes.Nodes {
+func (k *Keeper) GetNodesForPlan(ctx sdk.Context, id uint64) []nodetypes.Node {
 	return k.node.GetNodesForPlan(ctx, id)
 }
 

@@ -27,7 +27,7 @@ type NodeKeeper interface {
 	HasNode(ctx sdk.Context, addr base.NodeAddress) bool
 	SetNodeForPlan(ctx sdk.Context, id uint64, addr base.NodeAddress)
 	DeleteNodeForPlan(ctx sdk.Context, id uint64, addr base.NodeAddress)
-	GetNodesForPlan(ctx sdk.Context, id uint64) nodetypes.Nodes
+	GetNodesForPlan(ctx sdk.Context, id uint64) []nodetypes.Node
 }
 
 type SubscriptionKeeper interface {

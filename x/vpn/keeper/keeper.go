@@ -49,9 +49,9 @@ func NewKeeper(
 	k.Node = nodekeeper.NewKeeper(
 		cdc, key, paramsKeeper.Subspace(fmt.Sprintf("%s/%s", types.ModuleName, nodetypes.ModuleName)),
 	)
+	k.Node.WithDepositKeeper(&k.Deposit)
 	k.Node.WithDistributionKeeper(distributionKeeper)
 	k.Node.WithProviderKeeper(&k.Provider)
-	k.Node.WithSubscriptionKeeper(&k.Subscription)
 
 	k.Plan = plankeeper.NewKeeper(cdc, key)
 	k.Plan.WithBankKeeper(bankKeeper)

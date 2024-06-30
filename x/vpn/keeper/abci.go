@@ -15,14 +15,13 @@ func (k *Keeper) BeginBlock(ctx sdk.Context) {
 	ctx, write := cacheContext(ctx)
 	defer write()
 
-	k.Subscription.BeginBlock(ctx)
+	k.Node.BeginBlock(ctx)
 }
 
 func (k *Keeper) EndBlock(ctx sdk.Context) abcitypes.ValidatorUpdates {
 	ctx, write := cacheContext(ctx)
 	defer write()
 
-	k.Node.EndBlock(ctx)
 	k.Session.EndBlock(ctx)
 	k.Subscription.EndBlock(ctx)
 
