@@ -7,25 +7,27 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
-	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types/v2"
 )
 
 type AccountKeeper interface {
-	GetAccount(ctx sdk.Context, address sdk.AccAddress) authtypes.AccountI
+	GetAccount(ctx sdk.Context, addr sdk.AccAddress) authtypes.AccountI
 }
 
 type BankKeeper interface {
-	SpendableCoins(ctx sdk.Context, address sdk.AccAddress) sdk.Coins
+	SpendableCoins(ctx sdk.Context, addr sdk.AccAddress) sdk.Coins
 }
 
 type DistributionKeeper interface {
 	FundCommunityPool(ctx sdk.Context, amount sdk.Coins, sender sdk.AccAddress) error
 }
 
-type ProviderKeeper interface {
-	HasProvider(ctx sdk.Context, addr base.ProvAddress) bool
+type DepositKeeper interface {
+	Add(ctx sdk.Context, addr sdk.AccAddress, coins sdk.Coins) error
+	Subtract(ctx sdk.Context, addr sdk.AccAddress, coins sdk.Coins) error
+	SendCoinsFromDepositToAccount(ctx sdk.Context, fromAddr, toAddr sdk.AccAddress, coins sdk.Coins) error
+	SendCoinsFromDepositToModule(ctx sdk.Context, fromAddr sdk.AccAddress, toModule string, coins sdk.Coins) error
 }
 
-type SubscriptionKeeper interface {
-	CreateSubscriptionForNode(ctx sdk.Context, accAddr sdk.AccAddress, nodeAddr base.NodeAddress, gigabytes, hours int64, denom string) (*subscriptiontypes.NodeSubscription, error)
+type ProviderKeeper interface {
+	HasProvider(ctx sdk.Context, addr base.ProvAddress) bool
 }
