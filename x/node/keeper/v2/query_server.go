@@ -60,7 +60,7 @@ func (k *queryServer) QueryNodes(c context.Context, req *v2.QueryNodesRequest) (
 	}
 
 	var (
-		items     v2.Nodes
+		items     []v2.Node
 		keyPrefix []byte
 		ctx       = sdk.UnwrapSDKContext(c)
 	)
@@ -98,7 +98,7 @@ func (k *queryServer) QueryNodesForPlan(c context.Context, req *v2.QueryNodesFor
 	}
 
 	var (
-		items v2.Nodes
+		items []v2.Node
 		ctx   = sdk.UnwrapSDKContext(c)
 		store = prefix.NewStore(k.Store(ctx), types.GetNodeForPlanKeyPrefix(req.Id))
 	)

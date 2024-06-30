@@ -20,7 +20,7 @@ func TestDefaultGenesisState(t *testing.T) {
 
 func TestNewGenesisState(t *testing.T) {
 	var (
-		nodes  Nodes
+		nodes  []Node
 		params Params
 		state  *GenesisState
 	)

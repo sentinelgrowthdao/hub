@@ -112,7 +112,3 @@ func (m *Node) HourlyPrice(denom string) (sdk.Coin, bool) {
 
 	return sdk.Coin{}, false
 }
-
-type (
-	Nodes []Node
-)

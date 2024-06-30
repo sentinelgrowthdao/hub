@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func NewGenesisState(nodes Nodes, params Params) *GenesisState {
+func NewGenesisState(nodes []Node, params Params) *GenesisState {
 	return &GenesisState{
 		Nodes:  nodes,
 		Params: params,

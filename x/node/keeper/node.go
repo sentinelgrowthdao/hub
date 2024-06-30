@@ -128,7 +128,7 @@ func (k *Keeper) GetNode(ctx sdk.Context, addr base.NodeAddress) (node v2.Node, 
 	return node, false
 }
 
-func (k *Keeper) GetNodes(ctx sdk.Context) (items v2.Nodes) {
+func (k *Keeper) GetNodes(ctx sdk.Context) (items []v2.Node) {
 	var (
 		store    = k.Store(ctx)
 		iterator = sdk.KVStorePrefixIterator(store, types.NodeKeyPrefix)
@@ -228,7 +228,7 @@ func (k *Keeper) DeleteNodeForPlan(ctx sdk.Context, id uint64, addr base.NodeAdd
 	store.Delete(key)
 }
 
-func (k *Keeper) GetNodesForPlan(ctx sdk.Context, id uint64) (items v2.Nodes) {
+func (k *Keeper) GetNodesForPlan(ctx sdk.Context, id uint64) (items []v2.Node) {
 	var (
 		store    = k.Store(ctx)
 		iterator = sdk.KVStorePrefixIterator(store, types.GetNodeForPlanKeyPrefix(id))
