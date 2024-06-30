@@ -16,11 +16,21 @@ var (
 	_ sdk.Msg = (*MsgStartSessionRequest)(nil)
 )
 
+func NewMsgStartLeaseRequest(fromAddr base.ProvAddress, nodeAddr base.NodeAddress, hours int64, denom string, renewable bool) *MsgStartLeaseRequest {
+	return &MsgStartLeaseRequest{
+		From:        fromAddr.String(),
+		NodeAddress: nodeAddr.String(),
+		Hours:       hours,
+		Denom:       denom,
+		Renewable:   renewable,
+	}
+}
+
 func (m *MsgStartLeaseRequest) ValidateBasic() error {
 	if m.From == "" {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
 	}
-	if _, err := sdk.AccAddressFromBech32(m.From); err != nil {
+	if _, err := base.ProvAddressFromBech32(m.From); err != nil {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
 	}
 	if m.NodeAddress == "" {
@@ -46,19 +56,27 @@ func (m *MsgStartLeaseRequest) ValidateBasic() error {
 }
 
 func (m *MsgStartLeaseRequest) GetSigners() []sdk.AccAddress {
-	from, err := sdk.AccAddressFromBech32(m.From)
+	from, err := base.ProvAddressFromBech32(m.From)
 	if err != nil {
 		panic(err)
 	}
 
-	return []sdk.AccAddress{from}
+	return []sdk.AccAddress{from.Bytes()}
+}
+
+func NewMsgUpdateLeaseDetailsRequest(fromAddr base.ProvAddress, id uint64, renewable bool) *MsgUpdateLeaseDetailsRequest {
+	return &MsgUpdateLeaseDetailsRequest{
+		From:      fromAddr.String(),
+		ID:        id,
+		Renewable: renewable,
+	}
 }
 
 func (m *MsgUpdateLeaseDetailsRequest) ValidateBasic() error {
 	if m.From == "" {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
 	}
-	if _, err := sdk.AccAddressFromBech32(m.From); err != nil {
+	if _, err := base.ProvAddressFromBech32(m.From); err != nil {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
 	}
 	if m.ID == 0 {
@@ -69,19 +87,29 @@ func (m *MsgUpdateLeaseDetailsRequest) ValidateBasic() error {
 }
 
 func (m *MsgUpdateLeaseDetailsRequest) GetSigners() []sdk.AccAddress {
-	from, err := sdk.AccAddressFromBech32(m.From)
+	from, err := base.ProvAddressFromBech32(m.From)
 	if err != nil {
 		panic(err)
 	}
 
-	return []sdk.AccAddress{from}
+	return []sdk.AccAddress{from.Bytes()}
+}
+
+func NewMsgRenewLeaseRequest(fromAddr base.ProvAddress, id uint64, hours int64, denom string, renewable bool) *MsgRenewLeaseRequest {
+	return &MsgRenewLeaseRequest{
+		From:      fromAddr.String(),
+		ID:        id,
+		Hours:     hours,
+		Denom:     denom,
+		Renewable: renewable,
+	}
 }
 
 func (m *MsgRenewLeaseRequest) ValidateBasic() error {
 	if m.From == "" {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
 	}
-	if _, err := sdk.AccAddressFromBech32(m.From); err != nil {
+	if _, err := base.ProvAddressFromBech32(m.From); err != nil {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
 	}
 	if m.ID == 0 {
@@ -104,19 +132,26 @@ func (m *MsgRenewLeaseRequest) ValidateBasic() error {
 }
 
 func (m *MsgRenewLeaseRequest) GetSigners() []sdk.AccAddress {
-	from, err := sdk.AccAddressFromBech32(m.From)
+	from, err := base.ProvAddressFromBech32(m.From)
 	if err != nil {
 		panic(err)
 	}
 
-	return []sdk.AccAddress{from}
+	return []sdk.AccAddress{from.Bytes()}
+}
+
+func NewMsgEndLeaseRequest(fromAddr base.ProvAddress, id uint64) *MsgEndLeaseRequest {
+	return &MsgEndLeaseRequest{
+		From: fromAddr.String(),
+		ID:   id,
+	}
 }
 
 func (m *MsgEndLeaseRequest) ValidateBasic() error {
 	if m.From == "" {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
 	}
-	if _, err := sdk.AccAddressFromBech32(m.From); err != nil {
+	if _, err := base.ProvAddressFromBech32(m.From); err != nil {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
 	}
 	if m.ID == 0 {
@@ -127,12 +162,22 @@ func (m *MsgEndLeaseRequest) ValidateBasic() error {
 }
 
 func (m *MsgEndLeaseRequest) GetSigners() []sdk.AccAddress {
-	from, err := sdk.AccAddressFromBech32(m.From)
+	from, err := base.ProvAddressFromBech32(m.From)
 	if err != nil {
 		panic(err)
 	}
 
-	return []sdk.AccAddress{from}
+	return []sdk.AccAddress{from.Bytes()}
+}
+
+func NewMsgStartSessionRequest(fromAddr sdk.AccAddress, nodeAddr base.NodeAddress, gigabytes, hours int64, denom string) *MsgStartSessionRequest {
+	return &MsgStartSessionRequest{
+		From:        fromAddr.String(),
+		NodeAddress: nodeAddr.String(),
+		Gigabytes:   gigabytes,
+		Hours:       hours,
+		Denom:       denom,
+	}
 }
 
 func (m *MsgStartSessionRequest) ValidateBasic() error {

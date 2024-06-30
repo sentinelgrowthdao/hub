@@ -6,12 +6,13 @@ import (
 )
 
 const (
-	flagGigabytes      = "gigabytes"
 	flagGigabytePrices = "gigabyte-prices"
-	flagHours          = "hours"
 	flagHourlyPrices   = "hourly-prices"
-	flagPlan           = "plan"
+	flagNodeAddr       = "node-addr"
+	flagPlanID         = "plan-id"
+	flagProvAddr       = "prov-addr"
 	flagRemoteURL      = "remote-url"
+	flagRenewable      = "renewable"
 )
 
 func GetGigabytePrices(flags *pflag.FlagSet) (sdk.Coins, error) {
