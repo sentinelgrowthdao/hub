@@ -10,6 +10,7 @@ import (
 
 var (
 	_ sdk.Msg = (*MsgStartLeaseRequest)(nil)
+	_ sdk.Msg = (*MsgUpdateLeaseDetailsRequest)(nil)
 	_ sdk.Msg = (*MsgRenewLeaseRequest)(nil)
 	_ sdk.Msg = (*MsgEndLeaseRequest)(nil)
 	_ sdk.Msg = (*MsgStartSessionRequest)(nil)
@@ -45,6 +46,29 @@ func (m *MsgStartLeaseRequest) ValidateBasic() error {
 }
 
 func (m *MsgStartLeaseRequest) GetSigners() []sdk.AccAddress {
+	from, err := sdk.AccAddressFromBech32(m.From)
+	if err != nil {
+		panic(err)
+	}
+
+	return []sdk.AccAddress{from}
+}
+
+func (m *MsgUpdateLeaseDetailsRequest) ValidateBasic() error {
+	if m.From == "" {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
+	}
+	if _, err := sdk.AccAddressFromBech32(m.From); err != nil {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
+	}
+	if m.ID == 0 {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "id cannot be zero")
+	}
+
+	return nil
+}
+
+func (m *MsgUpdateLeaseDetailsRequest) GetSigners() []sdk.AccAddress {
 	from, err := sdk.AccAddressFromBech32(m.From)
 	if err != nil {
 		panic(err)

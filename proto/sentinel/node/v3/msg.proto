@@ -12,6 +12,13 @@ message MsgStartLeaseRequest {
   string node_address = 2;
   int64 hours = 3;
   string denom = 4;
+  bool renewable = 5;
+}
+
+message MsgUpdateLeaseDetailsRequest {
+  string from = 1;
+  uint64 id = 2 [(gogoproto.customname) = "ID"];
+  bool renewable = 3;
 }
 
 message MsgRenewLeaseRequest {
@@ -19,6 +26,7 @@ message MsgRenewLeaseRequest {
   uint64 id = 2 [(gogoproto.customname) = "ID"];
   int64 hours = 3;
   string denom = 4;
+  bool renewable = 5;
 }
 
 message MsgEndLeaseRequest {
@@ -35,12 +43,14 @@ message MsgStartSessionRequest {
 }
 
 message MsgStartLeaseResponse {}
+message MsgUpdateLeaseDetailsResponse {}
 message MsgRenewLeaseResponse {}
 message MsgEndLeaseResponse {}
 message MsgStartSessionResponse {}
 
 service MsgService {
   rpc MsgStartLease(MsgStartLeaseRequest) returns (MsgStartLeaseResponse);
+  rpc MsgUpdateLeaseDetails(MsgUpdateLeaseDetailsRequest) returns (MsgUpdateLeaseDetailsResponse);
   rpc MsgRenewLease(MsgRenewLeaseRequest) returns (MsgRenewLeaseResponse);
   rpc MsgEndLease(MsgEndLeaseRequest) returns (MsgEndLeaseResponse);
   rpc MsgStartSession(MsgStartSessionRequest) returns (MsgStartSessionResponse);
