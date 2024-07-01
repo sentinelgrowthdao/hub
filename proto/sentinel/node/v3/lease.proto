@@ -21,15 +21,15 @@ message Lease {
     (gogoproto.nullable) = false,
     (gogoproto.stdtime) = true
   ];
-  google.protobuf.Timestamp payout_at = 9 [
+  google.protobuf.Timestamp inactive_at = 9 [
     (gogoproto.nullable) = false,
     (gogoproto.stdtime) = true
   ];
-  google.protobuf.Timestamp renew_at = 10 [
+  google.protobuf.Timestamp payout_at = 10 [
     (gogoproto.nullable) = false,
     (gogoproto.stdtime) = true
   ];
-  google.protobuf.Timestamp inactive_at = 11 [
+  google.protobuf.Timestamp renewal_at = 11 [
     (gogoproto.nullable) = false,
     (gogoproto.stdtime) = true
   ];

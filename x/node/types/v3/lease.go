@@ -89,11 +89,11 @@ func (m *Lease) Validate() error {
 	if !m.PayoutAt.After(m.CreatedAt) {
 		return fmt.Errorf("payout_at must be after created_at")
 	}
-	if !m.RenewAt.IsZero() && !m.InactiveAt.IsZero() {
-		return fmt.Errorf("either renew_at or inactive_at must be zero")
+	if !m.RenewalAt.IsZero() && !m.InactiveAt.IsZero() {
+		return fmt.Errorf("either renewal_at or inactive_at must be zero")
 	}
-	if !m.RenewAt.IsZero() && !m.RenewAt.After(m.CreatedAt) {
-		return fmt.Errorf("renew_at must be after created_at")
+	if !m.RenewalAt.IsZero() && !m.RenewalAt.After(m.CreatedAt) {
+		return fmt.Errorf("renewal_at must be after created_at")
 	}
 	if !m.InactiveAt.IsZero() && m.InactiveAt.Before(m.CreatedAt) {
 		return fmt.Errorf("inactive_at must be after created_at")

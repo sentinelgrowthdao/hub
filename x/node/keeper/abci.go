@@ -108,7 +108,7 @@ func (k *Keeper) handleInactiveLeases(ctx sdk.Context) {
 		k.DeleteLeaseForPayoutAt(ctx, item.PayoutAt, item.ID)
 		k.DeleteLeaseForProvider(ctx, provAddr, item.ID)
 		k.DeleteLeaseForProviderByNode(ctx, provAddr, nodeAddr, item.ID)
-		k.DeleteLeaseForRenewAt(ctx, item.RenewAt, item.ID)
+		k.DeleteLeaseForRenewalAt(ctx, item.RenewalAt, item.ID)
 
 		return false
 	})
@@ -152,8 +152,8 @@ func (k *Keeper) handleLeasePayouts(ctx sdk.Context) {
 }
 
 func (k *Keeper) handleLeaseRenewals(ctx sdk.Context) {
-	k.IterateLeasesForRenewAt(ctx, ctx.BlockTime(), func(_ int, item v3.Lease) bool {
-		k.DeleteLeaseForRenewAt(ctx, item.RenewAt, item.ID)
+	k.IterateLeasesForRenewalAt(ctx, ctx.BlockTime(), func(_ int, item v3.Lease) bool {
+		k.DeleteLeaseForRenewalAt(ctx, item.RenewalAt, item.ID)
 
 		msg := &v3.MsgRenewLeaseRequest{
 			From:      "",

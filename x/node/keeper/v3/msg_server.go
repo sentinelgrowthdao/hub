@@ -78,17 +78,17 @@ func (k *msgServer) MsgStartLease(c context.Context, msg *v3.MsgStartLeaseReques
 		PayoutAt:  ctx.BlockTime(),
 	}
 
-	if err := k.AddDeposit(ctx, provAddr.Bytes(), lease.Deposit); err != nil {
-		return nil, err
-	}
-
 	duration := time.Duration(lease.MaxHours) * time.Hour
 	if msg.Renewable {
 		lease.InactiveAt = time.Time{}
-		lease.RenewAt = lease.CreatedAt.Add(duration)
+		lease.RenewalAt = lease.CreatedAt.Add(duration)
 	} else {
 		lease.InactiveAt = lease.CreatedAt.Add(duration)
-		lease.RenewAt = time.Time{}
+		lease.RenewalAt = time.Time{}
+	}
+
+	if err := k.AddDeposit(ctx, provAddr.Bytes(), lease.Deposit); err != nil {
+		return nil, err
 	}
 
 	k.SetLeaseCount(ctx, count+1)
@@ -99,7 +99,7 @@ func (k *msgServer) MsgStartLease(c context.Context, msg *v3.MsgStartLeaseReques
 	k.SetLeaseForProviderByNode(ctx, provAddr, nodeAddr, lease.ID)
 
 	if msg.Renewable {
-		k.SetLeaseForRenewAt(ctx, lease.RenewAt, lease.ID)
+		k.SetLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
 	} else {
 		k.SetLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
 	}
@@ -121,20 +121,20 @@ func (k *msgServer) MsgUpdateLeaseDetails(c context.Context, msg *v3.MsgUpdateLe
 	if msg.Renewable {
 		k.DeleteLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
 	} else {
-		k.DeleteLeaseForRenewAt(ctx, lease.RenewAt, lease.ID)
+		k.DeleteLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
 	}
 
 	duration := time.Duration(lease.MaxHours) * time.Hour
 	if msg.Renewable {
 		lease.InactiveAt = time.Time{}
-		lease.RenewAt = lease.CreatedAt.Add(duration)
+		lease.RenewalAt = lease.CreatedAt.Add(duration)
 	} else {
 		lease.InactiveAt = lease.CreatedAt.Add(duration)
-		lease.RenewAt = time.Time{}
+		lease.RenewalAt = time.Time{}
 	}
 
 	if msg.Renewable {
-		k.SetLeaseForRenewAt(ctx, lease.RenewAt, lease.ID)
+		k.SetLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
 	} else {
 		k.SetLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
 	}
@@ -177,7 +177,7 @@ func (k *msgServer) MsgEndLease(c context.Context, msg *v3.MsgEndLeaseRequest) (
 	k.DeleteLeaseForPayoutAt(ctx, lease.PayoutAt, lease.ID)
 	k.DeleteLeaseForProvider(ctx, provAddr, lease.ID)
 	k.DeleteLeaseForProviderByNode(ctx, provAddr, nodeAddr, lease.ID)
-	k.DeleteLeaseForRenewAt(ctx, lease.RenewAt, lease.ID)
+	k.DeleteLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
 
 	return &v3.MsgEndLeaseResponse{}, nil
 }
