@@ -372,8 +372,8 @@ func (k *Keeper) RenewLease(ctx sdk.Context, msg *v3.MsgRenewLeaseRequest) (*v3.
 		lease.InactiveAt = time.Time{}
 		lease.RenewAt = lease.CreatedAt.Add(duration)
 	} else {
-		lease.RenewAt = time.Time{}
 		lease.InactiveAt = lease.CreatedAt.Add(duration)
+		lease.RenewAt = time.Time{}
 	}
 
 	k.SetLease(ctx, lease)

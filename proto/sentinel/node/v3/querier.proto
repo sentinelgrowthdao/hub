@@ -12,7 +12,7 @@ option (gogoproto.equal_all) = false;
 option (gogoproto.goproto_getters_all) = false;
 
 message QueryLeaseRequest {
-  uint64 id = 1 [(gogoproto.customname) = "ID"];
+  uint64 id = 1;
 }
 
 message QueryLeasesRequest {

@@ -7,7 +7,7 @@ import (
 	"github.com/sentinel-official/hub/v12/x/session/types/v2"
 )
 
-func (k *Keeper) SubscriptionInactivePendingHook(ctx sdk.Context, id uint64) error {
+func (k *Keeper) SubscriptionInactivePendingPreHook(ctx sdk.Context, id uint64) error {
 	// Get the status change delay from the store.
 	statusChangeDelay := k.StatusChangeDelay(ctx)
 

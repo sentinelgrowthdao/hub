@@ -12,6 +12,14 @@ var (
 	_ sdk.Msg = (*MsgStartSessionRequest)(nil)
 )
 
+func NewMsgStartSessionRequest(fromAddr sdk.AccAddress, id uint64, nodeAddr base.NodeAddress) *MsgStartSessionRequest {
+	return &MsgStartSessionRequest{
+		From:        fromAddr.String(),
+		ID:          id,
+		NodeAddress: nodeAddr.String(),
+	}
+}
+
 func (m *MsgStartSessionRequest) ValidateBasic() error {
 	if m.From == "" {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
@@ -19,8 +27,8 @@ func (m *MsgStartSessionRequest) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(m.From); err != nil {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
 	}
-	if m.SubscriptionID == 0 {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, "subscription_id cannot be zero")
+	if m.ID == 0 {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "id cannot be zero")
 	}
 	if m.NodeAddress == "" {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "node_address cannot be empty")

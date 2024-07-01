@@ -1,5 +1,3 @@
-// DO NOT COVER
-
 package expected
 
 import (
@@ -45,5 +43,5 @@ type PlanKeeper interface {
 
 type SessionKeeper interface {
 	GetSession(ctx sdk.Context, id uint64) (sessiontypes.Session, bool)
-	SubscriptionInactivePendingHook(ctx sdk.Context, id uint64) error
+	SubscriptionInactivePendingPreHook(ctx sdk.Context, id uint64) error
 }

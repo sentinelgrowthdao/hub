@@ -60,15 +60,15 @@ func (k *msgServer) MsgCancel(c context.Context, msg *v2.MsgCancelRequest) (*v2.
 	// Delete the subscription from the Store for the time it becomes inactive.
 	k.DeleteSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
 
-	// Run the SubscriptionInactivePendingHook to perform custom actions before setting the subscription to inactive pending state.
-	if err = k.SubscriptionInactivePendingHook(ctx, subscription.ID); err != nil {
+	// Run the SubscriptionInactivePendingPreHook to perform custom actions before setting the subscription to inactive pending state.
+	if err = k.SubscriptionInactivePendingPreHook(ctx, subscription.ID); err != nil {
 		return nil, err
 	}
 
 	// Calculate the duration for which the subscription will be in the inactive state.
+	subscription.InactiveAt = ctx.BlockTime().Add(statusChangeDelay)
 	subscription.Status = v1base.StatusInactivePending
 	subscription.StatusAt = ctx.BlockTime()
-	subscription.InactiveAt = ctx.BlockTime().Add(statusChangeDelay)
 
 	// Update the subscription in the Store.
 	k.SetSubscription(ctx, subscription)

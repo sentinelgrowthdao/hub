@@ -40,9 +40,9 @@ func (k *queryServer) QueryLease(c context.Context, req *v3.QueryLeaseRequest) (
 
 	ctx := sdk.UnwrapSDKContext(c)
 
-	item, found := k.GetLease(ctx, req.ID)
+	item, found := k.GetLease(ctx, req.Id)
 	if !found {
-		return nil, status.Errorf(codes.NotFound, "lease %d does not exist", req.ID)
+		return nil, status.Errorf(codes.NotFound, "lease %d does not exist", req.Id)
 	}
 
 	return &v3.QueryLeaseResponse{Lease: item}, nil

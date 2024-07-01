@@ -87,8 +87,8 @@ func (k *msgServer) MsgStartLease(c context.Context, msg *v3.MsgStartLeaseReques
 		lease.InactiveAt = time.Time{}
 		lease.RenewAt = lease.CreatedAt.Add(duration)
 	} else {
-		lease.RenewAt = time.Time{}
 		lease.InactiveAt = lease.CreatedAt.Add(duration)
+		lease.RenewAt = time.Time{}
 	}
 
 	k.SetLeaseCount(ctx, count+1)
@@ -129,8 +129,8 @@ func (k *msgServer) MsgUpdateLeaseDetails(c context.Context, msg *v3.MsgUpdateLe
 		lease.InactiveAt = time.Time{}
 		lease.RenewAt = lease.CreatedAt.Add(duration)
 	} else {
-		lease.RenewAt = time.Time{}
 		lease.InactiveAt = lease.CreatedAt.Add(duration)
+		lease.RenewAt = time.Time{}
 	}
 
 	if msg.Renewable {

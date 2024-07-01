@@ -57,7 +57,7 @@ func NewKeeper(
 	k.Plan.WithBankKeeper(bankKeeper)
 	k.Plan.WithProviderKeeper(&k.Provider)
 	k.Plan.WithNodeKeeper(&k.Node)
-	k.Plan.WithSubscriptionKeeper(&k.Subscription)
+	k.Plan.WithSubscriptionKeeper(nil)
 
 	k.Subscription = subscriptionkeeper.NewKeeper(
 		cdc, key, paramsKeeper.Subspace(fmt.Sprintf("%s/%s", types.ModuleName, subscriptiontypes.ModuleName)),
@@ -79,7 +79,7 @@ func NewKeeper(
 	k.Session.WithDepositKeeper(&k.Deposit)
 	k.Session.WithNodeKeeper(&k.Node)
 	k.Session.WithPlanKeeper(&k.Plan)
-	k.Session.WithSubscriptionKeeper(&k.Subscription)
+	k.Session.WithSubscriptionKeeper(nil)
 
 	return k
 }

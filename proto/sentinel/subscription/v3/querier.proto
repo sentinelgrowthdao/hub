@@ -11,7 +11,7 @@ option (gogoproto.equal_all) = false;
 option (gogoproto.goproto_getters_all) = false;
 
 message QuerySubscriptionRequest {
-  uint64 id = 1 [(gogoproto.customname) = "ID"];
+  uint64 id = 1;
 }
 
 message QuerySubscriptionsRequest {
@@ -24,7 +24,7 @@ message QuerySubscriptionsForAccountRequest {
 }
 
 message QuerySubscriptionsForPlanRequest {
-  uint64 id = 1 [(gogoproto.customname) = "ID"];
+  uint64 id = 1;
   cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 

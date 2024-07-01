@@ -142,7 +142,7 @@ func queryLease() *cobra.Command {
 			res, err := qc.QueryLease(
 				context.Background(),
 				&v3.QueryLeaseRequest{
-					ID: id,
+					Id: id,
 				},
 			)
 			if err != nil {

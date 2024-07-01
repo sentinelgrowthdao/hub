@@ -16,6 +16,7 @@ func (k *Keeper) BeginBlock(ctx sdk.Context) {
 	defer write()
 
 	k.Node.BeginBlock(ctx)
+	k.Subscription.BeginBlock(ctx)
 }
 
 func (k *Keeper) EndBlock(ctx sdk.Context) abcitypes.ValidatorUpdates {
@@ -23,7 +24,6 @@ func (k *Keeper) EndBlock(ctx sdk.Context) abcitypes.ValidatorUpdates {
 	defer write()
 
 	k.Session.EndBlock(ctx)
-	k.Subscription.EndBlock(ctx)
 
 	return nil
 }

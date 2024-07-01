@@ -38,7 +38,7 @@ func (k *Keeper) SessionInactiveHook(ctx sdk.Context, id uint64, utilisedBytes s
 	// Retrieve the allocation associated with the subscription and account address.
 	alloc, found := k.GetAllocation(ctx, subscription.ID, accAddr)
 	if !found {
-		return fmt.Errorf("subscription allocation %d/%s does not exist", subscription.AccAddress, accAddr)
+		return fmt.Errorf("subscription allocation %d/%s does not exist", subscription.ID, accAddr)
 	}
 
 	// Update the allocation's utilized bytes by adding the provided bytes.

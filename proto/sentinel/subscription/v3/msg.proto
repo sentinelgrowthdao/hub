@@ -9,7 +9,7 @@ option (gogoproto.goproto_getters_all) = false;
 
 message MsgStartSessionRequest {
   string from = 1;
-  uint64 subscription_id = 2 [(gogoproto.customname) = "SubscriptionID"];
+  uint64 id = 2 [(gogoproto.customname) = "ID"];
   string node_address = 3;
 }
 

@@ -69,6 +69,6 @@ func (k *Keeper) GetSession(ctx sdk.Context, id uint64) (sessiontypes.Session, b
 	return k.session.GetSession(ctx, id)
 }
 
-func (k *Keeper) SubscriptionInactivePendingHook(ctx sdk.Context, id uint64) error {
-	return k.session.SubscriptionInactivePendingHook(ctx, id)
+func (k *Keeper) SubscriptionInactivePendingPreHook(ctx sdk.Context, id uint64) error {
+	return k.session.SubscriptionInactivePendingPreHook(ctx, id)
 }
