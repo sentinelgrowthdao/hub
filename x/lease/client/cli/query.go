@@ -2,20 +2,19 @@ package cli
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
 
-	base "github.com/sentinel-official/hub/v12/types"
-	"github.com/sentinel-official/hub/v12/x/node/types/v2"
-	"github.com/sentinel-official/hub/v12/x/node/types/v3"
+	"github.com/sentinel-official/hub/v12/x/lease/types/v1"
 )
 
-func queryNode() *cobra.Command {
+func queryLease() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "node [node-addr]",
-		Short: "Query a node",
+		Use:   "lease [id]",
+		Short: "Query a lease",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, err := client.GetClientQueryContext(cmd)
@@ -23,20 +22,20 @@ func queryNode() *cobra.Command {
 				return err
 			}
 
-			addr, err := base.NodeAddressFromBech32(args[0])
+			id, err := strconv.ParseUint(args[0], 10, 64)
 			if err != nil {
 				return err
 			}
 
 			var (
-				qc = v2.NewQueryServiceClient(ctx)
+				qc = v1.NewQueryServiceClient(ctx)
 			)
 
-			res, err := qc.QueryNode(
+			res, err := qc.QueryLease(
 				context.Background(),
-				v2.NewQueryNodeRequest(
-					addr,
-				),
+				&v1.QueryLeaseRequest{
+					Id: id,
+				},
 			)
 			if err != nil {
 				return err
@@ -51,22 +50,22 @@ func queryNode() *cobra.Command {
 	return cmd
 }
 
-func queryNodes() *cobra.Command {
+func queryLeases() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "nodes",
-		Short: "Query nodes",
+		Use:   "leases",
+		Short: "Query leases with optional filters for node or provider",
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			ctx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			id, err := cmd.Flags().GetUint64(flagPlanID)
+			nodeAddr, err := cmd.Flags().GetString(flagNodeAddr)
 			if err != nil {
 				return err
 			}
 
-			status, err := base.StatusFromFlags(cmd.Flags())
+			provAddr, err := cmd.Flags().GetString(flagProvAddr)
 			if err != nil {
 				return err
 			}
@@ -77,30 +76,40 @@ func queryNodes() *cobra.Command {
 			}
 
 			var (
-				qc = v2.NewQueryServiceClient(ctx)
+				qc = v1.NewQueryServiceClient(ctx)
 			)
 
 			switch {
-			case id != 0:
-				res, err := qc.QueryNodesForPlan(
+			case nodeAddr != "":
+				res, err := qc.QueryLeasesForNode(
 					context.Background(),
-					v2.NewQueryNodesForPlanRequest(
-						id,
-						status,
-						pagination,
-					),
+					&v1.QueryLeasesForNodeRequest{
+						Address:    nodeAddr,
+						Pagination: pagination,
+					},
+				)
+				if err != nil {
+					return err
+				}
+				return ctx.PrintProto(res)
+			case provAddr != "":
+				res, err := qc.QueryLeasesForProvider(
+					context.Background(),
+					&v1.QueryLeasesForProviderRequest{
+						Address:    provAddr,
+						Pagination: pagination,
+					},
 				)
 				if err != nil {
 					return err
 				}
 				return ctx.PrintProto(res)
 			default:
-				res, err := qc.QueryNodes(
+				res, err := qc.QueryLeases(
 					context.Background(),
-					v2.NewQueryNodesRequest(
-						status,
-						pagination,
-					),
+					&v1.QueryLeasesRequest{
+						Pagination: pagination,
+					},
 				)
 				if err != nil {
 					return err
@@ -111,17 +120,17 @@ func queryNodes() *cobra.Command {
 	}
 
 	flags.AddQueryFlagsToCmd(cmd)
-	flags.AddPaginationFlagsToCmd(cmd, "nodes")
-	cmd.Flags().String(base.FlagStatus, "", "filter the nodes by status (active|inactive)")
-	cmd.Flags().Uint64(flagPlanID, 0, "filter the nodes by subscription plan ID")
+	flags.AddPaginationFlagsToCmd(cmd, "leases")
+	cmd.Flags().String(flagNodeAddr, "", "filter the leases by node address")
+	cmd.Flags().String(flagProvAddr, "", "filter the leases by provider address")
 
 	return cmd
 }
 
 func queryParams() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "node-params",
-		Short: "Query node module parameters",
+		Use:   "lease-params",
+		Short: "Query lease module parameters",
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			ctx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
@@ -129,12 +138,12 @@ func queryParams() *cobra.Command {
 			}
 
 			var (
-				qc = v3.NewQueryServiceClient(ctx)
+				qc = v1.NewQueryServiceClient(ctx)
 			)
 
 			res, err := qc.QueryParams(
 				context.Background(),
-				&v3.QueryParamsRequest{},
+				&v1.QueryParamsRequest{},
 			)
 			if err != nil {
 				return err

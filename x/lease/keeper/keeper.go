@@ -10,9 +10,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 
-	"github.com/sentinel-official/hub/v12/x/node/expected"
-	"github.com/sentinel-official/hub/v12/x/node/types"
-	"github.com/sentinel-official/hub/v12/x/node/types/v2"
+	"github.com/sentinel-official/hub/v12/x/lease/expected"
+	"github.com/sentinel-official/hub/v12/x/lease/types"
+	"github.com/sentinel-official/hub/v12/x/lease/types/v1"
 )
 
 type Keeper struct {
@@ -22,13 +22,15 @@ type Keeper struct {
 	params           paramstypes.Subspace
 	deposit          expected.DepositKeeper
 	distribution     expected.DistributionKeeper
+	node             expected.NodeKeeper
+	provider         expected.ProviderKeeper
 }
 
 func NewKeeper(cdc codec.BinaryCodec, key storetypes.StoreKey, params paramstypes.Subspace) Keeper {
 	return Keeper{
 		cdc:    cdc,
 		key:    key,
-		params: params.WithKeyTable(v2.ParamsKeyTable()),
+		params: params.WithKeyTable(v1.ParamsKeyTable()),
 	}
 }
 
@@ -38,6 +40,14 @@ func (k *Keeper) WithDepositKeeper(keeper expected.DepositKeeper) {
 
 func (k *Keeper) WithDistributionKeeper(keeper expected.DistributionKeeper) {
 	k.distribution = keeper
+}
+
+func (k *Keeper) WithNodeKeeper(keeper expected.NodeKeeper) {
+	k.node = keeper
+}
+
+func (k *Keeper) WithProviderKeeper(keeper expected.ProviderKeeper) {
+	k.provider = keeper
 }
 
 func (k *Keeper) Logger(ctx sdk.Context) log.Logger {

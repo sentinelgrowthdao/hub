@@ -51,7 +51,6 @@ func NewKeeper(
 	)
 	k.Node.WithDepositKeeper(&k.Deposit)
 	k.Node.WithDistributionKeeper(distributionKeeper)
-	k.Node.WithProviderKeeper(&k.Provider)
 
 	k.Plan = plankeeper.NewKeeper(cdc, key)
 	k.Plan.WithBankKeeper(bankKeeper)

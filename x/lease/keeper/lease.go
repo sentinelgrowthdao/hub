@@ -8,8 +8,8 @@ import (
 	protobuf "github.com/gogo/protobuf/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
-	"github.com/sentinel-official/hub/v12/x/node/types"
-	"github.com/sentinel-official/hub/v12/x/node/types/v3"
+	"github.com/sentinel-official/hub/v12/x/lease/types"
+	"github.com/sentinel-official/hub/v12/x/lease/types/v1"
 )
 
 func (k *Keeper) SetLeaseCount(ctx sdk.Context, count uint64) {
@@ -39,7 +39,7 @@ func (k *Keeper) GetLeaseCount(ctx sdk.Context) uint64 {
 	return count.GetValue()
 }
 
-func (k *Keeper) SetLease(ctx sdk.Context, lease v3.Lease) {
+func (k *Keeper) SetLease(ctx sdk.Context, lease v1.Lease) {
 	var (
 		store = k.Store(ctx)
 		key   = types.LeaseKey(lease.ID)
@@ -58,7 +58,7 @@ func (k *Keeper) HasLease(ctx sdk.Context, id uint64) bool {
 	return store.Has(key)
 }
 
-func (k *Keeper) GetLease(ctx sdk.Context, id uint64) (lease v3.Lease, found bool) {
+func (k *Keeper) GetLease(ctx sdk.Context, id uint64) (lease v1.Lease, found bool) {
 	var (
 		store = k.Store(ctx)
 		key   = types.LeaseKey(id)
@@ -82,7 +82,7 @@ func (k *Keeper) DeleteLease(ctx sdk.Context, id uint64) {
 	store.Delete(key)
 }
 
-func (k *Keeper) GetLeases(ctx sdk.Context) (items []v3.Lease) {
+func (k *Keeper) GetLeases(ctx sdk.Context) (items []v1.Lease) {
 	var (
 		store    = k.Store(ctx)
 		iterator = sdk.KVStorePrefixIterator(store, types.LeaseKeyPrefix)
@@ -91,7 +91,7 @@ func (k *Keeper) GetLeases(ctx sdk.Context) (items []v3.Lease) {
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var item v3.Lease
+		var item v1.Lease
 		k.cdc.MustUnmarshal(iterator.Value(), &item)
 
 		items = append(items, item)
@@ -100,7 +100,7 @@ func (k *Keeper) GetLeases(ctx sdk.Context) (items []v3.Lease) {
 	return items
 }
 
-func (k *Keeper) IterateLeases(ctx sdk.Context, fn func(index int, item v3.Lease) (stop bool)) {
+func (k *Keeper) IterateLeases(ctx sdk.Context, fn func(index int, item v1.Lease) (stop bool)) {
 	var (
 		store    = k.Store(ctx)
 		iterator = sdk.KVStorePrefixIterator(store, types.LeaseKeyPrefix)
@@ -109,7 +109,7 @@ func (k *Keeper) IterateLeases(ctx sdk.Context, fn func(index int, item v3.Lease
 	defer iterator.Close()
 
 	for i := 0; iterator.Valid(); iterator.Next() {
-		var item v3.Lease
+		var item v1.Lease
 		k.cdc.MustUnmarshal(iterator.Value(), &item)
 
 		if stop := fn(i, item); stop {
@@ -203,7 +203,7 @@ func (k *Keeper) DeleteLeaseForProviderByNode(ctx sdk.Context, provAddr base.Pro
 	store.Delete(key)
 }
 
-func (k *Keeper) GetLatestLeaseForProviderByNode(ctx sdk.Context, provAddr base.ProvAddress, nodeAddr base.NodeAddress) (lease v3.Lease, found bool) {
+func (k *Keeper) GetLatestLeaseForProviderByNode(ctx sdk.Context, provAddr base.ProvAddress, nodeAddr base.NodeAddress) (lease v1.Lease, found bool) {
 	var (
 		store    = k.Store(ctx)
 		iterator = sdk.KVStoreReversePrefixIterator(store, types.GetLeaseForProviderByNodeKeyPrefix(provAddr, nodeAddr))
@@ -240,7 +240,7 @@ func (k *Keeper) DeleteLeaseForInactiveAt(ctx sdk.Context, at time.Time, id uint
 	store.Delete(key)
 }
 
-func (k *Keeper) IterateLeasesForInactiveAt(ctx sdk.Context, endTime time.Time, fn func(index int, item v3.Lease) (stop bool)) {
+func (k *Keeper) IterateLeasesForInactiveAt(ctx sdk.Context, endTime time.Time, fn func(index int, item v1.Lease) (stop bool)) {
 	var (
 		store    = k.Store(ctx)
 		iterator = store.Iterator(types.LeaseForInactiveAtKeyPrefix, sdk.PrefixEndBytes(types.GetLeaseForInactiveAtKeyPrefix(endTime)))
@@ -280,7 +280,7 @@ func (k *Keeper) DeleteLeaseForPayoutAt(ctx sdk.Context, at time.Time, id uint64
 	store.Delete(key)
 }
 
-func (k *Keeper) IterateLeasesForPayoutAt(ctx sdk.Context, at time.Time, fn func(index int, item v3.Lease) (stop bool)) {
+func (k *Keeper) IterateLeasesForPayoutAt(ctx sdk.Context, at time.Time, fn func(index int, item v1.Lease) (stop bool)) {
 	var (
 		store    = k.Store(ctx)
 		iterator = store.Iterator(types.LeaseForPayoutAtKeyPrefix, sdk.PrefixEndBytes(types.GetLeaseForPayoutAtKeyPrefix(at)))
@@ -320,7 +320,7 @@ func (k *Keeper) DeleteLeaseForRenewalAt(ctx sdk.Context, at time.Time, id uint6
 	store.Delete(key)
 }
 
-func (k *Keeper) IterateLeasesForRenewalAt(ctx sdk.Context, at time.Time, fn func(index int, item v3.Lease) (stop bool)) {
+func (k *Keeper) IterateLeasesForRenewalAt(ctx sdk.Context, at time.Time, fn func(index int, item v1.Lease) (stop bool)) {
 	var (
 		store    = k.Store(ctx)
 		iterator = store.Iterator(types.LeaseForRenewalAtKeyPrefix, sdk.PrefixEndBytes(types.GetLeaseForRenewalAtKeyPrefix(at)))
@@ -341,7 +341,7 @@ func (k *Keeper) IterateLeasesForRenewalAt(ctx sdk.Context, at time.Time, fn fun
 	}
 }
 
-func (k *Keeper) RenewLease(ctx sdk.Context, msg *v3.MsgRenewLeaseRequest) (*v3.Lease, error) {
+func (k *Keeper) RenewLease(ctx sdk.Context, msg *v1.MsgRenewRequest) (*v1.Lease, error) {
 	lease, found := k.GetLease(ctx, msg.ID)
 	if !found {
 		return nil, types.NewErrorLeaseNotFound(msg.ID)
@@ -362,7 +362,7 @@ func (k *Keeper) RenewLease(ctx sdk.Context, msg *v3.MsgRenewLeaseRequest) (*v3.
 		return nil, types.NewErrorPriceNotFound(msg.Denom)
 	}
 
-	lease = v3.Lease{
+	lease = v1.Lease{
 		ID:          lease.ID,
 		ProvAddress: lease.ProvAddress,
 		NodeAddress: lease.NodeAddress,
@@ -392,9 +392,9 @@ func (k *Keeper) RenewLease(ctx sdk.Context, msg *v3.MsgRenewLeaseRequest) (*v3.
 
 	k.SetLease(ctx, lease)
 	k.SetLeaseForNode(ctx, nodeAddr, lease.ID)
-	k.SetLeaseForPayoutAt(ctx, lease.PayoutAt, lease.ID)
 	k.SetLeaseForProvider(ctx, provAddr, lease.ID)
 	k.SetLeaseForProviderByNode(ctx, provAddr, nodeAddr, lease.ID)
+	k.SetLeaseForPayoutAt(ctx, lease.PayoutAt, lease.ID)
 
 	if msg.Renewable {
 		k.SetLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)

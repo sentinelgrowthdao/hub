@@ -38,11 +38,11 @@ message Session {
     (gogoproto.stdduration) = true
   ];
   sentinel.types.v1.Status status = 11;
-  google.protobuf.Timestamp status_at = 12 [
+  google.protobuf.Timestamp inactive_at = 12 [
     (gogoproto.nullable) = false,
     (gogoproto.stdtime) = true
   ];
-  google.protobuf.Timestamp inactive_at = 13 [
+  google.protobuf.Timestamp status_at = 13 [
     (gogoproto.nullable) = false,
     (gogoproto.stdtime) = true
   ];

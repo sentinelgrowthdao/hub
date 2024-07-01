@@ -1,0 +1,47 @@
+syntax = "proto3";
+package sentinel.lease.v1;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/sentinel-official/hub/v12/x/lease/types/v1";
+option (gogoproto.equal_all) = false;
+option (gogoproto.goproto_getters_all) = false;
+
+message MsgStartRequest {
+  string from = 1;
+  string node_address = 2;
+  int64 hours = 3;
+  string denom = 4;
+  bool renewable = 5;
+}
+
+message MsgUpdateDetailsRequest {
+  string from = 1;
+  uint64 id = 2 [(gogoproto.customname) = "ID"];
+  bool renewable = 3;
+}
+
+message MsgRenewRequest {
+  string from = 1;
+  uint64 id = 2 [(gogoproto.customname) = "ID"];
+  int64 hours = 3;
+  string denom = 4;
+  bool renewable = 5;
+}
+
+message MsgEndRequest {
+  string from = 1;
+  uint64 id = 2 [(gogoproto.customname) = "ID"];
+}
+
+message MsgStartResponse {}
+message MsgUpdateDetailsResponse {}
+message MsgRenewResponse {}
+message MsgEndResponse {}
+
+service MsgService {
+  rpc MsgStart(MsgStartRequest) returns (MsgStartResponse);
+  rpc MsgUpdateDetails(MsgUpdateDetailsRequest) returns (MsgUpdateDetailsResponse);
+  rpc MsgRenew(MsgRenewRequest) returns (MsgRenewResponse);
+  rpc MsgEnd(MsgEndRequest) returns (MsgEndResponse);
+}

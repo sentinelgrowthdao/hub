@@ -6,22 +6,23 @@ import (
 
 func GetQueryCommands() []*cobra.Command {
 	return []*cobra.Command{
-		queryNode(),
-		queryNodes(),
+		queryLease(),
+		queryLeases(),
 		queryParams(),
 	}
 }
 
 func GetTxCommands() []*cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "node",
-		Short: "Node module sub-commands",
+		Use:   "lease",
+		Short: "Lease module sub-commands",
 	}
 
 	cmd.AddCommand(
-		txRegister(),
+		txStart(),
 		txUpdateDetails(),
-		txUpdateStatus(),
+		txRenew(),
+		txEnd(),
 	)
 
 	return []*cobra.Command{cmd}

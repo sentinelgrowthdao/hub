@@ -23,13 +23,11 @@ message Params {
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
     (gogoproto.nullable) = false
   ];
-  int64 max_lease_hours = 5;
-  int64 min_lease_hours = 6;
-  int64 max_session_gigabytes = 7;
-  int64 min_session_gigabytes = 8;
-  int64 max_session_hours = 9;
-  int64 min_session_hours = 10;
-  string staking_share = 11 [
+  int64 max_session_gigabytes = 5;
+  int64 min_session_gigabytes = 6;
+  int64 max_session_hours = 7;
+  int64 min_session_hours = 8;
+  string staking_share = 9 [
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
     (gogoproto.nullable) = false
   ];
