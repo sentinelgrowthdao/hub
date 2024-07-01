@@ -1,5 +1,3 @@
-// DO NOT COVER
-
 package v2
 
 import (

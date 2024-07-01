@@ -10,7 +10,6 @@ import (
 
 const (
 	ModuleName = "subscription"
-	Day        = 24 * time.Hour
 )
 
 var (

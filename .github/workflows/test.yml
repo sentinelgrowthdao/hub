@@ -24,6 +24,8 @@ jobs:
           filepaths+=" $(find ./ -type f -name '*.go' -exec grep -l 'DO NOT COVER' {} \;)"
           filepaths+=" $(find ./ -type f -name '*.pb.go')"
           filepaths+=" $(find ./ -type f -name '*.pb.gw.go')"
+          filepaths+=" $(find ./ -type f -path '*/client/cli/*')"
+          filepaths+=" $(find ./ -type f -path '*/expected/*')"
           for filepath in ${filepaths}; do
             filepath=$(echo ${filepath} | sed 's@^.@github.com/sentinel-official/hub/v[0-9]*@g')
             echo "Excluding file ${filepath} from coverage report..."
