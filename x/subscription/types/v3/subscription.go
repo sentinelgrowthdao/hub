@@ -16,3 +16,7 @@ func (m *Subscription) GetAccAddress() sdk.AccAddress {
 
 	return addr
 }
+
+func (m *Subscription) Validate() error {
+	return nil
+}
