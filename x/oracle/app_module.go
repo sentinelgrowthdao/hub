@@ -15,6 +15,7 @@ import (
 
 	"github.com/sentinel-official/hub/v12/x/oracle/client/cli"
 	"github.com/sentinel-official/hub/v12/x/oracle/keeper"
+	"github.com/sentinel-official/hub/v12/x/oracle/services"
 	"github.com/sentinel-official/hub/v12/x/oracle/types"
 	"github.com/sentinel-official/hub/v12/x/oracle/types/v1"
 )
@@ -106,5 +107,5 @@ func (am AppModule) EndBlock(ctx sdk.Context, req abcitypes.RequestEndBlock) []a
 func (am AppModule) ConsensusVersion() uint64 { return 1 }
 
 func (am AppModule) RegisterServices(configurator sdkmodule.Configurator) {
-	RegisterServices(configurator, am.cdc, am.keeper)
+	services.RegisterServices(configurator, am.keeper)
 }

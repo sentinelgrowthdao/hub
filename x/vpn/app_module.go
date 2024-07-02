@@ -28,6 +28,7 @@ import (
 	"github.com/sentinel-official/hub/v12/x/vpn/client/cli"
 	"github.com/sentinel-official/hub/v12/x/vpn/expected"
 	"github.com/sentinel-official/hub/v12/x/vpn/keeper"
+	"github.com/sentinel-official/hub/v12/x/vpn/services"
 	"github.com/sentinel-official/hub/v12/x/vpn/types"
 	"github.com/sentinel-official/hub/v12/x/vpn/types/v1"
 )
@@ -136,5 +137,5 @@ func (am AppModule) ConsensusVersion() uint64 { return 3 }
 func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
 
 func (am AppModule) RegisterServices(configurator sdkmodule.Configurator) {
-	RegisterServices(configurator, am.cdc, am.keeper)
+	services.RegisterServices(configurator, am.keeper)
 }

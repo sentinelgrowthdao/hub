@@ -16,6 +16,7 @@ import (
 
 	"github.com/sentinel-official/hub/v12/x/swap/client/cli"
 	"github.com/sentinel-official/hub/v12/x/swap/keeper"
+	"github.com/sentinel-official/hub/v12/x/swap/services"
 	"github.com/sentinel-official/hub/v12/x/swap/types"
 	"github.com/sentinel-official/hub/v12/x/swap/types/v1"
 )
@@ -107,5 +108,5 @@ func (am AppModule) ConsensusVersion() uint64 { return 1 }
 func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
 
 func (am AppModule) RegisterServices(configurator sdkmodule.Configurator) {
-	RegisterServices(configurator, am.cdc, am.keeper)
+	services.RegisterServices(configurator, am.keeper)
 }
