@@ -7,14 +7,39 @@ option go_package = "github.com/sentinel-official/hub/v12/x/subscription/types/v
 option (gogoproto.equal_all) = false;
 option (gogoproto.goproto_getters_all) = false;
 
+message MsgStartRequest {
+  string from = 1;
+  uint64 plan_id = 2 [(gogoproto.customname) = "PlanID"];
+  string denom = 3;
+  bool renewable = 4;
+}
+
+message MsgUpdateDetailsRequest {
+  string from = 1;
+  uint64 id = 2 [(gogoproto.customname) = "ID"];
+  bool renewable = 3;
+}
+
+message MsgRenewRequest {
+  string from = 1;
+  uint64 id = 2 [(gogoproto.customname) = "ID"];
+  string denom = 3;
+}
+
 message MsgStartSessionRequest {
   string from = 1;
   uint64 id = 2 [(gogoproto.customname) = "ID"];
   string node_address = 3;
 }
 
+message MsgStartResponse {}
+message MsgUpdateDetailsResponse {}
+message MsgRenewResponse {}
 message MsgStartSessionResponse {}
 
 service MsgService {
+  rpc MsgStart(MsgStartRequest) returns (MsgStartResponse);
+  rpc MsgUpdateDetails(MsgUpdateDetailsRequest) returns (MsgUpdateDetailsResponse);
+  rpc MsgRenew(MsgRenewRequest) returns (MsgRenewResponse);
   rpc MsgStartSession(MsgStartSessionRequest) returns (MsgStartSessionResponse);
 }
