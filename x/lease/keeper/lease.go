@@ -362,6 +362,7 @@ func (k *Keeper) RenewLease(ctx sdk.Context, msg *v1.MsgRenewRequest) (*v1.Lease
 		return nil, types.NewErrorPriceNotFound(msg.Denom)
 	}
 
+	duration := time.Duration(msg.Hours) * time.Hour
 	lease = v1.Lease{
 		ID:          lease.ID,
 		ProvAddress: lease.ProvAddress,
@@ -375,19 +376,11 @@ func (k *Keeper) RenewLease(ctx sdk.Context, msg *v1.MsgRenewRequest) (*v1.Lease
 		MaxHours:  msg.Hours,
 		CreatedAt: ctx.BlockTime(),
 		PayoutAt:  ctx.BlockTime(),
+		RenewalAt: ctx.BlockTime().Add(duration),
 	}
 
 	if err := k.AddDeposit(ctx, provAddr.Bytes(), lease.Deposit); err != nil {
 		return nil, err
-	}
-
-	duration := time.Duration(lease.MaxHours) * time.Hour
-	if msg.Renewable {
-		lease.InactiveAt = time.Time{}
-		lease.RenewalAt = lease.CreatedAt.Add(duration)
-	} else {
-		lease.InactiveAt = lease.CreatedAt.Add(duration)
-		lease.RenewalAt = time.Time{}
 	}
 
 	k.SetLease(ctx, lease)
@@ -395,12 +388,7 @@ func (k *Keeper) RenewLease(ctx sdk.Context, msg *v1.MsgRenewRequest) (*v1.Lease
 	k.SetLeaseForProvider(ctx, provAddr, lease.ID)
 	k.SetLeaseForProviderByNode(ctx, provAddr, nodeAddr, lease.ID)
 	k.SetLeaseForPayoutAt(ctx, lease.PayoutAt, lease.ID)
-
-	if msg.Renewable {
-		k.SetLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
-	} else {
-		k.SetLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
-	}
+	k.SetLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
 
 	return &lease, nil
 }
