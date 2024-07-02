@@ -72,18 +72,17 @@ func (k *msgServer) MsgStart(c context.Context, msg *v1.MsgStartRequest) (*v1.Ms
 			price.Denom,
 			price.Amount.MulRaw(msg.Hours),
 		),
-		Hours:     0,
-		MaxHours:  msg.Hours,
-		CreatedAt: ctx.BlockTime(),
-		PayoutAt:  ctx.BlockTime(),
+		Hours:    0,
+		MaxHours: msg.Hours,
+		PayoutAt: ctx.BlockTime(),
 	}
 
-	duration := time.Duration(lease.MaxHours) * time.Hour
+	duration := time.Duration(msg.Hours) * time.Hour
 	if msg.Renewable {
 		lease.InactiveAt = time.Time{}
-		lease.RenewalAt = lease.CreatedAt.Add(duration)
+		lease.RenewalAt = ctx.BlockTime().Add(duration)
 	} else {
-		lease.InactiveAt = lease.CreatedAt.Add(duration)
+		lease.InactiveAt = ctx.BlockTime().Add(duration)
 		lease.RenewalAt = time.Time{}
 	}
 
@@ -124,13 +123,14 @@ func (k *msgServer) MsgUpdateDetails(c context.Context, msg *v1.MsgUpdateDetails
 		k.DeleteLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
 	}
 
-	duration := time.Duration(lease.MaxHours) * time.Hour
 	if msg.Renewable {
-		lease.InactiveAt = time.Time{}
-		lease.RenewalAt = lease.CreatedAt.Add(duration)
+		if lease.RenewalAt.IsZero() {
+			lease.InactiveAt, lease.RenewalAt = time.Time{}, lease.InactiveAt
+		}
 	} else {
-		lease.InactiveAt = lease.CreatedAt.Add(duration)
-		lease.RenewalAt = time.Time{}
+		if lease.InactiveAt.IsZero() {
+			lease.InactiveAt, lease.RenewalAt = lease.RenewalAt, time.Time{}
+		}
 	}
 
 	if msg.Renewable {

@@ -100,9 +100,9 @@ func txUpdateDetails() *cobra.Command {
 
 func txRenew() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "renew [id] [hours] [denom] [renewable]",
+		Use:   "renew [id] [hours] [denom]",
 		Short: "Renew an existing lease for a specified duration and terms",
-		Args:  cobra.ExactArgs(4),
+		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -119,17 +119,11 @@ func txRenew() *cobra.Command {
 				return err
 			}
 
-			renewable, err := strconv.ParseBool(args[3])
-			if err != nil {
-				return err
-			}
-
 			msg := v1.NewMsgRenewRequest(
 				ctx.FromAddress.Bytes(),
 				id,
 				hours,
 				args[2],
-				renewable,
 			)
 			if err = msg.ValidateBasic(); err != nil {
 				return err

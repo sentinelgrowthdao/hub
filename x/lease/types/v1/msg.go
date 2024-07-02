@@ -94,13 +94,12 @@ func (m *MsgUpdateDetailsRequest) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{from.Bytes()}
 }
 
-func NewMsgRenewRequest(fromAddr base.ProvAddress, id uint64, hours int64, denom string, renewable bool) *MsgRenewRequest {
+func NewMsgRenewRequest(fromAddr base.ProvAddress, id uint64, hours int64, denom string) *MsgRenewRequest {
 	return &MsgRenewRequest{
-		From:      fromAddr.String(),
-		ID:        id,
-		Hours:     hours,
-		Denom:     denom,
-		Renewable: renewable,
+		From:  fromAddr.String(),
+		ID:    id,
+		Hours: hours,
+		Denom: denom,
 	}
 }
 

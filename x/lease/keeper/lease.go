@@ -372,11 +372,11 @@ func (k *Keeper) RenewLease(ctx sdk.Context, msg *v1.MsgRenewRequest) (*v1.Lease
 			price.Denom,
 			price.Amount.MulRaw(msg.Hours),
 		),
-		Hours:     0,
-		MaxHours:  msg.Hours,
-		CreatedAt: ctx.BlockTime(),
-		PayoutAt:  ctx.BlockTime(),
-		RenewalAt: ctx.BlockTime().Add(duration),
+		Hours:      0,
+		MaxHours:   msg.Hours,
+		InactiveAt: time.Time{},
+		PayoutAt:   ctx.BlockTime(),
+		RenewalAt:  ctx.BlockTime().Add(duration),
 	}
 
 	if err := k.AddDeposit(ctx, provAddr.Bytes(), lease.Deposit); err != nil {
