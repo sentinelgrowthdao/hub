@@ -3,7 +3,6 @@ package v1
 import (
 	"context"
 
-	"github.com/cosmos/cosmos-sdk/codec"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -16,15 +15,11 @@ var (
 )
 
 type queryServer struct {
-	codec.BinaryCodec
 	keeper.Keeper
 }
 
-func NewQueryServiceServer(cdc codec.BinaryCodec, k keeper.Keeper) v1.QueryServiceServer {
-	return &queryServer{
-		BinaryCodec: cdc,
-		Keeper:      k,
-	}
+func NewQueryServiceServer(k keeper.Keeper) v1.QueryServiceServer {
+	return &queryServer{k}
 }
 
 func (k *queryServer) QuerySubscriptions(_ context.Context, _ *v1.QuerySubscriptionsRequest) (*v1.QuerySubscriptionsResponse, error) {

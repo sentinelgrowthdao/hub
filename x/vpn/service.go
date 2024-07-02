@@ -9,7 +9,7 @@ import (
 	"github.com/sentinel-official/hub/v12/x/plan"
 	"github.com/sentinel-official/hub/v12/x/provider"
 	"github.com/sentinel-official/hub/v12/x/session"
-	"github.com/sentinel-official/hub/v12/x/subscription"
+	subscription "github.com/sentinel-official/hub/v12/x/subscription/services"
 	"github.com/sentinel-official/hub/v12/x/vpn/keeper"
 )
 
@@ -19,5 +19,5 @@ func RegisterServices(configurator sdkmodule.Configurator, cdc codec.BinaryCodec
 	plan.RegisterServices(configurator, cdc, k.Plan)
 	provider.RegisterServices(configurator, cdc, k.Provider)
 	session.RegisterServices(configurator, cdc, k.Session)
-	subscription.RegisterServices(configurator, cdc, k.Subscription)
+	subscription.RegisterServices(configurator, k.Subscription)
 }

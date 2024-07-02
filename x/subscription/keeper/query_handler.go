@@ -1,43 +1,73 @@
-package v3
+package keeper
 
 import (
-	"context"
 	"fmt"
 
-	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkquery "github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/sentinel-official/hub/v12/x/subscription/keeper"
 	"github.com/sentinel-official/hub/v12/x/subscription/types"
-	"github.com/sentinel-official/hub/v12/x/subscription/types/v3"
+	"github.com/sentinel-official/hub/v12/x/subscription/types/v2"
+	v3 "github.com/sentinel-official/hub/v12/x/subscription/types/v3"
 )
 
-var (
-	_ v3.QueryServiceServer = (*queryServer)(nil)
-)
-
-type queryServer struct {
-	codec.BinaryCodec
-	keeper.Keeper
-}
-
-func NewQueryServiceServer(cdc codec.BinaryCodec, k keeper.Keeper) v3.QueryServiceServer {
-	return &queryServer{
-		BinaryCodec: cdc,
-		Keeper:      k,
-	}
-}
-
-func (k *queryServer) QuerySubscription(c context.Context, req *v3.QuerySubscriptionRequest) (*v3.QuerySubscriptionResponse, error) {
+func (k *Keeper) HandleQueryAllocation(ctx sdk.Context, req *v2.QueryAllocationRequest) (*v2.QueryAllocationResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
-	ctx := sdk.UnwrapSDKContext(c)
+	addr, err := sdk.AccAddressFromBech32(req.Address)
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "invalid address %s", req.Address)
+	}
+
+	item, found := k.GetAllocation(ctx, req.Id, addr)
+	if !found {
+		return nil, status.Errorf(codes.NotFound, "allocation %d/%s does not exist", req.Id, req.Address)
+	}
+
+	return &v2.QueryAllocationResponse{Allocation: item}, nil
+}
+
+func (k *Keeper) HandleQueryAllocations(ctx sdk.Context, req *v2.QueryAllocationsRequest) (*v2.QueryAllocationsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "empty request")
+	}
+
+	var (
+		items v2.Allocations
+		store = prefix.NewStore(k.Store(ctx), types.GetAllocationForSubscriptionKeyPrefix(req.Id))
+	)
+
+	pagination, err := sdkquery.Paginate(store, req.Pagination, func(_, value []byte) error {
+		var item v2.Allocation
+		if err := k.cdc.Unmarshal(value, &item); err != nil {
+			return err
+		}
+
+		items = append(items, item)
+		return nil
+	})
+
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &v2.QueryAllocationsResponse{Allocations: items, Pagination: pagination}, nil
+}
+
+func (k *Keeper) HandleQueryParams(ctx sdk.Context, _ *v2.QueryParamsRequest) (*v2.QueryParamsResponse, error) {
+	params := k.GetParams(ctx)
+	return &v2.QueryParamsResponse{Params: params}, nil
+}
+
+func (k *Keeper) HandleQuerySubscription(ctx sdk.Context, req *v3.QuerySubscriptionRequest) (*v3.QuerySubscriptionResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "empty request")
+	}
 
 	item, found := k.GetSubscription(ctx, req.Id)
 	if !found {
@@ -47,20 +77,19 @@ func (k *queryServer) QuerySubscription(c context.Context, req *v3.QuerySubscrip
 	return &v3.QuerySubscriptionResponse{Subscription: item}, nil
 }
 
-func (k *queryServer) QuerySubscriptions(c context.Context, req *v3.QuerySubscriptionsRequest) (*v3.QuerySubscriptionsResponse, error) {
+func (k *Keeper) HandleQuerySubscriptions(ctx sdk.Context, req *v3.QuerySubscriptionsRequest) (*v3.QuerySubscriptionsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	var (
 		items []v3.Subscription
-		ctx   = sdk.UnwrapSDKContext(c)
 		store = prefix.NewStore(k.Store(ctx), types.SubscriptionKeyPrefix)
 	)
 
 	pagination, err := sdkquery.Paginate(store, req.Pagination, func(_, value []byte) error {
 		var item v3.Subscription
-		if err := k.Unmarshal(value, &item); err != nil {
+		if err := k.cdc.Unmarshal(value, &item); err != nil {
 			return err
 		}
 
@@ -75,7 +104,7 @@ func (k *queryServer) QuerySubscriptions(c context.Context, req *v3.QuerySubscri
 	return &v3.QuerySubscriptionsResponse{Subscriptions: items, Pagination: pagination}, nil
 }
 
-func (k *queryServer) QuerySubscriptionsForAccount(c context.Context, req *v3.QuerySubscriptionsForAccountRequest) (*v3.QuerySubscriptionsForAccountResponse, error) {
+func (k *Keeper) HandleQuerySubscriptionsForAccount(ctx sdk.Context, req *v3.QuerySubscriptionsForAccountRequest) (*v3.QuerySubscriptionsForAccountResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -87,7 +116,6 @@ func (k *queryServer) QuerySubscriptionsForAccount(c context.Context, req *v3.Qu
 
 	var (
 		items []v3.Subscription
-		ctx   = sdk.UnwrapSDKContext(c)
 		store = prefix.NewStore(k.Store(ctx), types.GetSubscriptionForAccountKeyPrefix(addr))
 	)
 
@@ -108,14 +136,13 @@ func (k *queryServer) QuerySubscriptionsForAccount(c context.Context, req *v3.Qu
 	return &v3.QuerySubscriptionsForAccountResponse{Subscriptions: items, Pagination: pagination}, nil
 }
 
-func (k *queryServer) QuerySubscriptionsForPlan(c context.Context, req *v3.QuerySubscriptionsForPlanRequest) (*v3.QuerySubscriptionsForPlanResponse, error) {
+func (k *Keeper) HandleQuerySubscriptionsForPlan(ctx sdk.Context, req *v3.QuerySubscriptionsForPlanRequest) (*v3.QuerySubscriptionsForPlanResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	var (
 		items []v3.Subscription
-		ctx   = sdk.UnwrapSDKContext(c)
 		store = prefix.NewStore(k.Store(ctx), types.GetSubscriptionForPlanKeyPrefix(req.Id))
 	)
 
