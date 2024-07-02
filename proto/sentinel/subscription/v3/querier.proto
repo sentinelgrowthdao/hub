@@ -29,21 +29,21 @@ message QuerySubscriptionsForPlanRequest {
 }
 
 message QuerySubscriptionResponse {
-  sentinel.subscription.v3.Subscription subscription = 1 [(gogoproto.nullable) = false];
+  Subscription subscription = 1 [(gogoproto.nullable) = false];
 }
 
 message QuerySubscriptionsResponse {
-  repeated sentinel.subscription.v3.Subscription subscriptions = 1 [(gogoproto.nullable) = false];
+  repeated Subscription subscriptions = 1 [(gogoproto.nullable) = false];
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 message QuerySubscriptionsForAccountResponse {
-  repeated sentinel.subscription.v3.Subscription subscriptions = 1 [(gogoproto.nullable) = false];
+  repeated Subscription subscriptions = 1 [(gogoproto.nullable) = false];
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 message QuerySubscriptionsForPlanResponse {
-  repeated sentinel.subscription.v3.Subscription subscriptions = 1 [(gogoproto.nullable) = false];
+  repeated Subscription subscriptions = 1 [(gogoproto.nullable) = false];
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 

@@ -213,9 +213,41 @@ func (k *Keeper) IterateSubscriptionsForInactiveAt(ctx sdk.Context, endTime time
 	}
 }
 
-// CreateSubscriptionForPlan creates a new PlanSubscription for a specific plan and account.
-func (k *Keeper) CreateSubscriptionForPlan(ctx sdk.Context, accAddr sdk.AccAddress, id uint64, denom string) (*v3.Subscription, error) {
-	// Check if the plan exists and is in an active status.
+func (k *Keeper) SetSubscriptionForRenewalAt(ctx sdk.Context, at time.Time, id uint64) {
+	key := types.SubscriptionForRenewalAtKey(at, id)
+	value := k.cdc.MustMarshal(&protobuf.BoolValue{Value: true})
+
+	store := k.Store(ctx)
+	store.Set(key, value)
+}
+
+func (k *Keeper) DeleteSubscriptionForRenewalAt(ctx sdk.Context, at time.Time, id uint64) {
+	key := types.SubscriptionForRenewalAtKey(at, id)
+
+	store := k.Store(ctx)
+	store.Delete(key)
+}
+
+func (k *Keeper) IterateSubscriptionsForRenewalAt(ctx sdk.Context, endTime time.Time, fn func(index int, item v3.Subscription) (stop bool)) {
+	store := k.Store(ctx)
+
+	iterator := store.Iterator(types.SubscriptionForRenewalAtKeyPrefix, sdk.PrefixEndBytes(types.GetSubscriptionForRenewalAtKeyPrefix(endTime)))
+	defer iterator.Close()
+
+	for i := 0; iterator.Valid(); iterator.Next() {
+		item, found := k.GetSubscription(ctx, types.IDFromSubscriptionForRenewalAtKey(iterator.Key()))
+		if !found {
+			panic(fmt.Errorf("subscription for inactive at key %X does not exist", iterator.Key()))
+		}
+
+		if stop := fn(i, item); stop {
+			break
+		}
+		i++
+	}
+}
+
+func (k *Keeper) StartSubscription(ctx sdk.Context, accAddr sdk.AccAddress, id uint64, denom string) (*v3.Subscription, error) {
 	plan, found := k.GetPlan(ctx, id)
 	if !found {
 		return nil, types.NewErrorPlanNotFound(id)
@@ -224,35 +256,29 @@ func (k *Keeper) CreateSubscriptionForPlan(ctx sdk.Context, accAddr sdk.AccAddre
 		return nil, types.NewErrorInvalidPlanStatus(plan.ID, plan.Status)
 	}
 
-	// Get the price of the plan in the specified denomination.
 	price, found := plan.Price(denom)
 	if !found {
 		return nil, types.NewErrorPriceNotFound(denom)
 	}
 
-	// Calculate the staking reward based on the plan price and staking share.
 	var (
 		stakingShare  = k.provider.StakingShare(ctx)
 		stakingReward = baseutils.GetProportionOfCoin(price, stakingShare)
 	)
 
-	// Move the staking reward from the account to the fee collector module account.
 	if err := k.SendCoinFromAccountToModule(ctx, accAddr, k.feeCollectorName, stakingReward); err != nil {
 		return nil, err
 	}
 
-	// Calculate the payment amount after deducting the staking reward.
 	var (
 		provAddr = plan.GetProviderAddress()
 		payment  = price.Sub(stakingReward)
 	)
 
-	// Send the payment amount from the account to the plan provider address.
 	if err := k.SendCoin(ctx, accAddr, provAddr.Bytes(), payment); err != nil {
 		return nil, err
 	}
 
-	// Emit an event for the plan payment.
 	ctx.EventManager().EmitTypedEvent(
 		&v2.EventPayForPlan{
 			Address:         accAddr.String(),
@@ -263,7 +289,6 @@ func (k *Keeper) CreateSubscriptionForPlan(ctx sdk.Context, accAddr sdk.AccAddre
 		},
 	)
 
-	// Retrieve the current count and create a new PlanSubscription.
 	count := k.GetSubscriptionCount(ctx)
 	subscription := v3.Subscription{
 		ID:         count + 1,
@@ -275,14 +300,12 @@ func (k *Keeper) CreateSubscriptionForPlan(ctx sdk.Context, accAddr sdk.AccAddre
 		InactiveAt: ctx.BlockTime().Add(plan.Duration),
 	}
 
-	// Save the new PlanSubscription to the store and update the count.
 	k.SetSubscriptionCount(ctx, count+1)
 	k.SetSubscription(ctx, subscription)
 	k.SetSubscriptionForAccount(ctx, accAddr, subscription.ID)
 	k.SetSubscriptionForPlan(ctx, plan.ID, subscription.ID)
 	k.SetSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
 
-	// Create an allocation for the plan subscription and emit an event.
 	alloc := v2.Allocation{
 		ID:            subscription.ID,
 		Address:       accAddr.String(),
