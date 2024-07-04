@@ -9,7 +9,7 @@ option (gogoproto.goproto_getters_all) = false;
 
 message MsgStartRequest {
   string from = 1;
-  uint64 plan_id = 2 [(gogoproto.customname) = "PlanID"];
+  uint64 id = 2 [(gogoproto.customname) = "ID"];
   string denom = 3;
   bool renewable = 4;
 }

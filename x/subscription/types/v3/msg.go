@@ -15,10 +15,10 @@ var (
 	_ sdk.Msg = (*MsgStartSessionRequest)(nil)
 )
 
-func NewMsgStartRequest(fromAddr sdk.AccAddress, planID uint64, denom string, renewable bool) *MsgStartRequest {
+func NewMsgStartRequest(fromAddr sdk.AccAddress, id uint64, denom string, renewable bool) *MsgStartRequest {
 	return &MsgStartRequest{
 		From:      fromAddr.String(),
-		PlanID:    planID,
+		ID:        id,
 		Denom:     denom,
 		Renewable: renewable,
 	}
@@ -31,8 +31,8 @@ func (m *MsgStartRequest) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(m.From); err != nil {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
 	}
-	if m.PlanID == 0 {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, "plan_id cannot be zero")
+	if m.ID == 0 {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "id cannot be zero")
 	}
 	if m.Denom == "" {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "denom cannot be empty")
