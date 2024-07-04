@@ -4,15 +4,10 @@ import (
 	"fmt"
 	"time"
 
-	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	protobuf "github.com/gogo/protobuf/types"
 
-	base "github.com/sentinel-official/hub/v12/types"
-	v1base "github.com/sentinel-official/hub/v12/types/v1"
-	baseutils "github.com/sentinel-official/hub/v12/utils"
 	"github.com/sentinel-official/hub/v12/x/subscription/types"
-	"github.com/sentinel-official/hub/v12/x/subscription/types/v2"
 	"github.com/sentinel-official/hub/v12/x/subscription/types/v3"
 )
 
@@ -245,83 +240,4 @@ func (k *Keeper) IterateSubscriptionsForRenewalAt(ctx sdk.Context, endTime time.
 		}
 		i++
 	}
-}
-
-func (k *Keeper) StartSubscription(ctx sdk.Context, accAddr sdk.AccAddress, id uint64, denom string) (*v3.Subscription, error) {
-	plan, found := k.GetPlan(ctx, id)
-	if !found {
-		return nil, types.NewErrorPlanNotFound(id)
-	}
-	if !plan.Status.Equal(v1base.StatusActive) {
-		return nil, types.NewErrorInvalidPlanStatus(plan.ID, plan.Status)
-	}
-
-	price, found := plan.Price(denom)
-	if !found {
-		return nil, types.NewErrorPriceNotFound(denom)
-	}
-
-	var (
-		stakingShare  = k.provider.StakingShare(ctx)
-		stakingReward = baseutils.GetProportionOfCoin(price, stakingShare)
-	)
-
-	if err := k.SendCoinFromAccountToModule(ctx, accAddr, k.feeCollectorName, stakingReward); err != nil {
-		return nil, err
-	}
-
-	var (
-		provAddr = plan.GetProviderAddress()
-		payment  = price.Sub(stakingReward)
-	)
-
-	if err := k.SendCoin(ctx, accAddr, provAddr.Bytes(), payment); err != nil {
-		return nil, err
-	}
-
-	ctx.EventManager().EmitTypedEvent(
-		&v2.EventPayForPlan{
-			Address:         accAddr.String(),
-			Payment:         payment.String(),
-			ProviderAddress: plan.ProviderAddress,
-			StakingReward:   stakingReward.String(),
-			ID:              plan.ID,
-		},
-	)
-
-	count := k.GetSubscriptionCount(ctx)
-	subscription := v3.Subscription{
-		ID:         count + 1,
-		AccAddress: accAddr.String(),
-		PlanID:     plan.ID,
-		Price:      price,
-		Status:     v1base.StatusActive,
-		StatusAt:   ctx.BlockTime(),
-		InactiveAt: ctx.BlockTime().Add(plan.Duration),
-	}
-
-	k.SetSubscriptionCount(ctx, count+1)
-	k.SetSubscription(ctx, subscription)
-	k.SetSubscriptionForAccount(ctx, accAddr, subscription.ID)
-	k.SetSubscriptionForPlan(ctx, plan.ID, subscription.ID)
-	k.SetSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
-
-	alloc := v2.Allocation{
-		ID:            subscription.ID,
-		Address:       accAddr.String(),
-		GrantedBytes:  base.Gigabyte.MulRaw(plan.Gigabytes),
-		UtilisedBytes: sdkmath.ZeroInt(),
-	}
-
-	k.SetAllocation(ctx, alloc)
-	ctx.EventManager().EmitTypedEvent(
-		&v2.EventAllocate{
-			Address:       alloc.Address,
-			GrantedBytes:  alloc.GrantedBytes,
-			UtilisedBytes: alloc.UtilisedBytes,
-			ID:            alloc.ID,
-		},
-	)
-
-	return &subscription, nil
 }

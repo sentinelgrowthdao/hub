@@ -15,7 +15,7 @@ var (
 	ErrorNodeNotFound     = sdkerrors.Register(ModuleName, 204, "node not found")
 	ErrorPriceNotFound    = sdkerrors.Register(ModuleName, 205, "price not found")
 	ErrorProviderNotFound = sdkerrors.Register(ModuleName, 206, "provider not found")
-	ErrorUnauthorised     = sdkerrors.Register(ModuleName, 207, "unauthorised")
+	ErrorUnauthorized     = sdkerrors.Register(ModuleName, 207, "unauthorized")
 )
 
 func NewErrorInvalidHours(hours int64) error {
@@ -42,6 +42,6 @@ func NewErrorLeaseNotFound(id uint64) error {
 	return sdkerrors.Wrapf(ErrorLeaseNotFound, "lease %d does not exist", id)
 }
 
-func NewErrorUnauthorised(addr string) error {
-	return sdkerrors.Wrapf(ErrorUnauthorised, "address %s is not authorised", addr)
+func NewErrorUnauthorized(addr string) error {
+	return sdkerrors.Wrapf(ErrorUnauthorized, "address %s is not authorized", addr)
 }

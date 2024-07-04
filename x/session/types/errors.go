@@ -23,7 +23,7 @@ var (
 	ErrorPlanNotFound                   = sdkerrors.Register(ModuleName, 212, "plan not found")
 	ErrorSessionNotFound                = sdkerrors.Register(ModuleName, 213, "session not found")
 	ErrorSubscriptionNotFound           = sdkerrors.Register(ModuleName, 214, "subscription not found")
-	ErrorUnauthorized                   = sdkerrors.Register(ModuleName, 215, "unauthorised")
+	ErrorUnauthorized                   = sdkerrors.Register(ModuleName, 215, "unauthorized")
 )
 
 func NewErrorAllocationNotFound(id uint64, addr interface{}) error {

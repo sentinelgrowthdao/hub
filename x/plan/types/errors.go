@@ -10,7 +10,7 @@ var (
 	ErrorNodeNotFound     = sdkerrors.Register(ModuleName, 201, "node not found")
 	ErrorPlanNotFound     = sdkerrors.Register(ModuleName, 202, "plan not found")
 	ErrorProviderNotFound = sdkerrors.Register(ModuleName, 203, "provider not found")
-	ErrorUnauthorized     = sdkerrors.Register(ModuleName, 204, "unauthorised")
+	ErrorUnauthorized     = sdkerrors.Register(ModuleName, 204, "unauthorized")
 )
 
 func NewErrorNodeNotFound(addr interface{}) error {

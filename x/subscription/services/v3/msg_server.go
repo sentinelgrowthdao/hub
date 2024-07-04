@@ -4,6 +4,8 @@ import (
 	"context"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	"github.com/sentinel-official/hub/v12/x/subscription/keeper"
 	"github.com/sentinel-official/hub/v12/x/subscription/types/v3"
@@ -31,9 +33,8 @@ func (k *msgServer) MsgUpdateDetails(c context.Context, msg *v3.MsgUpdateDetails
 	return k.HandleMsgUpdateDetails(ctx, msg)
 }
 
-func (k *msgServer) MsgRenew(c context.Context, msg *v3.MsgRenewRequest) (*v3.MsgRenewResponse, error) {
-	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleMsgRenew(ctx, msg)
+func (k *msgServer) MsgRenew(_ context.Context, _ *v3.MsgRenewRequest) (*v3.MsgRenewResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
 }
 
 func (k *msgServer) MsgStartSession(c context.Context, msg *v3.MsgStartSessionRequest) (*v3.MsgStartSessionResponse, error) {

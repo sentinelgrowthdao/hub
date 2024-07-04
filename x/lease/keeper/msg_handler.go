@@ -94,7 +94,7 @@ func (k *Keeper) HandleMsgUpdateDetails(ctx sdk.Context, msg *v1.MsgUpdateDetail
 		return nil, types.NewErrorLeaseNotFound(msg.ID)
 	}
 	if msg.From != lease.ProvAddress {
-		return nil, types.NewErrorUnauthorised(msg.From)
+		return nil, types.NewErrorUnauthorized(msg.From)
 	}
 
 	if msg.Renewable {
@@ -128,7 +128,7 @@ func (k *Keeper) HandleMsgEnd(ctx sdk.Context, msg *v1.MsgEndRequest) (*v1.MsgEn
 		return nil, types.NewErrorLeaseNotFound(msg.ID)
 	}
 	if msg.From != lease.ProvAddress {
-		return nil, types.NewErrorUnauthorised(msg.From)
+		return nil, types.NewErrorUnauthorized(msg.From)
 	}
 
 	if err := k.LeaseInactivePreHook(ctx, lease.ID); err != nil {
