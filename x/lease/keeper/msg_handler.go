@@ -122,6 +122,66 @@ func (k *Keeper) HandleMsgUpdateDetails(ctx sdk.Context, msg *v1.MsgUpdateDetail
 	return &v1.MsgUpdateDetailsResponse{}, nil
 }
 
+func (k *Keeper) HandleMsgRenewLease(ctx sdk.Context, msg *v1.MsgRenewRequest) (*v1.MsgRenewResponse, error) {
+	lease, found := k.GetLease(ctx, msg.ID)
+	if !found {
+		return nil, types.NewErrorLeaseNotFound(msg.ID)
+	}
+	if msg.From != lease.ProvAddress {
+		return nil, types.NewErrorUnauthorized(msg.From)
+	}
+
+	var (
+		nodeAddr = lease.GetNodeAddress()
+		provAddr = lease.GetProvAddress()
+	)
+
+	refund := lease.Refund()
+	if err := k.SubtractDeposit(ctx, provAddr.Bytes(), refund); err != nil {
+		return nil, err
+	}
+
+	node, found := k.GetNode(ctx, nodeAddr)
+	if !found {
+		return nil, types.NewErrorNodeNotFound(nodeAddr)
+	}
+
+	price, found := node.HourlyPrice(msg.Denom)
+	if !found {
+		return nil, types.NewErrorPriceNotFound(msg.Denom)
+	}
+
+	duration := time.Duration(msg.Hours) * time.Hour
+	lease = v1.Lease{
+		ID:          lease.ID,
+		ProvAddress: lease.ProvAddress,
+		NodeAddress: lease.NodeAddress,
+		Price:       price,
+		Deposit: sdk.NewCoin(
+			price.Denom,
+			price.Amount.MulRaw(msg.Hours),
+		),
+		Hours:      0,
+		MaxHours:   msg.Hours,
+		InactiveAt: time.Time{},
+		PayoutAt:   ctx.BlockTime(),
+		RenewalAt:  ctx.BlockTime().Add(duration),
+	}
+
+	if err := k.AddDeposit(ctx, provAddr.Bytes(), lease.Deposit); err != nil {
+		return nil, err
+	}
+
+	k.SetLease(ctx, lease)
+	k.SetLeaseForNode(ctx, nodeAddr, lease.ID)
+	k.SetLeaseForProvider(ctx, provAddr, lease.ID)
+	k.SetLeaseForProviderByNode(ctx, provAddr, nodeAddr, lease.ID)
+	k.SetLeaseForPayoutAt(ctx, lease.PayoutAt, lease.ID)
+	k.SetLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
+
+	return &v1.MsgRenewResponse{}, nil
+}
+
 func (k *Keeper) HandleMsgEnd(ctx sdk.Context, msg *v1.MsgEndRequest) (*v1.MsgEndResponse, error) {
 	lease, found := k.GetLease(ctx, msg.ID)
 	if !found {

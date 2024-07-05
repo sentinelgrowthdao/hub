@@ -75,13 +75,13 @@ func (k *Keeper) handleLeaseRenewals(ctx sdk.Context) {
 		k.DeleteLeaseForRenewalAt(ctx, item.RenewalAt, item.ID)
 
 		msg := &v1.MsgRenewRequest{
-			From:  "",
+			From:  item.ProvAddress,
 			ID:    item.ID,
 			Hours: item.MaxHours,
 			Denom: item.Price.Denom,
 		}
 
-		if _, err := k.RenewLease(ctx, msg); err != nil {
+		if _, err := k.HandleMsgRenewLease(ctx, msg); err != nil {
 			panic(err)
 		}
 
