@@ -15,11 +15,11 @@ func (k *Keeper) HandleMsgCreate(ctx sdk.Context, msg *v2.MsgCreateRequest) (*v2
 		return nil, err
 	}
 
-	if !k.HasProvider(ctx, provAddr) {
+	if !k.provider.HasProvider(ctx, provAddr) {
 		return nil, types.NewErrorProviderNotFound(provAddr)
 	}
 
-	count := k.GetPlanCount(ctx)
+	count := k.GetCount(ctx)
 	plan := v2.Plan{
 		ID:              count + 1,
 		ProviderAddress: provAddr.String(),
@@ -30,7 +30,7 @@ func (k *Keeper) HandleMsgCreate(ctx sdk.Context, msg *v2.MsgCreateRequest) (*v2
 		StatusAt:        ctx.BlockTime(),
 	}
 
-	k.SetPlanCount(ctx, count+1)
+	k.SetCount(ctx, count+1)
 	k.SetPlan(ctx, plan)
 	k.SetPlanForProvider(ctx, provAddr, plan.ID)
 	ctx.EventManager().EmitTypedEvent(
@@ -93,11 +93,11 @@ func (k *Keeper) HandleMsgLinkNode(ctx sdk.Context, msg *v2.MsgLinkNodeRequest) 
 		return nil, err
 	}
 
-	if !k.HasNode(ctx, nodeAddr) {
+	if !k.node.HasNode(ctx, nodeAddr) {
 		return nil, types.NewErrorNodeNotFound(nodeAddr)
 	}
 
-	k.SetNodeForPlan(ctx, plan.ID, nodeAddr)
+	k.node.SetNodeForPlan(ctx, plan.ID, nodeAddr)
 	ctx.EventManager().EmitTypedEvent(
 		&v2.EventLinkNode{
 			Address:     plan.ProviderAddress,
@@ -123,7 +123,7 @@ func (k *Keeper) HandleMsgUnlinkNode(ctx sdk.Context, msg *v2.MsgUnlinkNodeReque
 		return nil, err
 	}
 
-	k.DeleteNodeForPlan(ctx, plan.ID, nodeAddr)
+	k.node.DeleteNodeForPlan(ctx, plan.ID, nodeAddr)
 	ctx.EventManager().EmitTypedEvent(
 		&v2.EventUnlinkNode{
 			Address:     plan.ProviderAddress,
@@ -141,7 +141,7 @@ func (k *Keeper) HandleMsgSubscribe(ctx sdk.Context, msg *v2.MsgSubscribeRequest
 		return nil, err
 	}
 
-	subscription, err := k.CreateSubscriptionForPlan(ctx, accAddr, msg.ID, msg.Denom)
+	subscription, err := k.subscription.CreateSubscriptionForPlan(ctx, accAddr, msg.ID, msg.Denom)
 	if err != nil {
 		return nil, err
 	}

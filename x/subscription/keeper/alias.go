@@ -2,11 +2,6 @@ package keeper
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	base "github.com/sentinel-official/hub/v12/types"
-	nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v2"
-	plantypes "github.com/sentinel-official/hub/v12/x/plan/types/v2"
-	sessiontypes "github.com/sentinel-official/hub/v12/x/session/types/v2"
 )
 
 func (k *Keeper) SendCoin(ctx sdk.Context, fromAddr sdk.AccAddress, toAddr sdk.AccAddress, coin sdk.Coin) error {
@@ -55,18 +50,6 @@ func (k *Keeper) SendCoinFromDepositToModule(ctx sdk.Context, fromAddr sdk.AccAd
 	}
 
 	return k.deposit.SendCoinsFromDepositToModule(ctx, fromAddr, toModule, sdk.NewCoins(coin))
-}
-
-func (k *Keeper) GetNode(ctx sdk.Context, address base.NodeAddress) (nodetypes.Node, bool) {
-	return k.node.GetNode(ctx, address)
-}
-
-func (k *Keeper) GetPlan(ctx sdk.Context, id uint64) (plantypes.Plan, bool) {
-	return k.plan.GetPlan(ctx, id)
-}
-
-func (k *Keeper) GetSession(ctx sdk.Context, id uint64) (sessiontypes.Session, bool) {
-	return k.session.GetSession(ctx, id)
 }
 
 func (k *Keeper) SubscriptionInactivePendingPreHook(ctx sdk.Context, id uint64) error {

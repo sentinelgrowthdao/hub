@@ -12,9 +12,9 @@ import (
 	"github.com/sentinel-official/hub/v12/x/lease/types/v1"
 )
 
-func (k *Keeper) SetLeaseCount(ctx sdk.Context, count uint64) {
+func (k *Keeper) SetCount(ctx sdk.Context, count uint64) {
 	var (
-		key   = types.LeaseCountKey
+		key   = types.CountKey
 		value = k.cdc.MustMarshal(&protobuf.UInt64Value{Value: count})
 		store = k.Store(ctx)
 	)
@@ -22,10 +22,10 @@ func (k *Keeper) SetLeaseCount(ctx sdk.Context, count uint64) {
 	store.Set(key, value)
 }
 
-func (k *Keeper) GetLeaseCount(ctx sdk.Context) uint64 {
+func (k *Keeper) GetCount(ctx sdk.Context) uint64 {
 	var (
 		store = k.Store(ctx)
-		key   = types.LeaseCountKey
+		key   = types.CountKey
 		value = store.Get(key)
 	)
 

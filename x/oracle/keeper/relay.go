@@ -31,7 +31,7 @@ func (k *Keeper) SendQueryPacket(
 	}
 
 	// Use the ICS-04 interface to send the packet over IBC.
-	return k.SendPacket(
+	return k.ics4.SendPacket(
 		ctx, channelCap, portID, channelID, ibcclienttypes.ZeroHeight(), timeout, packetData.GetBytes(),
 	)
 }

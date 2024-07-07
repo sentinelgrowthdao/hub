@@ -13,7 +13,7 @@ func (k *Keeper) EndBlock(ctx sdk.Context) []abcitypes.ValidatorUpdate {
 	portID := k.GetPortID(ctx)
 	timeout := k.GetTimeout(ctx)
 
-	channelCap, found := k.GetCapability(ctx, ibchost.ChannelCapabilityPath(portID, channelID))
+	channelCap, found := k.capability.GetCapability(ctx, ibchost.ChannelCapabilityPath(portID, channelID))
 	if !found {
 		return nil
 	}

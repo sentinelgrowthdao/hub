@@ -30,11 +30,11 @@ func (k *Keeper) HandleMsgStart(ctx sdk.Context, msg *v1.MsgStartRequest) (*v1.M
 		return nil, types.NewErrorDuplicateLease(provAddr, nodeAddr)
 	}
 
-	if found := k.HasProvider(ctx, provAddr); !found {
+	if found := k.provider.HasProvider(ctx, provAddr); !found {
 		return nil, types.NewErrorProviderNotFound(provAddr)
 	}
 
-	node, found := k.GetNode(ctx, nodeAddr)
+	node, found := k.node.GetNode(ctx, nodeAddr)
 	if !found {
 		return nil, types.NewErrorNodeNotFound(nodeAddr)
 	}
@@ -44,7 +44,7 @@ func (k *Keeper) HandleMsgStart(ctx sdk.Context, msg *v1.MsgStartRequest) (*v1.M
 		return nil, types.NewErrorPriceNotFound(msg.Denom)
 	}
 
-	count := k.GetLeaseCount(ctx)
+	count := k.GetCount(ctx)
 	lease = v1.Lease{
 		ID:          count + 1,
 		ProvAddress: provAddr.String(),
@@ -72,7 +72,7 @@ func (k *Keeper) HandleMsgStart(ctx sdk.Context, msg *v1.MsgStartRequest) (*v1.M
 		return nil, err
 	}
 
-	k.SetLeaseCount(ctx, count+1)
+	k.SetCount(ctx, count+1)
 	k.SetLease(ctx, lease)
 	k.SetLeaseForNode(ctx, nodeAddr, lease.ID)
 	k.SetLeaseForProvider(ctx, provAddr, lease.ID)
@@ -143,7 +143,7 @@ func (k *Keeper) HandleMsgRenew(ctx sdk.Context, msg *v1.MsgRenewRequest) (*v1.M
 		return nil, err
 	}
 
-	node, found := k.GetNode(ctx, nodeAddr)
+	node, found := k.node.GetNode(ctx, nodeAddr)
 	if !found {
 		return nil, types.NewErrorNodeNotFound(nodeAddr)
 	}

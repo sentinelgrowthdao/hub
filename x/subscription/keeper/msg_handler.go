@@ -112,7 +112,7 @@ func (k *Keeper) HandleMsgStart(ctx sdk.Context, msg *v3.MsgStartRequest) (*v3.M
 		return nil, err
 	}
 
-	plan, found := k.GetPlan(ctx, msg.ID)
+	plan, found := k.plan.GetPlan(ctx, msg.ID)
 	if !found {
 		return nil, types.NewErrorPlanNotFound(msg.ID)
 	}
@@ -145,7 +145,7 @@ func (k *Keeper) HandleMsgStart(ctx sdk.Context, msg *v3.MsgStartRequest) (*v3.M
 		return nil, err
 	}
 
-	count := k.GetSubscriptionCount(ctx)
+	count := k.GetCount(ctx)
 	subscription := v3.Subscription{
 		ID:         count + 1,
 		AccAddress: accAddr.String(),
@@ -165,7 +165,7 @@ func (k *Keeper) HandleMsgStart(ctx sdk.Context, msg *v3.MsgStartRequest) (*v3.M
 		subscription.RenewalAt = time.Time{}
 	}
 
-	k.SetSubscriptionCount(ctx, count+1)
+	k.SetCount(ctx, count+1)
 	k.SetSubscription(ctx, subscription)
 	k.SetSubscriptionForAccount(ctx, accAddr, subscription.ID)
 	k.SetSubscriptionForPlan(ctx, subscription.PlanID, subscription.ID)

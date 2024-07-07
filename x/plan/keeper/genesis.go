@@ -19,7 +19,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *v2.GenesisState) {
 				panic(err)
 			}
 
-			k.SetNodeForPlan(ctx, item.Plan.ID, addr)
+			k.node.SetNodeForPlan(ctx, item.Plan.ID, addr)
 		}
 	}
 
@@ -30,7 +30,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *v2.GenesisState) {
 		}
 	}
 
-	k.SetPlanCount(ctx, count)
+	k.SetCount(ctx, count)
 }
 
 func (k *Keeper) ExportGenesis(ctx sdk.Context) *v2.GenesisState {
@@ -45,7 +45,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *v2.GenesisState {
 			Nodes: []string{},
 		}
 
-		nodes := k.GetNodesForPlan(ctx, plan.ID)
+		nodes := k.node.GetNodesForPlan(ctx, plan.ID)
 		for _, node := range nodes {
 			item.Nodes = append(item.Nodes, node.Address)
 		}

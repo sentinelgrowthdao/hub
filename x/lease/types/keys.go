@@ -15,7 +15,7 @@ const (
 )
 
 var (
-	LeaseCountKey = []byte{0x00}
+	CountKey = []byte{0x00}
 
 	LeaseKeyPrefix                  = []byte{0x10}
 	LeaseForNodeKeyPrefix           = []byte{0x11}
