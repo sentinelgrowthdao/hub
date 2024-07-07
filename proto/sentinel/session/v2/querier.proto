@@ -126,36 +126,36 @@ message QueryParamsResponse {
 service QueryService {
   // RPC method to query sessions.
   rpc QuerySessions(QuerySessionsRequest) returns (QuerySessionsResponse) {
-    option (google.api.http).get = "/sentinel/sessions";
+    option (google.api.http).get = "/sentinel/session/v2/sessions";
   }
 
   // RPC method to query sessions for an account.
   rpc QuerySessionsForAccount(QuerySessionsForAccountRequest) returns (QuerySessionsForAccountResponse) {
-    option (google.api.http).get = "/sentinel/accounts/{address}/sessions";
+    option (google.api.http).get = "/sentinel/session/v2/accounts/{address}/sessions";
   }
 
   // RPC method to query sessions for a node.
   rpc QuerySessionsForNode(QuerySessionsForNodeRequest) returns (QuerySessionsForNodeResponse) {
-    option (google.api.http).get = "/sentinel/nodes/{address}/sessions";
+    option (google.api.http).get = "/sentinel/session/v2/nodes/{address}/sessions";
   }
 
   // RPC method to query sessions for a subscription.
   rpc QuerySessionsForSubscription(QuerySessionsForSubscriptionRequest) returns (QuerySessionsForSubscriptionResponse) {
-    option (google.api.http).get = "/sentinel/subscriptions/{id}/sessions";
+    option (google.api.http).get = "/sentinel/session/v2/subscriptions/{id}/sessions";
   }
 
   // RPC method to query sessions for an allocation.
   rpc QuerySessionsForAllocation(QuerySessionsForAllocationRequest) returns (QuerySessionsForAllocationResponse) {
-    option (google.api.http).get = "/sentinel/subscriptions/{id}/allocations/{address}/sessions";
+    option (google.api.http).get = "/sentinel/session/v2/subscriptions/{id}/allocations/{address}/sessions";
   }
 
   // RPC method to query a specific session.
   rpc QuerySession(QuerySessionRequest) returns (QuerySessionResponse) {
-    option (google.api.http).get = "/sentinel/sessions/{id}";
+    option (google.api.http).get = "/sentinel/session/v2/sessions/{id}";
   }
 
   // RPC method to query session parameters.
   rpc QueryParams(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/sentinel/modules/session/params";
+    option (google.api.http).get = "/sentinel/session/v2/params";
   }
 }
