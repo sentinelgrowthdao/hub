@@ -27,9 +27,8 @@ func (k *msgServer) MsgStart(_ context.Context, _ *v2.MsgStartRequest) (*v2.MsgS
 	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *msgServer) MsgUpdateDetails(c context.Context, msg *v2.MsgUpdateDetailsRequest) (*v2.MsgUpdateDetailsResponse, error) {
-	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleMsgUpdateDetails(ctx, msg)
+func (k *msgServer) MsgUpdateDetails(_ context.Context, _ *v2.MsgUpdateDetailsRequest) (*v2.MsgUpdateDetailsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
 }
 
 func (k *msgServer) MsgEnd(c context.Context, msg *v2.MsgEndRequest) (*v2.MsgEndResponse, error) {

@@ -4,49 +4,28 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	v1base "github.com/sentinel-official/hub/v12/types/v1"
-	"github.com/sentinel-official/hub/v12/x/session/types/v2"
+	"github.com/sentinel-official/hub/v12/x/session/types/v3"
 )
 
-func (k *Keeper) SubscriptionInactivePendingPreHook(ctx sdk.Context, id uint64) error {
-	// Get the status change delay from the store.
-	statusChangeDelay := k.StatusChangeDelay(ctx)
+func (k *Keeper) LeaseInactivePreHook(ctx sdk.Context, id uint64) error {
+	return nil
+}
 
-	// Iterate through sessions associated with the subscription.
-	k.IterateSessionsForSubscription(ctx, id, func(_ int, item v2.Session) (stop bool) {
-		// Skip non-active sessions.
-		if !item.Status.Equal(v1base.StatusActive) {
+func (k *Keeper) SubscriptionInactivePendingPreHook(ctx sdk.Context, id uint64) error {
+	statusChangeDelay := k.StatusChangeDelay(ctx)
+	k.IterateSessionsForSubscription(ctx, id, func(_ int, item v3.Session) (stop bool) {
+		if !item.GetStatus().Equal(v1base.StatusActive) {
 			return false
 		}
 
-		// Delete the session's entry from the InactiveAt index before updating the InactiveAt value.
-		k.DeleteSessionForInactiveAt(ctx, item.InactiveAt, item.ID)
+		k.DeleteSessionForInactiveAt(ctx, item.GetInactiveAt(), item.GetID())
 
-		// Calculate the new InactiveAt value by adding the status change delay to the current block time.
-		item.InactiveAt = ctx.BlockTime().Add(statusChangeDelay)
+		item.SetStatus(v1base.StatusInactivePending)
+		item.SetInactiveAt(ctx.BlockTime().Add(statusChangeDelay))
+		item.SetStatusAt(ctx.BlockTime())
 
-		// Set the session status to 'InactivePending' to mark it for an upcoming status update.
-		item.Status = v1base.StatusInactivePending
-
-		// Record the time of the status update in 'StatusAt' field.
-		item.StatusAt = ctx.BlockTime()
-
-		// Update the session entry in the store with the new status and status update time.
 		k.SetSession(ctx, item)
-
-		// Update the session entry in the InactiveAt index with the new InactiveAt value.
-		k.SetSessionForInactiveAt(ctx, item.InactiveAt, item.ID)
-
-		// Emit an event to notify that the session status has been updated.
-		ctx.EventManager().EmitTypedEvent(
-			&v2.EventUpdateStatus{
-				Status:         v1base.StatusInactivePending,
-				Address:        item.Address,
-				NodeAddress:    item.NodeAddress,
-				ID:             item.ID,
-				PlanID:         0,
-				SubscriptionID: item.SubscriptionID,
-			},
-		)
+		k.SetSessionForInactiveAt(ctx, item.GetInactiveAt(), item.GetID())
 
 		return false
 	})
