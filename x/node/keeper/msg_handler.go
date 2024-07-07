@@ -3,12 +3,14 @@ package keeper
 import (
 	"time"
 
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
 	v1base "github.com/sentinel-official/hub/v12/types/v1"
 	"github.com/sentinel-official/hub/v12/x/node/types"
 	"github.com/sentinel-official/hub/v12/x/node/types/v2"
+	"github.com/sentinel-official/hub/v12/x/node/types/v3"
 )
 
 func (k *Keeper) HandleMsgRegister(ctx sdk.Context, msg *v2.MsgRegisterRequest) (*v2.MsgRegisterResponse, error) {
@@ -145,4 +147,84 @@ func (k *Keeper) HandleMsgUpdateStatus(ctx sdk.Context, msg *v2.MsgUpdateStatusR
 	)
 
 	return &v2.MsgUpdateStatusResponse{}, nil
+}
+
+func (k *Keeper) HandleMsgStartSession(ctx sdk.Context, msg *v3.MsgStartSessionRequest) (*v3.MsgStartSessionResponse, error) {
+	fromAddr, err := sdk.AccAddressFromBech32(msg.From)
+	if err != nil {
+		return nil, err
+	}
+
+	nodeAddr, err := base.NodeAddressFromBech32(msg.NodeAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	node, found := k.GetNode(ctx, nodeAddr)
+	if !found {
+		return nil, types.NewErrorNodeNotFound(nodeAddr)
+	}
+	if !node.Status.Equal(v1base.StatusActive) {
+		return nil, types.NewErrorInvalidNodeStatus(nodeAddr, node.Status)
+	}
+
+	var (
+		count             = k.session.GetCount(ctx)
+		statusChangeDelay = k.session.StatusChangeDelay(ctx)
+		session           = &v3.Session{
+			ID:            count + 1,
+			AccAddress:    fromAddr.String(),
+			NodeAddress:   nodeAddr.String(),
+			Price:         sdk.Coin{},
+			Deposit:       sdk.Coin{},
+			DownloadBytes: sdkmath.ZeroInt(),
+			UploadBytes:   sdkmath.ZeroInt(),
+			MaxBytes:      sdkmath.Int{},
+			Duration:      0,
+			MaxDuration:   0,
+			Status:        v1base.StatusActive,
+			InactiveAt:    ctx.BlockTime().Add(statusChangeDelay),
+			StatusAt:      ctx.BlockTime(),
+		}
+	)
+
+	if msg.Gigabytes != 0 {
+		price, found := node.GigabytePrice(msg.Denom)
+		if !found {
+			return nil, types.NewErrorPriceNotFound(msg.Denom)
+		}
+
+		session.Price = price
+		session.Deposit = sdk.NewCoin(
+			price.Denom,
+			price.Amount.MulRaw(msg.Gigabytes),
+		)
+		session.MaxBytes = base.Gigabyte.MulRaw(msg.Gigabytes)
+	}
+	if msg.Hours != 0 {
+		price, found := node.HourlyPrice(msg.Denom)
+		if !found {
+			return nil, types.NewErrorPriceNotFound(msg.Denom)
+		}
+
+		session.Price = price
+		session.Deposit = sdk.NewCoin(
+			price.Denom,
+			price.Amount.MulRaw(msg.Hours),
+		)
+		session.MaxDuration = time.Duration(msg.Hours) * time.Hour
+	}
+
+	accAddr := session.GetAccAddress()
+	if err := k.AddDeposit(ctx, accAddr, session.Deposit); err != nil {
+		return nil, err
+	}
+
+	k.session.SetCount(ctx, count+1)
+	k.session.SetSession(ctx, session)
+	k.session.SetSessionForAccount(ctx, accAddr, session.ID)
+	k.session.SetSessionForNode(ctx, nodeAddr, session.ID)
+	k.session.SetSessionForInactiveAt(ctx, session.InactiveAt, session.ID)
+
+	return &v3.MsgStartSessionResponse{}, nil
 }

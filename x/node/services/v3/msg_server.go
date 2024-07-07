@@ -3,8 +3,7 @@ package v3
 import (
 	"context"
 
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/sentinel-official/hub/v12/x/node/keeper"
 	"github.com/sentinel-official/hub/v12/x/node/types/v3"
@@ -23,5 +22,6 @@ func NewMsgServiceServer(k keeper.Keeper) v3.MsgServiceServer {
 }
 
 func (k *msgServer) MsgStartSession(c context.Context, msg *v3.MsgStartSessionRequest) (*v3.MsgStartSessionResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "")
+	ctx := sdk.UnwrapSDKContext(c)
+	return k.HandleMsgStartSession(ctx, msg)
 }

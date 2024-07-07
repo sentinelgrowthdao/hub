@@ -22,6 +22,7 @@ type Keeper struct {
 	params           paramstypes.Subspace
 	deposit          expected.DepositKeeper
 	distribution     expected.DistributionKeeper
+	session          expected.SessionKeeper
 }
 
 func NewKeeper(cdc codec.BinaryCodec, key storetypes.StoreKey, params paramstypes.Subspace) Keeper {
