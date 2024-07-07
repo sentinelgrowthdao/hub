@@ -18,11 +18,11 @@ var (
 	SessionCountKey = []byte{0x00}
 
 	SessionKeyPrefix                = []byte{0x10}
-	SessionForInactiveAtKeyPrefix   = []byte{0x11}
 	SessionForAccountKeyPrefix      = []byte{0x12}
+	SessionForAllocationKeyPrefix   = []byte{0x15}
 	SessionForNodeKeyPrefix         = []byte{0x13}
 	SessionForSubscriptionKeyPrefix = []byte{0x14}
-	SessionForAllocationKeyPrefix   = []byte{0x15}
+	SessionForInactiveAtKeyPrefix   = []byte{0x11}
 )
 
 func SessionKey(id uint64) []byte {
