@@ -15,14 +15,14 @@ const (
 )
 
 var (
-	SessionCountKey = []byte{0x00}
+	CountKey = []byte{0x00}
 
 	SessionKeyPrefix                = []byte{0x10}
-	SessionForAccountKeyPrefix      = []byte{0x12}
-	SessionForAllocationKeyPrefix   = []byte{0x15}
+	SessionForAccountKeyPrefix      = []byte{0x11}
+	SessionForAllocationKeyPrefix   = []byte{0x12}
 	SessionForNodeKeyPrefix         = []byte{0x13}
 	SessionForSubscriptionKeyPrefix = []byte{0x14}
-	SessionForInactiveAtKeyPrefix   = []byte{0x11}
+	SessionForInactiveAtKeyPrefix   = []byte{0x15}
 )
 
 func SessionKey(id uint64) []byte {
