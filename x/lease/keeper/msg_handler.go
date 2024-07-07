@@ -122,7 +122,7 @@ func (k *Keeper) HandleMsgUpdateDetails(ctx sdk.Context, msg *v1.MsgUpdateDetail
 	return &v1.MsgUpdateDetailsResponse{}, nil
 }
 
-func (k *Keeper) HandleMsgRenewLease(ctx sdk.Context, msg *v1.MsgRenewRequest) (*v1.MsgRenewResponse, error) {
+func (k *Keeper) HandleMsgRenew(ctx sdk.Context, msg *v1.MsgRenewRequest) (*v1.MsgRenewResponse, error) {
 	lease, found := k.GetLease(ctx, msg.ID)
 	if !found {
 		return nil, types.NewErrorLeaseNotFound(msg.ID)
@@ -130,6 +130,8 @@ func (k *Keeper) HandleMsgRenewLease(ctx sdk.Context, msg *v1.MsgRenewRequest) (
 	if msg.From != lease.ProvAddress {
 		return nil, types.NewErrorUnauthorized(msg.From)
 	}
+
+	k.DeleteLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
 
 	var (
 		nodeAddr = lease.GetNodeAddress()

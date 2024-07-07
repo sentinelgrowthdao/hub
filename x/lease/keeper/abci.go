@@ -11,8 +11,6 @@ import (
 
 func (k *Keeper) handleInactiveLeases(ctx sdk.Context) {
 	k.IterateLeasesForInactiveAt(ctx, ctx.BlockTime(), func(_ int, item v1.Lease) bool {
-		k.DeleteLeaseForInactiveAt(ctx, item.InactiveAt, item.ID)
-
 		if err := k.LeaseInactivePreHook(ctx, item.ID); err != nil {
 			panic(err)
 		}
@@ -26,6 +24,7 @@ func (k *Keeper) handleInactiveLeases(ctx sdk.Context) {
 		k.DeleteLeaseForNode(ctx, nodeAddr, item.ID)
 		k.DeleteLeaseForProvider(ctx, provAddr, item.ID)
 		k.DeleteLeaseForProviderByNode(ctx, provAddr, nodeAddr, item.ID)
+		k.DeleteLeaseForInactiveAt(ctx, item.InactiveAt, item.ID)
 		k.DeleteLeaseForPayoutAt(ctx, item.PayoutAt, item.ID)
 		k.DeleteLeaseForRenewalAt(ctx, item.RenewalAt, item.ID)
 
@@ -72,8 +71,6 @@ func (k *Keeper) handleLeasePayouts(ctx sdk.Context) {
 
 func (k *Keeper) handleLeaseRenewals(ctx sdk.Context) {
 	k.IterateLeasesForRenewalAt(ctx, ctx.BlockTime(), func(_ int, item v1.Lease) bool {
-		k.DeleteLeaseForRenewalAt(ctx, item.RenewalAt, item.ID)
-
 		msg := &v1.MsgRenewRequest{
 			From:  item.ProvAddress,
 			ID:    item.ID,
@@ -81,7 +78,7 @@ func (k *Keeper) handleLeaseRenewals(ctx sdk.Context) {
 			Denom: item.Price.Denom,
 		}
 
-		if _, err := k.HandleMsgRenewLease(ctx, msg); err != nil {
+		if _, err := k.HandleMsgRenew(ctx, msg); err != nil {
 			panic(err)
 		}
 
