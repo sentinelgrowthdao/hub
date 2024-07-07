@@ -23,58 +23,28 @@ func NewQueryServiceServer(k keeper.Keeper) v2.QueryServiceServer {
 	return &queryServer{k}
 }
 
-func (k *queryServer) QuerySession(c context.Context, req *v2.QuerySessionRequest) (*v2.QuerySessionResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "empty request")
-	}
-
-	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQuerySession(ctx, req)
+func (k *queryServer) QuerySession(_ context.Context, _ *v2.QuerySessionRequest) (*v2.QuerySessionResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QuerySessions(c context.Context, req *v2.QuerySessionsRequest) (*v2.QuerySessionsResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "empty request")
-	}
-
-	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQuerySessions(ctx, req)
+func (k *queryServer) QuerySessions(_ context.Context, _ *v2.QuerySessionsRequest) (*v2.QuerySessionsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QuerySessionsForAccount(c context.Context, req *v2.QuerySessionsForAccountRequest) (*v2.QuerySessionsForAccountResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "empty request")
-	}
-
-	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQuerySessionsForAccount(ctx, req)
+func (k *queryServer) QuerySessionsForAccount(_ context.Context, _ *v2.QuerySessionsForAccountRequest) (*v2.QuerySessionsForAccountResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QuerySessionsForNode(c context.Context, req *v2.QuerySessionsForNodeRequest) (*v2.QuerySessionsForNodeResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "empty request")
-	}
-
-	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQuerySessionsForNode(ctx, req)
+func (k *queryServer) QuerySessionsForNode(_ context.Context, _ *v2.QuerySessionsForNodeRequest) (*v2.QuerySessionsForNodeResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QuerySessionsForSubscription(c context.Context, req *v2.QuerySessionsForSubscriptionRequest) (*v2.QuerySessionsForSubscriptionResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "empty request")
-	}
-
-	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQuerySessionsForSubscription(ctx, req)
+func (k *queryServer) QuerySessionsForSubscription(_ context.Context, _ *v2.QuerySessionsForSubscriptionRequest) (*v2.QuerySessionsForSubscriptionResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QuerySessionsForAllocation(c context.Context, req *v2.QuerySessionsForAllocationRequest) (*v2.QuerySessionsForAllocationResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "empty request")
-	}
-
-	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQuerySessionsForAllocation(ctx, req)
+func (k *queryServer) QuerySessionsForAllocation(_ context.Context, _ *v2.QuerySessionsForAllocationRequest) (*v2.QuerySessionsForAllocationResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
 }
 
 func (k *queryServer) QueryParams(c context.Context, req *v2.QueryParamsRequest) (*v2.QueryParamsResponse, error) {
