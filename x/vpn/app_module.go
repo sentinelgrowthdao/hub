@@ -121,7 +121,7 @@ func (am AppModule) BeginBlock(ctx sdk.Context, _ abcitypes.RequestBeginBlock) {
 }
 
 func (am AppModule) EndBlock(ctx sdk.Context, _ abcitypes.RequestEndBlock) []abcitypes.ValidatorUpdate {
-	return am.keeper.EndBlock(ctx)
+	return nil
 }
 
 func (am AppModule) GenerateGenesisState(_ *sdkmodule.SimulationState) {}

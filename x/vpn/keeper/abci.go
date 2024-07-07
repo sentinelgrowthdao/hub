@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	abcitypes "github.com/cometbft/cometbft/abci/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -16,14 +15,6 @@ func (k *Keeper) BeginBlock(ctx sdk.Context) {
 	defer write()
 
 	k.Node.BeginBlock(ctx)
+	k.Session.BeginBlock(ctx)
 	k.Subscription.BeginBlock(ctx)
-}
-
-func (k *Keeper) EndBlock(ctx sdk.Context) abcitypes.ValidatorUpdates {
-	ctx, write := cacheContext(ctx)
-	defer write()
-
-	k.Session.EndBlock(ctx)
-
-	return nil
 }

@@ -6,8 +6,8 @@ import "sentinel/deposit/v1/genesis.proto";
 import "sentinel/node/v3/genesis.proto";
 import "sentinel/plan/v2/genesis.proto";
 import "sentinel/provider/v2/genesis.proto";
-import "sentinel/session/v2/genesis.proto";
-import "sentinel/subscription/v2/genesis.proto";
+import "sentinel/session/v3/genesis.proto";
+import "sentinel/subscription/v3/genesis.proto";
 
 option go_package = "github.com/sentinel-official/hub/v12/x/vpn/types/v1";
 option (gogoproto.equal_all) = false;
@@ -30,8 +30,8 @@ message GenesisState {
   sentinel.provider.v2.GenesisState providers = 4;
 
   // Field 5: Genesis state for sessions in the Sentinel module.
-  sentinel.session.v2.GenesisState sessions = 5;
+  sentinel.session.v3.GenesisState sessions = 5;
 
   // Field 6: Genesis state for subscriptions in the Sentinel module.
-  sentinel.subscription.v2.GenesisState subscriptions = 6;
+  sentinel.subscription.v3.GenesisState subscriptions = 6;
 }
