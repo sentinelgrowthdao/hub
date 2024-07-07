@@ -10,7 +10,7 @@ import (
 	"github.com/sentinel-official/hub/v12/x/subscription/types/v3"
 )
 
-func (k *Keeper) BeginBlock(ctx sdk.Context) {
+func (k *Keeper) handleInactiveSubscriptions(ctx sdk.Context) {
 	statusChangeDelay := k.StatusChangeDelay(ctx)
 
 	k.IterateSubscriptionsForInactiveAt(ctx, ctx.BlockTime(), func(_ int, item v3.Subscription) bool {
@@ -47,4 +47,25 @@ func (k *Keeper) BeginBlock(ctx sdk.Context) {
 
 		return false
 	})
+}
+
+func (k *Keeper) handleSubscriptionRenewals(ctx sdk.Context) {
+	k.IterateSubscriptionsForRenewalAt(ctx, ctx.BlockTime(), func(_ int, item v3.Subscription) bool {
+		msg := &v3.MsgRenewRequest{
+			From:  item.AccAddress,
+			ID:    item.ID,
+			Denom: item.Price.Denom,
+		}
+
+		if _, err := k.HandleMsgRenew(ctx, msg); err != nil {
+			panic(err)
+		}
+
+		return false
+	})
+}
+
+func (k *Keeper) BeginBlock(ctx sdk.Context) {
+	k.handleInactiveSubscriptions(ctx)
+	k.handleSubscriptionRenewals(ctx)
 }
