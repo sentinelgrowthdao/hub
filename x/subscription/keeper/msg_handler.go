@@ -230,5 +230,64 @@ func (k *Keeper) HandleMsgRenew(ctx sdk.Context, msg *v3.MsgRenewRequest) (*v3.M
 }
 
 func (k *Keeper) HandleMsgStartSession(ctx sdk.Context, msg *v3.MsgStartSessionRequest) (*v3.MsgStartSessionResponse, error) {
+	accAddr, err := sdk.AccAddressFromBech32(msg.From)
+	if err != nil {
+		return nil, err
+	}
+
+	nodeAddr, err := base.NodeAddressFromBech32(msg.NodeAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	subscription, found := k.GetSubscription(ctx, msg.ID)
+	if !found {
+		return nil, types.NewErrorSubscriptionNotFound(msg.ID)
+	}
+	if !subscription.Status.Equal(v1base.StatusActive) {
+		return nil, types.NewErrorInvalidSubscriptionStatus(subscription.ID, subscription.Status)
+	}
+
+	node, found := k.node.GetNode(ctx, nodeAddr)
+	if !found {
+		return nil, types.NewErrorNodeNotFound(nodeAddr)
+	}
+	if !node.Status.Equal(v1base.StatusActive) {
+		return nil, types.NewErrorInvalidNodeStatus(nodeAddr, node.Status)
+	}
+
+	alloc, found := k.GetAllocation(ctx, subscription.ID, accAddr)
+	if !found {
+		return nil, types.NewErrorAllocationNotFound(subscription.ID, accAddr)
+	}
+	if alloc.UtilisedBytes.GTE(alloc.GrantedBytes) {
+		return nil, types.NewErrorInvalidAllocation(subscription.ID, accAddr)
+	}
+
+	var (
+		count   = k.session.GetCount(ctx)
+		delay   = k.session.StatusChangeDelay(ctx)
+		session = &v3.Session{
+			ID:             count + 1,
+			AccAddress:     accAddr.String(),
+			NodeAddress:    nodeAddr.String(),
+			SubscriptionID: subscription.ID,
+			DownloadBytes:  sdkmath.ZeroInt(),
+			UploadBytes:    sdkmath.ZeroInt(),
+			Duration:       0,
+			Status:         v1base.StatusActive,
+			InactiveAt:     ctx.BlockTime().Add(delay),
+			StatusAt:       ctx.BlockTime(),
+		}
+	)
+
+	k.session.SetCount(ctx, count+1)
+	k.session.SetSession(ctx, session)
+	k.session.SetSessionForAccount(ctx, accAddr, session.ID)
+	k.session.SetSessionForNode(ctx, nodeAddr, session.ID)
+	k.session.SetSessionForSubscription(ctx, subscription.ID, session.ID)
+	k.session.SetSessionForAllocation(ctx, subscription.ID, accAddr, session.ID)
+	k.session.SetSessionForInactiveAt(ctx, session.InactiveAt, session.ID)
+
 	return &v3.MsgStartSessionResponse{}, nil
 }

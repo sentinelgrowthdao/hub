@@ -1,6 +1,8 @@
 package expected
 
 import (
+	"time"
+
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -42,6 +44,15 @@ type PlanKeeper interface {
 }
 
 type SessionKeeper interface {
+	GetCount(ctx sdk.Context) uint64
 	GetSession(ctx sdk.Context, id uint64) (sessiontypes.Session, bool)
+	SetCount(ctx sdk.Context, count uint64)
+	SetSession(ctx sdk.Context, session sessiontypes.Session)
+	SetSessionForAccount(ctx sdk.Context, addr sdk.AccAddress, id uint64)
+	SetSessionForAllocation(ctx sdk.Context, subscriptionID uint64, addr sdk.AccAddress, sessionID uint64)
+	SetSessionForInactiveAt(ctx sdk.Context, at time.Time, id uint64)
+	SetSessionForNode(ctx sdk.Context, addr base.NodeAddress, id uint64)
+	SetSessionForSubscription(ctx sdk.Context, subscriptionID, sessionID uint64)
+	StatusChangeDelay(ctx sdk.Context) time.Duration
 	SubscriptionInactivePendingPreHook(ctx sdk.Context, id uint64) error
 }

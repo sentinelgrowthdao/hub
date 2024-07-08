@@ -17,7 +17,6 @@ func (k *Keeper) HandleMsgRegister(ctx sdk.Context, msg *v2.MsgRegisterRequest) 
 	if !k.IsValidGigabytePrices(ctx, msg.GigabytePrices) {
 		return nil, types.NewErrorInvalidPrices(msg.GigabytePrices)
 	}
-
 	if !k.IsValidHourlyPrices(ctx, msg.HourlyPrices) {
 		return nil, types.NewErrorInvalidPrices(msg.HourlyPrices)
 	}

@@ -299,22 +299,6 @@ func (k *Keeper) IterateSessionsForInactiveAt(ctx sdk.Context, end time.Time, fn
 	}
 }
 
-func (k *Keeper) GetLatestSessionForSubscription(ctx sdk.Context, subscriptionID uint64) (session v3.Session, found bool) {
-	store := k.Store(ctx)
-
-	iterator := sdk.KVStoreReversePrefixIterator(store, types.GetSessionForSubscriptionKeyPrefix(subscriptionID))
-	defer iterator.Close()
-
-	if iterator.Valid() {
-		session, found = k.GetSession(ctx, types.IDFromSessionForSubscriptionKey(iterator.Key()))
-		if !found {
-			panic(fmt.Errorf("session for subscription key %X does not exist", iterator.Key()))
-		}
-	}
-
-	return session, false
-}
-
 func (k *Keeper) GetLatestSessionForAllocation(ctx sdk.Context, subscriptionID uint64, addr sdk.AccAddress) (session v3.Session, found bool) {
 	store := k.Store(ctx)
 
