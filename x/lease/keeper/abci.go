@@ -5,6 +5,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	base "github.com/sentinel-official/hub/v12/types"
 	baseutils "github.com/sentinel-official/hub/v12/utils"
 	"github.com/sentinel-official/hub/v12/x/lease/types/v1"
 )
@@ -15,10 +16,15 @@ func (k *Keeper) handleInactiveLeases(ctx sdk.Context) {
 			panic(err)
 		}
 
-		var (
-			nodeAddr = item.GetNodeAddress()
-			provAddr = item.GetProvAddress()
-		)
+		nodeAddr, err := base.NodeAddressFromBech32(item.NodeAddress)
+		if err != nil {
+			panic(err)
+		}
+
+		provAddr, err := base.ProvAddressFromBech32(item.ProvAddress)
+		if err != nil {
+			panic(err)
+		}
 
 		k.DeleteLease(ctx, item.ID)
 		k.DeleteLeaseForNode(ctx, nodeAddr, item.ID)
@@ -26,21 +32,25 @@ func (k *Keeper) handleInactiveLeases(ctx sdk.Context) {
 		k.DeleteLeaseForProviderByNode(ctx, provAddr, nodeAddr, item.ID)
 		k.DeleteLeaseForInactiveAt(ctx, item.InactiveAt, item.ID)
 		k.DeleteLeaseForPayoutAt(ctx, item.PayoutAt, item.ID)
-		k.DeleteLeaseForRenewalAt(ctx, item.RenewalAt, item.ID)
 
 		return false
 	})
 }
 
 func (k *Keeper) handleLeasePayouts(ctx sdk.Context) {
+	stakingShare := k.StakingShare(ctx)
 	k.IterateLeasesForPayoutAt(ctx, ctx.BlockTime(), func(_ int, item v1.Lease) (stop bool) {
 		k.DeleteLeaseForPayoutAt(ctx, item.PayoutAt, item.ID)
 
-		var (
-			nodeAddr     = item.GetNodeAddress()
-			provAddr     = item.GetProvAddress()
-			stakingShare = k.StakingShare(ctx)
-		)
+		nodeAddr, err := base.NodeAddressFromBech32(item.NodeAddress)
+		if err != nil {
+			panic(err)
+		}
+
+		provAddr, err := base.ProvAddressFromBech32(item.ProvAddress)
+		if err != nil {
+			panic(err)
+		}
 
 		stakingReward := baseutils.GetProportionOfCoin(item.Price, stakingShare)
 		if err := k.SendCoinFromDepositToModule(ctx, provAddr.Bytes(), k.feeCollectorName, stakingReward); err != nil {

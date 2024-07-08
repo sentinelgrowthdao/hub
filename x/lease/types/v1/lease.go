@@ -9,38 +9,16 @@ import (
 	base "github.com/sentinel-official/hub/v12/types"
 )
 
-func (m *Lease) Refund() sdk.Coin {
+func (m *Lease) IsRenewable() bool {
+	return !m.RenewalAt.IsZero()
+}
+
+func (m *Lease) RefundAmount() sdk.Coin {
 	hours := m.MaxHours - m.Hours
 	return sdk.NewCoin(
 		m.Price.Denom,
 		m.Price.Amount.MulRaw(hours),
 	)
-}
-
-func (m *Lease) GetNodeAddress() base.NodeAddress {
-	if m.NodeAddress == "" {
-		return nil
-	}
-
-	addr, err := base.NodeAddressFromBech32(m.NodeAddress)
-	if err != nil {
-		panic(err)
-	}
-
-	return addr
-}
-
-func (m *Lease) GetProvAddress() base.ProvAddress {
-	if m.ProvAddress == "" {
-		return nil
-	}
-
-	addr, err := base.ProvAddressFromBech32(m.ProvAddress)
-	if err != nil {
-		panic(err)
-	}
-
-	return addr
 }
 
 func (m *Lease) Validate() error {

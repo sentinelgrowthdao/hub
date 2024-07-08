@@ -1,6 +1,8 @@
 package v1
 
 import (
+	"time"
+
 	sdkerrors "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -23,6 +25,10 @@ func NewMsgStartRequest(fromAddr base.ProvAddress, nodeAddr base.NodeAddress, ho
 		Denom:       denom,
 		Renewable:   renewable,
 	}
+}
+
+func (m *MsgStartRequest) GetHours() time.Duration {
+	return time.Duration(m.Hours) * time.Hour
 }
 
 func (m *MsgStartRequest) ValidateBasic() error {
@@ -101,6 +107,10 @@ func NewMsgRenewRequest(fromAddr base.ProvAddress, id uint64, hours int64, denom
 		Hours: hours,
 		Denom: denom,
 	}
+}
+
+func (m *MsgRenewRequest) GetHours() time.Duration {
+	return time.Duration(m.Hours) * time.Hour
 }
 
 func (m *MsgRenewRequest) ValidateBasic() error {
