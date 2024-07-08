@@ -11,11 +11,13 @@ import (
 var (
 	ErrorInvalidMessage = sdkerrors.Register(ModuleName, 101, "invalid message")
 
-	ErrorDuplicateNode = sdkerrors.Register(ModuleName, 201, "duplicate node")
-	ErrorInvalidPrices = sdkerrors.Register(ModuleName, 202, "invalid prices")
-	ErrorNodeNotFound  = sdkerrors.Register(ModuleName, 203, "node not found")
-	ErrorPriceNotFound = sdkerrors.Register(ModuleName, 204, "price not found")
-	ErrorInvalidStatus = sdkerrors.Register(ModuleName, 205, "invalid status")
+	ErrorDuplicateNode    = sdkerrors.Register(ModuleName, 201, "duplicate node")
+	ErrorInvalidGigabytes = sdkerrors.Register(ModuleName, 202, "invalid gigabytes")
+	ErrorInvalidHours     = sdkerrors.Register(ModuleName, 203, "invalid hours")
+	ErrorInvalidPrices    = sdkerrors.Register(ModuleName, 204, "invalid prices")
+	ErrorInvalidStatus    = sdkerrors.Register(ModuleName, 205, "invalid status")
+	ErrorNodeNotFound     = sdkerrors.Register(ModuleName, 206, "node not found")
+	ErrorPriceNotFound    = sdkerrors.Register(ModuleName, 207, "price not found")
 )
 
 func NewErrorDuplicateNode(addr base.NodeAddress) error {
@@ -36,4 +38,12 @@ func NewErrorPriceNotFound(denom string) error {
 
 func NewErrorInvalidNodeStatus(addr base.NodeAddress, status v1base.Status) error {
 	return sdkerrors.Wrapf(ErrorInvalidStatus, "invalid status %s for node %s", status, addr)
+}
+
+func NewErrorInvalidHours(hours int64) error {
+	return sdkerrors.Wrapf(ErrorInvalidHours, "invalid hours %d", hours)
+}
+
+func NewErrorInvalidGigabytes(gigabytes int64) error {
+	return sdkerrors.Wrapf(ErrorInvalidGigabytes, "invalid gigabytes %d", gigabytes)
 }

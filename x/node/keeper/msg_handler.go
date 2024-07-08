@@ -150,6 +150,17 @@ func (k *Keeper) HandleMsgUpdateStatus(ctx sdk.Context, msg *v2.MsgUpdateStatusR
 }
 
 func (k *Keeper) HandleMsgStartSession(ctx sdk.Context, msg *v3.MsgStartSessionRequest) (*v3.MsgStartSessionResponse, error) {
+	if msg.Gigabytes != 0 {
+		if ok := k.IsValidSessionGigabytes(ctx, msg.Gigabytes); !ok {
+			return nil, types.NewErrorInvalidGigabytes(msg.Gigabytes)
+		}
+	}
+	if msg.Hours != 0 {
+		if ok := k.IsValidSessionHours(ctx, msg.Hours); !ok {
+			return nil, types.NewErrorInvalidHours(msg.Hours)
+		}
+	}
+
 	fromAddr, err := sdk.AccAddressFromBech32(msg.From)
 	if err != nil {
 		return nil, err
@@ -169,9 +180,9 @@ func (k *Keeper) HandleMsgStartSession(ctx sdk.Context, msg *v3.MsgStartSessionR
 	}
 
 	var (
-		count             = k.session.GetCount(ctx)
-		statusChangeDelay = k.session.StatusChangeDelay(ctx)
-		session           = &v3.Session{
+		count   = k.session.GetCount(ctx)
+		delay   = k.session.StatusChangeDelay(ctx)
+		session = &v3.Session{
 			ID:            count + 1,
 			AccAddress:    fromAddr.String(),
 			NodeAddress:   nodeAddr.String(),
@@ -179,11 +190,11 @@ func (k *Keeper) HandleMsgStartSession(ctx sdk.Context, msg *v3.MsgStartSessionR
 			Deposit:       sdk.Coin{},
 			DownloadBytes: sdkmath.ZeroInt(),
 			UploadBytes:   sdkmath.ZeroInt(),
-			MaxBytes:      sdkmath.Int{},
+			MaxBytes:      sdkmath.ZeroInt(),
 			Duration:      0,
 			MaxDuration:   0,
 			Status:        v1base.StatusActive,
-			InactiveAt:    ctx.BlockTime().Add(statusChangeDelay),
+			InactiveAt:    ctx.BlockTime().Add(delay),
 			StatusAt:      ctx.BlockTime(),
 		}
 	)
