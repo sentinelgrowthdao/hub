@@ -12,11 +12,35 @@ import (
 	"github.com/sentinel-official/hub/v12/x/session/types/v3"
 )
 
+// SetCount sets the count value in the KVStore.
+func (k *Keeper) SetCount(ctx sdk.Context, count uint64) {
+	key := types.CountKey
+	value := k.cdc.MustMarshal(&protobuf.UInt64Value{Value: count})
+	store := k.Store(ctx)
+	store.Set(key, value)
+}
+
+// GetCount retrieves the count value from the KVStore.
+// If the count value does not exist, it returns 0 as the default.
+func (k *Keeper) GetCount(ctx sdk.Context) uint64 {
+	store := k.Store(ctx)
+	key := types.CountKey
+	value := store.Get(key)
+
+	if value == nil {
+		return 0
+	}
+
+	var count protobuf.UInt64Value
+	k.cdc.MustUnmarshal(value, &count)
+
+	return count.GetValue()
+}
+
+// SetSession stores a session in the module's KVStore.
 func (k *Keeper) SetSession(ctx sdk.Context, session v3.Session) {
-	var (
-		store = k.Store(ctx)
-		key   = types.SessionKey(session.GetID())
-	)
+	store := k.Store(ctx)
+	key := types.SessionKey(session.GetID())
 
 	value, err := k.cdc.MarshalInterface(session)
 	if err != nil {
@@ -26,12 +50,12 @@ func (k *Keeper) SetSession(ctx sdk.Context, session v3.Session) {
 	store.Set(key, value)
 }
 
+// GetSession retrieves a session from the module's KVStore based on the session ID.
+// If the session exists, it returns the session and 'found' as true; otherwise, it returns 'found' as false.
 func (k *Keeper) GetSession(ctx sdk.Context, id uint64) (session v3.Session, found bool) {
-	var (
-		store = k.Store(ctx)
-		key   = types.SessionKey(id)
-		value = store.Get(key)
-	)
+	store := k.Store(ctx)
+	key := types.SessionKey(id)
+	value := store.Get(key)
 
 	if value == nil {
 		return session, false
@@ -43,20 +67,18 @@ func (k *Keeper) GetSession(ctx sdk.Context, id uint64) (session v3.Session, fou
 	return session, true
 }
 
+// DeleteSession removes a session from the module's KVStore based on the session ID.
 func (k *Keeper) DeleteSession(ctx sdk.Context, id uint64) {
-	var (
-		store = k.Store(ctx)
-		key   = types.SessionKey(id)
-	)
+	store := k.Store(ctx)
+	key := types.SessionKey(id)
 
 	store.Delete(key)
 }
 
+// GetSessions retrieves all sessions stored in the module's KVStore.
 func (k *Keeper) GetSessions(ctx sdk.Context) (items []v3.Session) {
-	var (
-		store    = k.Store(ctx)
-		iterator = sdk.KVStorePrefixIterator(store, types.SessionKeyPrefix)
-	)
+	store := k.Store(ctx)
+	iterator := sdk.KVStorePrefixIterator(store, types.SessionKeyPrefix)
 
 	defer iterator.Close()
 
@@ -72,10 +94,12 @@ func (k *Keeper) GetSessions(ctx sdk.Context) (items []v3.Session) {
 	return items
 }
 
+// IterateSessions iterates over all sessions stored in the module's KVStore and calls the provided function for each session.
+// The iteration stops when the provided function returns 'true'.
 func (k *Keeper) IterateSessions(ctx sdk.Context, fn func(index int, item v3.Session) (stop bool)) {
 	store := k.Store(ctx)
-
 	iterator := sdk.KVStorePrefixIterator(store, types.SessionKeyPrefix)
+
 	defer iterator.Close()
 
 	for i := 0; iterator.Valid(); iterator.Next() {
@@ -91,30 +115,27 @@ func (k *Keeper) IterateSessions(ctx sdk.Context, fn func(index int, item v3.Ses
 	}
 }
 
+// SetSessionForAccount links a session ID to an account address in the module's KVStore.
 func (k *Keeper) SetSessionForAccount(ctx sdk.Context, addr sdk.AccAddress, id uint64) {
-	var (
-		store = k.Store(ctx)
-		key   = types.SessionForAccountKey(addr, id)
-		value = k.cdc.MustMarshal(&protobuf.BoolValue{Value: true})
-	)
+	store := k.Store(ctx)
+	key := types.SessionForAccountKey(addr, id)
+	value := k.cdc.MustMarshal(&protobuf.BoolValue{Value: true})
 
 	store.Set(key, value)
 }
 
+// DeleteSessionForAccount removes the association between a session ID and an account address from the module's KVStore.
 func (k *Keeper) DeleteSessionForAccount(ctx sdk.Context, addr sdk.AccAddress, id uint64) {
-	var (
-		store = k.Store(ctx)
-		key   = types.SessionForAccountKey(addr, id)
-	)
+	store := k.Store(ctx)
+	key := types.SessionForAccountKey(addr, id)
 
 	store.Delete(key)
 }
 
+// GetSessionsForAccount retrieves all sessions associated with a specific account address.
 func (k *Keeper) GetSessionsForAccount(ctx sdk.Context, addr sdk.AccAddress) (items []v3.Session) {
-	var (
-		store    = k.Store(ctx)
-		iterator = sdk.KVStorePrefixIterator(store, types.GetSessionForAccountKeyPrefix(addr))
-	)
+	store := k.Store(ctx)
+	iterator := sdk.KVStorePrefixIterator(store, types.GetSessionForAccountKeyPrefix(addr))
 
 	defer iterator.Close()
 
@@ -130,30 +151,27 @@ func (k *Keeper) GetSessionsForAccount(ctx sdk.Context, addr sdk.AccAddress) (it
 	return items
 }
 
+// SetSessionForNode links a session ID to a node address in the module's KVStore.
 func (k *Keeper) SetSessionForNode(ctx sdk.Context, addr base.NodeAddress, id uint64) {
-	var (
-		store = k.Store(ctx)
-		key   = types.SessionForNodeKey(addr, id)
-		value = k.cdc.MustMarshal(&protobuf.BoolValue{Value: true})
-	)
+	store := k.Store(ctx)
+	key := types.SessionForNodeKey(addr, id)
+	value := k.cdc.MustMarshal(&protobuf.BoolValue{Value: true})
 
 	store.Set(key, value)
 }
 
+// DeleteSessionForNode removes the association between a session ID and a node address from the module's KVStore.
 func (k *Keeper) DeleteSessionForNode(ctx sdk.Context, addr base.NodeAddress, id uint64) {
-	var (
-		store = k.Store(ctx)
-		key   = types.SessionForNodeKey(addr, id)
-	)
+	store := k.Store(ctx)
+	key := types.SessionForNodeKey(addr, id)
 
 	store.Delete(key)
 }
 
+// GetSessionsForNode retrieves all sessions associated with a specific node address.
 func (k *Keeper) GetSessionsForNode(ctx sdk.Context, addr base.NodeAddress) (items []v3.Session) {
-	var (
-		store    = k.Store(ctx)
-		iterator = sdk.KVStorePrefixIterator(store, types.GetSessionForNodeKeyPrefix(addr))
-	)
+	store := k.Store(ctx)
+	iterator := sdk.KVStorePrefixIterator(store, types.GetSessionForNodeKeyPrefix(addr))
 
 	defer iterator.Close()
 
@@ -169,30 +187,27 @@ func (k *Keeper) GetSessionsForNode(ctx sdk.Context, addr base.NodeAddress) (ite
 	return items
 }
 
+// SetSessionForSubscription links a session ID to a subscription ID in the module's KVStore.
 func (k *Keeper) SetSessionForSubscription(ctx sdk.Context, subscriptionID, sessionID uint64) {
-	var (
-		store = k.Store(ctx)
-		key   = types.SessionForSubscriptionKey(subscriptionID, sessionID)
-		value = k.cdc.MustMarshal(&protobuf.BoolValue{Value: true})
-	)
+	store := k.Store(ctx)
+	key := types.SessionForSubscriptionKey(subscriptionID, sessionID)
+	value := k.cdc.MustMarshal(&protobuf.BoolValue{Value: true})
 
 	store.Set(key, value)
 }
 
+// DeleteSessionForSubscription removes the association between a session ID and a subscription ID from the module's KVStore.
 func (k *Keeper) DeleteSessionForSubscription(ctx sdk.Context, subscriptionID, sessionID uint64) {
-	var (
-		store = k.Store(ctx)
-		key   = types.SessionForSubscriptionKey(subscriptionID, sessionID)
-	)
+	store := k.Store(ctx)
+	key := types.SessionForSubscriptionKey(subscriptionID, sessionID)
 
 	store.Delete(key)
 }
 
+// GetSessionsForSubscription retrieves all sessions associated with a specific subscription ID.
 func (k *Keeper) GetSessionsForSubscription(ctx sdk.Context, id uint64) (items []v3.Session) {
-	var (
-		store    = k.Store(ctx)
-		iterator = sdk.KVStorePrefixIterator(store, types.GetSessionForSubscriptionKeyPrefix(id))
-	)
+	store := k.Store(ctx)
+	iterator := sdk.KVStorePrefixIterator(store, types.GetSessionForSubscriptionKeyPrefix(id))
 
 	defer iterator.Close()
 
@@ -208,107 +223,114 @@ func (k *Keeper) GetSessionsForSubscription(ctx sdk.Context, id uint64) (items [
 	return items
 }
 
+// IterateSessionsForSubscription iterates over all sessions associated with a specific subscription ID and calls the provided function for each session.
+// The iteration stops when the provided function returns 'true'.
 func (k *Keeper) IterateSessionsForSubscription(ctx sdk.Context, id uint64, fn func(index int, item v3.Session) (stop bool)) {
 	store := k.Store(ctx)
-
 	iterator := sdk.KVStoreReversePrefixIterator(store, types.GetSessionForSubscriptionKeyPrefix(id))
+
 	defer iterator.Close()
 
 	for i := 0; iterator.Valid(); iterator.Next() {
-		session, found := k.GetSession(ctx, types.IDFromSessionForSubscriptionKey(iterator.Key()))
+		item, found := k.GetSession(ctx, types.IDFromSessionForSubscriptionKey(iterator.Key()))
 		if !found {
 			panic(fmt.Errorf("session for subscription key %X does not exist", iterator.Key()))
 		}
 
-		if stop := fn(i, session); stop {
+		if stop := fn(i, item); stop {
 			break
 		}
 		i++
 	}
 }
 
+// SetSessionForAllocation links a session ID to a subscription ID and an account address in the module's KVStore.
 func (k *Keeper) SetSessionForAllocation(ctx sdk.Context, subscriptionID uint64, addr sdk.AccAddress, sessionID uint64) {
-	var (
-		store = k.Store(ctx)
-		key   = types.SessionForAllocationKey(subscriptionID, addr, sessionID)
-		value = k.cdc.MustMarshal(&protobuf.BoolValue{Value: true})
-	)
+	store := k.Store(ctx)
+	key := types.SessionForAllocationKey(subscriptionID, addr, sessionID)
+	value := k.cdc.MustMarshal(&protobuf.BoolValue{Value: true})
 
 	store.Set(key, value)
 }
 
+// DeleteSessionForAllocation removes the association between a session ID, a subscription ID, and an account address from the module's KVStore.
 func (k *Keeper) DeleteSessionForAllocation(ctx sdk.Context, subscriptionID uint64, addr sdk.AccAddress, sessionID uint64) {
-	var (
-		store = k.Store(ctx)
-		key   = types.SessionForAllocationKey(subscriptionID, addr, sessionID)
-	)
+	store := k.Store(ctx)
+	key := types.SessionForAllocationKey(subscriptionID, addr, sessionID)
 
 	store.Delete(key)
 }
 
+// IterateSessionsForAllocation iterates over all sessions associated with a specific subscription ID and account address and calls the provided function for each session.
+// The iteration stops when the provided function returns 'true'.
 func (k *Keeper) IterateSessionsForAllocation(ctx sdk.Context, id uint64, addr sdk.AccAddress, fn func(index int, item v3.Session) (stop bool)) {
 	store := k.Store(ctx)
-
 	iterator := sdk.KVStoreReversePrefixIterator(store, types.GetSessionForAllocationKeyPrefix(id, addr))
+
 	defer iterator.Close()
 
 	for i := 0; iterator.Valid(); iterator.Next() {
-		session, found := k.GetSession(ctx, types.IDFromSessionForAllocationKey(iterator.Key()))
+		item, found := k.GetSession(ctx, types.IDFromSessionForAllocationKey(iterator.Key()))
 		if !found {
 			panic(fmt.Errorf("session for subscription allocation key %X does not exist", iterator.Key()))
 		}
 
-		if stop := fn(i, session); stop {
+		if stop := fn(i, item); stop {
 			break
 		}
 		i++
 	}
 }
 
+// SetSessionForInactiveAt sets a session to be inactive at a specified time in the module's KVStore.
 func (k *Keeper) SetSessionForInactiveAt(ctx sdk.Context, at time.Time, id uint64) {
+	store := k.Store(ctx)
 	key := types.SessionForInactiveAtKey(at, id)
 	value := k.cdc.MustMarshal(&protobuf.BoolValue{Value: true})
 
-	store := k.Store(ctx)
 	store.Set(key, value)
 }
 
+// DeleteSessionForInactiveAt removes the inactive session record from the module's KVStore based on the specified time and session ID.
 func (k *Keeper) DeleteSessionForInactiveAt(ctx sdk.Context, at time.Time, id uint64) {
+	store := k.Store(ctx)
 	key := types.SessionForInactiveAtKey(at, id)
 
-	store := k.Store(ctx)
 	store.Delete(key)
 }
 
-func (k *Keeper) IterateSessionsForInactiveAt(ctx sdk.Context, end time.Time, fn func(index int, item v3.Session) (stop bool)) {
+// IterateSessionsForInactiveAt iterates over all sessions that will be inactive before a specified time and calls the provided function for each session.
+// The iteration stops when the provided function returns 'true'.
+func (k *Keeper) IterateSessionsForInactiveAt(ctx sdk.Context, at time.Time, fn func(index int, item v3.Session) (stop bool)) {
 	store := k.Store(ctx)
+	iterator := store.Iterator(types.SessionForInactiveAtKeyPrefix, sdk.PrefixEndBytes(types.GetSessionForInactiveAtKeyPrefix(at)))
 
-	iterator := store.Iterator(types.SessionForInactiveAtKeyPrefix, sdk.PrefixEndBytes(types.GetSessionForInactiveAtKeyPrefix(end)))
 	defer iterator.Close()
 
 	for i := 0; iterator.Valid(); iterator.Next() {
-		session, found := k.GetSession(ctx, types.IDFromSessionForInactiveAtKey(iterator.Key()))
+		item, found := k.GetSession(ctx, types.IDFromSessionForInactiveAtKey(iterator.Key()))
 		if !found {
 			panic(fmt.Errorf("session for inactive at key %X does not exist", iterator.Key()))
 		}
 
-		if stop := fn(i, session); stop {
+		if stop := fn(i, item); stop {
 			break
 		}
 		i++
 	}
 }
 
+// GetLatestSessionForAllocation retrieves the latest session for a given subscription ID and account address.
 func (k *Keeper) GetLatestSessionForAllocation(ctx sdk.Context, subscriptionID uint64, addr sdk.AccAddress) (session v3.Session, found bool) {
 	store := k.Store(ctx)
-
 	iterator := sdk.KVStoreReversePrefixIterator(store, types.GetSessionForAllocationKeyPrefix(subscriptionID, addr))
+
 	defer iterator.Close()
 
 	if iterator.Valid() {
 		session, found = k.GetSession(ctx, types.IDFromSessionForAllocationKey(iterator.Key()))
 		if !found {
-			panic(fmt.Errorf("session for subscription allocation key %X does not exist", iterator.Key()))
+			panic(fmt.Errorf("session for allocation key %X does not exist", iterator.Key()))
 		}
 	}
 

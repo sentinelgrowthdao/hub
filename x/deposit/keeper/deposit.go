@@ -9,11 +9,9 @@ import (
 
 // SetDeposit stores a deposit in the module's KVStore.
 func (k *Keeper) SetDeposit(ctx sdk.Context, deposit v1.Deposit) {
-	var (
-		store = k.Store(ctx)
-		key   = types.DepositKey(deposit.GetAddress())
-		value = k.cdc.MustMarshal(&deposit)
-	)
+	store := k.Store(ctx)
+	key := types.DepositKey(deposit.GetAddress())
+	value := k.cdc.MustMarshal(&deposit)
 
 	store.Set(key, value)
 }
@@ -21,11 +19,9 @@ func (k *Keeper) SetDeposit(ctx sdk.Context, deposit v1.Deposit) {
 // GetDeposit retrieves a deposit from the module's KVStore based on the account address.
 // If the deposit exists, it returns the deposit and 'found' as true; otherwise, it returns 'found' as false.
 func (k *Keeper) GetDeposit(ctx sdk.Context, addr sdk.AccAddress) (deposit v1.Deposit, found bool) {
-	var (
-		store = k.Store(ctx)
-		key   = types.DepositKey(addr)
-		value = store.Get(key)
-	)
+	store := k.Store(ctx)
+	key := types.DepositKey(addr)
+	value := store.Get(key)
 
 	if value == nil {
 		return deposit, false
@@ -37,16 +33,15 @@ func (k *Keeper) GetDeposit(ctx sdk.Context, addr sdk.AccAddress) (deposit v1.De
 
 // GetDeposits retrieves all deposits stored in the module's KVStore.
 func (k *Keeper) GetDeposits(ctx sdk.Context) (items v1.Deposits) {
-	var (
-		store    = k.Store(ctx)
-		iterator = sdk.KVStorePrefixIterator(store, types.DepositKeyPrefix)
-	)
+	store := k.Store(ctx)
+	iterator := sdk.KVStorePrefixIterator(store, types.DepositKeyPrefix)
 
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
 		var item v1.Deposit
 		k.cdc.MustUnmarshal(iterator.Value(), &item)
+
 		items = append(items, item)
 	}
 
@@ -57,8 +52,8 @@ func (k *Keeper) GetDeposits(ctx sdk.Context) (items v1.Deposits) {
 // The iteration stops when the provided function returns 'true'.
 func (k *Keeper) IterateDeposits(ctx sdk.Context, fn func(index int, item v1.Deposit) (stop bool)) {
 	store := k.Store(ctx)
-
 	iterator := sdk.KVStorePrefixIterator(store, types.DepositKeyPrefix)
+
 	defer iterator.Close()
 
 	for i := 0; iterator.Valid(); iterator.Next() {
