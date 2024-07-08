@@ -82,13 +82,9 @@ func (k *Keeper) HandleMsgStart(ctx sdk.Context, msg *v1.MsgStartRequest) (*v1.M
 	k.SetLeaseForNode(ctx, nodeAddr, lease.ID)
 	k.SetLeaseForProvider(ctx, provAddr, lease.ID)
 	k.SetLeaseForProviderByNode(ctx, provAddr, nodeAddr, lease.ID)
+	k.SetLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
 	k.SetLeaseForPayoutAt(ctx, lease.PayoutAt, lease.ID)
-
-	if msg.Renewable {
-		k.SetLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
-	} else {
-		k.SetLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
-	}
+	k.SetLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
 
 	return &v1.MsgStartResponse{}, nil
 }
@@ -103,13 +99,9 @@ func (k *Keeper) HandleMsgUpdateDetails(ctx sdk.Context, msg *v1.MsgUpdateDetail
 	}
 
 	if msg.Renewable {
-		if !lease.InactiveAt.IsZero() {
-			k.DeleteLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
-		}
+		k.DeleteLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
 	} else {
-		if !lease.RenewalAt.IsZero() {
-			k.DeleteLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
-		}
+		k.DeleteLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
 	}
 
 	if msg.Renewable {
@@ -122,11 +114,8 @@ func (k *Keeper) HandleMsgUpdateDetails(ctx sdk.Context, msg *v1.MsgUpdateDetail
 		}
 	}
 
-	if msg.Renewable {
-		k.SetLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
-	} else {
-		k.SetLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
-	}
+	k.SetLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
+	k.SetLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
 
 	return &v1.MsgUpdateDetailsResponse{}, nil
 }
@@ -144,12 +133,8 @@ func (k *Keeper) HandleMsgRenew(ctx sdk.Context, msg *v1.MsgRenewRequest) (*v1.M
 		return nil, types.NewErrorUnauthorized(msg.From)
 	}
 
-	if !lease.InactiveAt.IsZero() {
-		k.DeleteLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
-	}
-	if !lease.RenewalAt.IsZero() {
-		k.DeleteLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
-	}
+	k.DeleteLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
+	k.DeleteLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
 
 	provAddr, err := base.ProvAddressFromBech32(lease.ProvAddress)
 	if err != nil {
@@ -212,13 +197,9 @@ func (k *Keeper) HandleMsgRenew(ctx sdk.Context, msg *v1.MsgRenewRequest) (*v1.M
 	k.SetLeaseForNode(ctx, nodeAddr, lease.ID)
 	k.SetLeaseForProvider(ctx, provAddr, lease.ID)
 	k.SetLeaseForProviderByNode(ctx, provAddr, nodeAddr, lease.ID)
+	k.SetLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
 	k.SetLeaseForPayoutAt(ctx, lease.PayoutAt, lease.ID)
-
-	if renewable {
-		k.SetLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
-	} else {
-		k.SetLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
-	}
+	k.SetLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
 
 	return &v1.MsgRenewResponse{}, nil
 }
@@ -255,14 +236,9 @@ func (k *Keeper) HandleMsgEnd(ctx sdk.Context, msg *v1.MsgEndRequest) (*v1.MsgEn
 	k.DeleteLeaseForNode(ctx, nodeAddr, lease.ID)
 	k.DeleteLeaseForProvider(ctx, provAddr, lease.ID)
 	k.DeleteLeaseForProviderByNode(ctx, provAddr, nodeAddr, lease.ID)
+	k.DeleteLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
 	k.DeleteLeaseForPayoutAt(ctx, lease.PayoutAt, lease.ID)
-
-	renewable := lease.IsRenewable()
-	if renewable {
-		k.DeleteLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
-	} else {
-		k.DeleteLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
-	}
+	k.DeleteLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
 
 	return &v1.MsgEndResponse{}, nil
 }

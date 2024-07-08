@@ -94,9 +94,9 @@ func (k *Keeper) HandleMsgCancel(ctx sdk.Context, msg *v2.MsgCancelRequest) (*v2
 	k.DeleteSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
 	k.DeleteSubscriptionForRenewalAt(ctx, subscription.RenewalAt, subscription.ID)
 
-	statusChangeDelay := k.StatusChangeDelay(ctx)
+	delay := k.StatusChangeDelay(ctx)
 	subscription.Status = v1base.StatusInactivePending
-	subscription.InactiveAt = ctx.BlockTime().Add(statusChangeDelay)
+	subscription.InactiveAt = ctx.BlockTime().Add(delay)
 	subscription.RenewalAt = time.Time{}
 	subscription.StatusAt = ctx.BlockTime()
 
@@ -127,20 +127,19 @@ func (k *Keeper) HandleMsgStart(ctx sdk.Context, msg *v3.MsgStartRequest) (*v3.M
 		return nil, types.NewErrorPriceNotFound(msg.Denom)
 	}
 
-	var (
-		stakingShare  = k.provider.StakingShare(ctx)
-		stakingReward = baseutils.GetProportionOfCoin(price, stakingShare)
-	)
+	share := k.provider.StakingShare(ctx)
 
-	if err := k.SendCoinFromAccountToModule(ctx, accAddr, k.feeCollectorName, stakingReward); err != nil {
+	reward := baseutils.GetProportionOfCoin(price, share)
+	if err := k.SendCoinFromAccountToModule(ctx, accAddr, k.feeCollectorName, reward); err != nil {
 		return nil, err
 	}
 
-	var (
-		provAddr = plan.GetProviderAddress()
-		payment  = price.Sub(stakingReward)
-	)
+	provAddr, err := base.ProvAddressFromBech32(plan.ProviderAddress)
+	if err != nil {
+		return nil, err
+	}
 
+	payment := price.Sub(reward)
 	if err := k.SendCoin(ctx, accAddr, provAddr.Bytes(), payment); err != nil {
 		return nil, err
 	}
@@ -158,23 +157,17 @@ func (k *Keeper) HandleMsgStart(ctx sdk.Context, msg *v3.MsgStartRequest) (*v3.M
 	}
 
 	if msg.Renewable {
-		subscription.InactiveAt = time.Time{}
 		subscription.RenewalAt = ctx.BlockTime().Add(plan.Duration)
 	} else {
 		subscription.InactiveAt = ctx.BlockTime().Add(plan.Duration)
-		subscription.RenewalAt = time.Time{}
 	}
 
 	k.SetCount(ctx, count+1)
 	k.SetSubscription(ctx, subscription)
 	k.SetSubscriptionForAccount(ctx, accAddr, subscription.ID)
 	k.SetSubscriptionForPlan(ctx, subscription.PlanID, subscription.ID)
-
-	if msg.Renewable {
-		k.SetSubscriptionForRenewalAt(ctx, subscription.RenewalAt, subscription.ID)
-	} else {
-		k.SetSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
-	}
+	k.SetSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
+	k.SetSubscriptionForRenewalAt(ctx, subscription.RenewalAt, subscription.ID)
 
 	alloc := v2.Allocation{
 		ID:            subscription.ID,
@@ -207,20 +200,17 @@ func (k *Keeper) HandleMsgUpdateDetails(ctx sdk.Context, msg *v3.MsgUpdateDetail
 	}
 
 	if msg.Renewable {
-		if subscription.RenewalAt.IsZero() {
+		if !subscription.InactiveAt.IsZero() {
 			subscription.InactiveAt, subscription.RenewalAt = time.Time{}, subscription.InactiveAt
 		}
 	} else {
-		if subscription.InactiveAt.IsZero() {
+		if !subscription.RenewalAt.IsZero() {
 			subscription.InactiveAt, subscription.RenewalAt = subscription.RenewalAt, time.Time{}
 		}
 	}
 
-	if msg.Renewable {
-		k.SetSubscriptionForRenewalAt(ctx, subscription.RenewalAt, subscription.ID)
-	} else {
-		k.SetSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
-	}
+	k.SetSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
+	k.SetSubscriptionForRenewalAt(ctx, subscription.RenewalAt, subscription.ID)
 
 	return &v3.MsgUpdateDetailsResponse{}, nil
 }

@@ -12,21 +12,17 @@ import (
 )
 
 func (k *Keeper) SetSubscription(ctx sdk.Context, subscription v3.Subscription) {
-	var (
-		store = k.Store(ctx)
-		key   = types.SubscriptionKey(subscription.ID)
-		value = k.cdc.MustMarshal(&subscription)
-	)
+	store := k.Store(ctx)
+	key := types.SubscriptionKey(subscription.ID)
+	value := k.cdc.MustMarshal(&subscription)
 
 	store.Set(key, value)
 }
 
 func (k *Keeper) GetSubscription(ctx sdk.Context, id uint64) (subscription v3.Subscription, found bool) {
-	var (
-		store = k.Store(ctx)
-		key   = types.SubscriptionKey(id)
-		value = store.Get(key)
-	)
+	store := k.Store(ctx)
+	key := types.SubscriptionKey(id)
+	value := store.Get(key)
 
 	if value == nil {
 		return subscription, false
@@ -37,17 +33,15 @@ func (k *Keeper) GetSubscription(ctx sdk.Context, id uint64) (subscription v3.Su
 }
 
 func (k *Keeper) DeleteSubscription(ctx sdk.Context, id uint64) {
+	store := k.Store(ctx)
 	key := types.SubscriptionKey(id)
 
-	store := k.Store(ctx)
 	store.Delete(key)
 }
 
 func (k *Keeper) GetSubscriptions(ctx sdk.Context) (items []v3.Subscription) {
-	var (
-		store    = k.Store(ctx)
-		iterator = sdk.KVStorePrefixIterator(store, types.SubscriptionKeyPrefix)
-	)
+	store := k.Store(ctx)
+	iterator := sdk.KVStorePrefixIterator(store, types.SubscriptionKeyPrefix)
 
 	defer iterator.Close()
 
@@ -63,8 +57,8 @@ func (k *Keeper) GetSubscriptions(ctx sdk.Context) (items []v3.Subscription) {
 
 func (k *Keeper) IterateSubscriptions(ctx sdk.Context, fn func(index int, item v3.Subscription) (stop bool)) {
 	store := k.Store(ctx)
-
 	iterator := sdk.KVStorePrefixIterator(store, types.SubscriptionKeyPrefix)
+
 	defer iterator.Close()
 
 	for i := 0; iterator.Valid(); iterator.Next() {
@@ -79,38 +73,30 @@ func (k *Keeper) IterateSubscriptions(ctx sdk.Context, fn func(index int, item v
 }
 
 func (k *Keeper) SetSubscriptionForAccount(ctx sdk.Context, addr sdk.AccAddress, id uint64) {
-	var (
-		store = k.Store(ctx)
-		key   = types.SubscriptionForAccountKey(addr, id)
-		value = k.cdc.MustMarshal(&protobuf.BoolValue{Value: true})
-	)
+	store := k.Store(ctx)
+	key := types.SubscriptionForAccountKey(addr, id)
+	value := k.cdc.MustMarshal(&protobuf.BoolValue{Value: true})
 
 	store.Set(key, value)
 }
 
 func (k *Keeper) HasSubscriptionForAccount(ctx sdk.Context, addr sdk.AccAddress, id uint64) bool {
-	var (
-		store = k.Store(ctx)
-		key   = types.SubscriptionForAccountKey(addr, id)
-	)
+	store := k.Store(ctx)
+	key := types.SubscriptionForAccountKey(addr, id)
 
 	return store.Has(key)
 }
 
 func (k *Keeper) DeleteSubscriptionForAccount(ctx sdk.Context, addr sdk.AccAddress, id uint64) {
-	var (
-		store = k.Store(ctx)
-		key   = types.SubscriptionForAccountKey(addr, id)
-	)
+	store := k.Store(ctx)
+	key := types.SubscriptionForAccountKey(addr, id)
 
 	store.Delete(key)
 }
 
 func (k *Keeper) GetSubscriptionsForAccount(ctx sdk.Context, addr sdk.AccAddress) (items []v3.Subscription) {
-	var (
-		store    = k.Store(ctx)
-		iterator = sdk.KVStorePrefixIterator(store, types.GetSubscriptionForAccountKeyPrefix(addr))
-	)
+	store := k.Store(ctx)
+	iterator := sdk.KVStorePrefixIterator(store, types.GetSubscriptionForAccountKeyPrefix(addr))
 
 	defer iterator.Close()
 
@@ -127,38 +113,30 @@ func (k *Keeper) GetSubscriptionsForAccount(ctx sdk.Context, addr sdk.AccAddress
 }
 
 func (k *Keeper) SetSubscriptionForPlan(ctx sdk.Context, planID, subscriptionID uint64) {
-	var (
-		store = k.Store(ctx)
-		key   = types.SubscriptionForPlanKey(planID, subscriptionID)
-		value = k.cdc.MustMarshal(&protobuf.BoolValue{Value: true})
-	)
+	store := k.Store(ctx)
+	key := types.SubscriptionForPlanKey(planID, subscriptionID)
+	value := k.cdc.MustMarshal(&protobuf.BoolValue{Value: true})
 
 	store.Set(key, value)
 }
 
 func (k *Keeper) HasSubscriptionForPlan(ctx sdk.Context, planID, subscriptionID uint64) bool {
-	var (
-		store = k.Store(ctx)
-		key   = types.SubscriptionForPlanKey(planID, subscriptionID)
-	)
+	store := k.Store(ctx)
+	key := types.SubscriptionForPlanKey(planID, subscriptionID)
 
 	return store.Has(key)
 }
 
 func (k *Keeper) DeleteSubscriptionForPlan(ctx sdk.Context, planID, subscriptionID uint64) {
-	var (
-		store = k.Store(ctx)
-		key   = types.SubscriptionForPlanKey(planID, subscriptionID)
-	)
+	store := k.Store(ctx)
+	key := types.SubscriptionForPlanKey(planID, subscriptionID)
 
 	store.Delete(key)
 }
 
 func (k *Keeper) GetSubscriptionsForPlan(ctx sdk.Context, id uint64) (items []v3.Subscription) {
-	var (
-		store    = k.Store(ctx)
-		iterator = sdk.KVStorePrefixIterator(store, types.GetSubscriptionForPlanKeyPrefix(id))
-	)
+	store := k.Store(ctx)
+	iterator := sdk.KVStorePrefixIterator(store, types.GetSubscriptionForPlanKeyPrefix(id))
 
 	defer iterator.Close()
 
@@ -175,24 +153,32 @@ func (k *Keeper) GetSubscriptionsForPlan(ctx sdk.Context, id uint64) (items []v3
 }
 
 func (k *Keeper) SetSubscriptionForInactiveAt(ctx sdk.Context, at time.Time, id uint64) {
+	if at.IsZero() {
+		return
+	}
+
+	store := k.Store(ctx)
 	key := types.SubscriptionForInactiveAtKey(at, id)
 	value := k.cdc.MustMarshal(&protobuf.BoolValue{Value: true})
 
-	store := k.Store(ctx)
 	store.Set(key, value)
 }
 
 func (k *Keeper) DeleteSubscriptionForInactiveAt(ctx sdk.Context, at time.Time, id uint64) {
-	key := types.SubscriptionForInactiveAtKey(at, id)
+	if at.IsZero() {
+		return
+	}
 
 	store := k.Store(ctx)
+	key := types.SubscriptionForInactiveAtKey(at, id)
+
 	store.Delete(key)
 }
 
-func (k *Keeper) IterateSubscriptionsForInactiveAt(ctx sdk.Context, endTime time.Time, fn func(index int, item v3.Subscription) (stop bool)) {
+func (k *Keeper) IterateSubscriptionsForInactiveAt(ctx sdk.Context, at time.Time, fn func(index int, item v3.Subscription) (stop bool)) {
 	store := k.Store(ctx)
+	iterator := store.Iterator(types.SubscriptionForInactiveAtKeyPrefix, sdk.PrefixEndBytes(types.GetSubscriptionForInactiveAtKeyPrefix(at)))
 
-	iterator := store.Iterator(types.SubscriptionForInactiveAtKeyPrefix, sdk.PrefixEndBytes(types.GetSubscriptionForInactiveAtKeyPrefix(endTime)))
 	defer iterator.Close()
 
 	for i := 0; iterator.Valid(); iterator.Next() {
@@ -209,24 +195,32 @@ func (k *Keeper) IterateSubscriptionsForInactiveAt(ctx sdk.Context, endTime time
 }
 
 func (k *Keeper) SetSubscriptionForRenewalAt(ctx sdk.Context, at time.Time, id uint64) {
+	if at.IsZero() {
+		return
+	}
+
+	store := k.Store(ctx)
 	key := types.SubscriptionForRenewalAtKey(at, id)
 	value := k.cdc.MustMarshal(&protobuf.BoolValue{Value: true})
 
-	store := k.Store(ctx)
 	store.Set(key, value)
 }
 
 func (k *Keeper) DeleteSubscriptionForRenewalAt(ctx sdk.Context, at time.Time, id uint64) {
-	key := types.SubscriptionForRenewalAtKey(at, id)
+	if at.IsZero() {
+		return
+	}
 
 	store := k.Store(ctx)
+	key := types.SubscriptionForRenewalAtKey(at, id)
+
 	store.Delete(key)
 }
 
-func (k *Keeper) IterateSubscriptionsForRenewalAt(ctx sdk.Context, endTime time.Time, fn func(index int, item v3.Subscription) (stop bool)) {
+func (k *Keeper) IterateSubscriptionsForRenewalAt(ctx sdk.Context, at time.Time, fn func(index int, item v3.Subscription) (stop bool)) {
 	store := k.Store(ctx)
+	iterator := store.Iterator(types.SubscriptionForRenewalAtKeyPrefix, sdk.PrefixEndBytes(types.GetSubscriptionForRenewalAtKeyPrefix(at)))
 
-	iterator := store.Iterator(types.SubscriptionForRenewalAtKeyPrefix, sdk.PrefixEndBytes(types.GetSubscriptionForRenewalAtKeyPrefix(endTime)))
 	defer iterator.Close()
 
 	for i := 0; iterator.Valid(); iterator.Next() {

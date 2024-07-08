@@ -32,13 +32,15 @@ func (k *Keeper) handleInactiveLeases(ctx sdk.Context) {
 		k.DeleteLeaseForProviderByNode(ctx, provAddr, nodeAddr, item.ID)
 		k.DeleteLeaseForInactiveAt(ctx, item.InactiveAt, item.ID)
 		k.DeleteLeaseForPayoutAt(ctx, item.PayoutAt, item.ID)
+		k.DeleteLeaseForRenewalAt(ctx, item.RenewalAt, item.ID)
 
 		return false
 	})
 }
 
 func (k *Keeper) handleLeasePayouts(ctx sdk.Context) {
-	stakingShare := k.StakingShare(ctx)
+	share := k.StakingShare(ctx)
+
 	k.IterateLeasesForPayoutAt(ctx, ctx.BlockTime(), func(_ int, item v1.Lease) (stop bool) {
 		k.DeleteLeaseForPayoutAt(ctx, item.PayoutAt, item.ID)
 
@@ -52,12 +54,12 @@ func (k *Keeper) handleLeasePayouts(ctx sdk.Context) {
 			panic(err)
 		}
 
-		stakingReward := baseutils.GetProportionOfCoin(item.Price, stakingShare)
-		if err := k.SendCoinFromDepositToModule(ctx, provAddr.Bytes(), k.feeCollectorName, stakingReward); err != nil {
+		reward := baseutils.GetProportionOfCoin(item.Price, share)
+		if err := k.SendCoinFromDepositToModule(ctx, provAddr.Bytes(), k.feeCollectorName, reward); err != nil {
 			panic(err)
 		}
 
-		payment := item.Price.Sub(stakingReward)
+		payment := item.Price.Sub(reward)
 		if err := k.SendCoinFromDepositToAccount(ctx, provAddr.Bytes(), nodeAddr.Bytes(), payment); err != nil {
 			panic(err)
 		}
@@ -70,10 +72,7 @@ func (k *Keeper) handleLeasePayouts(ctx sdk.Context) {
 		}
 
 		k.SetLease(ctx, item)
-
-		if item.Hours < item.MaxHours {
-			k.SetLeaseForPayoutAt(ctx, item.PayoutAt, item.ID)
-		}
+		k.SetLeaseForPayoutAt(ctx, item.PayoutAt, item.ID)
 
 		return false
 	})

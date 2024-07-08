@@ -186,6 +186,10 @@ func (k *Keeper) GetLatestLeaseForProviderByNode(ctx sdk.Context, provAddr base.
 }
 
 func (k *Keeper) SetLeaseForInactiveAt(ctx sdk.Context, at time.Time, id uint64) {
+	if at.IsZero() {
+		return
+	}
+
 	store := k.Store(ctx)
 	key := types.LeaseForInactiveAtKey(at, id)
 	value := k.cdc.MustMarshal(&protobuf.BoolValue{Value: true})
@@ -194,15 +198,19 @@ func (k *Keeper) SetLeaseForInactiveAt(ctx sdk.Context, at time.Time, id uint64)
 }
 
 func (k *Keeper) DeleteLeaseForInactiveAt(ctx sdk.Context, at time.Time, id uint64) {
+	if at.IsZero() {
+		return
+	}
+
 	store := k.Store(ctx)
 	key := types.LeaseForInactiveAtKey(at, id)
 
 	store.Delete(key)
 }
 
-func (k *Keeper) IterateLeasesForInactiveAt(ctx sdk.Context, endTime time.Time, fn func(index int, item v1.Lease) (stop bool)) {
+func (k *Keeper) IterateLeasesForInactiveAt(ctx sdk.Context, at time.Time, fn func(index int, item v1.Lease) (stop bool)) {
 	store := k.Store(ctx)
-	iterator := store.Iterator(types.LeaseForInactiveAtKeyPrefix, sdk.PrefixEndBytes(types.GetLeaseForInactiveAtKeyPrefix(endTime)))
+	iterator := store.Iterator(types.LeaseForInactiveAtKeyPrefix, sdk.PrefixEndBytes(types.GetLeaseForInactiveAtKeyPrefix(at)))
 
 	defer iterator.Close()
 
@@ -220,6 +228,10 @@ func (k *Keeper) IterateLeasesForInactiveAt(ctx sdk.Context, endTime time.Time, 
 }
 
 func (k *Keeper) SetLeaseForPayoutAt(ctx sdk.Context, at time.Time, id uint64) {
+	if at.IsZero() {
+		return
+	}
+
 	store := k.Store(ctx)
 	key := types.LeaseForPayoutAtKey(at, id)
 	value := k.cdc.MustMarshal(&protobuf.BoolValue{Value: true})
@@ -228,6 +240,10 @@ func (k *Keeper) SetLeaseForPayoutAt(ctx sdk.Context, at time.Time, id uint64) {
 }
 
 func (k *Keeper) DeleteLeaseForPayoutAt(ctx sdk.Context, at time.Time, id uint64) {
+	if at.IsZero() {
+		return
+	}
+
 	store := k.Store(ctx)
 	key := types.LeaseForPayoutAtKey(at, id)
 
@@ -254,6 +270,10 @@ func (k *Keeper) IterateLeasesForPayoutAt(ctx sdk.Context, at time.Time, fn func
 }
 
 func (k *Keeper) SetLeaseForRenewalAt(ctx sdk.Context, at time.Time, id uint64) {
+	if at.IsZero() {
+		return
+	}
+
 	store := k.Store(ctx)
 	key := types.LeaseForRenewalAtKey(at, id)
 	value := k.cdc.MustMarshal(&protobuf.BoolValue{Value: true})
@@ -262,6 +282,10 @@ func (k *Keeper) SetLeaseForRenewalAt(ctx sdk.Context, at time.Time, id uint64) 
 }
 
 func (k *Keeper) DeleteLeaseForRenewalAt(ctx sdk.Context, at time.Time, id uint64) {
+	if at.IsZero() {
+		return
+	}
+
 	store := k.Store(ctx)
 	key := types.LeaseForRenewalAtKey(at, id)
 
