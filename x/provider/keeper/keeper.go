@@ -18,6 +18,7 @@ type Keeper struct {
 	cdc          codec.BinaryCodec
 	key          storetypes.StoreKey
 	distribution expected.DistributionKeeper
+	lease        expected.LeaseKeeper
 }
 
 func NewKeeper(cdc codec.BinaryCodec, key storetypes.StoreKey, authority string) Keeper {
@@ -30,6 +31,10 @@ func NewKeeper(cdc codec.BinaryCodec, key storetypes.StoreKey, authority string)
 
 func (k *Keeper) WithDistributionKeeper(keeper expected.DistributionKeeper) {
 	k.distribution = keeper
+}
+
+func (k *Keeper) WithLeaseKeeper(keeper expected.LeaseKeeper) {
+	k.lease = keeper
 }
 
 func (k *Keeper) Logger(ctx sdk.Context) log.Logger {

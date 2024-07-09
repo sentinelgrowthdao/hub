@@ -3,6 +3,8 @@ package expected
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 type AccountKeeper interface {
@@ -15,4 +17,8 @@ type BankKeeper interface {
 
 type DistributionKeeper interface {
 	FundCommunityPool(ctx sdk.Context, amount sdk.Coins, sender sdk.AccAddress) error
+}
+
+type LeaseKeeper interface {
+	ProviderInactivePreHook(ctx sdk.Context, addr base.ProvAddress) error
 }

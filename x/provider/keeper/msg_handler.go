@@ -56,7 +56,24 @@ func (k *Keeper) HandleMsgUpdate(ctx sdk.Context, msg *v2.MsgUpdateRequest) (*v2
 		return nil, types.NewErrorProviderNotFound(provAddr)
 	}
 
-	if len(msg.Name) > 0 {
+	if msg.Status.Equal(v1base.StatusInactive) {
+		if err := k.ProviderInactivePreHook(ctx, provAddr); err != nil {
+			return nil, err
+		}
+	}
+
+	if msg.Status.Equal(v1base.StatusActive) {
+		if provider.Status.Equal(v1base.StatusInactive) {
+			k.DeleteInactiveProvider(ctx, provAddr)
+		}
+	}
+	if msg.Status.Equal(v1base.StatusInactive) {
+		if provider.Status.Equal(v1base.StatusActive) {
+			k.DeleteActiveProvider(ctx, provAddr)
+		}
+	}
+
+	if msg.Name != "" {
 		provider.Name = msg.Name
 	}
 	provider.Identity = msg.Identity
@@ -64,17 +81,6 @@ func (k *Keeper) HandleMsgUpdate(ctx sdk.Context, msg *v2.MsgUpdateRequest) (*v2
 	provider.Description = msg.Description
 
 	if !msg.Status.Equal(v1base.StatusUnspecified) {
-		if provider.Status.Equal(v1base.StatusActive) {
-			if msg.Status.Equal(v1base.StatusInactive) {
-				k.DeleteActiveProvider(ctx, provAddr)
-			}
-		}
-		if provider.Status.Equal(v1base.StatusInactive) {
-			if msg.Status.Equal(v1base.StatusActive) {
-				k.DeleteInactiveProvider(ctx, provAddr)
-			}
-		}
-
 		provider.Status = msg.Status
 		provider.StatusAt = ctx.BlockTime()
 	}
