@@ -2,6 +2,7 @@ syntax = "proto3";
 package sentinel.lease.v1;
 
 import "gogoproto/gogo.proto";
+import "sentinel/lease/v1/params.proto";
 
 option go_package = "github.com/sentinel-official/hub/v12/x/lease/types/v1";
 option (gogoproto.equal_all) = false;
@@ -33,14 +34,21 @@ message MsgEndRequest {
   uint64 id = 2 [(gogoproto.customname) = "ID"];
 }
 
+message MsgUpdateParamsRequest {
+  string from = 1;
+  Params params = 2 [(gogoproto.nullable) = false];
+}
+
 message MsgStartResponse {}
 message MsgUpdateDetailsResponse {}
 message MsgRenewResponse {}
 message MsgEndResponse {}
+message MsgUpdateParamsResponse {}
 
 service MsgService {
   rpc MsgStart(MsgStartRequest) returns (MsgStartResponse);
   rpc MsgUpdateDetails(MsgUpdateDetailsRequest) returns (MsgUpdateDetailsResponse);
   rpc MsgRenew(MsgRenewRequest) returns (MsgRenewResponse);
   rpc MsgEnd(MsgEndRequest) returns (MsgEndResponse);
+  rpc MsgUpdateParams(MsgUpdateParamsRequest) returns (MsgUpdateParamsResponse);
 }
