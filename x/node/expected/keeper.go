@@ -23,8 +23,8 @@ type DistributionKeeper interface {
 }
 
 type DepositKeeper interface {
-	Add(ctx sdk.Context, addr sdk.AccAddress, coins sdk.Coins) error
-	Subtract(ctx sdk.Context, addr sdk.AccAddress, coins sdk.Coins) error
+	AddDeposit(ctx sdk.Context, addr sdk.AccAddress, coins sdk.Coins) error
+	SubtractDeposit(ctx sdk.Context, addr sdk.AccAddress, coins sdk.Coins) error
 	SendCoinsFromDepositToAccount(ctx sdk.Context, fromAddr, toAddr sdk.AccAddress, coins sdk.Coins) error
 	SendCoinsFromDepositToModule(ctx sdk.Context, fromAddr sdk.AccAddress, toModule string, coins sdk.Coins) error
 }

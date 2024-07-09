@@ -155,12 +155,12 @@ func (k *Keeper) SendCoinsFromDepositToModule(ctx sdk.Context, fromAddr sdk.AccA
 	return nil
 }
 
-// Add is a utility function to add coins to a deposit by transferring from the account to the deposit.
-func (k *Keeper) Add(ctx sdk.Context, addr sdk.AccAddress, coins sdk.Coins) error {
+// AddDeposit is a utility function to add coins to a deposit by transferring from the account to the deposit.
+func (k *Keeper) AddDeposit(ctx sdk.Context, addr sdk.AccAddress, coins sdk.Coins) error {
 	return k.SendCoinsFromAccountToDeposit(ctx, addr, addr, coins)
 }
 
-// Subtract is a utility function to subtract coins from a deposit by transferring from the deposit to the account.
-func (k *Keeper) Subtract(ctx sdk.Context, addr sdk.AccAddress, coins sdk.Coins) error {
+// SubtractDeposit is a utility function to subtract coins from a deposit by transferring from the deposit to the account.
+func (k *Keeper) SubtractDeposit(ctx sdk.Context, addr sdk.AccAddress, coins sdk.Coins) error {
 	return k.SendCoinsFromDepositToAccount(ctx, addr, addr, coins)
 }

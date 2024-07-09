@@ -25,7 +25,7 @@ func (k *Keeper) AddDeposit(ctx sdk.Context, addr sdk.AccAddress, coin sdk.Coin)
 		return nil
 	}
 
-	return k.deposit.Add(ctx, addr, sdk.NewCoins(coin))
+	return k.deposit.AddDeposit(ctx, addr, sdk.NewCoins(coin))
 }
 
 func (k *Keeper) SubtractDeposit(ctx sdk.Context, addr sdk.AccAddress, coin sdk.Coin) error {
@@ -33,7 +33,7 @@ func (k *Keeper) SubtractDeposit(ctx sdk.Context, addr sdk.AccAddress, coin sdk.
 		return nil
 	}
 
-	return k.deposit.Subtract(ctx, addr, sdk.NewCoins(coin))
+	return k.deposit.SubtractDeposit(ctx, addr, sdk.NewCoins(coin))
 }
 
 func (k *Keeper) SendCoinFromDepositToAccount(ctx sdk.Context, fromAddr, toAddr sdk.AccAddress, coin sdk.Coin) error {
