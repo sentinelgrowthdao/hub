@@ -162,6 +162,27 @@ func (k *Keeper) GetSessionsForNode(ctx sdk.Context, addr base.NodeAddress) (ite
 	return items
 }
 
+// IterateSessionsForNode iterates over all sessions for a specific node and calls the provided function for each session.
+// The iteration stops when the provided function returns 'true'.
+func (k *Keeper) IterateSessionsForNode(ctx sdk.Context, addr base.NodeAddress, fn func(index int, item v3.Session) (stop bool)) {
+	store := k.Store(ctx)
+	iterator := sdk.KVStoreReversePrefixIterator(store, types.GetSessionForNodeKeyPrefix(addr))
+
+	defer iterator.Close()
+
+	for i := 0; iterator.Valid(); iterator.Next() {
+		item, found := k.GetSession(ctx, types.IDFromSessionForNodeKey(iterator.Key()))
+		if !found {
+			panic(fmt.Errorf("session for node key %X does not exist", iterator.Key()))
+		}
+
+		if stop := fn(i, item); stop {
+			break
+		}
+		i++
+	}
+}
+
 // SetSessionForSubscription links a session ID to a subscription ID in the module's KVStore.
 func (k *Keeper) SetSessionForSubscription(ctx sdk.Context, subscriptionID, sessionID uint64) {
 	store := k.Store(ctx)

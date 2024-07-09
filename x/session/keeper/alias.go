@@ -21,5 +21,9 @@ func (k *Keeper) SendCoinFromDepositToModule(ctx sdk.Context, from sdk.AccAddres
 }
 
 func (k *Keeper) SessionInactivePreHook(ctx sdk.Context, id uint64) error {
+	if err := k.subscription.SessionInactivePreHook(ctx, id); err != nil {
+		return err
+	}
+
 	return nil
 }

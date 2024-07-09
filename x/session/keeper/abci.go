@@ -7,20 +7,24 @@ import (
 	"github.com/sentinel-official/hub/v12/x/session/types/v3"
 )
 
-func (k *Keeper) handleInactiveSessions(ctx sdk.Context) {
-	statusChangeDelay := k.StatusChangeDelay(ctx)
-
+func (k *Keeper) handleInactivePendingSessions(ctx sdk.Context) {
 	k.IterateSessionsForInactiveAt(ctx, ctx.BlockTime(), func(_ int, item v3.Session) bool {
-		if item.GetStatus().Equal(v1base.StatusActive) {
-			k.DeleteSessionForInactiveAt(ctx, item.GetInactiveAt(), item.GetID())
+		if !item.GetStatus().Equal(v1base.StatusActive) {
+			return false
+		}
 
-			item.SetStatus(v1base.StatusInactivePending)
-			item.SetInactiveAt(ctx.BlockTime().Add(statusChangeDelay))
-			item.SetStatusAt(ctx.BlockTime())
+		msg := item.MsgEndRequest(0)
+		if _, err := k.HandleMsgEnd(ctx, msg); err != nil {
+			panic(err)
+		}
 
-			k.SetSession(ctx, item)
-			k.SetSessionForInactiveAt(ctx, item.GetInactiveAt(), item.GetID())
+		return false
+	})
+}
 
+func (k *Keeper) handleInactiveSessions(ctx sdk.Context) {
+	k.IterateSessionsForInactiveAt(ctx, ctx.BlockTime(), func(_ int, item v3.Session) bool {
+		if !item.GetStatus().Equal(v1base.StatusInactivePending) {
 			return false
 		}
 
@@ -28,16 +32,14 @@ func (k *Keeper) handleInactiveSessions(ctx sdk.Context) {
 			panic(err)
 		}
 
-		var (
-			accAddr  = item.GetAccAddress()
-			nodeAddr = item.GetNodeAddress()
-		)
+		accAddr := item.GetAccAddress()
+		nodeAddr := item.GetNodeAddress()
 
 		k.DeleteSession(ctx, item.GetID())
 		k.DeleteSessionForAccount(ctx, accAddr, item.GetID())
+		k.DeleteSessionForAllocation(ctx, 0, accAddr, item.GetID())
 		k.DeleteSessionForNode(ctx, nodeAddr, item.GetID())
 		k.DeleteSessionForSubscription(ctx, 0, item.GetID())
-		k.DeleteSessionForAllocation(ctx, 0, accAddr, item.GetID())
 		k.DeleteSessionForInactiveAt(ctx, item.GetInactiveAt(), item.GetID())
 
 		return false
@@ -45,5 +47,6 @@ func (k *Keeper) handleInactiveSessions(ctx sdk.Context) {
 }
 
 func (k *Keeper) BeginBlock(ctx sdk.Context) {
+	k.handleInactivePendingSessions(ctx)
 	k.handleInactiveSessions(ctx)
 }

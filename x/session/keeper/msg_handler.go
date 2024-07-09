@@ -29,11 +29,11 @@ func (k *Keeper) HandleMsgEnd(ctx sdk.Context, msg *v2.MsgEndRequest) (*v2.MsgEn
 		return nil, types.NewErrorUnauthorized(msg.From)
 	}
 
-	statusChangeDelay := k.StatusChangeDelay(ctx)
 	k.DeleteSessionForInactiveAt(ctx, session.GetInactiveAt(), session.GetID())
 
+	delay := k.StatusChangeDelay(ctx)
 	session.SetStatus(v1base.StatusInactivePending)
-	session.SetInactiveAt(ctx.BlockTime().Add(statusChangeDelay))
+	session.SetInactiveAt(ctx.BlockTime().Add(delay))
 	session.SetStatusAt(ctx.BlockTime())
 
 	k.SetSession(ctx, session)
@@ -68,17 +68,21 @@ func (k *Keeper) HandleMsgUpdateDetails(ctx sdk.Context, msg *v3.MsgUpdateDetail
 		}
 	}
 
+	if session.GetStatus().Equal(v1base.StatusActive) {
+		k.DeleteSessionForInactiveAt(ctx, session.GetInactiveAt(), session.GetID())
+	}
+
 	session.SetDownloadBytes(msg.DownloadBytes)
 	session.SetUploadBytes(msg.UploadBytes)
 	session.SetDuration(msg.Duration)
 
-	k.SetSession(ctx, session)
-
 	if session.GetStatus().Equal(v1base.StatusActive) {
-		k.DeleteSessionForInactiveAt(ctx, session.GetInactiveAt(), session.GetID())
+		delay := k.StatusChangeDelay(ctx)
+		session.SetInactiveAt(ctx.BlockTime().Add(delay))
+	}
 
-		statusChangeDelay := k.StatusChangeDelay(ctx)
-		session.SetInactiveAt(ctx.BlockTime().Add(statusChangeDelay))
+	k.SetSession(ctx, session)
+	if session.GetStatus().Equal(v1base.StatusActive) {
 		k.SetSessionForInactiveAt(ctx, session.GetInactiveAt(), session.GetID())
 	}
 
