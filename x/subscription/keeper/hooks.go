@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	v1base "github.com/sentinel-official/hub/v12/types/v1"
-	"github.com/sentinel-official/hub/v12/x/subscription/types/v3"
+	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types/v3"
 )
 
 func (k *Keeper) SessionInactivePreHook(ctx sdk.Context, id uint64) error {
@@ -18,7 +18,7 @@ func (k *Keeper) SessionInactivePreHook(ctx sdk.Context, id uint64) error {
 		return fmt.Errorf("invalid status %s for session %d", item.GetStatus(), item.GetStatus())
 	}
 
-	session, ok := item.(*v3.Session)
+	session, ok := item.(*subscriptiontypes.Session)
 	if !ok {
 		return nil
 	}

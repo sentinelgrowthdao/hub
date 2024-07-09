@@ -8,11 +8,12 @@ import (
 
 	base "github.com/sentinel-official/hub/v12/types"
 	v1base "github.com/sentinel-official/hub/v12/types/v1"
-	sessiontypes "github.com/sentinel-official/hub/v12/x/session/types/v3"
+	v2sessiontypes "github.com/sentinel-official/hub/v12/x/session/types/v2"
+	v3sessiontypes "github.com/sentinel-official/hub/v12/x/session/types/v3"
 )
 
 var (
-	_ sessiontypes.Session = (*Session)(nil)
+	_ v3sessiontypes.Session = (*Session)(nil)
 )
 
 func (m *Session) GetAccAddress() sdk.AccAddress {
@@ -45,6 +46,14 @@ func (m *Session) GetID() uint64            { return m.ID }
 func (m *Session) GetInactiveAt() time.Time { return m.InactiveAt }
 func (m *Session) GetStatus() v1base.Status { return m.Status }
 func (m *Session) GetType()                 {}
+
+func (m *Session) MsgEndRequest(rating uint64) *v2sessiontypes.MsgEndRequest {
+	return &v2sessiontypes.MsgEndRequest{
+		From:   m.AccAddress,
+		ID:     m.ID,
+		Rating: rating,
+	}
+}
 
 func (m *Session) SetDownloadBytes(v sdkmath.Int) { m.DownloadBytes = v }
 func (m *Session) SetDuration(v time.Duration)    { m.Duration = v }

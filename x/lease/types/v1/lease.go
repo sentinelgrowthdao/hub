@@ -20,6 +20,15 @@ func (m *Lease) MsgEndRequest() *MsgEndRequest {
 	}
 }
 
+func (m *Lease) MsgRenewRequest() *MsgRenewRequest {
+	return &MsgRenewRequest{
+		From:  m.ProvAddress,
+		ID:    m.ID,
+		Hours: m.MaxHours,
+		Denom: m.Price.Denom,
+	}
+}
+
 func (m *Lease) RefundAmount() sdk.Coin {
 	hours := m.MaxHours - m.Hours
 	return sdk.NewCoin(

@@ -63,13 +63,7 @@ func (k *Keeper) handleLeasePayouts(ctx sdk.Context) {
 
 func (k *Keeper) handleLeaseRenewals(ctx sdk.Context) {
 	k.IterateLeasesForRenewalAt(ctx, ctx.BlockTime(), func(_ int, item v1.Lease) bool {
-		msg := &v1.MsgRenewRequest{
-			From:  item.ProvAddress,
-			ID:    item.ID,
-			Hours: item.MaxHours,
-			Denom: item.Price.Denom,
-		}
-
+		msg := item.MsgRenewRequest()
 		if _, err := k.HandleMsgRenew(ctx, msg); err != nil {
 			panic(err)
 		}

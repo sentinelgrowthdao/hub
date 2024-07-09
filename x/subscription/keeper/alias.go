@@ -53,5 +53,9 @@ func (k *Keeper) SendCoinFromDepositToModule(ctx sdk.Context, fromAddr sdk.AccAd
 }
 
 func (k *Keeper) SubscriptionInactivePendingPreHook(ctx sdk.Context, id uint64) error {
-	return k.session.SubscriptionInactivePendingPreHook(ctx, id)
+	if err := k.session.SubscriptionInactivePendingPreHook(ctx, id); err != nil {
+		return err
+	}
+
+	return nil
 }

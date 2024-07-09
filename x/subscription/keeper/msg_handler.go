@@ -246,6 +246,8 @@ func (k *Keeper) HandleMsgStartSession(ctx sdk.Context, msg *v3.MsgStartSessionR
 		return nil, types.NewErrorInvalidNodeStatus(nodeAddr, node.Status)
 	}
 
+	// TODO: check lease exists or not
+
 	alloc, found := k.GetAllocation(ctx, subscription.ID, accAddr)
 	if !found {
 		return nil, types.NewErrorAllocationNotFound(subscription.ID, accAddr)
