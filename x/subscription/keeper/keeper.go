@@ -19,7 +19,6 @@ type Keeper struct {
 	cdc              codec.BinaryCodec
 	key              storetypes.StoreKey
 	bank             expected.BankKeeper
-	deposit          expected.DepositKeeper
 	node             expected.NodeKeeper
 	plan             expected.PlanKeeper
 	provider         expected.ProviderKeeper
@@ -37,10 +36,6 @@ func NewKeeper(cdc codec.BinaryCodec, key storetypes.StoreKey, authority, feeCol
 
 func (k *Keeper) WithBankKeeper(keeper expected.BankKeeper) {
 	k.bank = keeper
-}
-
-func (k *Keeper) WithDepositKeeper(keeper expected.DepositKeeper) {
-	k.deposit = keeper
 }
 
 func (k *Keeper) WithProviderKeeper(keeper expected.ProviderKeeper) {
