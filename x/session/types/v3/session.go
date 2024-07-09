@@ -9,7 +9,6 @@ import (
 
 	base "github.com/sentinel-official/hub/v12/types"
 	v1base "github.com/sentinel-official/hub/v12/types/v1"
-	"github.com/sentinel-official/hub/v12/x/session/types/v2"
 )
 
 type Session interface {
@@ -22,7 +21,7 @@ type Session interface {
 	GetStatus() v1base.Status
 	GetType()
 
-	MsgEndRequest(uint64) *v2.MsgEndRequest
+	MsgEndRequest() *MsgEndRequest
 
 	SetDownloadBytes(sdkmath.Int)
 	SetDuration(time.Duration)

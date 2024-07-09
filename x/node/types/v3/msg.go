@@ -12,9 +12,9 @@ var (
 	_ sdk.Msg = (*MsgStartSessionRequest)(nil)
 )
 
-func NewMsgStartSessionRequest(fromAddr sdk.AccAddress, nodeAddr base.NodeAddress, gigabytes, hours int64, denom string) *MsgStartSessionRequest {
+func NewMsgStartSessionRequest(from sdk.AccAddress, nodeAddr base.NodeAddress, gigabytes, hours int64, denom string) *MsgStartSessionRequest {
 	return &MsgStartSessionRequest{
-		From:        fromAddr.String(),
+		From:        from.String(),
 		NodeAddress: nodeAddr.String(),
 		Gigabytes:   gigabytes,
 		Hours:       hours,

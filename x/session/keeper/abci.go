@@ -13,7 +13,7 @@ func (k *Keeper) handleInactivePendingSessions(ctx sdk.Context) {
 			return false
 		}
 
-		msg := item.MsgEndRequest(0)
+		msg := item.MsgEndRequest()
 		if _, err := k.HandleMsgEnd(ctx, msg); err != nil {
 			panic(err)
 		}

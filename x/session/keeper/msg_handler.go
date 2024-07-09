@@ -6,11 +6,10 @@ import (
 	base "github.com/sentinel-official/hub/v12/types"
 	v1base "github.com/sentinel-official/hub/v12/types/v1"
 	"github.com/sentinel-official/hub/v12/x/session/types"
-	"github.com/sentinel-official/hub/v12/x/session/types/v2"
 	"github.com/sentinel-official/hub/v12/x/session/types/v3"
 )
 
-func (k *Keeper) HandleMsgEnd(ctx sdk.Context, msg *v2.MsgEndRequest) (*v2.MsgEndResponse, error) {
+func (k *Keeper) HandleMsgEnd(ctx sdk.Context, msg *v3.MsgEndRequest) (*v3.MsgEndResponse, error) {
 	fromAddr, err := sdk.AccAddressFromBech32(msg.From)
 	if err != nil {
 		return nil, err
@@ -39,7 +38,7 @@ func (k *Keeper) HandleMsgEnd(ctx sdk.Context, msg *v2.MsgEndRequest) (*v2.MsgEn
 	k.SetSession(ctx, session)
 	k.SetSessionForInactiveAt(ctx, session.GetInactiveAt(), session.GetID())
 
-	return &v2.MsgEndResponse{}, nil
+	return &v3.MsgEndResponse{}, nil
 }
 
 func (k *Keeper) HandleMsgUpdateDetails(ctx sdk.Context, msg *v3.MsgUpdateDetailsRequest) (*v3.MsgUpdateDetailsResponse, error) {

@@ -1,7 +1,10 @@
 package v3
 
 import (
+	"time"
+
 	sdkerrors "cosmossdk.io/errors"
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
@@ -11,6 +14,49 @@ import (
 var (
 	_ sdk.Msg = (*MsgUpdateDetailsRequest)(nil)
 )
+
+func NewMsgEndRequest(from sdk.AccAddress, id uint64) *MsgEndRequest {
+	return &MsgEndRequest{
+		From: from.String(),
+		ID:   id,
+	}
+}
+
+func (m *MsgEndRequest) ValidateBasic() error {
+	if m.From == "" {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
+	}
+	if _, err := sdk.AccAddressFromBech32(m.From); err != nil {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
+	}
+	if m.ID == 0 {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "id cannot be zero")
+	}
+
+	return nil
+}
+
+func (m *MsgEndRequest) GetSigners() []sdk.AccAddress {
+	from, err := sdk.AccAddressFromBech32(m.From)
+	if err != nil {
+		panic(err)
+	}
+
+	return []sdk.AccAddress{from.Bytes()}
+}
+
+func NewMsgUpdateDetailsRequest(
+	from base.NodeAddress, id uint64, downloadBytes, uploadBytes sdkmath.Int, duration time.Duration, signature []byte,
+) *MsgUpdateDetailsRequest {
+	return &MsgUpdateDetailsRequest{
+		From:          from.String(),
+		ID:            id,
+		DownloadBytes: downloadBytes,
+		UploadBytes:   uploadBytes,
+		Duration:      duration,
+		Signature:     signature,
+	}
+}
 
 func (m *MsgUpdateDetailsRequest) Proof() *Proof {
 	return &Proof{

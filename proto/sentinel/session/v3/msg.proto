@@ -9,6 +9,11 @@ option go_package = "github.com/sentinel-official/hub/v12/x/session/types/v3";
 option (gogoproto.equal_all) = false;
 option (gogoproto.goproto_getters_all) = false;
 
+message MsgEndRequest {
+  string from = 1;
+  uint64 id = 2 [(gogoproto.customname) = "ID"];
+}
+
 message MsgUpdateDetailsRequest {
   string from = 1;
   uint64 id = 2 [(gogoproto.customname) = "ID"];
@@ -32,10 +37,12 @@ message MsgUpdateParamsRequest {
   sentinel.session.v2.Params params = 2 [(gogoproto.nullable) = false];
 }
 
+message MsgEndResponse {}
 message MsgUpdateDetailsResponse {}
 message MsgUpdateParamsResponse {}
 
 service MsgService {
+  rpc MsgEnd(MsgEndRequest) returns (MsgEndResponse);
   rpc MsgUpdateDetails(MsgUpdateDetailsRequest) returns (MsgUpdateDetailsResponse);
   rpc MsgUpdateParams(MsgUpdateParamsRequest) returns (MsgUpdateParamsResponse);
 }

@@ -47,13 +47,12 @@ func (k *Keeper) HandleMsgStart(ctx sdk.Context, msg *v1.MsgStartRequest) (*v1.M
 		return nil, types.NewErrorPriceNotFound(msg.Denom)
 	}
 
-	lease, found := k.GetLatestLeaseForProviderByNode(ctx, provAddr, nodeAddr)
-	if found {
+	if _, found := k.GetLatestLeaseForProviderByNode(ctx, provAddr, nodeAddr); found {
 		return nil, types.NewErrorDuplicateLease(provAddr, nodeAddr)
 	}
 
 	count := k.GetCount(ctx)
-	lease = v1.Lease{
+	lease := v1.Lease{
 		ID:          count + 1,
 		ProvAddress: provAddr.String(),
 		NodeAddress: nodeAddr.String(),

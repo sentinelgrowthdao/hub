@@ -3,7 +3,6 @@ package v2
 import (
 	"context"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -31,7 +30,6 @@ func (k *msgServer) MsgUpdateDetails(_ context.Context, _ *v2.MsgUpdateDetailsRe
 	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *msgServer) MsgEnd(c context.Context, msg *v2.MsgEndRequest) (*v2.MsgEndResponse, error) {
-	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleMsgEnd(ctx, msg)
+func (k *msgServer) MsgEnd(_ context.Context, _ *v2.MsgEndRequest) (*v2.MsgEndResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
 }

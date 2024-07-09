@@ -17,9 +17,9 @@ var (
 	_ sdk.Msg = (*MsgEndRequest)(nil)
 )
 
-func NewMsgStartRequest(fromAddr base.ProvAddress, nodeAddr base.NodeAddress, hours int64, denom string, renewable bool) *MsgStartRequest {
+func NewMsgStartRequest(from base.ProvAddress, nodeAddr base.NodeAddress, hours int64, denom string, renewable bool) *MsgStartRequest {
 	return &MsgStartRequest{
-		From:        fromAddr.String(),
+		From:        from.String(),
 		NodeAddress: nodeAddr.String(),
 		Hours:       hours,
 		Denom:       denom,
@@ -69,9 +69,9 @@ func (m *MsgStartRequest) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{from.Bytes()}
 }
 
-func NewMsgUpdateDetailsRequest(fromAddr base.ProvAddress, id uint64, renewable bool) *MsgUpdateDetailsRequest {
+func NewMsgUpdateDetailsRequest(from base.ProvAddress, id uint64, renewable bool) *MsgUpdateDetailsRequest {
 	return &MsgUpdateDetailsRequest{
-		From:      fromAddr.String(),
+		From:      from.String(),
 		ID:        id,
 		Renewable: renewable,
 	}
@@ -100,9 +100,9 @@ func (m *MsgUpdateDetailsRequest) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{from.Bytes()}
 }
 
-func NewMsgRenewRequest(fromAddr base.ProvAddress, id uint64, hours int64, denom string) *MsgRenewRequest {
+func NewMsgRenewRequest(from base.ProvAddress, id uint64, hours int64, denom string) *MsgRenewRequest {
 	return &MsgRenewRequest{
-		From:  fromAddr.String(),
+		From:  from.String(),
 		ID:    id,
 		Hours: hours,
 		Denom: denom,
@@ -148,9 +148,9 @@ func (m *MsgRenewRequest) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{from.Bytes()}
 }
 
-func NewMsgEndRequest(fromAddr base.ProvAddress, id uint64) *MsgEndRequest {
+func NewMsgEndRequest(from base.ProvAddress, id uint64) *MsgEndRequest {
 	return &MsgEndRequest{
-		From: fromAddr.String(),
+		From: from.String(),
 		ID:   id,
 	}
 }

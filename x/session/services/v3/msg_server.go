@@ -21,6 +21,11 @@ func NewMsgServiceServer(k keeper.Keeper) v3.MsgServiceServer {
 	return &msgServer{k}
 }
 
+func (k *msgServer) MsgEnd(c context.Context, msg *v3.MsgEndRequest) (*v3.MsgEndResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return k.HandleMsgEnd(ctx, msg)
+}
+
 func (k *msgServer) MsgUpdateDetails(c context.Context, msg *v3.MsgUpdateDetailsRequest) (*v3.MsgUpdateDetailsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
 	return k.HandleMsgUpdateDetails(ctx, msg)
