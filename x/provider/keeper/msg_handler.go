@@ -88,3 +88,12 @@ func (k *Keeper) HandleMsgUpdate(ctx sdk.Context, msg *v2.MsgUpdateRequest) (*v2
 
 	return &v2.MsgUpdateResponse{}, nil
 }
+
+func (k *Keeper) HandleMsgUpdateParams(ctx sdk.Context, msg *v2.MsgUpdateParamsRequest) (*v2.MsgUpdateParamsResponse, error) {
+	if msg.From != k.authority {
+		return nil, types.NewErrorUnauthorized(msg.From)
+	}
+
+	k.SetParams(ctx, msg.Params)
+	return &v2.MsgUpdateParamsResponse{}, nil
+}

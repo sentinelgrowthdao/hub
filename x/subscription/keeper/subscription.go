@@ -11,31 +11,6 @@ import (
 	"github.com/sentinel-official/hub/v12/x/subscription/types/v3"
 )
 
-// SetCount sets the count value in the KVStore.
-func (k *Keeper) SetCount(ctx sdk.Context, count uint64) {
-	key := types.CountKey
-	value := k.cdc.MustMarshal(&protobuf.UInt64Value{Value: count})
-	store := k.Store(ctx)
-	store.Set(key, value)
-}
-
-// GetCount retrieves the count value from the KVStore.
-// If the count value does not exist, it returns 0 as the default.
-func (k *Keeper) GetCount(ctx sdk.Context) uint64 {
-	store := k.Store(ctx)
-	key := types.CountKey
-	value := store.Get(key)
-
-	if value == nil {
-		return 0
-	}
-
-	var count protobuf.UInt64Value
-	k.cdc.MustUnmarshal(value, &count)
-
-	return count.GetValue()
-}
-
 // SetSubscription stores a subscription in the module's KVStore.
 func (k *Keeper) SetSubscription(ctx sdk.Context, subscription v3.Subscription) {
 	store := k.Store(ctx)

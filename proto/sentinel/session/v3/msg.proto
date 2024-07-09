@@ -3,6 +3,7 @@ package sentinel.session.v3;
 
 import "gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
+import "sentinel/session/v2/params.proto";
 
 option go_package = "github.com/sentinel-official/hub/v12/x/session/types/v3";
 option (gogoproto.equal_all) = false;
@@ -26,8 +27,15 @@ message MsgUpdateDetailsRequest {
   bytes signature = 6;
 }
 
+message MsgUpdateParamsRequest {
+  string from = 1;
+  sentinel.session.v2.Params params = 2 [(gogoproto.nullable) = false];
+}
+
 message MsgUpdateDetailsResponse {}
+message MsgUpdateParamsResponse {}
 
 service MsgService {
   rpc MsgUpdateDetails(MsgUpdateDetailsRequest) returns (MsgUpdateDetailsResponse);
+  rpc MsgUpdateParams(MsgUpdateParamsRequest) returns (MsgUpdateParamsResponse);
 }

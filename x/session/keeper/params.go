@@ -5,26 +5,35 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"github.com/sentinel-official/hub/v12/x/session/types"
 	"github.com/sentinel-official/hub/v12/x/session/types/v2"
 )
 
-func (k *Keeper) StatusChangeDelay(ctx sdk.Context) (duration time.Duration) {
-	k.params.Get(ctx, v2.KeyStatusChangeDelay, &duration)
-	return
-}
-
-func (k *Keeper) ProofVerificationEnabled(ctx sdk.Context) (yes bool) {
-	k.params.Get(ctx, v2.KeyProofVerificationEnabled, &yes)
-	return
-}
-
+// SetParams stores the parameters for the module in the KVStore.
 func (k *Keeper) SetParams(ctx sdk.Context, params v2.Params) {
-	k.params.SetParamSet(ctx, &params)
+	store := k.Store(ctx)
+	key := types.ParamsKey
+	value := k.cdc.MustMarshal(&params)
+
+	store.Set(key, value)
 }
 
-func (k *Keeper) GetParams(ctx sdk.Context) v2.Params {
-	return v2.NewParams(
-		k.StatusChangeDelay(ctx),
-		k.ProofVerificationEnabled(ctx),
-	)
+// GetParams retrieves the parameters from the module's KVStore.
+func (k *Keeper) GetParams(ctx sdk.Context) (v v2.Params) {
+	store := k.Store(ctx)
+	key := types.ParamsKey
+	value := store.Get(key)
+
+	k.cdc.MustUnmarshal(value, &v)
+	return v
+}
+
+// ProofVerificationEnabled returns whether proof verification is enabled from the module's parameters.
+func (k *Keeper) ProofVerificationEnabled(ctx sdk.Context) bool {
+	return k.GetParams(ctx).ProofVerificationEnabled
+}
+
+// StatusChangeDelay returns the delay for status changes from the module's parameters.
+func (k *Keeper) StatusChangeDelay(ctx sdk.Context) time.Duration {
+	return k.GetParams(ctx).StatusChangeDelay
 }

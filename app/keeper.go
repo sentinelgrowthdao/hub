@@ -266,8 +266,8 @@ func NewKeepers(
 		encCfg.Codec, keys.KV(swaptypes.StoreKey), k.Subspace(swaptypes.ModuleName), k.AccountKeeper, k.BankKeeper,
 	)
 	k.VPNKeeper = vpnkeeper.NewKeeper(
-		encCfg.Codec, keys.KV(vpntypes.StoreKey), k.ParamsKeeper, k.AccountKeeper,
-		k.BankKeeper, k.DistributionKeeper, authtypes.FeeCollectorName,
+		encCfg.Codec, keys.KV(vpntypes.StoreKey), k.AccountKeeper, k.BankKeeper, k.DistributionKeeper,
+		govModuleAddr, authtypes.FeeCollectorName,
 	)
 
 	// Other keepers

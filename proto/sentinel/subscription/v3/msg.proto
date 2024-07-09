@@ -2,6 +2,7 @@ syntax = "proto3";
 package sentinel.subscription.v3;
 
 import "gogoproto/gogo.proto";
+import "sentinel/subscription/v2/params.proto";
 
 option go_package = "github.com/sentinel-official/hub/v12/x/subscription/types/v3";
 option (gogoproto.equal_all) = false;
@@ -32,14 +33,21 @@ message MsgStartSessionRequest {
   string node_address = 3;
 }
 
+message MsgUpdateParamsRequest {
+  string from = 1;
+  sentinel.subscription.v2.Params params = 2 [(gogoproto.nullable) = false];
+}
+
 message MsgStartResponse {}
 message MsgUpdateDetailsResponse {}
 message MsgRenewResponse {}
 message MsgStartSessionResponse {}
+message MsgUpdateParamsResponse {}
 
 service MsgService {
   rpc MsgStart(MsgStartRequest) returns (MsgStartResponse);
   rpc MsgUpdateDetails(MsgUpdateDetailsRequest) returns (MsgUpdateDetailsResponse);
   rpc MsgRenew(MsgRenewRequest) returns (MsgRenewResponse);
   rpc MsgStartSession(MsgStartSessionRequest) returns (MsgStartSessionResponse);
+  rpc MsgUpdateParams(MsgUpdateParamsRequest) returns (MsgUpdateParamsResponse);
 }

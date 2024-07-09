@@ -5,20 +5,30 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"github.com/sentinel-official/hub/v12/x/subscription/types"
 	"github.com/sentinel-official/hub/v12/x/subscription/types/v2"
 )
 
-func (k *Keeper) StatusChangeDelay(ctx sdk.Context) (duration time.Duration) {
-	k.params.Get(ctx, v2.KeyStatusChangeDelay, &duration)
-	return
-}
-
+// SetParams stores the given parameters in the module's KVStore.
 func (k *Keeper) SetParams(ctx sdk.Context, params v2.Params) {
-	k.params.SetParamSet(ctx, &params)
+	store := k.Store(ctx)
+	key := types.ParamsKey
+	value := k.cdc.MustMarshal(&params)
+
+	store.Set(key, value)
 }
 
-func (k *Keeper) GetParams(ctx sdk.Context) v2.Params {
-	return v2.NewParams(
-		k.StatusChangeDelay(ctx),
-	)
+// GetParams retrieves the parameters from the module's KVStore.
+func (k *Keeper) GetParams(ctx sdk.Context) (v v2.Params) {
+	store := k.Store(ctx)
+	key := types.ParamsKey
+	value := store.Get(key)
+
+	k.cdc.MustUnmarshal(value, &v)
+	return v
+}
+
+// StatusChangeDelay returns the delay for status changes from the module's parameters.
+func (k *Keeper) StatusChangeDelay(ctx sdk.Context) time.Duration {
+	return k.GetParams(ctx).StatusChangeDelay
 }

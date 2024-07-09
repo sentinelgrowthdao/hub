@@ -41,3 +41,8 @@ func (k *msgServer) MsgStartSession(c context.Context, msg *v3.MsgStartSessionRe
 	ctx := sdk.UnwrapSDKContext(c)
 	return k.HandleMsgStartSession(ctx, msg)
 }
+
+func (k *msgServer) MsgUpdateParams(c context.Context, msg *v3.MsgUpdateParamsRequest) (*v3.MsgUpdateParamsResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return k.HandleMsgUpdateParams(ctx, msg)
+}

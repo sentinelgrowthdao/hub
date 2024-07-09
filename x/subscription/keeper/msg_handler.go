@@ -281,3 +281,12 @@ func (k *Keeper) HandleMsgStartSession(ctx sdk.Context, msg *v3.MsgStartSessionR
 
 	return &v3.MsgStartSessionResponse{}, nil
 }
+
+func (k *Keeper) HandleMsgUpdateParams(ctx sdk.Context, msg *v3.MsgUpdateParamsRequest) (*v3.MsgUpdateParamsResponse, error) {
+	if msg.From != k.authority {
+		return nil, types.NewErrorUnauthorized(msg.From)
+	}
+
+	k.SetParams(ctx, msg.Params)
+	return &v3.MsgUpdateParamsResponse{}, nil
+}

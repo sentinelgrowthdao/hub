@@ -11,6 +11,8 @@ const (
 )
 
 var (
+	ParamsKey = []byte{0x00}
+
 	ProviderKeyPrefix         = []byte{0x10}
 	ActiveProviderKeyPrefix   = append(ProviderKeyPrefix, 0x01)
 	InactiveProviderKeyPrefix = append(ProviderKeyPrefix, 0x02)

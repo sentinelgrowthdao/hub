@@ -30,3 +30,8 @@ func (k *msgServer) MsgUpdate(c context.Context, msg *v2.MsgUpdateRequest) (*v2.
 	ctx := sdk.UnwrapSDKContext(c)
 	return k.HandleMsgUpdate(ctx, msg)
 }
+
+func (k *msgServer) MsgUpdateParams(c context.Context, msg *v2.MsgUpdateParamsRequest) (*v2.MsgUpdateParamsResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return k.HandleMsgUpdateParams(ctx, msg)
+}

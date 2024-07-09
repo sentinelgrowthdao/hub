@@ -13,7 +13,8 @@ const (
 )
 
 var (
-	CountKey = []byte{0x00}
+	CountKey  = []byte{0x00}
+	ParamsKey = []byte{0x01}
 
 	SubscriptionKeyPrefix              = []byte{0x10}
 	SubscriptionForAccountKeyPrefix    = []byte{0x11}

@@ -8,25 +8,23 @@ import (
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 
 	"github.com/sentinel-official/hub/v12/x/provider/expected"
 	"github.com/sentinel-official/hub/v12/x/provider/types"
-	"github.com/sentinel-official/hub/v12/x/provider/types/v2"
 )
 
 type Keeper struct {
+	authority    string
 	cdc          codec.BinaryCodec
 	key          storetypes.StoreKey
-	params       paramstypes.Subspace
 	distribution expected.DistributionKeeper
 }
 
-func NewKeeper(cdc codec.BinaryCodec, key storetypes.StoreKey, params paramstypes.Subspace) Keeper {
+func NewKeeper(cdc codec.BinaryCodec, key storetypes.StoreKey, authority string) Keeper {
 	return Keeper{
-		cdc:    cdc,
-		key:    key,
-		params: params.WithKeyTable(v2.ParamsKeyTable()),
+		authority: authority,
+		cdc:       cdc,
+		key:       key,
 	}
 }
 
