@@ -12,6 +12,8 @@ import (
 
 func (k *Keeper) handleInactiveLeases(ctx sdk.Context) {
 	k.IterateLeasesForInactiveAt(ctx, ctx.BlockTime(), func(_ int, item v1.Lease) bool {
+		k.DeleteLeaseForInactiveAt(ctx, item.InactiveAt, item.ID)
+
 		if err := k.LeaseInactivePreHook(ctx, item.ID); err != nil {
 			panic(err)
 		}
@@ -30,7 +32,6 @@ func (k *Keeper) handleInactiveLeases(ctx sdk.Context) {
 		k.DeleteLeaseForNode(ctx, nodeAddr, item.ID)
 		k.DeleteLeaseForProvider(ctx, provAddr, item.ID)
 		k.DeleteLeaseForProviderByNode(ctx, provAddr, nodeAddr, item.ID)
-		k.DeleteLeaseForInactiveAt(ctx, item.InactiveAt, item.ID)
 		k.DeleteLeaseForPayoutAt(ctx, item.PayoutAt, item.ID)
 		k.DeleteLeaseForRenewalAt(ctx, item.RenewalAt, item.ID)
 
@@ -44,11 +45,6 @@ func (k *Keeper) handleLeasePayouts(ctx sdk.Context) {
 	k.IterateLeasesForPayoutAt(ctx, ctx.BlockTime(), func(_ int, item v1.Lease) (stop bool) {
 		k.DeleteLeaseForPayoutAt(ctx, item.PayoutAt, item.ID)
 
-		nodeAddr, err := base.NodeAddressFromBech32(item.NodeAddress)
-		if err != nil {
-			panic(err)
-		}
-
 		provAddr, err := base.ProvAddressFromBech32(item.ProvAddress)
 		if err != nil {
 			panic(err)
@@ -56,6 +52,11 @@ func (k *Keeper) handleLeasePayouts(ctx sdk.Context) {
 
 		reward := baseutils.GetProportionOfCoin(item.Price, share)
 		if err := k.SendCoinFromDepositToModule(ctx, provAddr.Bytes(), k.feeCollectorName, reward); err != nil {
+			panic(err)
+		}
+
+		nodeAddr, err := base.NodeAddressFromBech32(item.NodeAddress)
+		if err != nil {
 			panic(err)
 		}
 

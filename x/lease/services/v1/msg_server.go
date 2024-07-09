@@ -33,11 +33,16 @@ func (k *msgServer) MsgUpdateDetails(c context.Context, msg *v1.MsgUpdateDetails
 	return k.HandleMsgUpdateDetails(ctx, msg)
 }
 
-func (k *msgServer) MsgRenew(_ context.Context, _ *v1.MsgRenewRequest) (*v1.MsgRenewResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "")
-}
-
 func (k *msgServer) MsgEnd(c context.Context, msg *v1.MsgEndRequest) (*v1.MsgEndResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
 	return k.HandleMsgEnd(ctx, msg)
+}
+
+func (k *msgServer) MsgUpdateParams(c context.Context, msg *v1.MsgUpdateParamsRequest) (*v1.MsgUpdateParamsResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return k.HandleMsgUpdateParams(ctx, msg)
+}
+
+func (k *msgServer) MsgRenew(_ context.Context, _ *v1.MsgRenewRequest) (*v1.MsgRenewResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
 }

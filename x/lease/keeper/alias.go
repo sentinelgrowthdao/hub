@@ -4,14 +4,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func (k *Keeper) FundCommunityPool(ctx sdk.Context, fromAddr sdk.AccAddress, coin sdk.Coin) error {
-	if coin.IsZero() {
-		return nil
-	}
-
-	return k.distribution.FundCommunityPool(ctx, sdk.NewCoins(coin), fromAddr)
-}
-
 func (k *Keeper) AddDeposit(ctx sdk.Context, addr sdk.AccAddress, coin sdk.Coin) error {
 	if coin.IsZero() {
 		return nil

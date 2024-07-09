@@ -12,29 +12,7 @@ import (
 	"github.com/sentinel-official/hub/v12/x/lease/types/v1"
 )
 
-func (k *Keeper) SetCount(ctx sdk.Context, count uint64) {
-	store := k.Store(ctx)
-	key := types.CountKey
-	value := k.cdc.MustMarshal(&protobuf.UInt64Value{Value: count})
-
-	store.Set(key, value)
-}
-
-func (k *Keeper) GetCount(ctx sdk.Context) uint64 {
-	store := k.Store(ctx)
-	key := types.CountKey
-	value := store.Get(key)
-
-	if value == nil {
-		return 0
-	}
-
-	var count protobuf.UInt64Value
-	k.cdc.MustUnmarshal(value, &count)
-
-	return count.GetValue()
-}
-
+// SetLease stores a lease in the module's KVStore.
 func (k *Keeper) SetLease(ctx sdk.Context, lease v1.Lease) {
 	store := k.Store(ctx)
 	key := types.LeaseKey(lease.ID)
@@ -43,6 +21,7 @@ func (k *Keeper) SetLease(ctx sdk.Context, lease v1.Lease) {
 	store.Set(key, value)
 }
 
+// HasLease checks if a lease exists in the module's KVStore based on the lease ID.
 func (k *Keeper) HasLease(ctx sdk.Context, id uint64) bool {
 	store := k.Store(ctx)
 	key := types.LeaseKey(id)
@@ -50,6 +29,8 @@ func (k *Keeper) HasLease(ctx sdk.Context, id uint64) bool {
 	return store.Has(key)
 }
 
+// GetLease retrieves a lease from the module's KVStore based on the lease ID.
+// If the lease exists, it returns the lease and 'found' as true; otherwise, it returns 'found' as false.
 func (k *Keeper) GetLease(ctx sdk.Context, id uint64) (lease v1.Lease, found bool) {
 	store := k.Store(ctx)
 	key := types.LeaseKey(id)
@@ -63,6 +44,7 @@ func (k *Keeper) GetLease(ctx sdk.Context, id uint64) (lease v1.Lease, found boo
 	return lease, true
 }
 
+// DeleteLease removes a lease from the module's KVStore based on the lease ID.
 func (k *Keeper) DeleteLease(ctx sdk.Context, id uint64) {
 	store := k.Store(ctx)
 	key := types.LeaseKey(id)
@@ -70,6 +52,7 @@ func (k *Keeper) DeleteLease(ctx sdk.Context, id uint64) {
 	store.Delete(key)
 }
 
+// GetLeases retrieves all leases stored in the module's KVStore.
 func (k *Keeper) GetLeases(ctx sdk.Context) (items []v1.Lease) {
 	store := k.Store(ctx)
 	iterator := sdk.KVStorePrefixIterator(store, types.LeaseKeyPrefix)
@@ -86,6 +69,8 @@ func (k *Keeper) GetLeases(ctx sdk.Context) (items []v1.Lease) {
 	return items
 }
 
+// IterateLeases iterates over all leases stored in the module's KVStore and calls the provided function for each lease.
+// The iteration stops when the provided function returns 'true'.
 func (k *Keeper) IterateLeases(ctx sdk.Context, fn func(index int, item v1.Lease) (stop bool)) {
 	store := k.Store(ctx)
 	iterator := sdk.KVStorePrefixIterator(store, types.LeaseKeyPrefix)
@@ -103,6 +88,7 @@ func (k *Keeper) IterateLeases(ctx sdk.Context, fn func(index int, item v1.Lease
 	}
 }
 
+// SetLeaseForNode stores a lease for a node in the module's KVStore.
 func (k *Keeper) SetLeaseForNode(ctx sdk.Context, addr base.NodeAddress, id uint64) {
 	store := k.Store(ctx)
 	key := types.LeaseForNodeKey(addr, id)
@@ -111,6 +97,7 @@ func (k *Keeper) SetLeaseForNode(ctx sdk.Context, addr base.NodeAddress, id uint
 	store.Set(key, value)
 }
 
+// HasLeaseForNode checks if a lease for a node exists in the module's KVStore based on the node address and lease ID.
 func (k *Keeper) HasLeaseForNode(ctx sdk.Context, addr base.NodeAddress, id uint64) bool {
 	store := k.Store(ctx)
 	key := types.LeaseForNodeKey(addr, id)
@@ -118,6 +105,7 @@ func (k *Keeper) HasLeaseForNode(ctx sdk.Context, addr base.NodeAddress, id uint
 	return store.Has(key)
 }
 
+// DeleteLeaseForNode removes a lease for a node from the module's KVStore based on the node address and lease ID.
 func (k *Keeper) DeleteLeaseForNode(ctx sdk.Context, addr base.NodeAddress, id uint64) {
 	store := k.Store(ctx)
 	key := types.LeaseForNodeKey(addr, id)
@@ -125,6 +113,7 @@ func (k *Keeper) DeleteLeaseForNode(ctx sdk.Context, addr base.NodeAddress, id u
 	store.Delete(key)
 }
 
+// SetLeaseForProvider stores a lease for a provider in the module's KVStore.
 func (k *Keeper) SetLeaseForProvider(ctx sdk.Context, addr base.ProvAddress, id uint64) {
 	store := k.Store(ctx)
 	key := types.LeaseForProviderKey(addr, id)
@@ -133,6 +122,7 @@ func (k *Keeper) SetLeaseForProvider(ctx sdk.Context, addr base.ProvAddress, id 
 	store.Set(key, value)
 }
 
+// HasLeaseForProvider checks if a lease for a provider exists in the module's KVStore based on the provider address and lease ID.
 func (k *Keeper) HasLeaseForProvider(ctx sdk.Context, addr base.ProvAddress, id uint64) bool {
 	store := k.Store(ctx)
 	key := types.LeaseForProviderKey(addr, id)
@@ -140,6 +130,7 @@ func (k *Keeper) HasLeaseForProvider(ctx sdk.Context, addr base.ProvAddress, id 
 	return store.Has(key)
 }
 
+// DeleteLeaseForProvider removes a lease for a provider from the module's KVStore based on the provider address and lease ID.
 func (k *Keeper) DeleteLeaseForProvider(ctx sdk.Context, addr base.ProvAddress, id uint64) {
 	store := k.Store(ctx)
 	key := types.LeaseForProviderKey(addr, id)
@@ -147,6 +138,7 @@ func (k *Keeper) DeleteLeaseForProvider(ctx sdk.Context, addr base.ProvAddress, 
 	store.Delete(key)
 }
 
+// SetLeaseForProviderByNode stores a lease for a provider by node in the module's KVStore.
 func (k *Keeper) SetLeaseForProviderByNode(ctx sdk.Context, provAddr base.ProvAddress, nodeAddr base.NodeAddress, id uint64) {
 	store := k.Store(ctx)
 	key := types.LeaseForProviderByNodeKey(provAddr, nodeAddr, id)
@@ -155,6 +147,7 @@ func (k *Keeper) SetLeaseForProviderByNode(ctx sdk.Context, provAddr base.ProvAd
 	store.Set(key, value)
 }
 
+// HasLeaseForProviderByNode checks if a lease for a provider by node exists in the module's KVStore based on the provider and node addresses and lease ID.
 func (k *Keeper) HasLeaseForProviderByNode(ctx sdk.Context, provAddr base.ProvAddress, nodeAddr base.NodeAddress, id uint64) bool {
 	store := k.Store(ctx)
 	key := types.LeaseForProviderByNodeKey(provAddr, nodeAddr, id)
@@ -162,6 +155,7 @@ func (k *Keeper) HasLeaseForProviderByNode(ctx sdk.Context, provAddr base.ProvAd
 	return store.Has(key)
 }
 
+// DeleteLeaseForProviderByNode removes a lease for a provider by node from the module's KVStore based on the provider and node addresses and lease ID.
 func (k *Keeper) DeleteLeaseForProviderByNode(ctx sdk.Context, provAddr base.ProvAddress, nodeAddr base.NodeAddress, id uint64) {
 	store := k.Store(ctx)
 	key := types.LeaseForProviderByNodeKey(provAddr, nodeAddr, id)
@@ -169,6 +163,8 @@ func (k *Keeper) DeleteLeaseForProviderByNode(ctx sdk.Context, provAddr base.Pro
 	store.Delete(key)
 }
 
+// GetLatestLeaseForProviderByNode retrieves the latest lease for a provider by node from the module's KVStore.
+// If the lease exists, it returns the lease and 'found' as true; otherwise, it returns 'found' as false.
 func (k *Keeper) GetLatestLeaseForProviderByNode(ctx sdk.Context, provAddr base.ProvAddress, nodeAddr base.NodeAddress) (lease v1.Lease, found bool) {
 	store := k.Store(ctx)
 	iterator := sdk.KVStoreReversePrefixIterator(store, types.GetLeaseForProviderByNodeKeyPrefix(provAddr, nodeAddr))
@@ -185,6 +181,7 @@ func (k *Keeper) GetLatestLeaseForProviderByNode(ctx sdk.Context, provAddr base.
 	return lease, found
 }
 
+// SetLeaseForInactiveAt stores a lease for inactive status at a specific time in the module's KVStore.
 func (k *Keeper) SetLeaseForInactiveAt(ctx sdk.Context, at time.Time, id uint64) {
 	if at.IsZero() {
 		return
@@ -197,6 +194,7 @@ func (k *Keeper) SetLeaseForInactiveAt(ctx sdk.Context, at time.Time, id uint64)
 	store.Set(key, value)
 }
 
+// DeleteLeaseForInactiveAt removes a lease for inactive status at a specific time from the module's KVStore.
 func (k *Keeper) DeleteLeaseForInactiveAt(ctx sdk.Context, at time.Time, id uint64) {
 	if at.IsZero() {
 		return
@@ -208,6 +206,8 @@ func (k *Keeper) DeleteLeaseForInactiveAt(ctx sdk.Context, at time.Time, id uint
 	store.Delete(key)
 }
 
+// IterateLeasesForInactiveAt iterates over all leases for inactive status at a specific time stored in the module's KVStore and calls the provided function for each lease.
+// The iteration stops when the provided function returns 'true'.
 func (k *Keeper) IterateLeasesForInactiveAt(ctx sdk.Context, at time.Time, fn func(index int, item v1.Lease) (stop bool)) {
 	store := k.Store(ctx)
 	iterator := store.Iterator(types.LeaseForInactiveAtKeyPrefix, sdk.PrefixEndBytes(types.GetLeaseForInactiveAtKeyPrefix(at)))
@@ -227,6 +227,7 @@ func (k *Keeper) IterateLeasesForInactiveAt(ctx sdk.Context, at time.Time, fn fu
 	}
 }
 
+// SetLeaseForPayoutAt stores a lease for payout at a specific time in the module's KVStore.
 func (k *Keeper) SetLeaseForPayoutAt(ctx sdk.Context, at time.Time, id uint64) {
 	if at.IsZero() {
 		return
@@ -239,6 +240,7 @@ func (k *Keeper) SetLeaseForPayoutAt(ctx sdk.Context, at time.Time, id uint64) {
 	store.Set(key, value)
 }
 
+// DeleteLeaseForPayoutAt removes a lease for payout at a specific time from the module's KVStore.
 func (k *Keeper) DeleteLeaseForPayoutAt(ctx sdk.Context, at time.Time, id uint64) {
 	if at.IsZero() {
 		return
@@ -250,6 +252,8 @@ func (k *Keeper) DeleteLeaseForPayoutAt(ctx sdk.Context, at time.Time, id uint64
 	store.Delete(key)
 }
 
+// IterateLeasesForPayoutAt iterates over all leases for payout at a specific time stored in the module's KVStore and calls the provided function for each lease.
+// The iteration stops when the provided function returns 'true'.
 func (k *Keeper) IterateLeasesForPayoutAt(ctx sdk.Context, at time.Time, fn func(index int, item v1.Lease) (stop bool)) {
 	store := k.Store(ctx)
 	iterator := store.Iterator(types.LeaseForPayoutAtKeyPrefix, sdk.PrefixEndBytes(types.GetLeaseForPayoutAtKeyPrefix(at)))
@@ -269,6 +273,7 @@ func (k *Keeper) IterateLeasesForPayoutAt(ctx sdk.Context, at time.Time, fn func
 	}
 }
 
+// SetLeaseForRenewalAt stores a lease for renewal at a specific time in the module's KVStore.
 func (k *Keeper) SetLeaseForRenewalAt(ctx sdk.Context, at time.Time, id uint64) {
 	if at.IsZero() {
 		return
@@ -281,6 +286,7 @@ func (k *Keeper) SetLeaseForRenewalAt(ctx sdk.Context, at time.Time, id uint64) 
 	store.Set(key, value)
 }
 
+// DeleteLeaseForRenewalAt removes a lease for renewal at a specific time from the module's KVStore.
 func (k *Keeper) DeleteLeaseForRenewalAt(ctx sdk.Context, at time.Time, id uint64) {
 	if at.IsZero() {
 		return
@@ -292,6 +298,8 @@ func (k *Keeper) DeleteLeaseForRenewalAt(ctx sdk.Context, at time.Time, id uint6
 	store.Delete(key)
 }
 
+// IterateLeasesForRenewalAt iterates over all leases for renewal at a specific time stored in the module's KVStore and calls the provided function for each lease.
+// The iteration stops when the provided function returns 'true'.
 func (k *Keeper) IterateLeasesForRenewalAt(ctx sdk.Context, at time.Time, fn func(index int, item v1.Lease) (stop bool)) {
 	store := k.Store(ctx)
 	iterator := store.Iterator(types.LeaseForRenewalAtKeyPrefix, sdk.PrefixEndBytes(types.GetLeaseForRenewalAtKeyPrefix(at)))

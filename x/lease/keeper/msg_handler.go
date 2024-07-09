@@ -21,11 +21,13 @@ func (k *Keeper) HandleMsgStart(ctx sdk.Context, msg *v1.MsgStartRequest) (*v1.M
 		return nil, err
 	}
 
-	if found := k.provider.HasProvider(ctx, provAddr); !found {
+	provider, found := k.provider.GetProvider(ctx, provAddr)
+	if !found {
 		return nil, types.NewErrorProviderNotFound(provAddr)
 	}
-
-	// TODO: check provider status?
+	if !provider.Status.Equal(v1base.StatusActive) {
+		return nil, types.NewErrorInvalidProviderStatus(provAddr, provider.Status)
+	}
 
 	nodeAddr, err := base.NodeAddressFromBech32(msg.NodeAddress)
 	if err != nil {
@@ -40,14 +42,14 @@ func (k *Keeper) HandleMsgStart(ctx sdk.Context, msg *v1.MsgStartRequest) (*v1.M
 		return nil, types.NewErrorInvalidNodeStatus(nodeAddr, node.Status)
 	}
 
-	lease, found := k.GetLatestLeaseForProviderByNode(ctx, provAddr, nodeAddr)
-	if found {
-		return nil, types.NewErrorDuplicateLease(provAddr, nodeAddr)
-	}
-
 	price, found := node.HourlyPrice(msg.Denom)
 	if !found {
 		return nil, types.NewErrorPriceNotFound(msg.Denom)
+	}
+
+	lease, found := k.GetLatestLeaseForProviderByNode(ctx, provAddr, nodeAddr)
+	if found {
+		return nil, types.NewErrorDuplicateLease(provAddr, nodeAddr)
 	}
 
 	count := k.GetCount(ctx)
@@ -133,20 +135,18 @@ func (k *Keeper) HandleMsgRenew(ctx sdk.Context, msg *v1.MsgRenewRequest) (*v1.M
 		return nil, types.NewErrorUnauthorized(msg.From)
 	}
 
-	k.DeleteLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
-	k.DeleteLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
-
 	provAddr, err := base.ProvAddressFromBech32(lease.ProvAddress)
 	if err != nil {
 		return nil, err
 	}
 
-	amount := lease.RefundAmount()
-	if err := k.SubtractDeposit(ctx, provAddr.Bytes(), amount); err != nil {
-		return nil, err
+	provider, found := k.provider.GetProvider(ctx, provAddr)
+	if !found {
+		return nil, types.NewErrorProviderNotFound(provAddr)
 	}
-
-	// TODO: check provider status?
+	if !provider.Status.Equal(v1base.StatusActive) {
+		return nil, types.NewErrorInvalidProviderStatus(provAddr, provider.Status)
+	}
 
 	nodeAddr, err := base.NodeAddressFromBech32(lease.NodeAddress)
 	if err != nil {
@@ -165,6 +165,15 @@ func (k *Keeper) HandleMsgRenew(ctx sdk.Context, msg *v1.MsgRenewRequest) (*v1.M
 	if !found {
 		return nil, types.NewErrorPriceNotFound(msg.Denom)
 	}
+
+	amount := lease.RefundAmount()
+	if err := k.SubtractDeposit(ctx, provAddr.Bytes(), amount); err != nil {
+		return nil, err
+	}
+
+	k.DeleteLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
+	k.DeleteLeaseForPayoutAt(ctx, lease.PayoutAt, lease.ID)
+	k.DeleteLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
 
 	renewable := lease.IsRenewable()
 	lease = v1.Lease{
@@ -194,9 +203,6 @@ func (k *Keeper) HandleMsgRenew(ctx sdk.Context, msg *v1.MsgRenewRequest) (*v1.M
 	}
 
 	k.SetLease(ctx, lease)
-	k.SetLeaseForNode(ctx, nodeAddr, lease.ID)
-	k.SetLeaseForProvider(ctx, provAddr, lease.ID)
-	k.SetLeaseForProviderByNode(ctx, provAddr, nodeAddr, lease.ID)
 	k.SetLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
 	k.SetLeaseForPayoutAt(ctx, lease.PayoutAt, lease.ID)
 	k.SetLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
@@ -241,4 +247,13 @@ func (k *Keeper) HandleMsgEnd(ctx sdk.Context, msg *v1.MsgEndRequest) (*v1.MsgEn
 	k.DeleteLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
 
 	return &v1.MsgEndResponse{}, nil
+}
+
+func (k *Keeper) HandleMsgUpdateParams(ctx sdk.Context, msg *v1.MsgUpdateParamsRequest) (*v1.MsgUpdateParamsResponse, error) {
+	if msg.From != k.authority {
+		return nil, types.NewErrorUnauthorized(msg.From)
+	}
+
+	k.SetParams(ctx, msg.Params)
+	return &v1.MsgUpdateParamsResponse{}, nil
 }

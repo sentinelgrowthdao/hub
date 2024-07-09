@@ -10,14 +10,15 @@ import (
 var (
 	ErrorInvalidMessage = sdkerrors.Register(ModuleName, 101, "invalid message")
 
-	ErrorDuplicateLease    = sdkerrors.Register(ModuleName, 201, "duplicate lease")
-	ErrorInvalidHours      = sdkerrors.Register(ModuleName, 202, "invalid hours")
-	ErrorInvalidNodeStatus = sdkerrors.Register(ModuleName, 203, "invalid node status")
-	ErrorLeaseNotFound     = sdkerrors.Register(ModuleName, 203, "lease not found")
-	ErrorNodeNotFound      = sdkerrors.Register(ModuleName, 204, "node not found")
-	ErrorPriceNotFound     = sdkerrors.Register(ModuleName, 205, "price not found")
-	ErrorProviderNotFound  = sdkerrors.Register(ModuleName, 206, "provider not found")
-	ErrorUnauthorized      = sdkerrors.Register(ModuleName, 207, "unauthorized")
+	ErrorDuplicateLease        = sdkerrors.Register(ModuleName, 201, "duplicate lease")
+	ErrorInvalidHours          = sdkerrors.Register(ModuleName, 202, "invalid hours")
+	ErrorInvalidNodeStatus     = sdkerrors.Register(ModuleName, 203, "invalid node status")
+	ErrorInvalidProviderStatus = sdkerrors.Register(ModuleName, 204, "invalid provider status")
+	ErrorLeaseNotFound         = sdkerrors.Register(ModuleName, 205, "lease not found")
+	ErrorNodeNotFound          = sdkerrors.Register(ModuleName, 206, "node not found")
+	ErrorPriceNotFound         = sdkerrors.Register(ModuleName, 207, "price not found")
+	ErrorProviderNotFound      = sdkerrors.Register(ModuleName, 208, "provider not found")
+	ErrorUnauthorized          = sdkerrors.Register(ModuleName, 209, "unauthorized")
 )
 
 // NewErrorDuplicateLease returns an error indicating that a lease for the specified provider and node already exists.
@@ -33,6 +34,11 @@ func NewErrorInvalidHours(hours int64) error {
 // NewErrorInvalidNodeStatus returns an error indicating that the provided status is invalid for the given node.
 func NewErrorInvalidNodeStatus(addr base.NodeAddress, status v1base.Status) error {
 	return sdkerrors.Wrapf(ErrorInvalidNodeStatus, "invalid status %s for node %s", status, addr)
+}
+
+// NewErrorInvalidProviderStatus returns an error indicating that the provided status is invalid for the given provider.
+func NewErrorInvalidProviderStatus(addr base.ProvAddress, status v1base.Status) error {
+	return sdkerrors.Wrapf(ErrorInvalidProviderStatus, "invalid status %s for provider %s", status, addr)
 }
 
 // NewErrorLeaseNotFound returns an error indicating that the specified lease does not exist.

@@ -7,7 +7,7 @@ import (
 )
 
 func (k *Keeper) MintCoin(ctx sdk.Context, coin sdk.Coin) error {
-	if !coin.IsPositive() {
+	if coin.IsZero() {
 		return nil
 	}
 
@@ -15,7 +15,7 @@ func (k *Keeper) MintCoin(ctx sdk.Context, coin sdk.Coin) error {
 }
 
 func (k *Keeper) SendCoinFromModuleToAccount(ctx sdk.Context, address sdk.AccAddress, coin sdk.Coin) error {
-	if !coin.IsPositive() {
+	if coin.IsZero() {
 		return nil
 	}
 

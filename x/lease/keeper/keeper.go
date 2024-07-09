@@ -8,38 +8,32 @@ import (
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 
 	"github.com/sentinel-official/hub/v12/x/lease/expected"
 	"github.com/sentinel-official/hub/v12/x/lease/types"
-	"github.com/sentinel-official/hub/v12/x/lease/types/v1"
 )
 
 type Keeper struct {
+	authority        string
 	feeCollectorName string
 	cdc              codec.BinaryCodec
 	key              storetypes.StoreKey
-	params           paramstypes.Subspace
 	deposit          expected.DepositKeeper
-	distribution     expected.DistributionKeeper
 	node             expected.NodeKeeper
 	provider         expected.ProviderKeeper
 }
 
-func NewKeeper(cdc codec.BinaryCodec, key storetypes.StoreKey, params paramstypes.Subspace) Keeper {
+func NewKeeper(cdc codec.BinaryCodec, key storetypes.StoreKey, authority, feeCollectorName string) Keeper {
 	return Keeper{
-		cdc:    cdc,
-		key:    key,
-		params: params.WithKeyTable(v1.ParamsKeyTable()),
+		authority:        authority,
+		feeCollectorName: feeCollectorName,
+		cdc:              cdc,
+		key:              key,
 	}
 }
 
 func (k *Keeper) WithDepositKeeper(keeper expected.DepositKeeper) {
 	k.deposit = keeper
-}
-
-func (k *Keeper) WithDistributionKeeper(keeper expected.DistributionKeeper) {
-	k.distribution = keeper
 }
 
 func (k *Keeper) WithNodeKeeper(keeper expected.NodeKeeper) {
