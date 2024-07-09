@@ -113,6 +113,27 @@ func (k *Keeper) DeleteLeaseForNode(ctx sdk.Context, addr base.NodeAddress, id u
 	store.Delete(key)
 }
 
+// IterateLeasesForNode iterates over all leases for a specific node and calls the provided function for each lease.
+// The iteration stops when the provided function returns 'true'.
+func (k *Keeper) IterateLeasesForNode(ctx sdk.Context, addr base.NodeAddress, fn func(index int, item v1.Lease) (stop bool)) {
+	store := k.Store(ctx)
+	iterator := store.Iterator(types.LeaseForNodeKeyPrefix, sdk.PrefixEndBytes(types.GetLeaseForNodeKeyPrefix(addr)))
+
+	defer iterator.Close()
+
+	for i := 0; iterator.Valid(); iterator.Next() {
+		item, found := k.GetLease(ctx, types.IDFromLeaseForNodeKey(iterator.Key()))
+		if !found {
+			panic(fmt.Errorf("lease for node key %X does not exist", iterator.Key()))
+		}
+
+		if stop := fn(i, item); stop {
+			break
+		}
+		i++
+	}
+}
+
 // SetLeaseForProvider stores a lease for a provider in the module's KVStore.
 func (k *Keeper) SetLeaseForProvider(ctx sdk.Context, addr base.ProvAddress, id uint64) {
 	store := k.Store(ctx)
@@ -136,6 +157,27 @@ func (k *Keeper) DeleteLeaseForProvider(ctx sdk.Context, addr base.ProvAddress, 
 	key := types.LeaseForProviderKey(addr, id)
 
 	store.Delete(key)
+}
+
+// IterateLeasesForProvider iterates over all leases for a specific provider and calls the provided function for each lease.
+// The iteration stops when the provided function returns 'true'.
+func (k *Keeper) IterateLeasesForProvider(ctx sdk.Context, addr base.ProvAddress, fn func(index int, item v1.Lease) (stop bool)) {
+	store := k.Store(ctx)
+	iterator := store.Iterator(types.LeaseForProviderKeyPrefix, sdk.PrefixEndBytes(types.GetLeaseForProviderKeyPrefix(addr)))
+
+	defer iterator.Close()
+
+	for i := 0; iterator.Valid(); iterator.Next() {
+		item, found := k.GetLease(ctx, types.IDFromLeaseForProviderKey(iterator.Key()))
+		if !found {
+			panic(fmt.Errorf("lease for provider key %X does not exist", iterator.Key()))
+		}
+
+		if stop := fn(i, item); stop {
+			break
+		}
+		i++
+	}
 }
 
 // SetLeaseForProviderByNode stores a lease for a provider by node in the module's KVStore.

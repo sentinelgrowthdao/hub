@@ -37,5 +37,12 @@ func (k *Keeper) SendCoinFromDepositToModule(ctx sdk.Context, fromAddr sdk.AccAd
 }
 
 func (k *Keeper) LeaseInactivePreHook(ctx sdk.Context, id uint64) error {
+	if err := k.plan.LeaseInactivePreHook(ctx, id); err != nil {
+		return err
+	}
+	if err := k.session.LeaseInactivePreHook(ctx, id); err != nil {
+		return err
+	}
+
 	return nil
 }

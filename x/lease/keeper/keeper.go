@@ -20,7 +20,9 @@ type Keeper struct {
 	key              storetypes.StoreKey
 	deposit          expected.DepositKeeper
 	node             expected.NodeKeeper
+	plan             expected.PlanKeeper
 	provider         expected.ProviderKeeper
+	session          expected.SessionKeeper
 }
 
 func NewKeeper(cdc codec.BinaryCodec, key storetypes.StoreKey, authority, feeCollectorName string) Keeper {
@@ -40,8 +42,16 @@ func (k *Keeper) WithNodeKeeper(keeper expected.NodeKeeper) {
 	k.node = keeper
 }
 
+func (k *Keeper) WithPlanKeeper(keeper expected.PlanKeeper) {
+	k.plan = keeper
+}
+
 func (k *Keeper) WithProviderKeeper(keeper expected.ProviderKeeper) {
 	k.provider = keeper
+}
+
+func (k *Keeper) WithSessionKeeper(keeper expected.SessionKeeper) {
+	k.session = keeper
 }
 
 func (k *Keeper) Logger(ctx sdk.Context) log.Logger {

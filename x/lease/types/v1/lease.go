@@ -13,6 +13,13 @@ func (m *Lease) IsRenewable() bool {
 	return !m.RenewalAt.IsZero()
 }
 
+func (m *Lease) MsgEndRequest() *MsgEndRequest {
+	return &MsgEndRequest{
+		From: m.ProvAddress,
+		ID:   m.ID,
+	}
+}
+
 func (m *Lease) RefundAmount() sdk.Coin {
 	hours := m.MaxHours - m.Hours
 	return sdk.NewCoin(

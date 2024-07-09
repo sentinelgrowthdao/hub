@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	base "github.com/sentinel-official/hub/v12/types"
-	v1 "github.com/sentinel-official/hub/v12/x/lease/types/v1"
+	"github.com/sentinel-official/hub/v12/x/lease/types/v1"
 )
 
 func txStart() *cobra.Command {

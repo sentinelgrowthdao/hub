@@ -79,6 +79,28 @@ func LeaseForRenewalAtKey(at time.Time, id uint64) []byte {
 	return append(GetLeaseForRenewalAtKeyPrefix(at), sdk.Uint64ToBigEndian(id)...)
 }
 
+func IDFromLeaseForNodeKey(key []byte) uint64 {
+	// prefix (1 bytes) | addrLen (1 byte) | addr (addrLen bytes) | id (8 bytes)
+
+	addrLen := int(key[1])
+	if len(key) != 10+addrLen {
+		panic(fmt.Errorf("invalid key length %d; expected %d", len(key), 10+addrLen))
+	}
+
+	return sdk.BigEndianToUint64(key[2+addrLen:])
+}
+
+func IDFromLeaseForProviderKey(key []byte) uint64 {
+	// prefix (1 bytes) | addrLen (1 byte) | addr (addrLen bytes) | id (8 bytes)
+
+	addrLen := int(key[1])
+	if len(key) != 10+addrLen {
+		panic(fmt.Errorf("invalid key length %d; expected %d", len(key), 10+addrLen))
+	}
+
+	return sdk.BigEndianToUint64(key[2+addrLen:])
+}
+
 func IDFromLeaseForInactiveAtKey(key []byte) uint64 {
 	// prefix (1 byte) | at (29 bytes) | id (8 bytes)
 

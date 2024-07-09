@@ -12,28 +12,10 @@ import (
 
 func (k *Keeper) handleInactiveLeases(ctx sdk.Context) {
 	k.IterateLeasesForInactiveAt(ctx, ctx.BlockTime(), func(_ int, item v1.Lease) bool {
-		k.DeleteLeaseForInactiveAt(ctx, item.InactiveAt, item.ID)
-
-		if err := k.LeaseInactivePreHook(ctx, item.ID); err != nil {
+		msg := item.MsgEndRequest()
+		if _, err := k.HandleMsgEnd(ctx, msg); err != nil {
 			panic(err)
 		}
-
-		nodeAddr, err := base.NodeAddressFromBech32(item.NodeAddress)
-		if err != nil {
-			panic(err)
-		}
-
-		provAddr, err := base.ProvAddressFromBech32(item.ProvAddress)
-		if err != nil {
-			panic(err)
-		}
-
-		k.DeleteLease(ctx, item.ID)
-		k.DeleteLeaseForNode(ctx, nodeAddr, item.ID)
-		k.DeleteLeaseForProvider(ctx, provAddr, item.ID)
-		k.DeleteLeaseForProviderByNode(ctx, provAddr, nodeAddr, item.ID)
-		k.DeleteLeaseForPayoutAt(ctx, item.PayoutAt, item.ID)
-		k.DeleteLeaseForRenewalAt(ctx, item.RenewalAt, item.ID)
 
 		return false
 	})

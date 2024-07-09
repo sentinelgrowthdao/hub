@@ -28,6 +28,14 @@ type NodeKeeper interface {
 	GetNode(ctx sdk.Context, addr base.NodeAddress) (nodetypes.Node, bool)
 }
 
+type PlanKeeper interface {
+	LeaseInactivePreHook(ctx sdk.Context, id uint64) error
+}
+
 type ProviderKeeper interface {
 	GetProvider(ctx sdk.Context, addr base.ProvAddress) (providertypes.Provider, bool)
+}
+
+type SessionKeeper interface {
+	LeaseInactivePreHook(ctx sdk.Context, id uint64) error
 }
