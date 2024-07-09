@@ -2,6 +2,7 @@ syntax = "proto3";
 package sentinel.node.v3;
 
 import "gogoproto/gogo.proto";
+import "sentinel/node/v3/params.proto";
 
 option go_package = "github.com/sentinel-official/hub/v12/x/node/types/v3";
 option (gogoproto.equal_all) = false;
@@ -15,8 +16,15 @@ message MsgStartSessionRequest {
   string denom = 5;
 }
 
+message MsgUpdateParamsRequest {
+  string from = 1;
+  Params params = 2 [(gogoproto.nullable) = false];
+}
+
 message MsgStartSessionResponse {}
+message MsgUpdateParamsResponse {}
 
 service MsgService {
   rpc MsgStartSession(MsgStartSessionRequest) returns (MsgStartSessionResponse);
+  rpc MsgUpdateParams(MsgUpdateParamsRequest) returns (MsgUpdateParamsResponse);
 }

@@ -32,7 +32,7 @@ func (k *Keeper) HandleMsgRegister(ctx sdk.Context, msg *v2.MsgRegisterRequest) 
 	}
 
 	deposit := k.Deposit(ctx)
-	if err = k.FundCommunityPool(ctx, accAddr, deposit); err != nil {
+	if err := k.FundCommunityPool(ctx, accAddr, deposit); err != nil {
 		return nil, err
 	}
 
@@ -47,6 +47,7 @@ func (k *Keeper) HandleMsgRegister(ctx sdk.Context, msg *v2.MsgRegisterRequest) 
 	}
 
 	k.SetNode(ctx, node)
+	k.SetNodeForInactiveAt(ctx, node.InactiveAt, nodeAddr)
 	ctx.EventManager().EmitTypedEvent(
 		&v2.EventRegister{
 			Address: node.Address,
@@ -62,7 +63,6 @@ func (k *Keeper) HandleMsgUpdateDetails(ctx sdk.Context, msg *v2.MsgUpdateDetail
 			return nil, types.NewErrorInvalidPrices(msg.GigabytePrices)
 		}
 	}
-
 	if msg.HourlyPrices != nil {
 		if !k.IsValidHourlyPrices(ctx, msg.HourlyPrices) {
 			return nil, types.NewErrorInvalidPrices(msg.HourlyPrices)
@@ -110,34 +110,25 @@ func (k *Keeper) HandleMsgUpdateStatus(ctx sdk.Context, msg *v2.MsgUpdateStatusR
 		return nil, types.NewErrorNodeNotFound(nodeAddr)
 	}
 
+	k.DeleteNodeForInactiveAt(ctx, node.InactiveAt, nodeAddr)
 	if node.Status.Equal(v1base.StatusActive) {
-		k.DeleteNodeForInactiveAt(ctx, node.InactiveAt, nodeAddr)
-		if msg.Status.Equal(v1base.StatusInactive) {
-			k.DeleteActiveNode(ctx, nodeAddr)
-		}
+		k.DeleteActiveNode(ctx, nodeAddr)
 	}
-
 	if node.Status.Equal(v1base.StatusInactive) {
-		if msg.Status.Equal(v1base.StatusActive) {
-			k.DeleteInactiveNode(ctx, nodeAddr)
-		}
-	}
-
-	if msg.Status.Equal(v1base.StatusActive) {
-		node.InactiveAt = ctx.BlockTime().Add(
-			k.ActiveDuration(ctx),
-		)
-		k.SetNodeForInactiveAt(ctx, node.InactiveAt, nodeAddr)
-	}
-
-	if msg.Status.Equal(v1base.StatusInactive) {
-		node.InactiveAt = time.Time{}
+		k.DeleteInactiveNode(ctx, nodeAddr)
 	}
 
 	node.Status = msg.Status
+	node.InactiveAt = time.Time{}
 	node.StatusAt = ctx.BlockTime()
 
+	if node.Status.Equal(v1base.StatusActive) {
+		duration := k.ActiveDuration(ctx)
+		node.InactiveAt = ctx.BlockTime().Add(duration)
+	}
+
 	k.SetNode(ctx, node)
+	k.SetNodeForInactiveAt(ctx, node.InactiveAt, nodeAddr)
 	ctx.EventManager().EmitTypedEvent(
 		&v2.EventUpdateStatus{
 			Status:  node.Status,
@@ -160,7 +151,7 @@ func (k *Keeper) HandleMsgStartSession(ctx sdk.Context, msg *v3.MsgStartSessionR
 		}
 	}
 
-	fromAddr, err := sdk.AccAddressFromBech32(msg.From)
+	accAddr, err := sdk.AccAddressFromBech32(msg.From)
 	if err != nil {
 		return nil, err
 	}
@@ -183,7 +174,7 @@ func (k *Keeper) HandleMsgStartSession(ctx sdk.Context, msg *v3.MsgStartSessionR
 		delay   = k.session.StatusChangeDelay(ctx)
 		session = &v3.Session{
 			ID:            count + 1,
-			AccAddress:    fromAddr.String(),
+			AccAddress:    accAddr.String(),
 			NodeAddress:   nodeAddr.String(),
 			Price:         sdk.Coin{},
 			Deposit:       sdk.Coin{},
@@ -225,7 +216,6 @@ func (k *Keeper) HandleMsgStartSession(ctx sdk.Context, msg *v3.MsgStartSessionR
 		session.MaxDuration = time.Duration(msg.Hours) * time.Hour
 	}
 
-	accAddr := session.GetAccAddress()
 	if err := k.AddDeposit(ctx, accAddr, session.Deposit); err != nil {
 		return nil, err
 	}
@@ -237,4 +227,55 @@ func (k *Keeper) HandleMsgStartSession(ctx sdk.Context, msg *v3.MsgStartSessionR
 	k.session.SetSessionForInactiveAt(ctx, session.InactiveAt, session.ID)
 
 	return &v3.MsgStartSessionResponse{}, nil
+}
+
+func (k *Keeper) HandleMsgUpdateParams(ctx sdk.Context, msg *v3.MsgUpdateParamsRequest) (*v3.MsgUpdateParamsResponse, error) {
+	if msg.From != k.authority {
+		return nil, types.NewErrorUnauthorized(msg.From)
+	}
+
+	minGigabytePrices := k.MinGigabytePrices(ctx)
+	minHourlyPrices := k.MinHourlyPrices(ctx)
+	k.SetParams(ctx, msg.Params)
+
+	minGigabytePricesModified := !msg.Params.MinGigabytePrices.IsEqual(minGigabytePrices)
+	minHourlyPricesModified := !msg.Params.MinHourlyPrices.IsEqual(minHourlyPrices)
+
+	if minGigabytePricesModified {
+		minGigabytePrices = k.MinGigabytePrices(ctx)
+	}
+	if minHourlyPricesModified {
+		minHourlyPrices = k.MinHourlyPrices(ctx)
+	}
+
+	if minGigabytePricesModified || minHourlyPricesModified {
+		k.IterateNodes(ctx, func(_ int, item v2.Node) bool {
+			if minGigabytePricesModified {
+				for _, coin := range minGigabytePrices {
+					amount := item.GigabytePrices.AmountOf(coin.Denom)
+					if amount.LT(coin.Amount) {
+						item.GigabytePrices = item.GigabytePrices.Sub(
+							sdk.NewCoin(coin.Denom, amount),
+						).Add(coin)
+					}
+				}
+			}
+
+			if minHourlyPricesModified {
+				for _, coin := range minHourlyPrices {
+					amount := item.HourlyPrices.AmountOf(coin.Denom)
+					if amount.LT(coin.Amount) {
+						item.HourlyPrices = item.HourlyPrices.Sub(
+							sdk.NewCoin(coin.Denom, amount),
+						).Add(coin)
+					}
+				}
+			}
+
+			k.SetNode(ctx, item)
+			return false
+		})
+	}
+
+	return &v3.MsgUpdateParamsResponse{}, nil
 }

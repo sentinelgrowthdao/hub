@@ -15,6 +15,8 @@ const (
 )
 
 var (
+	ParamsKey = []byte{0x00}
+
 	NodeKeyPrefix              = []byte{0x10}
 	ActiveNodeKeyPrefix        = append(NodeKeyPrefix, 0x01)
 	InactiveNodeKeyPrefix      = append(NodeKeyPrefix, 0x02)

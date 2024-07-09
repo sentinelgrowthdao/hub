@@ -164,6 +164,10 @@ func (k *Keeper) IterateNodes(ctx sdk.Context, fn func(index int, item v2.Node) 
 
 // SetNodeForInactiveAt stores a node's inactivity timestamp in the module's KVStore.
 func (k *Keeper) SetNodeForInactiveAt(ctx sdk.Context, at time.Time, addr base.NodeAddress) {
+	if at.IsZero() {
+		return
+	}
+
 	store := k.Store(ctx)
 	key := types.NodeForInactiveAtKey(at, addr)
 	value := k.cdc.MustMarshal(&protobuf.BoolValue{Value: true})
@@ -173,6 +177,10 @@ func (k *Keeper) SetNodeForInactiveAt(ctx sdk.Context, at time.Time, addr base.N
 
 // DeleteNodeForInactiveAt removes a node's inactivity timestamp from the module's KVStore.
 func (k *Keeper) DeleteNodeForInactiveAt(ctx sdk.Context, at time.Time, addr base.NodeAddress) {
+	if at.IsZero() {
+		return
+	}
+
 	store := k.Store(ctx)
 	key := types.NodeForInactiveAtKey(at, addr)
 

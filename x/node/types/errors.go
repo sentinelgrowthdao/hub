@@ -18,6 +18,7 @@ var (
 	ErrorInvalidStatus    = sdkerrors.Register(ModuleName, 205, "invalid status")
 	ErrorNodeNotFound     = sdkerrors.Register(ModuleName, 206, "node not found")
 	ErrorPriceNotFound    = sdkerrors.Register(ModuleName, 207, "price not found")
+	ErrorUnauthorized     = sdkerrors.Register(ModuleName, 208, "unauthorized")
 )
 
 func NewErrorDuplicateNode(addr base.NodeAddress) error {
@@ -46,4 +47,8 @@ func NewErrorInvalidHours(hours int64) error {
 
 func NewErrorInvalidGigabytes(gigabytes int64) error {
 	return sdkerrors.Wrapf(ErrorInvalidGigabytes, "invalid gigabytes %d", gigabytes)
+}
+
+func NewErrorUnauthorized(addr string) error {
+	return sdkerrors.Wrapf(ErrorUnauthorized, "address %s is not authorized", addr)
 }
