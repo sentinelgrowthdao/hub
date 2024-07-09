@@ -22,7 +22,6 @@ func GetTxCommands() []*cobra.Command {
 		txUpdateStatus(),
 		txLinkNode(),
 		txUnlinkNode(),
-		txSubscribe(),
 	)
 
 	return []*cobra.Command{cmd}

@@ -4,6 +4,8 @@ import (
 	"context"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	"github.com/sentinel-official/hub/v12/x/plan/keeper"
 	"github.com/sentinel-official/hub/v12/x/plan/types/v2"
@@ -41,7 +43,6 @@ func (k *msgServer) MsgUnlinkNode(c context.Context, msg *v2.MsgUnlinkNodeReques
 	return k.HandleMsgUnlinkNode(ctx, msg)
 }
 
-func (k *msgServer) MsgSubscribe(c context.Context, msg *v2.MsgSubscribeRequest) (*v2.MsgSubscribeResponse, error) {
-	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleMsgSubscribe(ctx, msg)
+func (k *msgServer) MsgSubscribe(_ context.Context, _ *v2.MsgSubscribeRequest) (*v2.MsgSubscribeResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
 }

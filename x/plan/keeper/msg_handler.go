@@ -52,15 +52,14 @@ func (k *Keeper) HandleMsgUpdateStatus(ctx sdk.Context, msg *v2.MsgUpdateStatusR
 		return nil, types.NewErrorUnauthorized(msg.From)
 	}
 
-	if plan.Status.Equal(v1base.StatusActive) {
-		if msg.Status.Equal(v1base.StatusInactive) {
-			k.DeleteActivePlan(ctx, plan.ID)
+	if msg.Status.Equal(v1base.StatusActive) {
+		if plan.Status.Equal(v1base.StatusInactive) {
+			k.DeleteInactivePlan(ctx, plan.ID)
 		}
 	}
-
-	if plan.Status.Equal(v1base.StatusInactive) {
-		if msg.Status.Equal(v1base.StatusActive) {
-			k.DeleteInactivePlan(ctx, plan.ID)
+	if msg.Status.Equal(v1base.StatusInactive) {
+		if plan.Status.Equal(v1base.StatusActive) {
+			k.DeleteActivePlan(ctx, plan.ID)
 		}
 	}
 
@@ -133,27 +132,4 @@ func (k *Keeper) HandleMsgUnlinkNode(ctx sdk.Context, msg *v2.MsgUnlinkNodeReque
 	)
 
 	return &v2.MsgUnlinkNodeResponse{}, nil
-}
-
-func (k *Keeper) HandleMsgSubscribe(ctx sdk.Context, msg *v2.MsgSubscribeRequest) (*v2.MsgSubscribeResponse, error) {
-	accAddr, err := sdk.AccAddressFromBech32(msg.From)
-	if err != nil {
-		return nil, err
-	}
-
-	subscription, err := k.subscription.CreateSubscriptionForPlan(ctx, accAddr, msg.ID, msg.Denom)
-	if err != nil {
-		return nil, err
-	}
-
-	ctx.EventManager().EmitTypedEvent(
-		&v2.EventCreateSubscription{
-			Address:         subscription.Address,
-			ProviderAddress: "",
-			ID:              subscription.ID,
-			PlanID:          subscription.PlanID,
-		},
-	)
-
-	return &v2.MsgSubscribeResponse{}, nil
 }

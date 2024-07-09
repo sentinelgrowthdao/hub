@@ -171,37 +171,3 @@ func txUnlinkNode() *cobra.Command {
 
 	return cmd
 }
-
-func txSubscribe() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "subscribe [plan-id] [denom]",
-		Short: "Subscribe to a subscription plan",
-		Args:  cobra.ExactArgs(2),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			ctx, err := client.GetClientTxContext(cmd)
-			if err != nil {
-				return err
-			}
-
-			id, err := strconv.ParseUint(args[0], 10, 64)
-			if err != nil {
-				return err
-			}
-
-			msg := v2.NewMsgSubscribeRequest(
-				ctx.FromAddress,
-				id,
-				args[1],
-			)
-			if err = msg.ValidateBasic(); err != nil {
-				return err
-			}
-
-			return tx.GenerateOrBroadcastTxCLI(ctx, cmd.Flags(), msg)
-		},
-	}
-
-	flags.AddTxFlagsToCmd(cmd)
-
-	return cmd
-}
