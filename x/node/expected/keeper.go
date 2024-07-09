@@ -26,8 +26,13 @@ type DepositKeeper interface {
 	AddDeposit(ctx sdk.Context, addr sdk.AccAddress, coins sdk.Coins) error
 }
 
+type LeaseKeeper interface {
+	NodeInactivePreHook(ctx sdk.Context, addr base.NodeAddress) error
+}
+
 type SessionKeeper interface {
 	GetCount(ctx sdk.Context) uint64
+	NodeInactivePreHook(ctx sdk.Context, addr base.NodeAddress) error
 	SetCount(ctx sdk.Context, count uint64)
 	SetSession(ctx sdk.Context, session sessiontypes.Session)
 	SetSessionForAccount(ctx sdk.Context, addr sdk.AccAddress, id uint64)

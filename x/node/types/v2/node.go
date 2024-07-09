@@ -24,6 +24,13 @@ func (m *Node) GetAddress() base.NodeAddress {
 	return addr
 }
 
+func (m *Node) MsgUpdateStatusRequest(status v1base.Status) *MsgUpdateStatusRequest {
+	return &MsgUpdateStatusRequest{
+		From:   m.Address,
+		Status: status,
+	}
+}
+
 func (m *Node) Validate() error {
 	if m.Address == "" {
 		return fmt.Errorf("address cannot be empty")

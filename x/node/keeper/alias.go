@@ -23,5 +23,12 @@ func (k *Keeper) AddDeposit(ctx sdk.Context, addr sdk.AccAddress, coin sdk.Coin)
 }
 
 func (k *Keeper) NodeInactivePreHook(ctx sdk.Context, addr base.NodeAddress) error {
+	if err := k.lease.NodeInactivePreHook(ctx, addr); err != nil {
+		return err
+	}
+	if err := k.session.NodeInactivePreHook(ctx, addr); err != nil {
+		return err
+	}
+
 	return nil
 }

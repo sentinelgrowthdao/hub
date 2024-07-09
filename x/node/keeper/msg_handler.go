@@ -111,11 +111,20 @@ func (k *Keeper) HandleMsgUpdateStatus(ctx sdk.Context, msg *v2.MsgUpdateStatusR
 	}
 
 	k.DeleteNodeForInactiveAt(ctx, node.InactiveAt, nodeAddr)
-	if node.Status.Equal(v1base.StatusActive) {
-		k.DeleteActiveNode(ctx, nodeAddr)
+
+	if msg.Status.Equal(v1base.StatusActive) {
+		if node.Status.Equal(v1base.StatusInactive) {
+			k.DeleteInactiveNode(ctx, nodeAddr)
+		}
 	}
-	if node.Status.Equal(v1base.StatusInactive) {
-		k.DeleteInactiveNode(ctx, nodeAddr)
+	if msg.Status.Equal(v1base.StatusInactive) {
+		if err := k.NodeInactivePreHook(ctx, nodeAddr); err != nil {
+			return nil, err
+		}
+
+		if node.Status.Equal(v1base.StatusActive) {
+			k.DeleteActiveNode(ctx, nodeAddr)
+		}
 	}
 
 	node.Status = msg.Status

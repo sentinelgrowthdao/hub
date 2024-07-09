@@ -20,6 +20,7 @@ type Keeper struct {
 	key              storetypes.StoreKey
 	deposit          expected.DepositKeeper
 	distribution     expected.DistributionKeeper
+	lease            expected.LeaseKeeper
 	session          expected.SessionKeeper
 }
 
@@ -38,6 +39,10 @@ func (k *Keeper) WithDepositKeeper(keeper expected.DepositKeeper) {
 
 func (k *Keeper) WithDistributionKeeper(keeper expected.DistributionKeeper) {
 	k.distribution = keeper
+}
+
+func (k *Keeper) WithLeaseKeeper(keeper expected.LeaseKeeper) {
+	k.lease = keeper
 }
 
 func (k *Keeper) WithSessionKeeper(keeper expected.SessionKeeper) {
