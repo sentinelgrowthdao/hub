@@ -4,22 +4,19 @@ import (
 	"time"
 
 	sdkmath "cosmossdk.io/math"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/gogoproto/proto"
 
-	base "github.com/sentinel-official/hub/v12/types"
 	v1base "github.com/sentinel-official/hub/v12/types/v1"
 )
 
 type Session interface {
 	proto.Message
 
-	GetAccAddress() sdk.AccAddress
+	GetAccAddress() string
 	GetID() uint64
 	GetInactiveAt() time.Time
-	GetNodeAddress() base.NodeAddress
+	GetNodeAddress() string
 	GetStatus() v1base.Status
-	GetType()
 
 	MsgEndRequest() *MsgEndRequest
 

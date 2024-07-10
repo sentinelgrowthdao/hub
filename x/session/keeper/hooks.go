@@ -13,7 +13,7 @@ func (k *Keeper) LeaseInactivePreHook(_ sdk.Context, _ uint64) error {
 }
 
 func (k *Keeper) NodeInactivePreHook(ctx sdk.Context, addr base.NodeAddress) error {
-	k.IterateSessionsForNode(ctx, addr, func(_ int, item v3.Session) (stop bool) {
+	k.IterateSessionsForNode(ctx, addr, func(_ int, item v3.Session) bool {
 		if !item.GetStatus().Equal(v1base.StatusActive) {
 			return false
 		}
@@ -30,7 +30,7 @@ func (k *Keeper) NodeInactivePreHook(ctx sdk.Context, addr base.NodeAddress) err
 }
 
 func (k *Keeper) SubscriptionInactivePendingPreHook(ctx sdk.Context, id uint64) error {
-	k.IterateSessionsForSubscription(ctx, id, func(_ int, item v3.Session) (stop bool) {
+	k.IterateSessionsForSubscription(ctx, id, func(_ int, item v3.Session) bool {
 		if !item.GetStatus().Equal(v1base.StatusActive) {
 			return false
 		}

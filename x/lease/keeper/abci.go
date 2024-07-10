@@ -24,7 +24,7 @@ func (k *Keeper) handleInactiveLeases(ctx sdk.Context) {
 func (k *Keeper) handleLeasePayouts(ctx sdk.Context) {
 	share := k.StakingShare(ctx)
 
-	k.IterateLeasesForPayoutAt(ctx, ctx.BlockTime(), func(_ int, item v1.Lease) (stop bool) {
+	k.IterateLeasesForPayoutAt(ctx, ctx.BlockTime(), func(_ int, item v1.Lease) bool {
 		k.DeleteLeaseForPayoutAt(ctx, item.PayoutAt, item.ID)
 
 		provAddr, err := base.ProvAddressFromBech32(item.ProvAddress)

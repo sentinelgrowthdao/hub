@@ -28,15 +28,17 @@ func (k *Keeper) SessionInactivePreHook(ctx sdk.Context, id uint64) error {
 		return fmt.Errorf("subscription %d does not exist", session.SubscriptionID)
 	}
 
-	var (
-		accAddr       = session.GetAccAddress()
-		utilisedBytes = session.DownloadBytes.Add(session.UploadBytes)
-	)
+	accAddr, err := sdk.AccAddressFromBech32(item.GetAccAddress())
+	if err != nil {
+		panic(err)
+	}
 
 	alloc, found := k.GetAllocation(ctx, subscription.ID, accAddr)
 	if !found {
 		return fmt.Errorf("subscription allocation %d/%s does not exist", subscription.ID, accAddr)
 	}
+
+	utilisedBytes := session.DownloadBytes.Add(session.UploadBytes)
 
 	alloc.UtilisedBytes = alloc.UtilisedBytes.Add(utilisedBytes)
 	if alloc.UtilisedBytes.GT(alloc.GrantedBytes) {

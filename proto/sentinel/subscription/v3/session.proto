@@ -8,7 +8,6 @@ import "sentinel/types/v1/status.proto";
 
 option go_package = "github.com/sentinel-official/hub/v12/x/subscription/types/v3";
 option (gogoproto.equal_all) = false;
-option (gogoproto.goproto_getters_all) = false;
 
 message Session {
   uint64 id = 1 [(gogoproto.customname) = "ID"];

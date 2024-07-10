@@ -23,7 +23,11 @@ func (k *Keeper) HandleMsgEnd(ctx sdk.Context, msg *v3.MsgEndRequest) (*v3.MsgEn
 		return nil, types.NewErrorInvalidSessionStatus(session.GetID(), session.GetStatus())
 	}
 
-	accAddr := session.GetAccAddress()
+	accAddr, err := sdk.AccAddressFromBech32(session.GetAccAddress())
+	if err != nil {
+		return nil, err
+	}
+
 	if !fromAddr.Equals(accAddr) {
 		return nil, types.NewErrorUnauthorized(msg.From)
 	}
@@ -55,13 +59,21 @@ func (k *Keeper) HandleMsgUpdateDetails(ctx sdk.Context, msg *v3.MsgUpdateDetail
 		return nil, types.NewErrorInvalidSessionStatus(session.GetID(), session.GetStatus())
 	}
 
-	nodeAddr := session.GetNodeAddress()
+	nodeAddr, err := sdk.AccAddressFromBech32(session.GetNodeAddress())
+	if err != nil {
+		return nil, err
+	}
+
 	if !fromAddr.Equals(nodeAddr) {
 		return nil, types.NewErrorUnauthorized(msg.From)
 	}
 
 	if k.ProofVerificationEnabled(ctx) {
-		accAddr := session.GetAccAddress()
+		accAddr, err := sdk.AccAddressFromBech32(session.GetAccAddress())
+		if err != nil {
+			return nil, err
+		}
+
 		if err := k.VerifySignature(ctx, accAddr, msg.Proof(), msg.Signature); err != nil {
 			return nil, types.NewErrorInvalidSignature(msg.Signature)
 		}
