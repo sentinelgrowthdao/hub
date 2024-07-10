@@ -5,13 +5,16 @@ import (
 
 	sdkerrors "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	params "github.com/cosmos/cosmos-sdk/x/params/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
+
+	"github.com/sentinel-official/hub/v12/x/swap/types"
 )
 
-const (
+var (
 	DefaultSwapEnabled = false
-	DefaultSwapDenom   = "tsent"
-	DefaultApproveBy   = ""
+	DefaultSwapDenom   = sdk.DefaultBondDenom
+	DefaultApproveBy   = authtypes.NewModuleAddress(types.ModuleName).String()
 )
 
 var (
@@ -21,7 +24,7 @@ var (
 )
 
 var (
-	_ params.ParamSet = (*Params)(nil)
+	_ paramstypes.ParamSet = (*Params)(nil)
 )
 
 func (m *Params) Validate() error {
@@ -41,8 +44,8 @@ func (m *Params) Validate() error {
 	return nil
 }
 
-func (m *Params) ParamSetPairs() params.ParamSetPairs {
-	return params.ParamSetPairs{
+func (m *Params) ParamSetPairs() paramstypes.ParamSetPairs {
+	return paramstypes.ParamSetPairs{
 		{
 			Key:   KeySwapEnabled,
 			Value: &m.SwapEnabled,
@@ -112,6 +115,6 @@ func DefaultParams() Params {
 	}
 }
 
-func ParamsKeyTable() params.KeyTable {
-	return params.NewKeyTable().RegisterParamSet(&Params{})
+func ParamsKeyTable() paramstypes.KeyTable {
+	return paramstypes.NewKeyTable().RegisterParamSet(&Params{})
 }

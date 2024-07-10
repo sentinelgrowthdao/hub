@@ -244,11 +244,14 @@ func NewKeepers(
 		k.IBCFeeKeeper, k.IBCKeeper.ChannelKeeper, &k.IBCKeeper.PortKeeper,
 		k.ScopedIBCICAControllerKeeper, app.MsgServiceRouter(),
 	)
+
 	k.IBCICAHostKeeper = ibcicahostkeeper.NewKeeper(
 		encCfg.Codec, keys.KV(ibcicahosttypes.StoreKey), k.Subspace(ibcicahosttypes.SubModuleName),
 		k.IBCKeeper.ChannelKeeper, k.IBCKeeper.ChannelKeeper, &k.IBCKeeper.PortKeeper, k.AccountKeeper,
 		k.ScopedIBCICAHostKeeper, app.MsgServiceRouter(),
 	)
+	k.IBCICAHostKeeper.WithQueryRouter(app.GRPCQueryRouter())
+
 	k.IBCTransferKeeper = ibctransferkeeper.NewKeeper(
 		encCfg.Codec, keys.KV(ibctransfertypes.StoreKey), k.Subspace(ibctransfertypes.ModuleName),
 		k.IBCKeeper.ChannelKeeper, k.IBCKeeper.ChannelKeeper, &k.IBCKeeper.PortKeeper,
@@ -273,10 +276,8 @@ func NewKeepers(
 	// Other keepers
 	k.ScopedWasmKeeper = k.CapabilityKeeper.ScopeToModule(wasmtypes.ModuleName)
 
-	var (
-		wasmCapabilities = "iterator,staking,stargate,cosmwasm_1_1,cosmwasm_1_2"
-		wasmDir          = filepath.Join(homeDir, "data")
-	)
+	wasmCapabilities := "iterator,staking,stargate,cosmwasm_1_1,cosmwasm_1_2"
+	wasmDir := filepath.Join(homeDir, "data")
 
 	k.WasmKeeper = wasmkeeper.NewKeeper(
 		encCfg.Codec, keys.KV(wasmtypes.StoreKey), k.AccountKeeper, k.BankKeeper, k.StakingKeeper,
