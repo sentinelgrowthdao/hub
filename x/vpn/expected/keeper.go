@@ -3,12 +3,7 @@ package expected
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 )
-
-type ParamsKeeper interface {
-	Subspace(s string) paramstypes.Subspace
-}
 
 type AccountKeeper interface {
 	GetAccount(ctx sdk.Context, address sdk.AccAddress) authtypes.AccountI

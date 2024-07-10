@@ -14,6 +14,7 @@ func (k *Keeper) BeginBlock(ctx sdk.Context) {
 	ctx, write := cacheContext(ctx)
 	defer write()
 
+	k.Lease.BeginBlock(ctx)
 	k.Node.BeginBlock(ctx)
 	k.Session.BeginBlock(ctx)
 	k.Subscription.BeginBlock(ctx)
