@@ -38,12 +38,15 @@ import (
 )
 
 var (
-	_ sdkmodule.AppModuleBasic      = AppModuleBasic{}
+	_ sdkmodule.AppModuleBasic   = AppModuleBasic{}
+	_ sdkmodule.HasGenesisBasics = AppModuleBasic{}
+
 	_ sdkmodule.AppModuleGenesis    = AppModule{}
 	_ sdkmodule.AppModuleSimulation = AppModule{}
 	_ sdkmodule.BeginBlockAppModule = AppModule{}
 	_ sdkmodule.EndBlockAppModule   = AppModule{}
 	_ sdkmodule.HasConsensusVersion = AppModule{}
+	_ sdkmodule.HasInvariants       = AppModule{}
 	_ sdkmodule.HasServices         = AppModule{}
 )
 
@@ -81,6 +84,20 @@ func (amb AppModuleBasic) GetTxCmd() *cobra.Command { return cli.GetTxCmd() }
 
 func (amb AppModuleBasic) GetQueryCmd() *cobra.Command { return cli.GetQueryCmd() }
 
+func (amb AppModuleBasic) DefaultGenesis(jsonCodec codec.JSONCodec) json.RawMessage {
+	state := v1.DefaultGenesisState()
+	return jsonCodec.MustMarshalJSON(state)
+}
+
+func (amb AppModuleBasic) ValidateGenesis(jsonCodec codec.JSONCodec, _ client.TxEncodingConfig, message json.RawMessage) error {
+	var state v1.GenesisState
+	if err := jsonCodec.UnmarshalJSON(message, &state); err != nil {
+		return err
+	}
+
+	return state.Validate()
+}
+
 type AppModule struct {
 	AppModuleBasic
 	cdc     codec.Codec
@@ -96,20 +113,6 @@ func NewAppModule(cdc codec.Codec, account expected.AccountKeeper, bank expected
 		bank:    bank,
 		keeper:  k,
 	}
-}
-
-func (am AppModule) DefaultGenesis(jsonCodec codec.JSONCodec) json.RawMessage {
-	state := v1.DefaultGenesisState()
-	return jsonCodec.MustMarshalJSON(state)
-}
-
-func (am AppModule) ValidateGenesis(jsonCodec codec.JSONCodec, _ client.TxEncodingConfig, message json.RawMessage) error {
-	var state v1.GenesisState
-	if err := jsonCodec.UnmarshalJSON(message, &state); err != nil {
-		return err
-	}
-
-	return state.Validate()
 }
 
 func (am AppModule) InitGenesis(ctx sdk.Context, jsonCodec codec.JSONCodec, message json.RawMessage) []abcitypes.ValidatorUpdate {

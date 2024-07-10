@@ -7,21 +7,23 @@ import (
 )
 
 func (k *Keeper) InitGenesis(ctx sdk.Context, state *v1.GenesisState) {
-	k.Deposit.InitGenesis(ctx, state.Deposits)
-	k.Node.InitGenesis(ctx, state.Nodes)
-	k.Plan.InitGenesis(ctx, state.Plans)
-	k.Provider.InitGenesis(ctx, state.Providers)
-	k.Session.InitGenesis(ctx, state.Sessions)
-	k.Subscription.InitGenesis(ctx, state.Subscriptions)
+	k.Deposit.InitGenesis(ctx, state.Deposit)
+	k.Lease.InitGenesis(ctx, state.Lease)
+	k.Node.InitGenesis(ctx, state.Node)
+	k.Plan.InitGenesis(ctx, state.Plan)
+	k.Provider.InitGenesis(ctx, state.Provider)
+	k.Session.InitGenesis(ctx, state.Session)
+	k.Subscription.InitGenesis(ctx, state.Subscription)
 }
 
 func (k *Keeper) ExportGenesis(ctx sdk.Context) *v1.GenesisState {
 	return &v1.GenesisState{
-		Deposits:      k.Deposit.ExportGenesis(ctx),
-		Nodes:         k.Node.ExportGenesis(ctx),
-		Plans:         k.Plan.ExportGenesis(ctx),
-		Providers:     k.Provider.ExportGenesis(ctx),
-		Sessions:      k.Session.ExportGenesis(ctx),
-		Subscriptions: k.Subscription.ExportGenesis(ctx),
+		Deposit:      k.Deposit.ExportGenesis(ctx),
+		Lease:        k.Lease.ExportGenesis(ctx),
+		Node:         k.Node.ExportGenesis(ctx),
+		Plan:         k.Plan.ExportGenesis(ctx),
+		Provider:     k.Provider.ExportGenesis(ctx),
+		Session:      k.Session.ExportGenesis(ctx),
+		Subscription: k.Subscription.ExportGenesis(ctx),
 	}
 }
