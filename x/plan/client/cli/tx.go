@@ -18,7 +18,7 @@ import (
 func txCreate() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create [duration] [gigabytes] [prices]",
-		Short: "Create a subscription plan",
+		Short: "Create a new subscription plan with duration, gigabytes and pricing details",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, err := client.GetClientTxContext(cmd)
@@ -62,8 +62,8 @@ func txCreate() *cobra.Command {
 
 func txUpdateStatus() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "update-status [plan-id] [status]",
-		Short: "Update status for a subscription plan",
+		Use:   "update-status [id] [status]",
+		Short: "Update the status of an existing subscription plan",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, err := client.GetClientTxContext(cmd)
@@ -96,8 +96,8 @@ func txUpdateStatus() *cobra.Command {
 
 func txLinkNode() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "add-node [plan-id] [node-addr]",
-		Short: "Add node to a subscription plan",
+		Use:   "link-node [id] [node-addr]",
+		Short: "Link a node to a subscription plan",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, err := client.GetClientTxContext(cmd)
@@ -135,8 +135,8 @@ func txLinkNode() *cobra.Command {
 
 func txUnlinkNode() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "remove-node [plan-id] [node-addr]",
-		Short: "Remove node from a subscription plan",
+		Use:   "unlink-node [id] [node-addr]",
+		Short: "Unlink a node from a subscription plan",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, err := client.GetClientTxContext(cmd)

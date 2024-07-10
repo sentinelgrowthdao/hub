@@ -15,7 +15,7 @@ import (
 func txStart() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "start [node-addr] [hours] [denom] [renewable]",
-		Short: "Start a lease with a node for the specified duration and terms",
+		Short: "Start a lease with a node for the specified duration",
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, err := client.GetClientTxContext(cmd)
@@ -60,9 +60,9 @@ func txStart() *cobra.Command {
 
 func txUpdateDetails() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "update-details [id]",
+		Use:   "update-details [id] [renewable]",
 		Short: "Update the renewable status of an existing lease",
-		Args:  cobra.ExactArgs(1),
+		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -74,7 +74,7 @@ func txUpdateDetails() *cobra.Command {
 				return err
 			}
 
-			renewable, err := cmd.Flags().GetBool(flagRenewable)
+			renewable, err := strconv.ParseBool(args[1])
 			if err != nil {
 				return err
 			}
@@ -93,7 +93,6 @@ func txUpdateDetails() *cobra.Command {
 	}
 
 	flags.AddTxFlagsToCmd(cmd)
-	cmd.Flags().Bool(flagRenewable, false, "specify if the lease is renewable")
 
 	return cmd
 }
@@ -101,7 +100,7 @@ func txUpdateDetails() *cobra.Command {
 func txRenew() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "renew [id] [hours] [denom]",
-		Short: "Renew an existing lease for a specified duration and terms",
+		Short: "Renew an existing lease for a specified duration",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, err := client.GetClientTxContext(cmd)
@@ -141,7 +140,7 @@ func txRenew() *cobra.Command {
 func txEnd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "end [id]",
-		Short: "End an existing lease with the specified ID",
+		Short: "End an existing lease",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, err := client.GetClientTxContext(cmd)

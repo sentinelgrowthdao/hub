@@ -10,8 +10,6 @@ func GetQueryCommands() []*cobra.Command {
 		querySubscriptions(),
 		queryAllocation(),
 		queryAllocations(),
-		queryPayout(),
-		queryPayouts(),
 		queryParams(),
 	}
 }
@@ -25,6 +23,10 @@ func GetTxCommands() []*cobra.Command {
 	cmd.AddCommand(
 		txCancel(),
 		txAllocate(),
+		txStart(),
+		txUpdateDetails(),
+		txRenew(),
+		txStartSession(),
 	)
 
 	return []*cobra.Command{cmd}

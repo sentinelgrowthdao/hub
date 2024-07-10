@@ -1,20 +1,21 @@
 package cli
 
 import (
-	"context"
 	"strconv"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
 
+	base "github.com/sentinel-official/hub/v12/types"
 	"github.com/sentinel-official/hub/v12/x/session/types/v2"
+	"github.com/sentinel-official/hub/v12/x/session/types/v3"
 )
 
 func querySession() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "session [session-id]",
-		Short: "Query a session",
+		Use:   "session [id]",
+		Short: "Query a session by ID",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, err := client.GetClientQueryContext(cmd)
@@ -27,15 +28,11 @@ func querySession() *cobra.Command {
 				return err
 			}
 
-			var (
-				qc = v2.NewQueryServiceClient(ctx)
-			)
+			qc := v3.NewQueryServiceClient(ctx)
 
 			res, err := qc.QuerySession(
-				context.Background(),
-				v2.NewQuerySessionRequest(
-					id,
-				),
+				cmd.Context(),
+				v3.NewQuerySessionRequest(id),
 			)
 			if err != nil {
 				return err
@@ -53,24 +50,24 @@ func querySession() *cobra.Command {
 func querySessions() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "sessions",
-		Short: "Query sessions",
+		Short: "Query all sessions with optional filters and pagination",
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			ctx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			accAddr, err := GetAddress(cmd.Flags())
+			accAddr, err := base.AccAddrFromFlags(cmd.Flags())
 			if err != nil {
 				return err
 			}
 
-			nodeAddr, err := GetNodeAddress(cmd.Flags())
+			nodeAddr, err := base.NodeAddrFromFlags(cmd.Flags())
 			if err != nil {
 				return err
 			}
 
-			subscriptionID, err := cmd.Flags().GetUint64(flagSubscriptionID)
+			id, err := base.SubscriptionIDFromFlags(cmd.Flags())
 			if err != nil {
 				return err
 			}
@@ -80,74 +77,63 @@ func querySessions() *cobra.Command {
 				return err
 			}
 
-			var (
-				qc = v2.NewQueryServiceClient(ctx)
-			)
+			qc := v3.NewQueryServiceClient(ctx)
 
-			if accAddr != nil {
-				res, err := qc.QuerySessionsForAccount(
-					context.Background(),
-					v2.NewQuerySessionsForAccountRequest(
-						accAddr,
-						pagination,
-					),
+			switch {
+			case id != 0 && accAddr != nil:
+				res, err := qc.QuerySessionsForAllocation(
+					cmd.Context(),
+					v3.NewQuerySessionsForAllocationRequest(id, accAddr, pagination),
 				)
 				if err != nil {
 					return err
 				}
-
 				return ctx.PrintProto(res)
-			}
-
-			if nodeAddr != nil {
-				res, err := qc.QuerySessionsForNode(
-					context.Background(),
-					v2.NewQuerySessionsForNodeRequest(
-						nodeAddr,
-						pagination,
-					),
-				)
-				if err != nil {
-					return err
-				}
-
-				return ctx.PrintProto(res)
-			}
-
-			if subscriptionID != 0 {
+			case id != 0:
 				res, err := qc.QuerySessionsForSubscription(
-					context.Background(),
-					v2.NewQuerySessionsForSubscriptionRequest(
-						subscriptionID,
-						pagination,
-					),
+					cmd.Context(),
+					v3.NewQuerySessionsForSubscriptionRequest(id, pagination),
 				)
 				if err != nil {
 					return err
 				}
-
+				return ctx.PrintProto(res)
+			case accAddr != nil:
+				res, err := qc.QuerySessionsForAccount(
+					cmd.Context(),
+					v3.NewQuerySessionsForAccountRequest(accAddr, pagination),
+				)
+				if err != nil {
+					return err
+				}
+				return ctx.PrintProto(res)
+			case nodeAddr != nil:
+				res, err := qc.QuerySessionsForNode(
+					cmd.Context(),
+					v3.NewQuerySessionsForNodeRequest(nodeAddr, pagination),
+				)
+				if err != nil {
+					return err
+				}
+				return ctx.PrintProto(res)
+			default:
+				res, err := qc.QuerySessions(
+					cmd.Context(),
+					v3.NewQuerySessionsRequest(pagination),
+				)
+				if err != nil {
+					return err
+				}
 				return ctx.PrintProto(res)
 			}
-
-			res, err := qc.QuerySessions(
-				context.Background(),
-				v2.NewQuerySessionsRequest(
-					pagination,
-				),
-			)
-			if err != nil {
-				return err
-			}
-
-			return ctx.PrintProto(res)
 		},
 	}
 
 	flags.AddQueryFlagsToCmd(cmd)
 	flags.AddPaginationFlagsToCmd(cmd, "sessions")
-	cmd.Flags().String(flagAddress, "", "filter the sessions by an account address")
-	cmd.Flags().String(flagNodeAddress, "", "filter the sessions by a node address")
-	cmd.Flags().Uint64(flagSubscriptionID, 0, "filter the sessions by a subscription id")
+	cmd.Flags().String(base.FlagAccAddr, "", "filter the sessions by account address")
+	cmd.Flags().String(base.FlagNodeAddr, "", "filter the sessions by node address")
+	cmd.Flags().Uint64(base.FlagSubscriptionID, 0, "filter the sessions by subscription ID")
 
 	return cmd
 }
@@ -155,19 +141,17 @@ func querySessions() *cobra.Command {
 func queryParams() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "session-params",
-		Short: "Query session module parameters",
+		Short: "Query the session module parameters",
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			ctx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			var (
-				qc = v2.NewQueryServiceClient(ctx)
-			)
+			qc := v2.NewQueryServiceClient(ctx)
 
 			res, err := qc.QueryParams(
-				context.Background(),
+				cmd.Context(),
 				v2.NewQueryParamsRequest(),
 			)
 			if err != nil {

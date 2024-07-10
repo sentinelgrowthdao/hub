@@ -11,7 +11,7 @@ import (
 
 	"github.com/sentinel-official/hub/v12/x/subscription/types"
 	"github.com/sentinel-official/hub/v12/x/subscription/types/v2"
-	v3 "github.com/sentinel-official/hub/v12/x/subscription/types/v3"
+	"github.com/sentinel-official/hub/v12/x/subscription/types/v3"
 )
 
 func (k *Keeper) HandleQueryAllocation(ctx sdk.Context, req *v2.QueryAllocationRequest) (*v2.QueryAllocationResponse, error) {

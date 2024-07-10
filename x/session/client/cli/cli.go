@@ -19,7 +19,6 @@ func GetTxCommands() []*cobra.Command {
 	}
 
 	cmd.AddCommand(
-		txStart(),
 		txUpdateDetails(),
 		txEnd(),
 	)

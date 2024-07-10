@@ -22,6 +22,7 @@ func GetTxCommands() []*cobra.Command {
 		txRegister(),
 		txUpdateDetails(),
 		txUpdateStatus(),
+		txStartSession(),
 	)
 
 	return []*cobra.Command{cmd}

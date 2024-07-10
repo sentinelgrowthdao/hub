@@ -48,9 +48,7 @@ func (m *MsgEndRequest) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{from.Bytes()}
 }
 
-func NewMsgUpdateDetailsRequest(
-	from base.NodeAddress, id uint64, downloadBytes, uploadBytes sdkmath.Int, duration time.Duration, signature []byte,
-) *MsgUpdateDetailsRequest {
+func NewMsgUpdateDetailsRequest(from base.NodeAddress, id uint64, downloadBytes, uploadBytes sdkmath.Int, duration time.Duration, signature []byte) *MsgUpdateDetailsRequest {
 	return &MsgUpdateDetailsRequest{
 		From:          from.String(),
 		ID:            id,

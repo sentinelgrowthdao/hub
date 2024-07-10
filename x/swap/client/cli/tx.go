@@ -17,8 +17,8 @@ import (
 
 func txSwap() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "swap [txHash] [receiver] [amount]",
-		Short: "Swap from SENT to DVPN",
+		Use:   "swap [tx-hash] [receiver-addr] [amount]",
+		Short: "Swap coins from SENT to DVPN",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, err := client.GetClientTxContext(cmd)
@@ -42,7 +42,7 @@ func txSwap() *cobra.Command {
 			}
 
 			msg := v1.NewMsgSwapRequest(
-				ctx.FromAddress,
+				ctx.FromAddress.Bytes(),
 				types.BytesToHash(txHash),
 				receiver,
 				sdkmath.NewInt(amount),

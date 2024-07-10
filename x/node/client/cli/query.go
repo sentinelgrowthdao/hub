@@ -1,8 +1,6 @@
 package cli
 
 import (
-	"context"
-
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
@@ -15,7 +13,7 @@ import (
 func queryNode() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "node [node-addr]",
-		Short: "Query a node",
+		Short: "Query a node by address",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, err := client.GetClientQueryContext(cmd)
@@ -28,15 +26,11 @@ func queryNode() *cobra.Command {
 				return err
 			}
 
-			var (
-				qc = v2.NewQueryServiceClient(ctx)
-			)
+			qc := v2.NewQueryServiceClient(ctx)
 
 			res, err := qc.QueryNode(
-				context.Background(),
-				v2.NewQueryNodeRequest(
-					addr,
-				),
+				cmd.Context(),
+				v2.NewQueryNodeRequest(addr),
 			)
 			if err != nil {
 				return err
@@ -54,14 +48,14 @@ func queryNode() *cobra.Command {
 func queryNodes() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "nodes",
-		Short: "Query nodes",
+		Short: "Query all nodes with optional filters and pagination",
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			ctx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			id, err := cmd.Flags().GetUint64(flagPlanID)
+			id, err := base.PlanIDFromFlags(cmd.Flags())
 			if err != nil {
 				return err
 			}
@@ -76,19 +70,13 @@ func queryNodes() *cobra.Command {
 				return err
 			}
 
-			var (
-				qc = v2.NewQueryServiceClient(ctx)
-			)
+			qc := v2.NewQueryServiceClient(ctx)
 
 			switch {
 			case id != 0:
 				res, err := qc.QueryNodesForPlan(
-					context.Background(),
-					v2.NewQueryNodesForPlanRequest(
-						id,
-						status,
-						pagination,
-					),
+					cmd.Context(),
+					v2.NewQueryNodesForPlanRequest(id, status, pagination),
 				)
 				if err != nil {
 					return err
@@ -96,11 +84,8 @@ func queryNodes() *cobra.Command {
 				return ctx.PrintProto(res)
 			default:
 				res, err := qc.QueryNodes(
-					context.Background(),
-					v2.NewQueryNodesRequest(
-						status,
-						pagination,
-					),
+					cmd.Context(),
+					v2.NewQueryNodesRequest(status, pagination),
 				)
 				if err != nil {
 					return err
@@ -113,7 +98,7 @@ func queryNodes() *cobra.Command {
 	flags.AddQueryFlagsToCmd(cmd)
 	flags.AddPaginationFlagsToCmd(cmd, "nodes")
 	cmd.Flags().String(base.FlagStatus, "", "filter the nodes by status (active|inactive)")
-	cmd.Flags().Uint64(flagPlanID, 0, "filter the nodes by subscription plan ID")
+	cmd.Flags().Uint64(base.FlagPlanID, 0, "filter the nodes by subscription plan ID")
 
 	return cmd
 }
@@ -121,20 +106,18 @@ func queryNodes() *cobra.Command {
 func queryParams() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "node-params",
-		Short: "Query node module parameters",
+		Short: "Query the node module parameters",
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			ctx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			var (
-				qc = v3.NewQueryServiceClient(ctx)
-			)
+			qc := v3.NewQueryServiceClient(ctx)
 
 			res, err := qc.QueryParams(
-				context.Background(),
-				&v3.QueryParamsRequest{},
+				cmd.Context(),
+				v3.NewQueryParamsRequest(),
 			)
 			if err != nil {
 				return err

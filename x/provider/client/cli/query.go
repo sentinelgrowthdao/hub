@@ -1,8 +1,6 @@
 package cli
 
 import (
-	"context"
-
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
@@ -13,8 +11,8 @@ import (
 
 func queryProvider() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "provider [provider-addr]",
-		Short: "Query a provider",
+		Use:   "provider [prov-addr]",
+		Short: "Query a provider by address",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, err := client.GetClientQueryContext(cmd)
@@ -27,15 +25,11 @@ func queryProvider() *cobra.Command {
 				return err
 			}
 
-			var (
-				qc = v2.NewQueryServiceClient(ctx)
-			)
+			qc := v2.NewQueryServiceClient(ctx)
 
 			res, err := qc.QueryProvider(
-				context.Background(),
-				v2.NewQueryProviderRequest(
-					addr,
-				),
+				cmd.Context(),
+				v2.NewQueryProviderRequest(addr),
 			)
 			if err != nil {
 				return err
@@ -53,7 +47,7 @@ func queryProvider() *cobra.Command {
 func queryProviders() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "providers",
-		Short: "Query providers",
+		Short: "Query all providers with optional filters and pagination",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
@@ -70,16 +64,11 @@ func queryProviders() *cobra.Command {
 				return err
 			}
 
-			var (
-				qc = v2.NewQueryServiceClient(ctx)
-			)
+			qc := v2.NewQueryServiceClient(ctx)
 
 			res, err := qc.QueryProviders(
-				context.Background(),
-				v2.NewQueryProvidersRequest(
-					status,
-					pagination,
-				),
+				cmd.Context(),
+				v2.NewQueryProvidersRequest(status, pagination),
 			)
 
 			if err != nil {
@@ -100,19 +89,17 @@ func queryProviders() *cobra.Command {
 func queryParams() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "provider-params",
-		Short: "Query provider module parameters",
+		Short: "Query the provider module parameters",
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			ctx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			var (
-				qc = v2.NewQueryServiceClient(ctx)
-			)
+			qc := v2.NewQueryServiceClient(ctx)
 
 			res, err := qc.QueryParams(
-				context.Background(),
+				cmd.Context(),
 				v2.NewQueryParamsRequest(),
 			)
 			if err != nil {

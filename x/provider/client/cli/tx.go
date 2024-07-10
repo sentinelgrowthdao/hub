@@ -13,7 +13,7 @@ import (
 func txRegister() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "register [name]",
-		Short: "Register a provider",
+		Short: "Register a new provider with a name and optional details",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, err := client.GetClientTxContext(cmd)
@@ -37,7 +37,7 @@ func txRegister() *cobra.Command {
 			}
 
 			msg := v2.NewMsgRegisterRequest(
-				ctx.FromAddress,
+				ctx.FromAddress.Bytes(),
 				args[0],
 				identity,
 				website,
@@ -52,9 +52,9 @@ func txRegister() *cobra.Command {
 	}
 
 	flags.AddTxFlagsToCmd(cmd)
-	cmd.Flags().String(flagIdentity, "", "identity of the provider")
-	cmd.Flags().String(flagWebsite, "", "website of the provider")
-	cmd.Flags().String(flagDescription, "", "description of the provider")
+	cmd.Flags().String(flagIdentity, "", "unique identity of the provider")
+	cmd.Flags().String(flagWebsite, "", "official website URL of the provider")
+	cmd.Flags().String(flagDescription, "", "brief description of the provider's services or offerings")
 
 	return cmd
 }
@@ -62,7 +62,7 @@ func txRegister() *cobra.Command {
 func txUpdate() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "update",
-		Short: "Update a provider",
+		Short: "Update the details of an existing provider",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -112,10 +112,10 @@ func txUpdate() *cobra.Command {
 
 	flags.AddTxFlagsToCmd(cmd)
 	cmd.Flags().String(flagName, "", "name of the provider")
-	cmd.Flags().String(flagIdentity, "", "identity of the provider")
-	cmd.Flags().String(flagWebsite, "", "website of the provider")
-	cmd.Flags().String(flagDescription, "", "description of the provider")
-	cmd.Flags().String(base.FlagStatus, "", "status of the provider (active|inactive)")
+	cmd.Flags().String(flagIdentity, "", "unique identity of the provider")
+	cmd.Flags().String(flagWebsite, "", "official website URL of the provider")
+	cmd.Flags().String(flagDescription, "", "breif description of the provider's services or offerings")
+	cmd.Flags().String(base.FlagStatus, "", "operational status of the provider (active|inactive)")
 
 	return cmd
 }

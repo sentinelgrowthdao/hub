@@ -1,8 +1,6 @@
 package cli
 
 import (
-	"context"
-
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -13,8 +11,8 @@ import (
 
 func queryDeposit() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "deposit [account-addr]",
-		Short: "Query a deposit",
+		Use:   "deposit [acc-addr]",
+		Short: "Query a deposit for an account",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, err := client.GetClientQueryContext(cmd)
@@ -27,15 +25,11 @@ func queryDeposit() *cobra.Command {
 				return err
 			}
 
-			var (
-				qc = v1.NewQueryServiceClient(ctx)
-			)
+			qc := v1.NewQueryServiceClient(ctx)
 
 			res, err := qc.QueryDeposit(
-				context.Background(),
-				v1.NewQueryDepositRequest(
-					addr,
-				),
+				cmd.Context(),
+				v1.NewQueryDepositRequest(addr),
 			)
 			if err != nil {
 				return err
@@ -53,7 +47,7 @@ func queryDeposit() *cobra.Command {
 func queryDeposits() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "deposits",
-		Short: "Query deposits",
+		Short: "Query all deposits with optional pagination",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
@@ -65,15 +59,11 @@ func queryDeposits() *cobra.Command {
 				return err
 			}
 
-			var (
-				qc = v1.NewQueryServiceClient(ctx)
-			)
+			qc := v1.NewQueryServiceClient(ctx)
 
 			res, err := qc.QueryDeposits(
-				context.Background(),
-				v1.NewQueryDepositsRequest(
-					pagination,
-				),
+				cmd.Context(),
+				v1.NewQueryDepositsRequest(pagination),
 			)
 			if err != nil {
 				return err
