@@ -45,7 +45,7 @@ func (k *Keeper) HandleMsgEnd(ctx sdk.Context, msg *v3.MsgEndRequest) (*v3.MsgEn
 	return &v3.MsgEndResponse{}, nil
 }
 
-func (k *Keeper) HandleMsgUpdateDetails(ctx sdk.Context, msg *v3.MsgUpdateDetailsRequest) (*v3.MsgUpdateDetailsResponse, error) {
+func (k *Keeper) HandleMsgUpdate(ctx sdk.Context, msg *v3.MsgUpdateRequest) (*v3.MsgUpdateResponse, error) {
 	fromAddr, err := base.NodeAddressFromBech32(msg.From)
 	if err != nil {
 		return nil, err
@@ -97,7 +97,7 @@ func (k *Keeper) HandleMsgUpdateDetails(ctx sdk.Context, msg *v3.MsgUpdateDetail
 		k.SetSessionForInactiveAt(ctx, session.GetInactiveAt(), session.GetID())
 	}
 
-	return &v3.MsgUpdateDetailsResponse{}, nil
+	return &v3.MsgUpdateResponse{}, nil
 }
 
 func (k *Keeper) HandleMsgUpdateParams(ctx sdk.Context, msg *v3.MsgUpdateParamsRequest) (*v3.MsgUpdateParamsResponse, error) {

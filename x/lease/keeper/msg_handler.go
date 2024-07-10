@@ -90,7 +90,7 @@ func (k *Keeper) HandleMsgStart(ctx sdk.Context, msg *v1.MsgStartRequest) (*v1.M
 	return &v1.MsgStartResponse{}, nil
 }
 
-func (k *Keeper) HandleMsgUpdateDetails(ctx sdk.Context, msg *v1.MsgUpdateDetailsRequest) (*v1.MsgUpdateDetailsResponse, error) {
+func (k *Keeper) HandleMsgUpdate(ctx sdk.Context, msg *v1.MsgUpdateRequest) (*v1.MsgUpdateResponse, error) {
 	lease, found := k.GetLease(ctx, msg.ID)
 	if !found {
 		return nil, types.NewErrorLeaseNotFound(msg.ID)
@@ -118,7 +118,7 @@ func (k *Keeper) HandleMsgUpdateDetails(ctx sdk.Context, msg *v1.MsgUpdateDetail
 	k.SetLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
 	k.SetLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
 
-	return &v1.MsgUpdateDetailsResponse{}, nil
+	return &v1.MsgUpdateResponse{}, nil
 }
 
 func (k *Keeper) HandleMsgRenew(ctx sdk.Context, msg *v1.MsgRenewRequest) (*v1.MsgRenewResponse, error) {

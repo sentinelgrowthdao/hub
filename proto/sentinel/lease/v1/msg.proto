@@ -16,7 +16,7 @@ message MsgStartRequest {
   bool renewable = 5;
 }
 
-message MsgUpdateDetailsRequest {
+message MsgUpdateRequest {
   string from = 1;
   uint64 id = 2 [(gogoproto.customname) = "ID"];
   bool renewable = 3;
@@ -40,14 +40,14 @@ message MsgUpdateParamsRequest {
 }
 
 message MsgStartResponse {}
-message MsgUpdateDetailsResponse {}
+message MsgUpdateResponse {}
 message MsgRenewResponse {}
 message MsgEndResponse {}
 message MsgUpdateParamsResponse {}
 
 service MsgService {
   rpc MsgStart(MsgStartRequest) returns (MsgStartResponse);
-  rpc MsgUpdateDetails(MsgUpdateDetailsRequest) returns (MsgUpdateDetailsResponse);
+  rpc MsgUpdate(MsgUpdateRequest) returns (MsgUpdateResponse);
   rpc MsgRenew(MsgRenewRequest) returns (MsgRenewResponse);
   rpc MsgEnd(MsgEndRequest) returns (MsgEndResponse);
   rpc MsgUpdateParams(MsgUpdateParamsRequest) returns (MsgUpdateParamsResponse);

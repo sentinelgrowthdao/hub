@@ -14,7 +14,7 @@ message MsgEndRequest {
   uint64 id = 2 [(gogoproto.customname) = "ID"];
 }
 
-message MsgUpdateDetailsRequest {
+message MsgUpdateRequest {
   string from = 1;
   uint64 id = 2 [(gogoproto.customname) = "ID"];
   string download_bytes = 3 [
@@ -38,11 +38,11 @@ message MsgUpdateParamsRequest {
 }
 
 message MsgEndResponse {}
-message MsgUpdateDetailsResponse {}
+message MsgUpdateResponse {}
 message MsgUpdateParamsResponse {}
 
 service MsgService {
   rpc MsgEnd(MsgEndRequest) returns (MsgEndResponse);
-  rpc MsgUpdateDetails(MsgUpdateDetailsRequest) returns (MsgUpdateDetailsResponse);
+  rpc MsgUpdate(MsgUpdateRequest) returns (MsgUpdateResponse);
   rpc MsgUpdateParams(MsgUpdateParamsRequest) returns (MsgUpdateParamsResponse);
 }

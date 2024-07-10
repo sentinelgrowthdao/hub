@@ -133,10 +133,10 @@ func txStart() *cobra.Command {
 	return cmd
 }
 
-func txUpdateDetails() *cobra.Command {
+func txUpdate() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "update-details [id] [renewable]",
-		Short: "Update the renewable status of an existing subscription",
+		Use:   "update [id] [renewable]",
+		Short: "Update the details of an existing subscription",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, err := client.GetClientTxContext(cmd)
@@ -154,7 +154,7 @@ func txUpdateDetails() *cobra.Command {
 				return err
 			}
 
-			msg := v3.NewMsgUpdateDetailsRequest(
+			msg := v3.NewMsgUpdateRequest(
 				ctx.FromAddress.Bytes(),
 				id,
 				renewable,

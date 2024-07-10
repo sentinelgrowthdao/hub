@@ -14,7 +14,7 @@ import (
 
 var (
 	_ sdk.Msg = (*MsgEndRequest)(nil)
-	_ sdk.Msg = (*MsgUpdateDetailsRequest)(nil)
+	_ sdk.Msg = (*MsgUpdateRequest)(nil)
 	_ sdk.Msg = (*MsgUpdateParamsRequest)(nil)
 )
 
@@ -48,8 +48,8 @@ func (m *MsgEndRequest) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{from.Bytes()}
 }
 
-func NewMsgUpdateDetailsRequest(from base.NodeAddress, id uint64, downloadBytes, uploadBytes sdkmath.Int, duration time.Duration, signature []byte) *MsgUpdateDetailsRequest {
-	return &MsgUpdateDetailsRequest{
+func NewMsgUpdateRequest(from base.NodeAddress, id uint64, downloadBytes, uploadBytes sdkmath.Int, duration time.Duration, signature []byte) *MsgUpdateRequest {
+	return &MsgUpdateRequest{
 		From:          from.String(),
 		ID:            id,
 		DownloadBytes: downloadBytes,
@@ -59,7 +59,7 @@ func NewMsgUpdateDetailsRequest(from base.NodeAddress, id uint64, downloadBytes,
 	}
 }
 
-func (m *MsgUpdateDetailsRequest) Proof() *Proof {
+func (m *MsgUpdateRequest) Proof() *Proof {
 	return &Proof{
 		ID:            m.ID,
 		DownloadBytes: m.DownloadBytes,
@@ -68,7 +68,7 @@ func (m *MsgUpdateDetailsRequest) Proof() *Proof {
 	}
 }
 
-func (m *MsgUpdateDetailsRequest) ValidateBasic() error {
+func (m *MsgUpdateRequest) ValidateBasic() error {
 	if m.From == "" {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
 	}
@@ -100,7 +100,7 @@ func (m *MsgUpdateDetailsRequest) ValidateBasic() error {
 	return nil
 }
 
-func (m *MsgUpdateDetailsRequest) GetSigners() []sdk.AccAddress {
+func (m *MsgUpdateRequest) GetSigners() []sdk.AccAddress {
 	from, err := base.NodeAddressFromBech32(m.From)
 	if err != nil {
 		panic(err)

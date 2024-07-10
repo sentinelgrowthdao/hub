@@ -69,24 +69,24 @@ func (m *MsgStartRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgStartRequest proto.InternalMessageInfo
 
-type MsgUpdateDetailsRequest struct {
+type MsgUpdateRequest struct {
 	From      string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
 	ID        uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	Renewable bool   `protobuf:"varint,3,opt,name=renewable,proto3" json:"renewable,omitempty"`
 }
 
-func (m *MsgUpdateDetailsRequest) Reset()         { *m = MsgUpdateDetailsRequest{} }
-func (m *MsgUpdateDetailsRequest) String() string { return proto.CompactTextString(m) }
-func (*MsgUpdateDetailsRequest) ProtoMessage()    {}
-func (*MsgUpdateDetailsRequest) Descriptor() ([]byte, []int) {
+func (m *MsgUpdateRequest) Reset()         { *m = MsgUpdateRequest{} }
+func (m *MsgUpdateRequest) String() string { return proto.CompactTextString(m) }
+func (*MsgUpdateRequest) ProtoMessage()    {}
+func (*MsgUpdateRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_4e6a1e1e644cf079, []int{1}
 }
-func (m *MsgUpdateDetailsRequest) XXX_Unmarshal(b []byte) error {
+func (m *MsgUpdateRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgUpdateDetailsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgUpdateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgUpdateDetailsRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgUpdateRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -96,17 +96,17 @@ func (m *MsgUpdateDetailsRequest) XXX_Marshal(b []byte, deterministic bool) ([]b
 		return b[:n], nil
 	}
 }
-func (m *MsgUpdateDetailsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgUpdateDetailsRequest.Merge(m, src)
+func (m *MsgUpdateRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUpdateRequest.Merge(m, src)
 }
-func (m *MsgUpdateDetailsRequest) XXX_Size() int {
+func (m *MsgUpdateRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgUpdateDetailsRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgUpdateDetailsRequest.DiscardUnknown(m)
+func (m *MsgUpdateRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUpdateRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgUpdateDetailsRequest proto.InternalMessageInfo
+var xxx_messageInfo_MsgUpdateRequest proto.InternalMessageInfo
 
 type MsgRenewRequest struct {
 	From  string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
@@ -260,21 +260,21 @@ func (m *MsgStartResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgStartResponse proto.InternalMessageInfo
 
-type MsgUpdateDetailsResponse struct {
+type MsgUpdateResponse struct {
 }
 
-func (m *MsgUpdateDetailsResponse) Reset()         { *m = MsgUpdateDetailsResponse{} }
-func (m *MsgUpdateDetailsResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgUpdateDetailsResponse) ProtoMessage()    {}
-func (*MsgUpdateDetailsResponse) Descriptor() ([]byte, []int) {
+func (m *MsgUpdateResponse) Reset()         { *m = MsgUpdateResponse{} }
+func (m *MsgUpdateResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgUpdateResponse) ProtoMessage()    {}
+func (*MsgUpdateResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_4e6a1e1e644cf079, []int{6}
 }
-func (m *MsgUpdateDetailsResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgUpdateResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgUpdateDetailsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgUpdateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgUpdateDetailsResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgUpdateResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -284,17 +284,17 @@ func (m *MsgUpdateDetailsResponse) XXX_Marshal(b []byte, deterministic bool) ([]
 		return b[:n], nil
 	}
 }
-func (m *MsgUpdateDetailsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgUpdateDetailsResponse.Merge(m, src)
+func (m *MsgUpdateResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUpdateResponse.Merge(m, src)
 }
-func (m *MsgUpdateDetailsResponse) XXX_Size() int {
+func (m *MsgUpdateResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgUpdateDetailsResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgUpdateDetailsResponse.DiscardUnknown(m)
+func (m *MsgUpdateResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUpdateResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgUpdateDetailsResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgUpdateResponse proto.InternalMessageInfo
 
 type MsgRenewResponse struct {
 }
@@ -406,12 +406,12 @@ var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
 
 func init() {
 	proto.RegisterType((*MsgStartRequest)(nil), "sentinel.lease.v1.MsgStartRequest")
-	proto.RegisterType((*MsgUpdateDetailsRequest)(nil), "sentinel.lease.v1.MsgUpdateDetailsRequest")
+	proto.RegisterType((*MsgUpdateRequest)(nil), "sentinel.lease.v1.MsgUpdateRequest")
 	proto.RegisterType((*MsgRenewRequest)(nil), "sentinel.lease.v1.MsgRenewRequest")
 	proto.RegisterType((*MsgEndRequest)(nil), "sentinel.lease.v1.MsgEndRequest")
 	proto.RegisterType((*MsgUpdateParamsRequest)(nil), "sentinel.lease.v1.MsgUpdateParamsRequest")
 	proto.RegisterType((*MsgStartResponse)(nil), "sentinel.lease.v1.MsgStartResponse")
-	proto.RegisterType((*MsgUpdateDetailsResponse)(nil), "sentinel.lease.v1.MsgUpdateDetailsResponse")
+	proto.RegisterType((*MsgUpdateResponse)(nil), "sentinel.lease.v1.MsgUpdateResponse")
 	proto.RegisterType((*MsgRenewResponse)(nil), "sentinel.lease.v1.MsgRenewResponse")
 	proto.RegisterType((*MsgEndResponse)(nil), "sentinel.lease.v1.MsgEndResponse")
 	proto.RegisterType((*MsgUpdateParamsResponse)(nil), "sentinel.lease.v1.MsgUpdateParamsResponse")
@@ -420,41 +420,40 @@ func init() {
 func init() { proto.RegisterFile("sentinel/lease/v1/msg.proto", fileDescriptor_4e6a1e1e644cf079) }
 
 var fileDescriptor_4e6a1e1e644cf079 = []byte{
-	// 529 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x54, 0xcd, 0x6e, 0xd3, 0x40,
-	0x10, 0xb6, 0x93, 0x34, 0x6a, 0xa7, 0xfc, 0x94, 0x55, 0x55, 0x5c, 0x83, 0xdc, 0xd4, 0x5c, 0x42,
-	0x11, 0xb6, 0x12, 0x84, 0x38, 0x70, 0x22, 0x2a, 0x07, 0x0e, 0x91, 0x90, 0x2b, 0x84, 0xc4, 0x05,
-	0x39, 0xf1, 0xc4, 0xb1, 0xb0, 0xbd, 0xc6, 0xeb, 0x18, 0x78, 0x0b, 0xc4, 0x53, 0xf0, 0x28, 0x39,
-	0xf6, 0xc8, 0x01, 0x55, 0xe0, 0xbc, 0x08, 0xf2, 0xae, 0x4d, 0x92, 0x26, 0xb5, 0xda, 0xdc, 0x76,
-	0x67, 0xbe, 0x9d, 0x6f, 0xbe, 0x99, 0x4f, 0x0b, 0x0f, 0x18, 0x86, 0x89, 0x17, 0xa2, 0x6f, 0xfa,
-	0x68, 0x33, 0x34, 0xd3, 0x8e, 0x19, 0x30, 0xd7, 0x88, 0x62, 0x9a, 0x50, 0x72, 0xaf, 0x4c, 0x1a,
-	0x3c, 0x69, 0xa4, 0x1d, 0x75, 0xdf, 0xa5, 0x2e, 0xe5, 0x59, 0x33, 0x3f, 0x09, 0xa0, 0xaa, 0xad,
-	0x56, 0x89, 0xec, 0xd8, 0x0e, 0x98, 0xc8, 0xeb, 0x3f, 0x64, 0xb8, 0xdb, 0x67, 0xee, 0x59, 0x62,
-	0xc7, 0x89, 0x85, 0x9f, 0x27, 0xc8, 0x12, 0x42, 0xa0, 0x31, 0x8a, 0x69, 0xa0, 0xc8, 0x2d, 0xb9,
-	0xbd, 0x63, 0xf1, 0x33, 0x39, 0x86, 0x5b, 0x21, 0x75, 0xf0, 0xa3, 0xed, 0x38, 0x31, 0x32, 0xa6,
-	0xd4, 0x78, 0x6e, 0x37, 0x8f, 0xbd, 0x12, 0x21, 0xb2, 0x0f, 0x5b, 0x63, 0x3a, 0x89, 0x99, 0x52,
-	0x6f, 0xc9, 0xed, 0xba, 0x25, 0x2e, 0x79, 0xd4, 0xc1, 0x90, 0x06, 0x4a, 0x83, 0xbf, 0x10, 0x17,
-	0xf2, 0x10, 0x76, 0x62, 0x0c, 0xf1, 0x8b, 0x3d, 0xf0, 0x51, 0xd9, 0x6a, 0xc9, 0xed, 0x6d, 0x6b,
-	0x1e, 0xd0, 0x87, 0x70, 0xbf, 0xcf, 0xdc, 0x77, 0x91, 0x63, 0x27, 0x78, 0x8a, 0x89, 0xed, 0xf9,
-	0xac, 0xaa, 0xb7, 0x03, 0xa8, 0x79, 0x0e, 0xef, 0xa8, 0xd1, 0x6b, 0x66, 0x17, 0x47, 0xb5, 0x37,
-	0xa7, 0x56, 0xcd, 0x73, 0x96, 0x49, 0xea, 0x97, 0x49, 0x3c, 0x2e, 0xdc, 0xca, 0xef, 0x9b, 0x14,
-	0xbf, 0x81, 0x5a, 0xfd, 0x25, 0xdc, 0xee, 0x33, 0xf7, 0x75, 0xe8, 0x6c, 0x40, 0xa4, 0x23, 0x1c,
-	0xfc, 0x1f, 0xc6, 0x5b, 0xbe, 0xba, 0xaa, 0x2a, 0x2f, 0xa0, 0x29, 0xf6, 0xcb, 0x2b, 0xed, 0x76,
-	0x0f, 0x8d, 0x15, 0xa7, 0x18, 0xa2, 0x4a, 0xaf, 0x31, 0xbd, 0x38, 0x92, 0xac, 0x02, 0xae, 0x13,
-	0xd8, 0x9b, 0xfb, 0x80, 0x45, 0x34, 0x64, 0xa8, 0xab, 0xa0, 0xac, 0xee, 0xa1, 0xc8, 0x09, 0x7c,
-	0x31, 0xbe, 0x22, 0xb6, 0x07, 0x77, 0x4a, 0x9d, 0x45, 0xe4, 0x70, 0x61, 0x93, 0x65, 0xf3, 0x22,
-	0xd5, 0xfd, 0x5d, 0x07, 0xc8, 0x19, 0x31, 0x4e, 0xbd, 0x21, 0x92, 0x33, 0xd8, 0x2e, 0xf9, 0x89,
-	0xbe, 0xa6, 0xe9, 0x4b, 0x26, 0x55, 0x1f, 0x55, 0x62, 0x04, 0x07, 0xf9, 0xc4, 0x9b, 0x5c, 0x12,
-	0x40, 0x4e, 0xd6, 0x3f, 0x5c, 0xe7, 0x36, 0xf5, 0xc9, 0xb5, 0xb0, 0x05, 0x99, 0x50, 0xc0, 0x27,
-	0x72, 0x95, 0x82, 0x45, 0xb7, 0x5d, 0xa5, 0x60, 0x69, 0xa4, 0xa4, 0x0f, 0x4d, 0x31, 0x52, 0xd2,
-	0x5a, 0x0f, 0x9f, 0xbb, 0x4a, 0x3d, 0xae, 0x40, 0x14, 0xe5, 0xc6, 0xdc, 0xf4, 0x8b, 0xfb, 0x20,
-	0x8f, 0xab, 0x34, 0x2e, 0x19, 0x4e, 0x3d, 0xb9, 0x0e, 0x54, 0x30, 0xf5, 0xde, 0x4f, 0xff, 0x6a,
-	0xd2, 0xcf, 0x4c, 0x93, 0xa6, 0x99, 0x26, 0x9f, 0x67, 0x9a, 0xfc, 0x27, 0xd3, 0xe4, 0xef, 0x33,
-	0x4d, 0x3a, 0x9f, 0x69, 0xd2, 0xaf, 0x99, 0x26, 0x7d, 0x78, 0xee, 0x7a, 0xc9, 0x78, 0x32, 0x30,
-	0x86, 0x34, 0x30, 0xcb, 0xba, 0x4f, 0xe9, 0x68, 0xe4, 0x0d, 0x3d, 0xdb, 0x37, 0xc7, 0x93, 0x81,
-	0x99, 0x76, 0xba, 0xe6, 0xd7, 0xe2, 0xe3, 0x4a, 0xbe, 0x45, 0xc8, 0xcc, 0xb4, 0x33, 0x68, 0xf2,
-	0x8f, 0xeb, 0xd9, 0xbf, 0x00, 0x00, 0x00, 0xff, 0xff, 0x96, 0x44, 0xfe, 0x69, 0x20, 0x05, 0x00,
-	0x00,
+	// 522 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x54, 0x4d, 0x6f, 0xd3, 0x40,
+	0x10, 0xb5, 0x93, 0x34, 0x6a, 0xa6, 0x7c, 0xb4, 0x4b, 0x55, 0x5c, 0x83, 0xdc, 0xd4, 0x70, 0x08,
+	0x48, 0xd8, 0x4a, 0x10, 0xe2, 0xc0, 0x89, 0x08, 0x0e, 0x1c, 0x22, 0x21, 0x57, 0x80, 0x84, 0x90,
+	0x90, 0x13, 0x4f, 0x1c, 0x4b, 0xb1, 0xd7, 0x78, 0x1d, 0x03, 0xff, 0x02, 0xf1, 0x2b, 0xf8, 0x27,
+	0xe4, 0xd8, 0x23, 0xa7, 0x0a, 0x9c, 0x3f, 0x82, 0xbc, 0xbb, 0x69, 0x93, 0xa6, 0xb1, 0x20, 0x37,
+	0xef, 0x9b, 0xe7, 0x37, 0x6f, 0x66, 0x9f, 0x16, 0xee, 0x30, 0x8c, 0xd2, 0x20, 0xc2, 0xb1, 0x3d,
+	0x46, 0x97, 0xa1, 0x9d, 0xb5, 0xed, 0x90, 0xf9, 0x56, 0x9c, 0xd0, 0x94, 0x92, 0xbd, 0x79, 0xd1,
+	0xe2, 0x45, 0x2b, 0x6b, 0xeb, 0xfb, 0x3e, 0xf5, 0x29, 0xaf, 0xda, 0xc5, 0x97, 0x20, 0xea, 0xc6,
+	0xaa, 0x4a, 0xec, 0x26, 0x6e, 0xc8, 0x44, 0xdd, 0xfc, 0xae, 0xc2, 0xcd, 0x1e, 0xf3, 0x4f, 0x52,
+	0x37, 0x49, 0x1d, 0xfc, 0x34, 0x41, 0x96, 0x12, 0x02, 0xb5, 0x61, 0x42, 0x43, 0x4d, 0x6d, 0xaa,
+	0xad, 0x86, 0xc3, 0xbf, 0xc9, 0x31, 0x5c, 0x8b, 0xa8, 0x87, 0x1f, 0x5d, 0xcf, 0x4b, 0x90, 0x31,
+	0xad, 0xc2, 0x6b, 0x3b, 0x05, 0xf6, 0x5c, 0x40, 0x64, 0x1f, 0xb6, 0x46, 0x74, 0x92, 0x30, 0xad,
+	0xda, 0x54, 0x5b, 0x55, 0x47, 0x1c, 0x0a, 0xd4, 0xc3, 0x88, 0x86, 0x5a, 0x8d, 0xff, 0x21, 0x0e,
+	0xe4, 0x2e, 0x34, 0x12, 0x8c, 0xf0, 0xb3, 0xdb, 0x1f, 0xa3, 0xb6, 0xd5, 0x54, 0x5b, 0xdb, 0xce,
+	0x05, 0x60, 0x7e, 0x80, 0xdd, 0x1e, 0xf3, 0xdf, 0xc4, 0x9e, 0x9b, 0x62, 0x99, 0xa9, 0x03, 0xa8,
+	0x04, 0x1e, 0xb7, 0x52, 0xeb, 0xd6, 0xf3, 0xb3, 0xa3, 0xca, 0xab, 0x17, 0x4e, 0x25, 0xf0, 0x96,
+	0xd5, 0xab, 0x97, 0xd5, 0x03, 0x3e, 0xb1, 0x53, 0x9c, 0x37, 0x11, 0xff, 0x8f, 0x31, 0xcd, 0x67,
+	0x70, 0xbd, 0xc7, 0xfc, 0x97, 0x91, 0xb7, 0x41, 0x23, 0x13, 0xe1, 0xe0, 0x7c, 0x0b, 0xaf, 0xf9,
+	0x9d, 0x95, 0xa9, 0x3c, 0x85, 0xba, 0xb8, 0x58, 0xae, 0xb4, 0xd3, 0x39, 0xb4, 0x56, 0x22, 0x62,
+	0x09, 0x95, 0x6e, 0x6d, 0x7a, 0x76, 0xa4, 0x38, 0x92, 0x6e, 0x12, 0xbe, 0x6c, 0x19, 0x00, 0x16,
+	0xd3, 0x88, 0xa1, 0x79, 0x0b, 0xf6, 0x16, 0x2e, 0x40, 0x82, 0x82, 0x28, 0xf7, 0x26, 0xb1, 0x5d,
+	0xb8, 0x31, 0x1f, 0x50, 0x22, 0x87, 0x70, 0x7b, 0xc5, 0xb5, 0x28, 0x75, 0x7e, 0x56, 0x01, 0x8a,
+	0x56, 0x98, 0x64, 0xc1, 0x00, 0xc9, 0x09, 0x6c, 0xcf, 0x1b, 0x13, 0xf3, 0x0a, 0xb7, 0x97, 0x62,
+	0xa9, 0xdf, 0x2b, 0xe5, 0x88, 0x1e, 0xe4, 0x2d, 0x34, 0xce, 0xdb, 0x93, 0x35, 0x7f, 0x2c, 0x05,
+	0x4b, 0xbf, 0x5f, 0x4e, 0x92, 0xba, 0xc2, 0x2c, 0x1f, 0x7e, 0x9d, 0xd9, 0xc5, 0x44, 0xad, 0x33,
+	0xbb, 0xb4, 0x3d, 0xd2, 0x83, 0xba, 0xd8, 0x1e, 0x69, 0x5e, 0x4d, 0xbf, 0x48, 0x8e, 0x7e, 0x5c,
+	0xc2, 0x90, 0x72, 0x23, 0x1e, 0xec, 0xc5, 0xd5, 0x93, 0x07, 0x65, 0xc3, 0x2d, 0x85, 0x4a, 0x7f,
+	0xf8, 0x2f, 0x54, 0xd1, 0xa9, 0xfb, 0x6e, 0xfa, 0xc7, 0x50, 0x7e, 0xe4, 0x86, 0x32, 0xcd, 0x0d,
+	0xf5, 0x34, 0x37, 0xd4, 0xdf, 0xb9, 0xa1, 0x7e, 0x9b, 0x19, 0xca, 0xe9, 0xcc, 0x50, 0x7e, 0xcd,
+	0x0c, 0xe5, 0xfd, 0x13, 0x3f, 0x48, 0x47, 0x93, 0xbe, 0x35, 0xa0, 0xa1, 0x3d, 0xd7, 0x7d, 0x44,
+	0x87, 0xc3, 0x60, 0x10, 0xb8, 0x63, 0x7b, 0x34, 0xe9, 0xdb, 0x59, 0xbb, 0x63, 0x7f, 0x91, 0xaf,
+	0x52, 0xfa, 0x35, 0x46, 0x66, 0x67, 0xed, 0x7e, 0x9d, 0xbf, 0x4a, 0x8f, 0xff, 0x06, 0x00, 0x00,
+	0xff, 0xff, 0x49, 0x78, 0x50, 0x58, 0xfd, 0x04, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -470,7 +469,7 @@ const _ = grpc.SupportPackageIsVersion4
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgServiceClient interface {
 	MsgStart(ctx context.Context, in *MsgStartRequest, opts ...grpc.CallOption) (*MsgStartResponse, error)
-	MsgUpdateDetails(ctx context.Context, in *MsgUpdateDetailsRequest, opts ...grpc.CallOption) (*MsgUpdateDetailsResponse, error)
+	MsgUpdate(ctx context.Context, in *MsgUpdateRequest, opts ...grpc.CallOption) (*MsgUpdateResponse, error)
 	MsgRenew(ctx context.Context, in *MsgRenewRequest, opts ...grpc.CallOption) (*MsgRenewResponse, error)
 	MsgEnd(ctx context.Context, in *MsgEndRequest, opts ...grpc.CallOption) (*MsgEndResponse, error)
 	MsgUpdateParams(ctx context.Context, in *MsgUpdateParamsRequest, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
@@ -493,9 +492,9 @@ func (c *msgServiceClient) MsgStart(ctx context.Context, in *MsgStartRequest, op
 	return out, nil
 }
 
-func (c *msgServiceClient) MsgUpdateDetails(ctx context.Context, in *MsgUpdateDetailsRequest, opts ...grpc.CallOption) (*MsgUpdateDetailsResponse, error) {
-	out := new(MsgUpdateDetailsResponse)
-	err := c.cc.Invoke(ctx, "/sentinel.lease.v1.MsgService/MsgUpdateDetails", in, out, opts...)
+func (c *msgServiceClient) MsgUpdate(ctx context.Context, in *MsgUpdateRequest, opts ...grpc.CallOption) (*MsgUpdateResponse, error) {
+	out := new(MsgUpdateResponse)
+	err := c.cc.Invoke(ctx, "/sentinel.lease.v1.MsgService/MsgUpdate", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -532,7 +531,7 @@ func (c *msgServiceClient) MsgUpdateParams(ctx context.Context, in *MsgUpdatePar
 // MsgServiceServer is the server API for MsgService service.
 type MsgServiceServer interface {
 	MsgStart(context.Context, *MsgStartRequest) (*MsgStartResponse, error)
-	MsgUpdateDetails(context.Context, *MsgUpdateDetailsRequest) (*MsgUpdateDetailsResponse, error)
+	MsgUpdate(context.Context, *MsgUpdateRequest) (*MsgUpdateResponse, error)
 	MsgRenew(context.Context, *MsgRenewRequest) (*MsgRenewResponse, error)
 	MsgEnd(context.Context, *MsgEndRequest) (*MsgEndResponse, error)
 	MsgUpdateParams(context.Context, *MsgUpdateParamsRequest) (*MsgUpdateParamsResponse, error)
@@ -545,8 +544,8 @@ type UnimplementedMsgServiceServer struct {
 func (*UnimplementedMsgServiceServer) MsgStart(ctx context.Context, req *MsgStartRequest) (*MsgStartResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method MsgStart not implemented")
 }
-func (*UnimplementedMsgServiceServer) MsgUpdateDetails(ctx context.Context, req *MsgUpdateDetailsRequest) (*MsgUpdateDetailsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method MsgUpdateDetails not implemented")
+func (*UnimplementedMsgServiceServer) MsgUpdate(ctx context.Context, req *MsgUpdateRequest) (*MsgUpdateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MsgUpdate not implemented")
 }
 func (*UnimplementedMsgServiceServer) MsgRenew(ctx context.Context, req *MsgRenewRequest) (*MsgRenewResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method MsgRenew not implemented")
@@ -580,20 +579,20 @@ func _MsgService_MsgStart_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
-func _MsgService_MsgUpdateDetails_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgUpdateDetailsRequest)
+func _MsgService_MsgUpdate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUpdateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServiceServer).MsgUpdateDetails(ctx, in)
+		return srv.(MsgServiceServer).MsgUpdate(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/sentinel.lease.v1.MsgService/MsgUpdateDetails",
+		FullMethod: "/sentinel.lease.v1.MsgService/MsgUpdate",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServiceServer).MsgUpdateDetails(ctx, req.(*MsgUpdateDetailsRequest))
+		return srv.(MsgServiceServer).MsgUpdate(ctx, req.(*MsgUpdateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -661,8 +660,8 @@ var _MsgService_serviceDesc = grpc.ServiceDesc{
 			Handler:    _MsgService_MsgStart_Handler,
 		},
 		{
-			MethodName: "MsgUpdateDetails",
-			Handler:    _MsgService_MsgUpdateDetails_Handler,
+			MethodName: "MsgUpdate",
+			Handler:    _MsgService_MsgUpdate_Handler,
 		},
 		{
 			MethodName: "MsgRenew",
@@ -740,7 +739,7 @@ func (m *MsgStartRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgUpdateDetailsRequest) Marshal() (dAtA []byte, err error) {
+func (m *MsgUpdateRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -750,12 +749,12 @@ func (m *MsgUpdateDetailsRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgUpdateDetailsRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgUpdateRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgUpdateDetailsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgUpdateRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -930,7 +929,7 @@ func (m *MsgStartResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgUpdateDetailsResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgUpdateResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -940,12 +939,12 @@ func (m *MsgUpdateDetailsResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgUpdateDetailsResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgUpdateResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgUpdateDetailsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgUpdateResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1060,7 +1059,7 @@ func (m *MsgStartRequest) Size() (n int) {
 	return n
 }
 
-func (m *MsgUpdateDetailsRequest) Size() (n int) {
+func (m *MsgUpdateRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1142,7 +1141,7 @@ func (m *MsgStartResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgUpdateDetailsResponse) Size() (n int) {
+func (m *MsgUpdateResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1369,7 +1368,7 @@ func (m *MsgStartRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgUpdateDetailsRequest) Unmarshal(dAtA []byte) error {
+func (m *MsgUpdateRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1392,10 +1391,10 @@ func (m *MsgUpdateDetailsRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgUpdateDetailsRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgUpdateRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgUpdateDetailsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgUpdateRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1908,7 +1907,7 @@ func (m *MsgStartResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgUpdateDetailsResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgUpdateResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1931,10 +1930,10 @@ func (m *MsgUpdateDetailsResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgUpdateDetailsResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgUpdateResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgUpdateDetailsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgUpdateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

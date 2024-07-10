@@ -24,7 +24,7 @@ func GetTxCommands() []*cobra.Command {
 		txCancel(),
 		txAllocate(),
 		txStart(),
-		txUpdateDetails(),
+		txUpdate(),
 		txRenew(),
 		txStartSession(),
 	)

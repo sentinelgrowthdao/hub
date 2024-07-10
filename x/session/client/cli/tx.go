@@ -14,7 +14,7 @@ import (
 	"github.com/sentinel-official/hub/v12/x/session/types/v3"
 )
 
-func txUpdateDetails() *cobra.Command {
+func txUpdate() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "update [id] [download-bytes] [upload-bytes] [duration] [signature]",
 		Short: "Update the details of an existing session",
@@ -50,7 +50,7 @@ func txUpdateDetails() *cobra.Command {
 				return err
 			}
 
-			msg := v3.NewMsgUpdateDetailsRequest(
+			msg := v3.NewMsgUpdateRequest(
 				ctx.FromAddress.Bytes(),
 				id,
 				sdkmath.NewInt(downloadBytes),

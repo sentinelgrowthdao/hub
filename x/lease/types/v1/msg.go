@@ -12,7 +12,7 @@ import (
 
 var (
 	_ sdk.Msg = (*MsgStartRequest)(nil)
-	_ sdk.Msg = (*MsgUpdateDetailsRequest)(nil)
+	_ sdk.Msg = (*MsgUpdateRequest)(nil)
 	_ sdk.Msg = (*MsgRenewRequest)(nil)
 	_ sdk.Msg = (*MsgEndRequest)(nil)
 	_ sdk.Msg = (*MsgUpdateParamsRequest)(nil)
@@ -70,15 +70,15 @@ func (m *MsgStartRequest) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{from.Bytes()}
 }
 
-func NewMsgUpdateDetailsRequest(from base.ProvAddress, id uint64, renewable bool) *MsgUpdateDetailsRequest {
-	return &MsgUpdateDetailsRequest{
+func NewMsgUpdateRequest(from base.ProvAddress, id uint64, renewable bool) *MsgUpdateRequest {
+	return &MsgUpdateRequest{
 		From:      from.String(),
 		ID:        id,
 		Renewable: renewable,
 	}
 }
 
-func (m *MsgUpdateDetailsRequest) ValidateBasic() error {
+func (m *MsgUpdateRequest) ValidateBasic() error {
 	if m.From == "" {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
 	}
@@ -92,7 +92,7 @@ func (m *MsgUpdateDetailsRequest) ValidateBasic() error {
 	return nil
 }
 
-func (m *MsgUpdateDetailsRequest) GetSigners() []sdk.AccAddress {
+func (m *MsgUpdateRequest) GetSigners() []sdk.AccAddress {
 	from, err := base.ProvAddressFromBech32(m.From)
 	if err != nil {
 		panic(err)

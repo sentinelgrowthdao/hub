@@ -28,9 +28,9 @@ func (k *msgServer) MsgStart(c context.Context, msg *v3.MsgStartRequest) (*v3.Ms
 	return k.HandleMsgStart(ctx, msg)
 }
 
-func (k *msgServer) MsgUpdateDetails(c context.Context, msg *v3.MsgUpdateDetailsRequest) (*v3.MsgUpdateDetailsResponse, error) {
+func (k *msgServer) MsgUpdate(c context.Context, msg *v3.MsgUpdateRequest) (*v3.MsgUpdateResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleMsgUpdateDetails(ctx, msg)
+	return k.HandleMsgUpdate(ctx, msg)
 }
 
 func (k *msgServer) MsgRenew(_ context.Context, _ *v3.MsgRenewRequest) (*v3.MsgRenewResponse, error) {

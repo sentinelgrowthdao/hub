@@ -181,7 +181,7 @@ func (k *Keeper) HandleMsgStart(ctx sdk.Context, msg *v3.MsgStartRequest) (*v3.M
 	return &v3.MsgStartResponse{}, nil
 }
 
-func (k *Keeper) HandleMsgUpdateDetails(ctx sdk.Context, msg *v3.MsgUpdateDetailsRequest) (*v3.MsgUpdateDetailsResponse, error) {
+func (k *Keeper) HandleMsgUpdate(ctx sdk.Context, msg *v3.MsgUpdateRequest) (*v3.MsgUpdateResponse, error) {
 	subscription, found := k.GetSubscription(ctx, msg.ID)
 	if !found {
 		return nil, types.NewErrorSubscriptionNotFound(msg.ID)
@@ -212,7 +212,7 @@ func (k *Keeper) HandleMsgUpdateDetails(ctx sdk.Context, msg *v3.MsgUpdateDetail
 	k.SetSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
 	k.SetSubscriptionForRenewalAt(ctx, subscription.RenewalAt, subscription.ID)
 
-	return &v3.MsgUpdateDetailsResponse{}, nil
+	return &v3.MsgUpdateResponse{}, nil
 }
 
 func (k *Keeper) HandleMsgRenew(ctx sdk.Context, msg *v3.MsgRenewRequest) (*v3.MsgRenewResponse, error) {
