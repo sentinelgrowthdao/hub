@@ -21,6 +21,9 @@ func AccAddrFromFlags(flags *pflag.FlagSet) (sdk.AccAddress, error) {
 	if err != nil {
 		return nil, err
 	}
+	if s == "" {
+		return nil, err
+	}
 
 	return sdk.AccAddressFromBech32(s)
 }
@@ -28,6 +31,9 @@ func AccAddrFromFlags(flags *pflag.FlagSet) (sdk.AccAddress, error) {
 func NodeAddrFromFlags(flags *pflag.FlagSet) (NodeAddress, error) {
 	s, err := flags.GetString(FlagNodeAddr)
 	if err != nil {
+		return nil, err
+	}
+	if s == "" {
 		return nil, err
 	}
 
@@ -41,6 +47,9 @@ func PlanIDFromFlags(flags *pflag.FlagSet) (uint64, error) {
 func ProvAddrFromFlags(flags *pflag.FlagSet) (ProvAddress, error) {
 	s, err := flags.GetString(FlagProvAddr)
 	if err != nil {
+		return nil, err
+	}
+	if s == "" {
 		return nil, err
 	}
 
