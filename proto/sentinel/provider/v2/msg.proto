@@ -2,7 +2,6 @@ syntax = "proto3";
 package sentinel.provider.v2;
 
 import "gogoproto/gogo.proto";
-import "sentinel/provider/v2/params.proto";
 import "sentinel/types/v1/status.proto";
 
 option go_package = "github.com/sentinel-official/hub/v12/x/provider/types/v2";
@@ -26,17 +25,10 @@ message MsgUpdateRequest {
   sentinel.types.v1.Status status = 6;
 }
 
-message MsgUpdateParamsRequest {
-  string from = 1;
-  Params params = 2 [(gogoproto.nullable) = false];
-}
-
 message MsgRegisterResponse {}
 message MsgUpdateResponse {}
-message MsgUpdateParamsResponse {}
 
 service MsgService {
   rpc MsgRegister(MsgRegisterRequest) returns (MsgRegisterResponse);
   rpc MsgUpdate(MsgUpdateRequest) returns (MsgUpdateResponse);
-  rpc MsgUpdateParams(MsgUpdateParamsRequest) returns (MsgUpdateParamsResponse);
 }

@@ -7,6 +7,7 @@ import (
 	v1base "github.com/sentinel-official/hub/v12/types/v1"
 	"github.com/sentinel-official/hub/v12/x/provider/types"
 	"github.com/sentinel-official/hub/v12/x/provider/types/v2"
+	"github.com/sentinel-official/hub/v12/x/provider/types/v3"
 )
 
 func (k *Keeper) HandleMsgRegister(ctx sdk.Context, msg *v2.MsgRegisterRequest) (*v2.MsgRegisterResponse, error) {
@@ -95,11 +96,11 @@ func (k *Keeper) HandleMsgUpdate(ctx sdk.Context, msg *v2.MsgUpdateRequest) (*v2
 	return &v2.MsgUpdateResponse{}, nil
 }
 
-func (k *Keeper) HandleMsgUpdateParams(ctx sdk.Context, msg *v2.MsgUpdateParamsRequest) (*v2.MsgUpdateParamsResponse, error) {
+func (k *Keeper) HandleMsgUpdateParams(ctx sdk.Context, msg *v3.MsgUpdateParamsRequest) (*v3.MsgUpdateParamsResponse, error) {
 	if msg.From != k.authority {
 		return nil, types.NewErrorUnauthorized(msg.From)
 	}
 
 	k.SetParams(ctx, msg.Params)
-	return &v2.MsgUpdateParamsResponse{}, nil
+	return &v3.MsgUpdateParamsResponse{}, nil
 }

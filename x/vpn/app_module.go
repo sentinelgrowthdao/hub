@@ -15,16 +15,20 @@ import (
 	"github.com/spf13/cobra"
 
 	v1deposittypes "github.com/sentinel-official/hub/v12/x/deposit/types/v1"
+	v1leasetypes "github.com/sentinel-official/hub/v12/x/lease/types/v1"
 	v1nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v1"
 	v2nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v2"
+	v3nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v3"
 	v1plantypes "github.com/sentinel-official/hub/v12/x/plan/types/v1"
 	v2plantypes "github.com/sentinel-official/hub/v12/x/plan/types/v2"
 	v1providertypes "github.com/sentinel-official/hub/v12/x/provider/types/v1"
 	v2providertypes "github.com/sentinel-official/hub/v12/x/provider/types/v2"
 	v1sessiontypes "github.com/sentinel-official/hub/v12/x/session/types/v1"
 	v2sessiontypes "github.com/sentinel-official/hub/v12/x/session/types/v2"
+	v3sessiontypes "github.com/sentinel-official/hub/v12/x/session/types/v3"
 	v1subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types/v1"
 	v2subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types/v2"
+	v3subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types/v3"
 	"github.com/sentinel-official/hub/v12/x/vpn/client/cli"
 	"github.com/sentinel-official/hub/v12/x/vpn/expected"
 	"github.com/sentinel-official/hub/v12/x/vpn/keeper"
@@ -55,6 +59,7 @@ func (amb AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegist
 
 func (amb AppModuleBasic) RegisterGRPCGatewayRoutes(ctx client.Context, mux *runtime.ServeMux) {
 	_ = v1deposittypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v1deposittypes.NewQueryServiceClient(ctx))
+	_ = v1leasetypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v1leasetypes.NewQueryServiceClient(ctx))
 	_ = v1nodetypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v1nodetypes.NewQueryServiceClient(ctx))
 	_ = v1plantypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v1plantypes.NewQueryServiceClient(ctx))
 	_ = v1providertypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v1providertypes.NewQueryServiceClient(ctx))
@@ -66,6 +71,10 @@ func (amb AppModuleBasic) RegisterGRPCGatewayRoutes(ctx client.Context, mux *run
 	_ = v2providertypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v2providertypes.NewQueryServiceClient(ctx))
 	_ = v2sessiontypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v2sessiontypes.NewQueryServiceClient(ctx))
 	_ = v2subscriptiontypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v2subscriptiontypes.NewQueryServiceClient(ctx))
+
+	_ = v3nodetypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v3nodetypes.NewQueryServiceClient(ctx))
+	_ = v3sessiontypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v3sessiontypes.NewQueryServiceClient(ctx))
+	_ = v3subscriptiontypes.RegisterQueryServiceHandlerClient(context.Background(), mux, v3subscriptiontypes.NewQueryServiceClient(ctx))
 }
 
 func (amb AppModuleBasic) GetTxCmd() *cobra.Command { return cli.GetTxCmd() }

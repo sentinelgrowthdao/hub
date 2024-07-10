@@ -1,4 +1,4 @@
-package v1
+package v3
 
 import (
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -9,6 +9,7 @@ import (
 func RegisterInterfaces(registry codectypes.InterfaceRegistry) {
 	registry.RegisterImplementations(
 		(*sdk.Msg)(nil),
+		&MsgStartSessionRequest{},
 		&MsgUpdateParamsRequest{},
 	)
 

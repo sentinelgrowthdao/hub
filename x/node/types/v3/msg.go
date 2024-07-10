@@ -10,6 +10,7 @@ import (
 
 var (
 	_ sdk.Msg = (*MsgStartSessionRequest)(nil)
+	_ sdk.Msg = (*MsgUpdateParamsRequest)(nil)
 )
 
 func NewMsgStartSessionRequest(from sdk.AccAddress, nodeAddr base.NodeAddress, gigabytes, hours int64, denom string) *MsgStartSessionRequest {
@@ -68,4 +69,34 @@ func (m *MsgStartSessionRequest) GetSigners() []sdk.AccAddress {
 	}
 
 	return []sdk.AccAddress{from}
+}
+
+func NewMsgUpdateParamsRequest(from sdk.AccAddress, params Params) *MsgUpdateParamsRequest {
+	return &MsgUpdateParamsRequest{
+		From:   from.String(),
+		Params: params,
+	}
+}
+
+func (m *MsgUpdateParamsRequest) ValidateBasic() error {
+	if m.From == "" {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
+	}
+	if _, err := sdk.AccAddressFromBech32(m.From); err != nil {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
+	}
+	if err := m.Params.Validate(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *MsgUpdateParamsRequest) GetSigners() []sdk.AccAddress {
+	from, err := sdk.AccAddressFromBech32(m.From)
+	if err != nil {
+		panic(err)
+	}
+
+	return []sdk.AccAddress{from.Bytes()}
 }

@@ -6,8 +6,10 @@ import (
 	"github.com/sentinel-official/hub/v12/x/provider/keeper"
 	"github.com/sentinel-official/hub/v12/x/provider/services/v1"
 	"github.com/sentinel-official/hub/v12/x/provider/services/v2"
+	"github.com/sentinel-official/hub/v12/x/provider/services/v3"
 	v1types "github.com/sentinel-official/hub/v12/x/provider/types/v1"
 	v2types "github.com/sentinel-official/hub/v12/x/provider/types/v2"
+	v3types "github.com/sentinel-official/hub/v12/x/provider/types/v3"
 )
 
 func RegisterServices(configurator sdkmodule.Configurator, k keeper.Keeper) {
@@ -16,4 +18,6 @@ func RegisterServices(configurator sdkmodule.Configurator, k keeper.Keeper) {
 
 	v2types.RegisterMsgServiceServer(configurator.MsgServer(), v2.NewMsgServiceServer(k))
 	v2types.RegisterQueryServiceServer(configurator.QueryServer(), v2.NewQueryServiceServer(k))
+
+	v3types.RegisterMsgServiceServer(configurator.MsgServer(), v3.NewMsgServiceServer(k))
 }

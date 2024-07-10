@@ -1,0 +1,20 @@
+syntax = "proto3";
+package sentinel.provider.v3;
+
+import "gogoproto/gogo.proto";
+import "sentinel/provider/v2/params.proto";
+
+option go_package = "github.com/sentinel-official/hub/v12/x/provider/types/v3";
+option (gogoproto.equal_all) = false;
+option (gogoproto.goproto_getters_all) = false;
+
+message MsgUpdateParamsRequest {
+  string from = 1;
+  sentinel.provider.v2.Params params = 2 [(gogoproto.nullable) = false];
+}
+
+message MsgUpdateParamsResponse {}
+
+service MsgService {
+  rpc MsgUpdateParams(MsgUpdateParamsRequest) returns (MsgUpdateParamsResponse);
+}
