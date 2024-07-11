@@ -87,6 +87,17 @@ func (k *Keeper) HandleMsgStart(ctx sdk.Context, msg *v1.MsgStartRequest) (*v1.M
 	k.SetLeaseForPayoutAt(ctx, lease.PayoutAt, lease.ID)
 	k.SetLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
 
+	ctx.EventManager().EmitTypedEvent(
+		&v1.EventCreate{
+			ID:          lease.ID,
+			NodeAddress: lease.NodeAddress,
+			ProvAddress: lease.ProvAddress,
+			MaxHours:    lease.MaxHours,
+			Price:       lease.Price.String(),
+			Deposit:     lease.Deposit.String(),
+		},
+	)
+
 	return &v1.MsgStartResponse{}, nil
 }
 
@@ -115,8 +126,19 @@ func (k *Keeper) HandleMsgUpdate(ctx sdk.Context, msg *v1.MsgUpdateRequest) (*v1
 		}
 	}
 
+	k.SetLease(ctx, lease)
 	k.SetLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
 	k.SetLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
+
+	ctx.EventManager().EmitTypedEvent(
+		&v1.EventUpdate{
+			ID:          lease.ID,
+			NodeAddress: lease.NodeAddress,
+			ProvAddress: lease.ProvAddress,
+			InactiveAt:  lease.InactiveAt.String(),
+			RenewalAt:   lease.RenewalAt.String(),
+		},
+	)
 
 	return &v1.MsgUpdateResponse{}, nil
 }
@@ -170,6 +192,14 @@ func (k *Keeper) HandleMsgRenew(ctx sdk.Context, msg *v1.MsgRenewRequest) (*v1.M
 		return nil, err
 	}
 
+	ctx.EventManager().EmitTypedEvent(
+		&v1.EventRefund{
+			ID:          lease.ID,
+			ProvAddress: lease.ProvAddress,
+			Amount:      amount.String(),
+		},
+	)
+
 	k.DeleteLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
 	k.DeleteLeaseForPayoutAt(ctx, lease.PayoutAt, lease.ID)
 	k.DeleteLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
@@ -206,6 +236,17 @@ func (k *Keeper) HandleMsgRenew(ctx sdk.Context, msg *v1.MsgRenewRequest) (*v1.M
 	k.SetLeaseForPayoutAt(ctx, lease.PayoutAt, lease.ID)
 	k.SetLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
 
+	ctx.EventManager().EmitTypedEvent(
+		&v1.EventRenew{
+			ID:          lease.ID,
+			NodeAddress: lease.NodeAddress,
+			ProvAddress: lease.ProvAddress,
+			MaxHours:    lease.MaxHours,
+			Price:       lease.Price.String(),
+			Deposit:     lease.Deposit.String(),
+		},
+	)
+
 	return &v1.MsgRenewResponse{}, nil
 }
 
@@ -232,6 +273,14 @@ func (k *Keeper) HandleMsgEnd(ctx sdk.Context, msg *v1.MsgEndRequest) (*v1.MsgEn
 		return nil, err
 	}
 
+	ctx.EventManager().EmitTypedEvent(
+		&v1.EventRefund{
+			ID:          lease.ID,
+			ProvAddress: lease.ProvAddress,
+			Amount:      amount.String(),
+		},
+	)
+
 	nodeAddr, err := base.NodeAddressFromBech32(lease.NodeAddress)
 	if err != nil {
 		return nil, err
@@ -244,6 +293,14 @@ func (k *Keeper) HandleMsgEnd(ctx sdk.Context, msg *v1.MsgEndRequest) (*v1.MsgEn
 	k.DeleteLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
 	k.DeleteLeaseForPayoutAt(ctx, lease.PayoutAt, lease.ID)
 	k.DeleteLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
+
+	ctx.EventManager().EmitTypedEvent(
+		&v1.EventEnd{
+			ID:          lease.ID,
+			NodeAddress: lease.NodeAddress,
+			ProvAddress: lease.ProvAddress,
+		},
+	)
 
 	return &v1.MsgEndResponse{}, nil
 }

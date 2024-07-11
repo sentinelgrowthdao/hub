@@ -13,6 +13,9 @@ var (
 	_ sessiontypes.Session = (*Session)(nil)
 )
 
+func (m *Session) GetDownloadBytes() sdkmath.Int { return m.DownloadBytes }
+func (m *Session) GetUploadBytes() sdkmath.Int   { return m.UploadBytes }
+
 func (m *Session) MsgEndRequest() *sessiontypes.MsgEndRequest {
 	return &sessiontypes.MsgEndRequest{
 		From: m.AccAddress,

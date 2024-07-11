@@ -38,8 +38,12 @@ func (k *Keeper) HandleMsgRegister(ctx sdk.Context, msg *v2.MsgRegisterRequest) 
 
 	k.SetProvider(ctx, provider)
 	ctx.EventManager().EmitTypedEvent(
-		&v2.EventRegister{
-			Address: provider.Address,
+		&v3.EventCreate{
+			ProvAddress: provider.Address,
+			Name:        provider.Name,
+			Identity:    provider.Identity,
+			Website:     provider.Website,
+			Description: provider.Description,
 		},
 	)
 
@@ -88,8 +92,13 @@ func (k *Keeper) HandleMsgUpdate(ctx sdk.Context, msg *v2.MsgUpdateRequest) (*v2
 
 	k.SetProvider(ctx, provider)
 	ctx.EventManager().EmitTypedEvent(
-		&v2.EventUpdate{
-			Address: provider.Address,
+		&v3.EventUpdate{
+			ProvAddress: provider.Address,
+			Name:        provider.Name,
+			Identity:    provider.Identity,
+			Website:     provider.Website,
+			Description: provider.Description,
+			Status:      provider.Status,
 		},
 	)
 

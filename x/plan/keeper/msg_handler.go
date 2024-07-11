@@ -7,6 +7,7 @@ import (
 	v1base "github.com/sentinel-official/hub/v12/types/v1"
 	"github.com/sentinel-official/hub/v12/x/plan/types"
 	"github.com/sentinel-official/hub/v12/x/plan/types/v2"
+	"github.com/sentinel-official/hub/v12/x/plan/types/v3"
 )
 
 func (k *Keeper) HandleMsgCreate(ctx sdk.Context, msg *v2.MsgCreateRequest) (*v2.MsgCreateResponse, error) {
@@ -33,10 +34,14 @@ func (k *Keeper) HandleMsgCreate(ctx sdk.Context, msg *v2.MsgCreateRequest) (*v2
 	k.SetCount(ctx, count+1)
 	k.SetPlan(ctx, plan)
 	k.SetPlanForProvider(ctx, provAddr, plan.ID)
+
 	ctx.EventManager().EmitTypedEvent(
-		&v2.EventCreate{
-			Address: plan.ProviderAddress,
-			ID:      plan.ID,
+		&v3.EventCreate{
+			ID:          plan.ID,
+			ProvAddress: plan.ProviderAddress,
+			Duration:    plan.Duration,
+			Gigabytes:   plan.Gigabytes,
+			Prices:      plan.Prices.String(),
 		},
 	)
 
@@ -68,10 +73,10 @@ func (k *Keeper) HandleMsgUpdateStatus(ctx sdk.Context, msg *v2.MsgUpdateStatusR
 
 	k.SetPlan(ctx, plan)
 	ctx.EventManager().EmitTypedEvent(
-		&v2.EventUpdateStatus{
-			Status:  plan.Status,
-			Address: plan.ProviderAddress,
-			ID:      plan.ID,
+		&v3.EventUpdateStatus{
+			ID:          plan.ID,
+			ProvAddress: plan.ProviderAddress,
+			Status:      plan.Status,
 		},
 	)
 
@@ -98,10 +103,10 @@ func (k *Keeper) HandleMsgLinkNode(ctx sdk.Context, msg *v2.MsgLinkNodeRequest) 
 
 	k.node.SetNodeForPlan(ctx, plan.ID, nodeAddr)
 	ctx.EventManager().EmitTypedEvent(
-		&v2.EventLinkNode{
-			Address:     plan.ProviderAddress,
-			NodeAddress: msg.NodeAddress,
+		&v3.EventLinkNode{
 			ID:          plan.ID,
+			ProvAddress: plan.ProviderAddress,
+			NodeAddress: nodeAddr.String(),
 		},
 	)
 
@@ -124,10 +129,10 @@ func (k *Keeper) HandleMsgUnlinkNode(ctx sdk.Context, msg *v2.MsgUnlinkNodeReque
 
 	k.node.DeleteNodeForPlan(ctx, plan.ID, nodeAddr)
 	ctx.EventManager().EmitTypedEvent(
-		&v2.EventUnlinkNode{
-			Address:     plan.ProviderAddress,
-			NodeAddress: msg.NodeAddress,
+		&v3.EventUnlinkNode{
 			ID:          plan.ID,
+			ProvAddress: plan.ProviderAddress,
+			NodeAddress: nodeAddr.String(),
 		},
 	)
 

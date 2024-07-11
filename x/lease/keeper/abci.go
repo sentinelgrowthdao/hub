@@ -27,12 +27,14 @@ func (k *Keeper) handleLeasePayouts(ctx sdk.Context) {
 	k.IterateLeasesForPayoutAt(ctx, ctx.BlockTime(), func(_ int, item v1.Lease) bool {
 		k.DeleteLeaseForPayoutAt(ctx, item.PayoutAt, item.ID)
 
+		reward := baseutils.GetProportionOfCoin(item.Price, share)
+		payment := item.Price.Sub(reward)
+
 		provAddr, err := base.ProvAddressFromBech32(item.ProvAddress)
 		if err != nil {
 			panic(err)
 		}
 
-		reward := baseutils.GetProportionOfCoin(item.Price, share)
 		if err := k.SendCoinFromDepositToModule(ctx, provAddr.Bytes(), k.feeCollectorName, reward); err != nil {
 			panic(err)
 		}
@@ -42,10 +44,19 @@ func (k *Keeper) handleLeasePayouts(ctx sdk.Context) {
 			panic(err)
 		}
 
-		payment := item.Price.Sub(reward)
 		if err := k.SendCoinFromDepositToAccount(ctx, provAddr.Bytes(), nodeAddr.Bytes(), payment); err != nil {
 			panic(err)
 		}
+
+		ctx.EventManager().EmitTypedEvent(
+			&v1.EventPay{
+				ID:            item.ID,
+				NodeAddress:   item.NodeAddress,
+				ProvAddress:   item.ProvAddress,
+				Payment:       payment.String(),
+				StakingReward: reward.String(),
+			},
+		)
 
 		item.Hours = item.Hours + 1
 		if item.Hours < item.MaxHours {
@@ -56,6 +67,16 @@ func (k *Keeper) handleLeasePayouts(ctx sdk.Context) {
 
 		k.SetLease(ctx, item)
 		k.SetLeaseForPayoutAt(ctx, item.PayoutAt, item.ID)
+
+		ctx.EventManager().EmitTypedEvent(
+			&v1.EventUpdate{
+				ID:          item.ID,
+				NodeAddress: item.NodeAddress,
+				ProvAddress: item.ProvAddress,
+				Hours:       item.Hours,
+				PayoutAt:    item.PayoutAt.String(),
+			},
+		)
 
 		return false
 	})

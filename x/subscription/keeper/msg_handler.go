@@ -15,17 +15,17 @@ import (
 )
 
 func (k *Keeper) HandleMsgAllocate(ctx sdk.Context, msg *v2.MsgAllocateRequest) (*v2.MsgAllocateResponse, error) {
-	fromAddr, err := sdk.AccAddressFromBech32(msg.From)
-	if err != nil {
-		return nil, err
-	}
-
 	subscription, found := k.GetSubscription(ctx, msg.ID)
 	if !found {
 		return nil, types.NewErrorSubscriptionNotFound(msg.ID)
 	}
 	if msg.From != subscription.AccAddress {
 		return nil, types.NewErrorUnauthorized(msg.From)
+	}
+
+	fromAddr, err := sdk.AccAddressFromBech32(msg.From)
+	if err != nil {
+		return nil, err
 	}
 
 	fromAlloc, found := k.GetAllocation(ctx, subscription.ID, fromAddr)
@@ -64,6 +64,14 @@ func (k *Keeper) HandleMsgAllocate(ctx sdk.Context, msg *v2.MsgAllocateRequest) 
 	}
 
 	k.SetAllocation(ctx, fromAlloc)
+	ctx.EventManager().EmitTypedEvent(
+		&v3.EventAllocate{
+			ID:            fromAlloc.ID,
+			AccAddress:    fromAlloc.Address,
+			GrantedBytes:  fromAlloc.GrantedBytes.String(),
+			UtilisedBytes: fromAlloc.GrantedBytes.String(),
+		},
+	)
 
 	toAlloc.GrantedBytes = msg.Bytes
 	if toAlloc.GrantedBytes.LT(toAlloc.UtilisedBytes) {
@@ -71,6 +79,14 @@ func (k *Keeper) HandleMsgAllocate(ctx sdk.Context, msg *v2.MsgAllocateRequest) 
 	}
 
 	k.SetAllocation(ctx, toAlloc)
+	ctx.EventManager().EmitTypedEvent(
+		&v3.EventAllocate{
+			ID:            toAlloc.ID,
+			AccAddress:    toAlloc.Address,
+			GrantedBytes:  toAlloc.GrantedBytes.String(),
+			UtilisedBytes: toAlloc.GrantedBytes.String(),
+		},
+	)
 
 	return &v2.MsgAllocateResponse{}, nil
 }
@@ -103,15 +119,21 @@ func (k *Keeper) HandleMsgCancel(ctx sdk.Context, msg *v2.MsgCancelRequest) (*v2
 	k.SetSubscription(ctx, subscription)
 	k.SetSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
 
+	ctx.EventManager().EmitTypedEvent(
+		&v3.EventUpdate{
+			ID:         subscription.ID,
+			PlanID:     subscription.PlanID,
+			AccAddress: subscription.AccAddress,
+			Status:     subscription.Status,
+			InactiveAt: subscription.InactiveAt.String(),
+			RenewalAt:  subscription.RenewalAt.String(),
+		},
+	)
+
 	return &v2.MsgCancelResponse{}, nil
 }
 
 func (k *Keeper) HandleMsgStart(ctx sdk.Context, msg *v3.MsgStartRequest) (*v3.MsgStartResponse, error) {
-	accAddr, err := sdk.AccAddressFromBech32(msg.From)
-	if err != nil {
-		return nil, err
-	}
-
 	plan, found := k.plan.GetPlan(ctx, msg.ID)
 	if !found {
 		return nil, types.NewErrorPlanNotFound(msg.ID)
@@ -128,8 +150,14 @@ func (k *Keeper) HandleMsgStart(ctx sdk.Context, msg *v3.MsgStartRequest) (*v3.M
 	}
 
 	share := k.provider.StakingShare(ctx)
-
 	reward := baseutils.GetProportionOfCoin(price, share)
+	payment := price.Sub(reward)
+
+	accAddr, err := sdk.AccAddressFromBech32(msg.From)
+	if err != nil {
+		return nil, err
+	}
+
 	if err := k.SendCoinFromAccountToModule(ctx, accAddr, k.feeCollectorName, reward); err != nil {
 		return nil, err
 	}
@@ -139,7 +167,6 @@ func (k *Keeper) HandleMsgStart(ctx sdk.Context, msg *v3.MsgStartRequest) (*v3.M
 		return nil, err
 	}
 
-	payment := price.Sub(reward)
 	if err := k.SendCoin(ctx, accAddr, provAddr.Bytes(), payment); err != nil {
 		return nil, err
 	}
@@ -169,6 +196,24 @@ func (k *Keeper) HandleMsgStart(ctx sdk.Context, msg *v3.MsgStartRequest) (*v3.M
 	k.SetSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
 	k.SetSubscriptionForRenewalAt(ctx, subscription.RenewalAt, subscription.ID)
 
+	ctx.EventManager().EmitTypedEvents(
+		&v3.EventCreate{
+			ID:          subscription.ID,
+			PlanID:      subscription.PlanID,
+			AccAddress:  subscription.AccAddress,
+			ProvAddress: provAddr.String(),
+			Price:       subscription.Price.String(),
+		},
+		&v3.EventPay{
+			ID:            subscription.ID,
+			PlanID:        subscription.PlanID,
+			AccAddress:    subscription.AccAddress,
+			ProvAddress:   provAddr.String(),
+			Payment:       payment.String(),
+			StakingReward: reward.String(),
+		},
+	)
+
 	alloc := v2.Allocation{
 		ID:            subscription.ID,
 		Address:       subscription.AccAddress,
@@ -177,6 +222,14 @@ func (k *Keeper) HandleMsgStart(ctx sdk.Context, msg *v3.MsgStartRequest) (*v3.M
 	}
 
 	k.SetAllocation(ctx, alloc)
+	ctx.EventManager().EmitTypedEvent(
+		&v3.EventAllocate{
+			ID:            alloc.ID,
+			AccAddress:    alloc.Address,
+			GrantedBytes:  alloc.GrantedBytes.String(),
+			UtilisedBytes: alloc.UtilisedBytes.String(),
+		},
+	)
 
 	return &v3.MsgStartResponse{}, nil
 }
@@ -209,8 +262,19 @@ func (k *Keeper) HandleMsgUpdate(ctx sdk.Context, msg *v3.MsgUpdateRequest) (*v3
 		}
 	}
 
+	k.SetSubscription(ctx, subscription)
 	k.SetSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
 	k.SetSubscriptionForRenewalAt(ctx, subscription.RenewalAt, subscription.ID)
+
+	ctx.EventManager().EmitTypedEvent(
+		&v3.EventUpdate{
+			ID:         subscription.ID,
+			PlanID:     subscription.PlanID,
+			AccAddress: subscription.AccAddress,
+			InactiveAt: subscription.InactiveAt.String(),
+			RenewalAt:  subscription.RenewalAt.String(),
+		},
+	)
 
 	return &v3.MsgUpdateResponse{}, nil
 }
@@ -220,22 +284,17 @@ func (k *Keeper) HandleMsgRenew(ctx sdk.Context, msg *v3.MsgRenewRequest) (*v3.M
 }
 
 func (k *Keeper) HandleMsgStartSession(ctx sdk.Context, msg *v3.MsgStartSessionRequest) (*v3.MsgStartSessionResponse, error) {
-	accAddr, err := sdk.AccAddressFromBech32(msg.From)
-	if err != nil {
-		return nil, err
-	}
-
-	nodeAddr, err := base.NodeAddressFromBech32(msg.NodeAddress)
-	if err != nil {
-		return nil, err
-	}
-
 	subscription, found := k.GetSubscription(ctx, msg.ID)
 	if !found {
 		return nil, types.NewErrorSubscriptionNotFound(msg.ID)
 	}
 	if !subscription.Status.Equal(v1base.StatusActive) {
 		return nil, types.NewErrorInvalidSubscriptionStatus(subscription.ID, subscription.Status)
+	}
+
+	nodeAddr, err := base.NodeAddressFromBech32(msg.NodeAddress)
+	if err != nil {
+		return nil, err
 	}
 
 	node, found := k.node.GetNode(ctx, nodeAddr)
@@ -247,6 +306,11 @@ func (k *Keeper) HandleMsgStartSession(ctx sdk.Context, msg *v3.MsgStartSessionR
 	}
 
 	// TODO: check lease exists or not
+
+	accAddr, err := sdk.AccAddressFromBech32(msg.From)
+	if err != nil {
+		return nil, err
+	}
 
 	alloc, found := k.GetAllocation(ctx, subscription.ID, accAddr)
 	if !found {
@@ -280,6 +344,15 @@ func (k *Keeper) HandleMsgStartSession(ctx sdk.Context, msg *v3.MsgStartSessionR
 	k.session.SetSessionForSubscription(ctx, subscription.ID, session.ID)
 	k.session.SetSessionForAllocation(ctx, subscription.ID, accAddr, session.ID)
 	k.session.SetSessionForInactiveAt(ctx, session.InactiveAt, session.ID)
+
+	ctx.EventManager().EmitTypedEvent(
+		&v3.EventCreateSession{
+			ID:             session.ID,
+			AccAddress:     session.AccAddress,
+			NodeAddress:    session.NodeAddress,
+			SubscriptionID: session.SubscriptionID,
+		},
+	)
 
 	return &v3.MsgStartSessionResponse{}, nil
 }

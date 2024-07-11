@@ -42,6 +42,15 @@ func (k *Keeper) HandleMsgEnd(ctx sdk.Context, msg *v3.MsgEndRequest) (*v3.MsgEn
 	k.SetSession(ctx, session)
 	k.SetSessionForInactiveAt(ctx, session.GetInactiveAt(), session.GetID())
 
+	ctx.EventManager().EmitTypedEvent(
+		&v3.EventUpdateStatus{
+			ID:          session.GetID(),
+			AccAddress:  session.GetAccAddress(),
+			NodeAddress: session.GetNodeAddress(),
+			Status:      session.GetStatus(),
+		},
+	)
+
 	return &v3.MsgEndResponse{}, nil
 }
 
@@ -96,6 +105,17 @@ func (k *Keeper) HandleMsgUpdate(ctx sdk.Context, msg *v3.MsgUpdateRequest) (*v3
 	if session.GetStatus().Equal(v1base.StatusActive) {
 		k.SetSessionForInactiveAt(ctx, session.GetInactiveAt(), session.GetID())
 	}
+
+	ctx.EventManager().EmitTypedEvent(
+		&v3.EventUpdateDetails{
+			ID:            session.GetID(),
+			AccAddress:    session.GetAccAddress(),
+			NodeAddress:   session.GetNodeAddress(),
+			DownloadBytes: session.GetDownloadBytes().String(),
+			UploadBytes:   session.GetUploadBytes().String(),
+			Duration:      session.GetDuration(),
+		},
+	)
 
 	return &v3.MsgUpdateResponse{}, nil
 }

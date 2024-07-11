@@ -13,10 +13,13 @@ type Session interface {
 	proto.Message
 
 	GetAccAddress() string
+	GetDownloadBytes() sdkmath.Int
+	GetDuration() time.Duration
 	GetID() uint64
 	GetInactiveAt() time.Time
 	GetNodeAddress() string
 	GetStatus() v1base.Status
+	GetUploadBytes() sdkmath.Int
 
 	MsgEndRequest() *MsgEndRequest
 

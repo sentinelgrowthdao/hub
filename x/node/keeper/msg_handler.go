@@ -48,9 +48,13 @@ func (k *Keeper) HandleMsgRegister(ctx sdk.Context, msg *v2.MsgRegisterRequest) 
 
 	k.SetNode(ctx, node)
 	k.SetNodeForInactiveAt(ctx, node.InactiveAt, nodeAddr)
+
 	ctx.EventManager().EmitTypedEvent(
-		&v2.EventRegister{
-			Address: node.Address,
+		&v3.EventCreate{
+			NodeAddress:    node.Address,
+			GigabytePrices: node.GigabytePrices.String(),
+			HourlyPrices:   node.HourlyPrices.String(),
+			RemoteUrl:      node.RemoteURL,
 		},
 	)
 
@@ -91,8 +95,11 @@ func (k *Keeper) HandleMsgUpdateDetails(ctx sdk.Context, msg *v2.MsgUpdateDetail
 
 	k.SetNode(ctx, node)
 	ctx.EventManager().EmitTypedEvent(
-		&v2.EventUpdateDetails{
-			Address: node.Address,
+		&v3.EventUpdateDetails{
+			NodeAddress:    node.Address,
+			GigabytePrices: node.GigabytePrices.String(),
+			HourlyPrices:   node.HourlyPrices.String(),
+			RemoteUrl:      node.RemoteURL,
 		},
 	)
 
@@ -140,10 +147,11 @@ func (k *Keeper) HandleMsgUpdateStatus(ctx sdk.Context, msg *v2.MsgUpdateStatusR
 
 	k.SetNode(ctx, node)
 	k.SetNodeForInactiveAt(ctx, node.InactiveAt, nodeAddr)
+
 	ctx.EventManager().EmitTypedEvent(
-		&v2.EventUpdateStatus{
-			Status:  node.Status,
-			Address: node.Address,
+		&v3.EventUpdateStatus{
+			NodeAddress: node.Address,
+			Status:      node.Status,
 		},
 	)
 
@@ -237,6 +245,18 @@ func (k *Keeper) HandleMsgStartSession(ctx sdk.Context, msg *v3.MsgStartSessionR
 	k.session.SetSessionForNode(ctx, nodeAddr, session.ID)
 	k.session.SetSessionForInactiveAt(ctx, session.InactiveAt, session.ID)
 
+	ctx.EventManager().EmitTypedEvent(
+		&v3.EventCreateSession{
+			ID:          session.ID,
+			AccAddress:  session.AccAddress,
+			NodeAddress: session.NodeAddress,
+			Price:       session.Price.String(),
+			Deposit:     session.Deposit.String(),
+			MaxBytes:    session.MaxBytes.String(),
+			MaxDuration: session.MaxDuration,
+		},
+	)
+
 	return &v3.MsgStartSessionResponse{}, nil
 }
 
@@ -284,6 +304,15 @@ func (k *Keeper) HandleMsgUpdateParams(ctx sdk.Context, msg *v3.MsgUpdateParamsR
 			}
 
 			k.SetNode(ctx, item)
+			ctx.EventManager().EmitTypedEvent(
+				&v3.EventUpdateDetails{
+					NodeAddress:    item.Address,
+					GigabytePrices: item.GigabytePrices.String(),
+					HourlyPrices:   item.HourlyPrices.String(),
+					RemoteUrl:      item.RemoteURL,
+				},
+			)
+
 			return false
 		})
 	}

@@ -50,6 +50,15 @@ func (k *Keeper) handleInactiveSessions(ctx sdk.Context) {
 		k.DeleteSessionForSubscription(ctx, 0, item.GetID())
 		k.DeleteSessionForInactiveAt(ctx, item.GetInactiveAt(), item.GetID())
 
+		ctx.EventManager().EmitTypedEvent(
+			&v3.EventUpdateStatus{
+				ID:          item.GetID(),
+				AccAddress:  item.GetAccAddress(),
+				NodeAddress: item.GetNodeAddress(),
+				Status:      v1base.StatusInactive,
+			},
+		)
+
 		return false
 	})
 }

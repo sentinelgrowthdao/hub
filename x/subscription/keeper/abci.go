@@ -45,6 +45,15 @@ func (k *Keeper) handleInactiveSubscriptions(ctx sdk.Context) {
 		k.DeleteSubscriptionForPlan(ctx, item.PlanID, item.ID)
 		k.DeleteSubscriptionForInactiveAt(ctx, item.InactiveAt, item.ID)
 
+		ctx.EventManager().EmitTypedEvent(
+			&v3.EventUpdate{
+				ID:         item.ID,
+				PlanID:     item.PlanID,
+				AccAddress: item.AccAddress,
+				Status:     v1base.StatusInactive,
+			},
+		)
+
 		return false
 	})
 }
