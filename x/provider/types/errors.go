@@ -2,6 +2,8 @@ package types
 
 import (
 	sdkerrors "cosmossdk.io/errors"
+
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 var (
@@ -12,11 +14,11 @@ var (
 	ErrorUnauthorized      = sdkerrors.Register(ModuleName, 203, "unauthorized")
 )
 
-func NewErrorDuplicateProvider(addr interface{}) error {
+func NewErrorDuplicateProvider(addr base.ProvAddress) error {
 	return sdkerrors.Wrapf(ErrorDuplicateProvider, "provider %s already exist", addr)
 }
 
-func NewErrorProviderNotFound(addr interface{}) error {
+func NewErrorProviderNotFound(addr base.ProvAddress) error {
 	return sdkerrors.Wrapf(ErrorProviderNotFound, "provider %s does not exist", addr)
 }
 

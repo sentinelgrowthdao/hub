@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"encoding/base64"
+	"encoding/hex"
 	"strconv"
 	"time"
 
@@ -78,7 +78,7 @@ func txUpdateSession() *cobra.Command {
 				return err
 			}
 
-			signature, err := base64.StdEncoding.DecodeString(args[4])
+			signature, err := hex.DecodeString(args[4])
 			if err != nil {
 				return err
 			}

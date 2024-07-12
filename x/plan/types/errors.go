@@ -2,6 +2,8 @@ package types
 
 import (
 	sdkerrors "cosmossdk.io/errors"
+
+	base "github.com/sentinel-official/hub/v12/types"
 )
 
 var (
@@ -13,7 +15,7 @@ var (
 	ErrorUnauthorized     = sdkerrors.Register(ModuleName, 204, "unauthorized")
 )
 
-func NewErrorNodeNotFound(addr interface{}) error {
+func NewErrorNodeNotFound(addr base.NodeAddress) error {
 	return sdkerrors.Wrapf(ErrorNodeNotFound, "node %s does not exist", addr)
 }
 
@@ -21,10 +23,10 @@ func NewErrorPlanNotFound(id uint64) error {
 	return sdkerrors.Wrapf(ErrorPlanNotFound, "plan %d does not exist", id)
 }
 
-func NewErrorProviderNotFound(addr interface{}) error {
+func NewErrorProviderNotFound(addr base.ProvAddress) error {
 	return sdkerrors.Wrapf(ErrorProviderNotFound, "provider %s does not exist", addr)
 }
 
-func NewErrorUnauthorized(addr interface{}) error {
+func NewErrorUnauthorized(addr string) error {
 	return sdkerrors.Wrapf(ErrorUnauthorized, "address %s is not authorized", addr)
 }

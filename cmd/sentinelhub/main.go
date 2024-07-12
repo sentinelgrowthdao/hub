@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"log"
 	"os"
 	"path"
@@ -32,8 +33,9 @@ func main() {
 
 	cmd := NewRootCmd(homeDir)
 	if err = servercmd.Execute(cmd, "SENTINELHUB", homeDir); err != nil {
-		switch e := err.(type) {
-		case server.ErrorCode:
+		var e server.ErrorCode
+		switch {
+		case errors.As(err, &e):
 			os.Exit(e.Code)
 		default:
 			os.Exit(1)
