@@ -11,7 +11,6 @@ import (
 	"github.com/spf13/cobra"
 
 	base "github.com/sentinel-official/hub/v12/types"
-	"github.com/sentinel-official/hub/v12/x/subscription/types/v2"
 	"github.com/sentinel-official/hub/v12/x/subscription/types/v3"
 )
 
@@ -31,7 +30,7 @@ func txCancelSubscription() *cobra.Command {
 				return err
 			}
 
-			msg := v2.NewMsgCancelRequest(
+			msg := v3.NewMsgCancelSubscriptionRequest(
 				ctx.FromAddress,
 				id,
 			)
@@ -108,7 +107,7 @@ func txShareSubscription() *cobra.Command {
 				return err
 			}
 
-			msg := v2.NewMsgAllocateRequest(
+			msg := v3.NewMsgShareSubscriptionRequest(
 				ctx.FromAddress.Bytes(),
 				id,
 				addr,

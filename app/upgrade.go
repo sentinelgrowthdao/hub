@@ -124,13 +124,13 @@ func UpgradeHandler(
 			}
 
 			keepers.StakingKeeper.SetValidator(ctx, validator)
-			ctx.EventManager().EmitEvents(sdk.Events{
+			ctx.EventManager().EmitEvent(
 				sdk.NewEvent(
 					stakingtypes.EventTypeEditValidator,
 					sdk.NewAttribute(stakingtypes.AttributeKeyCommissionRate, validator.Commission.String()),
 					sdk.NewAttribute(stakingtypes.AttributeKeyMinSelfDelegation, validator.MinSelfDelegation.String()),
 				),
-			})
+			)
 		}
 
 		ibcClientParams := keepers.IBCKeeper.ClientKeeper.GetParams(ctx)
@@ -240,7 +240,7 @@ func undelegateAllDelegations(ctx sdk.Context, k *stakingkeeper.Keeper, accAddr 
 			return err
 		}
 
-		ctx.EventManager().EmitEvents(sdk.Events{
+		ctx.EventManager().EmitEvent(
 			sdk.NewEvent(
 				stakingtypes.EventTypeUnbond,
 				sdk.NewAttribute(stakingtypes.AttributeKeyValidator, item.ValidatorAddress),
@@ -248,7 +248,7 @@ func undelegateAllDelegations(ctx sdk.Context, k *stakingkeeper.Keeper, accAddr 
 				sdk.NewAttribute(stakingtypes.AttributeKeyDelegator, item.DelegatorAddress),
 				sdk.NewAttribute(stakingtypes.AttributeKeyCompletionTime, completionTime.Format(time.RFC3339)),
 			),
-		})
+		)
 	}
 
 	return nil

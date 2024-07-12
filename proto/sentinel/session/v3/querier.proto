@@ -39,8 +39,6 @@ message QuerySessionRequest {
   uint64 id = 1;
 }
 
-message QueryParamsRequest {}
-
 message QuerySessionsResponse {
   repeated google.protobuf.Any sessions = 1;
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
