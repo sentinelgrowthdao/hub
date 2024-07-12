@@ -9,8 +9,12 @@ import (
 
 func (k *Keeper) NodeInactivePreHook(ctx sdk.Context, addr base.NodeAddress) error {
 	k.IterateLeasesForNode(ctx, addr, func(_ int, item v1.Lease) bool {
-		msg := item.MsgEndRequest()
-		if _, err := k.HandleMsgEnd(ctx, msg); err != nil {
+		msg := &v1.MsgEndLeaseRequest{
+			From: item.ProvAddress,
+			ID:   item.ID,
+		}
+
+		if _, err := k.HandleMsgEndLease(ctx, msg); err != nil {
 			panic(err)
 		}
 
@@ -22,8 +26,12 @@ func (k *Keeper) NodeInactivePreHook(ctx sdk.Context, addr base.NodeAddress) err
 
 func (k *Keeper) ProviderInactivePreHook(ctx sdk.Context, addr base.ProvAddress) error {
 	k.IterateLeasesForProvider(ctx, addr, func(_ int, item v1.Lease) bool {
-		msg := item.MsgEndRequest()
-		if _, err := k.HandleMsgEnd(ctx, msg); err != nil {
+		msg := &v1.MsgEndLeaseRequest{
+			From: item.ProvAddress,
+			ID:   item.ID,
+		}
+
+		if _, err := k.HandleMsgEndLease(ctx, msg); err != nil {
 			panic(err)
 		}
 

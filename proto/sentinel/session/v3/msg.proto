@@ -9,12 +9,12 @@ option go_package = "github.com/sentinel-official/hub/v12/x/session/types/v3";
 option (gogoproto.equal_all) = false;
 option (gogoproto.goproto_getters_all) = false;
 
-message MsgEndRequest {
+message MsgCancelSessionRequest {
   string from = 1;
   uint64 id = 2 [(gogoproto.customname) = "ID"];
 }
 
-message MsgUpdateRequest {
+message MsgUpdateSessionRequest {
   string from = 1;
   uint64 id = 2 [(gogoproto.customname) = "ID"];
   string download_bytes = 3 [
@@ -37,12 +37,12 @@ message MsgUpdateParamsRequest {
   sentinel.session.v2.Params params = 2 [(gogoproto.nullable) = false];
 }
 
-message MsgEndResponse {}
-message MsgUpdateResponse {}
+message MsgCancelSessionResponse {}
+message MsgUpdateSessionResponse {}
 message MsgUpdateParamsResponse {}
 
 service MsgService {
-  rpc MsgEnd(MsgEndRequest) returns (MsgEndResponse);
-  rpc MsgUpdate(MsgUpdateRequest) returns (MsgUpdateResponse);
+  rpc MsgCancelSession(MsgCancelSessionRequest) returns (MsgCancelSessionResponse);
+  rpc MsgUpdateSession(MsgUpdateSessionRequest) returns (MsgUpdateSessionResponse);
   rpc MsgUpdateParams(MsgUpdateParamsRequest) returns (MsgUpdateParamsResponse);
 }

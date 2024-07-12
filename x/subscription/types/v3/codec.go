@@ -9,9 +9,11 @@ import (
 func RegisterInterfaces(registry codectypes.InterfaceRegistry) {
 	registry.RegisterImplementations(
 		(*sdk.Msg)(nil),
-		&MsgStartRequest{},
-		&MsgUpdateRequest{},
-		&MsgRenewRequest{},
+		&MsgCancelSubscriptionRequest{},
+		&MsgRenewSubscriptionRequest{},
+		&MsgShareSubscriptionRequest{},
+		&MsgStartSubscriptionRequest{},
+		&MsgUpdateSubscriptionRequest{},
 		&MsgStartSessionRequest{},
 		&MsgUpdateParamsRequest{},
 	)

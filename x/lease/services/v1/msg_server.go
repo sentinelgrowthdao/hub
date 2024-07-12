@@ -23,26 +23,26 @@ func NewMsgServiceServer(k keeper.Keeper) v1.MsgServiceServer {
 	return &msgServer{k}
 }
 
-func (k *msgServer) MsgStart(c context.Context, msg *v1.MsgStartRequest) (*v1.MsgStartResponse, error) {
+func (m *msgServer) MsgEndLease(c context.Context, req *v1.MsgEndLeaseRequest) (*v1.MsgEndLeaseResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleMsgStart(ctx, msg)
+	return m.HandleMsgEndLease(ctx, req)
 }
 
-func (k *msgServer) MsgUpdate(c context.Context, msg *v1.MsgUpdateRequest) (*v1.MsgUpdateResponse, error) {
-	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleMsgUpdate(ctx, msg)
-}
-
-func (k *msgServer) MsgEnd(c context.Context, msg *v1.MsgEndRequest) (*v1.MsgEndResponse, error) {
-	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleMsgEnd(ctx, msg)
-}
-
-func (k *msgServer) MsgUpdateParams(c context.Context, msg *v1.MsgUpdateParamsRequest) (*v1.MsgUpdateParamsResponse, error) {
-	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleMsgUpdateParams(ctx, msg)
-}
-
-func (k *msgServer) MsgRenew(_ context.Context, _ *v1.MsgRenewRequest) (*v1.MsgRenewResponse, error) {
+func (m *msgServer) MsgRenewLease(_ context.Context, _ *v1.MsgRenewLeaseRequest) (*v1.MsgRenewLeaseResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "")
+}
+
+func (m *msgServer) MsgStartLease(c context.Context, req *v1.MsgStartLeaseRequest) (*v1.MsgStartLeaseResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return m.HandleMsgStartLease(ctx, req)
+}
+
+func (m *msgServer) MsgUpdateLease(c context.Context, req *v1.MsgUpdateLeaseRequest) (*v1.MsgUpdateLeaseResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return m.HandleMsgUpdateLease(ctx, req)
+}
+
+func (m *msgServer) MsgUpdateParams(c context.Context, req *v1.MsgUpdateParamsRequest) (*v1.MsgUpdateParamsResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return m.HandleMsgUpdateParams(ctx, req)
 }

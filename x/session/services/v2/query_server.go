@@ -23,35 +23,35 @@ func NewQueryServiceServer(k keeper.Keeper) v2.QueryServiceServer {
 	return &queryServer{k}
 }
 
-func (k *queryServer) QuerySession(_ context.Context, _ *v2.QuerySessionRequest) (*v2.QuerySessionResponse, error) {
+func (q *queryServer) QuerySession(_ context.Context, _ *v2.QuerySessionRequest) (*v2.QuerySessionResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QuerySessions(_ context.Context, _ *v2.QuerySessionsRequest) (*v2.QuerySessionsResponse, error) {
+func (q *queryServer) QuerySessions(_ context.Context, _ *v2.QuerySessionsRequest) (*v2.QuerySessionsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QuerySessionsForAccount(_ context.Context, _ *v2.QuerySessionsForAccountRequest) (*v2.QuerySessionsForAccountResponse, error) {
+func (q *queryServer) QuerySessionsForAccount(_ context.Context, _ *v2.QuerySessionsForAccountRequest) (*v2.QuerySessionsForAccountResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QuerySessionsForNode(_ context.Context, _ *v2.QuerySessionsForNodeRequest) (*v2.QuerySessionsForNodeResponse, error) {
+func (q *queryServer) QuerySessionsForNode(_ context.Context, _ *v2.QuerySessionsForNodeRequest) (*v2.QuerySessionsForNodeResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QuerySessionsForSubscription(_ context.Context, _ *v2.QuerySessionsForSubscriptionRequest) (*v2.QuerySessionsForSubscriptionResponse, error) {
+func (q *queryServer) QuerySessionsForSubscription(_ context.Context, _ *v2.QuerySessionsForSubscriptionRequest) (*v2.QuerySessionsForSubscriptionResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QuerySessionsForAllocation(_ context.Context, _ *v2.QuerySessionsForAllocationRequest) (*v2.QuerySessionsForAllocationResponse, error) {
+func (q *queryServer) QuerySessionsForAllocation(_ context.Context, _ *v2.QuerySessionsForAllocationRequest) (*v2.QuerySessionsForAllocationResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QueryParams(c context.Context, req *v2.QueryParamsRequest) (*v2.QueryParamsResponse, error) {
+func (q *queryServer) QueryParams(c context.Context, req *v2.QueryParamsRequest) (*v2.QueryParamsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQueryParams(ctx, req)
+	return q.HandleQueryParams(ctx, req)
 }

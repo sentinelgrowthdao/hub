@@ -22,18 +22,18 @@ func NewQueryServiceServer(k keeper.Keeper) v1.QueryServiceServer {
 	return &queryServer{k}
 }
 
-func (k *queryServer) QueryNodes(_ context.Context, _ *v1.QueryNodesRequest) (*v1.QueryNodesResponse, error) {
+func (q *queryServer) QueryNodes(_ context.Context, _ *v1.QueryNodesRequest) (*v1.QueryNodesResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QueryNodesForProvider(_ context.Context, _ *v1.QueryNodesForProviderRequest) (*v1.QueryNodesForProviderResponse, error) {
+func (q *queryServer) QueryNodesForProvider(_ context.Context, _ *v1.QueryNodesForProviderRequest) (*v1.QueryNodesForProviderResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QueryNode(_ context.Context, _ *v1.QueryNodeRequest) (*v1.QueryNodeResponse, error) {
+func (q *queryServer) QueryNode(_ context.Context, _ *v1.QueryNodeRequest) (*v1.QueryNodeResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QueryParams(_ context.Context, _ *v1.QueryParamsRequest) (*v1.QueryParamsResponse, error) {
+func (q *queryServer) QueryParams(_ context.Context, _ *v1.QueryParamsRequest) (*v1.QueryParamsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "")
 }

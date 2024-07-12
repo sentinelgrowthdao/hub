@@ -65,5 +65,5 @@ func (m *MsgSwapRequest) GetSigners() []sdk.AccAddress {
 		panic(err)
 	}
 
-	return []sdk.AccAddress{from}
+	return []sdk.AccAddress{from.Bytes()}
 }

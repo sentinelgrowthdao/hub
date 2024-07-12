@@ -14,8 +14,12 @@ func (k *Keeper) handleInactivePendingSubscriptions(ctx sdk.Context) {
 			return false
 		}
 
-		msg := item.MsgCancelRequest()
-		if _, err := k.HandleMsgCancel(ctx, msg); err != nil {
+		msg := &v3.MsgCancelSubscriptionRequest{
+			From: item.AccAddress,
+			ID:   item.ID,
+		}
+
+		if _, err := k.HandleMsgCancelSubscription(ctx, msg); err != nil {
 			panic(err)
 		}
 
@@ -60,8 +64,13 @@ func (k *Keeper) handleInactiveSubscriptions(ctx sdk.Context) {
 
 func (k *Keeper) handleSubscriptionRenewals(ctx sdk.Context) {
 	k.IterateSubscriptionsForRenewalAt(ctx, ctx.BlockTime(), func(_ int, item v3.Subscription) bool {
-		msg := item.MsgRenewRequest()
-		if _, err := k.HandleMsgRenew(ctx, msg); err != nil {
+		msg := &v3.MsgRenewSubscriptionRequest{
+			From:  item.AccAddress,
+			ID:    item.ID,
+			Denom: item.Price.Denom,
+		}
+
+		if _, err := k.HandleMsgRenewSubscription(ctx, msg); err != nil {
 			panic(err)
 		}
 

@@ -8,7 +8,19 @@ option go_package = "github.com/sentinel-official/hub/v12/x/lease/types/v1";
 option (gogoproto.equal_all) = false;
 option (gogoproto.goproto_getters_all) = false;
 
-message MsgStartRequest {
+message MsgEndLeaseRequest {
+  string from = 1;
+  uint64 id = 2 [(gogoproto.customname) = "ID"];
+}
+
+message MsgRenewLeaseRequest {
+  string from = 1;
+  uint64 id = 2 [(gogoproto.customname) = "ID"];
+  int64 hours = 3;
+  string denom = 4;
+}
+
+message MsgStartLeaseRequest {
   string from = 1;
   string node_address = 2;
   int64 hours = 3;
@@ -16,22 +28,10 @@ message MsgStartRequest {
   bool renewable = 5;
 }
 
-message MsgUpdateRequest {
+message MsgUpdateLeaseRequest {
   string from = 1;
   uint64 id = 2 [(gogoproto.customname) = "ID"];
   bool renewable = 3;
-}
-
-message MsgRenewRequest {
-  string from = 1;
-  uint64 id = 2 [(gogoproto.customname) = "ID"];
-  int64 hours = 3;
-  string denom = 4;
-}
-
-message MsgEndRequest {
-  string from = 1;
-  uint64 id = 2 [(gogoproto.customname) = "ID"];
 }
 
 message MsgUpdateParamsRequest {
@@ -39,16 +39,16 @@ message MsgUpdateParamsRequest {
   Params params = 2 [(gogoproto.nullable) = false];
 }
 
-message MsgStartResponse {}
-message MsgUpdateResponse {}
-message MsgRenewResponse {}
-message MsgEndResponse {}
+message MsgEndLeaseResponse {}
+message MsgRenewLeaseResponse {}
+message MsgStartLeaseResponse {}
+message MsgUpdateLeaseResponse {}
 message MsgUpdateParamsResponse {}
 
 service MsgService {
-  rpc MsgStart(MsgStartRequest) returns (MsgStartResponse);
-  rpc MsgUpdate(MsgUpdateRequest) returns (MsgUpdateResponse);
-  rpc MsgRenew(MsgRenewRequest) returns (MsgRenewResponse);
-  rpc MsgEnd(MsgEndRequest) returns (MsgEndResponse);
+  rpc MsgEndLease(MsgEndLeaseRequest) returns (MsgEndLeaseResponse);
+  rpc MsgRenewLease(MsgRenewLeaseRequest) returns (MsgRenewLeaseResponse);
+  rpc MsgStartLease(MsgStartLeaseRequest) returns (MsgStartLeaseResponse);
+  rpc MsgUpdateLease(MsgUpdateLeaseRequest) returns (MsgUpdateLeaseResponse);
   rpc MsgUpdateParams(MsgUpdateParamsRequest) returns (MsgUpdateParamsResponse);
 }

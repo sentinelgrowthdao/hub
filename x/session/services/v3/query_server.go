@@ -23,56 +23,56 @@ func NewQueryServiceServer(k keeper.Keeper) v3.QueryServiceServer {
 	return &queryServer{k}
 }
 
-func (k *queryServer) QuerySession(c context.Context, req *v3.QuerySessionRequest) (*v3.QuerySessionResponse, error) {
+func (q *queryServer) QuerySession(c context.Context, req *v3.QuerySessionRequest) (*v3.QuerySessionResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQuerySession(ctx, req)
+	return q.HandleQuerySession(ctx, req)
 }
 
-func (k *queryServer) QuerySessions(c context.Context, req *v3.QuerySessionsRequest) (*v3.QuerySessionsResponse, error) {
+func (q *queryServer) QuerySessions(c context.Context, req *v3.QuerySessionsRequest) (*v3.QuerySessionsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQuerySessions(ctx, req)
+	return q.HandleQuerySessions(ctx, req)
 }
 
-func (k *queryServer) QuerySessionsForAccount(c context.Context, req *v3.QuerySessionsForAccountRequest) (*v3.QuerySessionsForAccountResponse, error) {
+func (q *queryServer) QuerySessionsForAccount(c context.Context, req *v3.QuerySessionsForAccountRequest) (*v3.QuerySessionsForAccountResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQuerySessionsForAccount(ctx, req)
+	return q.HandleQuerySessionsForAccount(ctx, req)
 }
 
-func (k *queryServer) QuerySessionsForNode(c context.Context, req *v3.QuerySessionsForNodeRequest) (*v3.QuerySessionsForNodeResponse, error) {
+func (q *queryServer) QuerySessionsForNode(c context.Context, req *v3.QuerySessionsForNodeRequest) (*v3.QuerySessionsForNodeResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQuerySessionsForNode(ctx, req)
+	return q.HandleQuerySessionsForNode(ctx, req)
 }
 
-func (k *queryServer) QuerySessionsForSubscription(c context.Context, req *v3.QuerySessionsForSubscriptionRequest) (*v3.QuerySessionsForSubscriptionResponse, error) {
+func (q *queryServer) QuerySessionsForSubscription(c context.Context, req *v3.QuerySessionsForSubscriptionRequest) (*v3.QuerySessionsForSubscriptionResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQuerySessionsForSubscription(ctx, req)
+	return q.HandleQuerySessionsForSubscription(ctx, req)
 }
 
-func (k *queryServer) QuerySessionsForAllocation(c context.Context, req *v3.QuerySessionsForAllocationRequest) (*v3.QuerySessionsForAllocationResponse, error) {
+func (q *queryServer) QuerySessionsForAllocation(c context.Context, req *v3.QuerySessionsForAllocationRequest) (*v3.QuerySessionsForAllocationResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQuerySessionsForAllocation(ctx, req)
+	return q.HandleQuerySessionsForAllocation(ctx, req)
 }

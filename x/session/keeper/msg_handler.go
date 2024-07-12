@@ -9,7 +9,7 @@ import (
 	"github.com/sentinel-official/hub/v12/x/session/types/v3"
 )
 
-func (k *Keeper) HandleMsgEnd(ctx sdk.Context, msg *v3.MsgEndRequest) (*v3.MsgEndResponse, error) {
+func (k *Keeper) HandleMsgCancelSession(ctx sdk.Context, msg *v3.MsgCancelSessionRequest) (*v3.MsgCancelSessionResponse, error) {
 	fromAddr, err := sdk.AccAddressFromBech32(msg.From)
 	if err != nil {
 		return nil, err
@@ -51,10 +51,10 @@ func (k *Keeper) HandleMsgEnd(ctx sdk.Context, msg *v3.MsgEndRequest) (*v3.MsgEn
 		},
 	)
 
-	return &v3.MsgEndResponse{}, nil
+	return &v3.MsgCancelSessionResponse{}, nil
 }
 
-func (k *Keeper) HandleMsgUpdate(ctx sdk.Context, msg *v3.MsgUpdateRequest) (*v3.MsgUpdateResponse, error) {
+func (k *Keeper) HandleMsgUpdateSession(ctx sdk.Context, msg *v3.MsgUpdateSessionRequest) (*v3.MsgUpdateSessionResponse, error) {
 	fromAddr, err := base.NodeAddressFromBech32(msg.From)
 	if err != nil {
 		return nil, err
@@ -117,7 +117,7 @@ func (k *Keeper) HandleMsgUpdate(ctx sdk.Context, msg *v3.MsgUpdateRequest) (*v3
 		},
 	)
 
-	return &v3.MsgUpdateResponse{}, nil
+	return &v3.MsgUpdateSessionResponse{}, nil
 }
 
 func (k *Keeper) HandleMsgUpdateParams(ctx sdk.Context, msg *v3.MsgUpdateParamsRequest) (*v3.MsgUpdateParamsResponse, error) {

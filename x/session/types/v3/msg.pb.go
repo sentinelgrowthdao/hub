@@ -34,23 +34,23 @@ var _ = time.Kitchen
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-type MsgEndRequest struct {
+type MsgCancelSessionRequest struct {
 	From string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
 	ID   uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 }
 
-func (m *MsgEndRequest) Reset()         { *m = MsgEndRequest{} }
-func (m *MsgEndRequest) String() string { return proto.CompactTextString(m) }
-func (*MsgEndRequest) ProtoMessage()    {}
-func (*MsgEndRequest) Descriptor() ([]byte, []int) {
+func (m *MsgCancelSessionRequest) Reset()         { *m = MsgCancelSessionRequest{} }
+func (m *MsgCancelSessionRequest) String() string { return proto.CompactTextString(m) }
+func (*MsgCancelSessionRequest) ProtoMessage()    {}
+func (*MsgCancelSessionRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_500a511d35bc0487, []int{0}
 }
-func (m *MsgEndRequest) XXX_Unmarshal(b []byte) error {
+func (m *MsgCancelSessionRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgEndRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgCancelSessionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgEndRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgCancelSessionRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -60,19 +60,19 @@ func (m *MsgEndRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error
 		return b[:n], nil
 	}
 }
-func (m *MsgEndRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgEndRequest.Merge(m, src)
+func (m *MsgCancelSessionRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCancelSessionRequest.Merge(m, src)
 }
-func (m *MsgEndRequest) XXX_Size() int {
+func (m *MsgCancelSessionRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgEndRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgEndRequest.DiscardUnknown(m)
+func (m *MsgCancelSessionRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCancelSessionRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgEndRequest proto.InternalMessageInfo
+var xxx_messageInfo_MsgCancelSessionRequest proto.InternalMessageInfo
 
-type MsgUpdateRequest struct {
+type MsgUpdateSessionRequest struct {
 	From          string                `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
 	ID            uint64                `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	DownloadBytes cosmossdk_io_math.Int `protobuf:"bytes,3,opt,name=download_bytes,json=downloadBytes,proto3,customtype=cosmossdk.io/math.Int" json:"download_bytes"`
@@ -81,18 +81,18 @@ type MsgUpdateRequest struct {
 	Signature     []byte                `protobuf:"bytes,6,opt,name=signature,proto3" json:"signature,omitempty"`
 }
 
-func (m *MsgUpdateRequest) Reset()         { *m = MsgUpdateRequest{} }
-func (m *MsgUpdateRequest) String() string { return proto.CompactTextString(m) }
-func (*MsgUpdateRequest) ProtoMessage()    {}
-func (*MsgUpdateRequest) Descriptor() ([]byte, []int) {
+func (m *MsgUpdateSessionRequest) Reset()         { *m = MsgUpdateSessionRequest{} }
+func (m *MsgUpdateSessionRequest) String() string { return proto.CompactTextString(m) }
+func (*MsgUpdateSessionRequest) ProtoMessage()    {}
+func (*MsgUpdateSessionRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_500a511d35bc0487, []int{1}
 }
-func (m *MsgUpdateRequest) XXX_Unmarshal(b []byte) error {
+func (m *MsgUpdateSessionRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgUpdateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgUpdateSessionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgUpdateRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgUpdateSessionRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -102,17 +102,17 @@ func (m *MsgUpdateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, er
 		return b[:n], nil
 	}
 }
-func (m *MsgUpdateRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgUpdateRequest.Merge(m, src)
+func (m *MsgUpdateSessionRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUpdateSessionRequest.Merge(m, src)
 }
-func (m *MsgUpdateRequest) XXX_Size() int {
+func (m *MsgUpdateSessionRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgUpdateRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgUpdateRequest.DiscardUnknown(m)
+func (m *MsgUpdateSessionRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUpdateSessionRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgUpdateRequest proto.InternalMessageInfo
+var xxx_messageInfo_MsgUpdateSessionRequest proto.InternalMessageInfo
 
 type MsgUpdateParamsRequest struct {
 	From   string    `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
@@ -152,21 +152,21 @@ func (m *MsgUpdateParamsRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUpdateParamsRequest proto.InternalMessageInfo
 
-type MsgEndResponse struct {
+type MsgCancelSessionResponse struct {
 }
 
-func (m *MsgEndResponse) Reset()         { *m = MsgEndResponse{} }
-func (m *MsgEndResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgEndResponse) ProtoMessage()    {}
-func (*MsgEndResponse) Descriptor() ([]byte, []int) {
+func (m *MsgCancelSessionResponse) Reset()         { *m = MsgCancelSessionResponse{} }
+func (m *MsgCancelSessionResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgCancelSessionResponse) ProtoMessage()    {}
+func (*MsgCancelSessionResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_500a511d35bc0487, []int{3}
 }
-func (m *MsgEndResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgCancelSessionResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgEndResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgCancelSessionResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgEndResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgCancelSessionResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -176,33 +176,33 @@ func (m *MsgEndResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, erro
 		return b[:n], nil
 	}
 }
-func (m *MsgEndResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgEndResponse.Merge(m, src)
+func (m *MsgCancelSessionResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCancelSessionResponse.Merge(m, src)
 }
-func (m *MsgEndResponse) XXX_Size() int {
+func (m *MsgCancelSessionResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgEndResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgEndResponse.DiscardUnknown(m)
+func (m *MsgCancelSessionResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCancelSessionResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgEndResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgCancelSessionResponse proto.InternalMessageInfo
 
-type MsgUpdateResponse struct {
+type MsgUpdateSessionResponse struct {
 }
 
-func (m *MsgUpdateResponse) Reset()         { *m = MsgUpdateResponse{} }
-func (m *MsgUpdateResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgUpdateResponse) ProtoMessage()    {}
-func (*MsgUpdateResponse) Descriptor() ([]byte, []int) {
+func (m *MsgUpdateSessionResponse) Reset()         { *m = MsgUpdateSessionResponse{} }
+func (m *MsgUpdateSessionResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgUpdateSessionResponse) ProtoMessage()    {}
+func (*MsgUpdateSessionResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_500a511d35bc0487, []int{4}
 }
-func (m *MsgUpdateResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgUpdateSessionResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgUpdateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgUpdateSessionResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgUpdateResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgUpdateSessionResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -212,17 +212,17 @@ func (m *MsgUpdateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, e
 		return b[:n], nil
 	}
 }
-func (m *MsgUpdateResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgUpdateResponse.Merge(m, src)
+func (m *MsgUpdateSessionResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUpdateSessionResponse.Merge(m, src)
 }
-func (m *MsgUpdateResponse) XXX_Size() int {
+func (m *MsgUpdateSessionResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgUpdateResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgUpdateResponse.DiscardUnknown(m)
+func (m *MsgUpdateSessionResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUpdateSessionResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgUpdateResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgUpdateSessionResponse proto.InternalMessageInfo
 
 type MsgUpdateParamsResponse struct {
 }
@@ -261,51 +261,51 @@ func (m *MsgUpdateParamsResponse) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
 
 func init() {
-	proto.RegisterType((*MsgEndRequest)(nil), "sentinel.session.v3.MsgEndRequest")
-	proto.RegisterType((*MsgUpdateRequest)(nil), "sentinel.session.v3.MsgUpdateRequest")
+	proto.RegisterType((*MsgCancelSessionRequest)(nil), "sentinel.session.v3.MsgCancelSessionRequest")
+	proto.RegisterType((*MsgUpdateSessionRequest)(nil), "sentinel.session.v3.MsgUpdateSessionRequest")
 	proto.RegisterType((*MsgUpdateParamsRequest)(nil), "sentinel.session.v3.MsgUpdateParamsRequest")
-	proto.RegisterType((*MsgEndResponse)(nil), "sentinel.session.v3.MsgEndResponse")
-	proto.RegisterType((*MsgUpdateResponse)(nil), "sentinel.session.v3.MsgUpdateResponse")
+	proto.RegisterType((*MsgCancelSessionResponse)(nil), "sentinel.session.v3.MsgCancelSessionResponse")
+	proto.RegisterType((*MsgUpdateSessionResponse)(nil), "sentinel.session.v3.MsgUpdateSessionResponse")
 	proto.RegisterType((*MsgUpdateParamsResponse)(nil), "sentinel.session.v3.MsgUpdateParamsResponse")
 }
 
 func init() { proto.RegisterFile("sentinel/session/v3/msg.proto", fileDescriptor_500a511d35bc0487) }
 
 var fileDescriptor_500a511d35bc0487 = []byte{
-	// 528 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x53, 0xcf, 0x6e, 0xd3, 0x30,
-	0x18, 0x4f, 0x42, 0xa9, 0x56, 0x77, 0x1b, 0xc3, 0x83, 0xd1, 0x15, 0x96, 0x56, 0x41, 0xa0, 0x4a,
-	0x80, 0x2d, 0xd2, 0x03, 0x42, 0x1c, 0x40, 0x51, 0x39, 0xec, 0x50, 0x09, 0x82, 0x38, 0xb0, 0x0b,
-	0x4a, 0x1b, 0xd7, 0xb5, 0x68, 0xe2, 0x10, 0x3b, 0x85, 0xbd, 0x05, 0x47, 0x5e, 0x00, 0x09, 0xde,
-	0xa4, 0xc7, 0x1d, 0x11, 0x87, 0x02, 0xed, 0x8b, 0xa0, 0xc4, 0x49, 0x59, 0x29, 0x94, 0x69, 0x37,
-	0xc7, 0xbf, 0x3f, 0xdf, 0x97, 0xdf, 0xf7, 0x19, 0x1c, 0x08, 0x12, 0x4a, 0x16, 0x92, 0x11, 0x16,
-	0x44, 0x08, 0xc6, 0x43, 0x3c, 0x6e, 0xe3, 0x40, 0x50, 0x14, 0xc5, 0x5c, 0x72, 0xb8, 0x5b, 0xc0,
-	0x28, 0x87, 0xd1, 0xb8, 0x5d, 0xbf, 0x42, 0x39, 0xe5, 0x19, 0x8e, 0xd3, 0x93, 0xa2, 0xd6, 0x4d,
-	0xca, 0x39, 0x1d, 0x11, 0x9c, 0x7d, 0xf5, 0x92, 0x01, 0xf6, 0x93, 0xd8, 0x93, 0xa9, 0x44, 0xe1,
-	0xcd, 0xd5, 0x4a, 0x36, 0x8e, 0xbc, 0xd8, 0x0b, 0x84, 0x62, 0x58, 0x8f, 0xc0, 0x56, 0x57, 0xd0,
-	0xa7, 0xa1, 0xef, 0x92, 0xb7, 0x09, 0x11, 0x12, 0x42, 0x50, 0x1a, 0xc4, 0x3c, 0xa8, 0xe9, 0x4d,
-	0xbd, 0x55, 0x71, 0xb3, 0x33, 0xdc, 0x03, 0x06, 0xf3, 0x6b, 0x46, 0x53, 0x6f, 0x95, 0x9c, 0xf2,
-	0x6c, 0xda, 0x30, 0x0e, 0x3b, 0xae, 0xc1, 0x7c, 0xeb, 0x93, 0x01, 0x76, 0xba, 0x82, 0xbe, 0x8c,
-	0x7c, 0x4f, 0x92, 0x73, 0x18, 0xc0, 0x0e, 0xd8, 0xf6, 0xf9, 0xbb, 0x70, 0xc4, 0x3d, 0xff, 0x75,
-	0xef, 0x58, 0x12, 0x51, 0xbb, 0x90, 0xaa, 0x9c, 0x83, 0xc9, 0xb4, 0xa1, 0x7d, 0x9b, 0x36, 0xae,
-	0xf6, 0xb9, 0x08, 0xb8, 0x10, 0xfe, 0x1b, 0xc4, 0x38, 0x0e, 0x3c, 0x39, 0x44, 0x87, 0xa1, 0x74,
-	0xb7, 0x0a, 0x91, 0x93, 0x6a, 0xe0, 0x13, 0xb0, 0x99, 0x44, 0xa7, 0x3c, 0x4a, 0x67, 0xf1, 0xa8,
-	0x2a, 0x89, 0x72, 0x78, 0x0c, 0x36, 0x8a, 0xe4, 0x6a, 0x17, 0x9b, 0x7a, 0xab, 0x6a, 0xef, 0x23,
-	0x15, 0x2d, 0x2a, 0xa2, 0x45, 0x9d, 0x9c, 0xe0, 0x6c, 0xa4, 0xc6, 0x1f, 0xbf, 0x37, 0x74, 0x77,
-	0x21, 0x82, 0x37, 0x40, 0x45, 0x30, 0x1a, 0x7a, 0x32, 0x89, 0x49, 0xad, 0xdc, 0xd4, 0x5b, 0x9b,
-	0xee, 0xef, 0x0b, 0x8b, 0x82, 0xbd, 0x45, 0x4c, 0xcf, 0xb2, 0xf4, 0xd7, 0x85, 0xf5, 0x10, 0x94,
-	0xd5, 0x88, 0xb2, 0xc0, 0xaa, 0xf6, 0x75, 0xb4, 0xba, 0x10, 0x36, 0x52, 0x3e, 0x4e, 0x29, 0x6d,
-	0xc6, 0xcd, 0x05, 0xd6, 0x0e, 0xd8, 0x2e, 0xa6, 0x29, 0x22, 0x1e, 0x0a, 0x62, 0xed, 0x82, 0xcb,
-	0xa7, 0x26, 0x94, 0x5f, 0xee, 0x83, 0x6b, 0x2b, 0xfd, 0x28, 0xc8, 0xfe, 0x62, 0x00, 0xd0, 0x15,
-	0xf4, 0x05, 0x89, 0xc7, 0xac, 0x4f, 0xe0, 0x73, 0x50, 0x56, 0x86, 0xd0, 0xfa, 0x4b, 0x17, 0x6d,
-	0xb4, 0xb4, 0x3b, 0xf5, 0x9b, 0x6b, 0x39, 0xaa, 0x02, 0x3c, 0x02, 0x95, 0x45, 0x71, 0x78, 0xeb,
-	0x5f, 0x8a, 0xa5, 0x9d, 0xaa, 0xdf, 0xfe, 0x1f, 0x2d, 0xf7, 0x1e, 0x81, 0x4b, 0x7f, 0xfc, 0x18,
-	0xbc, 0xb3, 0x5e, 0xba, 0x34, 0x8e, 0xfa, 0xdd, 0xb3, 0x91, 0x55, 0x35, 0xe7, 0xd5, 0xe4, 0xa7,
-	0xa9, 0x7d, 0x9e, 0x99, 0xda, 0x64, 0x66, 0xea, 0x27, 0x33, 0x53, 0xff, 0x31, 0x33, 0xf5, 0x0f,
-	0x73, 0x53, 0x3b, 0x99, 0x9b, 0xda, 0xd7, 0xb9, 0xa9, 0x1d, 0x3d, 0xa0, 0x4c, 0x0e, 0x93, 0x1e,
-	0xea, 0xf3, 0x00, 0x17, 0xce, 0xf7, 0xf8, 0x60, 0xc0, 0xfa, 0xcc, 0x1b, 0xe1, 0x61, 0xd2, 0xc3,
-	0xe3, 0xfb, 0x36, 0x7e, 0xbf, 0x78, 0x9d, 0xf2, 0x38, 0x22, 0x02, 0x8f, 0xdb, 0xbd, 0x72, 0xb6,
-	0x76, 0xed, 0x5f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x44, 0x1c, 0x84, 0xd2, 0x2b, 0x04, 0x00, 0x00,
+	// 525 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x53, 0xcd, 0x6e, 0xd3, 0x40,
+	0x18, 0xb4, 0x4d, 0x88, 0xda, 0x6d, 0xf9, 0xd1, 0x02, 0xc5, 0x0d, 0xd4, 0x89, 0x72, 0x8a, 0x44,
+	0xbb, 0x2b, 0x9c, 0x03, 0xe2, 0x04, 0x32, 0xe1, 0xd0, 0x43, 0x25, 0xe4, 0x8a, 0x03, 0x5c, 0x90,
+	0x13, 0x6f, 0x36, 0x2b, 0x6c, 0xaf, 0xf1, 0xae, 0x03, 0x7d, 0x0b, 0x8e, 0x3c, 0x02, 0x07, 0x1e,
+	0x24, 0xc7, 0x1e, 0x11, 0x42, 0x01, 0x9c, 0x17, 0x41, 0xf6, 0xda, 0xa1, 0xcd, 0x4f, 0x15, 0x71,
+	0xdb, 0x64, 0xbe, 0x99, 0xf9, 0x34, 0xf3, 0x19, 0x1c, 0x08, 0x12, 0x49, 0x16, 0x91, 0x00, 0x0b,
+	0x22, 0x04, 0xe3, 0x11, 0x1e, 0x77, 0x71, 0x28, 0x28, 0x8a, 0x13, 0x2e, 0x39, 0xbc, 0x53, 0xc1,
+	0xa8, 0x84, 0xd1, 0xb8, 0xdb, 0xb8, 0x4b, 0x39, 0xe5, 0x05, 0x8e, 0xf3, 0x97, 0x1a, 0x6d, 0x58,
+	0x94, 0x73, 0x1a, 0x10, 0x5c, 0xfc, 0xea, 0xa7, 0x43, 0xec, 0xa7, 0x89, 0x27, 0x73, 0x8a, 0xc2,
+	0x5b, 0xcb, 0x4e, 0x36, 0x8e, 0xbd, 0xc4, 0x0b, 0x85, 0x9a, 0x68, 0xbf, 0x04, 0xf7, 0x4f, 0x04,
+	0x7d, 0xe1, 0x45, 0x03, 0x12, 0x9c, 0xaa, 0x19, 0x97, 0x7c, 0x48, 0x89, 0x90, 0x10, 0x82, 0xda,
+	0x30, 0xe1, 0xa1, 0xa9, 0xb7, 0xf4, 0xce, 0xb6, 0x5b, 0xbc, 0xe1, 0x1e, 0x30, 0x98, 0x6f, 0x1a,
+	0x2d, 0xbd, 0x53, 0x73, 0xea, 0xd9, 0xb4, 0x69, 0x1c, 0xf7, 0x5c, 0x83, 0xf9, 0xed, 0x6f, 0x46,
+	0xa1, 0xf3, 0x3a, 0xf6, 0x3d, 0x49, 0xfe, 0x5f, 0x07, 0xf6, 0xc0, 0x4d, 0x9f, 0x7f, 0x8c, 0x02,
+	0xee, 0xf9, 0xef, 0xfa, 0x67, 0x92, 0x08, 0xf3, 0x5a, 0xce, 0x72, 0x0e, 0x26, 0xd3, 0xa6, 0xf6,
+	0x63, 0xda, 0xbc, 0x37, 0xe0, 0x22, 0xe4, 0x42, 0xf8, 0xef, 0x11, 0xe3, 0x38, 0xf4, 0xe4, 0x08,
+	0x1d, 0x47, 0xd2, 0xbd, 0x51, 0x91, 0x9c, 0x9c, 0x03, 0x9f, 0x83, 0xdd, 0x34, 0xbe, 0xa0, 0x51,
+	0xdb, 0x44, 0x63, 0x47, 0x51, 0x94, 0xc2, 0x33, 0xb0, 0x55, 0x45, 0x69, 0x5e, 0x6f, 0xe9, 0x9d,
+	0x1d, 0x7b, 0x1f, 0xa9, 0xac, 0x51, 0x95, 0x35, 0xea, 0x95, 0x03, 0xce, 0x56, 0x2e, 0xfc, 0xe5,
+	0x57, 0x53, 0x77, 0xe7, 0x24, 0xf8, 0x10, 0x6c, 0x0b, 0x46, 0x23, 0x4f, 0xa6, 0x09, 0x31, 0xeb,
+	0x2d, 0xbd, 0xb3, 0xeb, 0xfe, 0xfb, 0xa3, 0x4d, 0xc1, 0xde, 0x3c, 0xad, 0x57, 0x45, 0x1d, 0x57,
+	0x85, 0xf5, 0x14, 0xd4, 0x55, 0x67, 0x45, 0x60, 0x3b, 0xf6, 0x03, 0xb4, 0x7c, 0x21, 0x36, 0x52,
+	0x3a, 0x4e, 0x2d, 0x5f, 0xc6, 0x2d, 0x09, 0xed, 0x06, 0x30, 0x97, 0xeb, 0x15, 0x31, 0x8f, 0x04,
+	0x29, 0xb1, 0x85, 0xca, 0x4a, 0x6c, 0xff, 0x42, 0x9d, 0xd5, 0x82, 0x0a, 0xb2, 0x7f, 0x1a, 0x00,
+	0x9c, 0x08, 0x7a, 0x4a, 0x92, 0x31, 0x1b, 0x10, 0xc8, 0xc1, 0xed, 0x45, 0x07, 0x78, 0xb8, 0x62,
+	0xc1, 0x2e, 0x5a, 0x73, 0x67, 0x8d, 0xa3, 0x0d, 0xa7, 0x95, 0x7f, 0x69, 0x78, 0x69, 0xed, 0xf5,
+	0x86, 0xab, 0x0e, 0x72, 0xbd, 0xe1, 0xca, 0x2c, 0x60, 0x00, 0x6e, 0x2d, 0x64, 0x01, 0x1f, 0x5d,
+	0xad, 0x70, 0xa9, 0xd2, 0xc6, 0xe1, 0x66, 0xc3, 0xca, 0xcd, 0x79, 0x33, 0xf9, 0x63, 0x69, 0x5f,
+	0x33, 0x4b, 0x9b, 0x64, 0x96, 0x7e, 0x9e, 0x59, 0xfa, 0xef, 0xcc, 0xd2, 0x3f, 0xcf, 0x2c, 0xed,
+	0x7c, 0x66, 0x69, 0xdf, 0x67, 0x96, 0xf6, 0xf6, 0x09, 0x65, 0x72, 0x94, 0xf6, 0xd1, 0x80, 0x87,
+	0xb8, 0x52, 0x3e, 0xe2, 0xc3, 0x21, 0x1b, 0x30, 0x2f, 0xc0, 0xa3, 0xb4, 0x8f, 0xc7, 0x8f, 0x6d,
+	0xfc, 0x69, 0xfe, 0xc9, 0xcb, 0xb3, 0x98, 0x08, 0x3c, 0xee, 0xf6, 0xeb, 0xc5, 0xe9, 0x76, 0xff,
+	0x06, 0x00, 0x00, 0xff, 0xff, 0x1a, 0xcd, 0x25, 0x21, 0x80, 0x04, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -320,8 +320,8 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgServiceClient interface {
-	MsgEnd(ctx context.Context, in *MsgEndRequest, opts ...grpc.CallOption) (*MsgEndResponse, error)
-	MsgUpdate(ctx context.Context, in *MsgUpdateRequest, opts ...grpc.CallOption) (*MsgUpdateResponse, error)
+	MsgCancelSession(ctx context.Context, in *MsgCancelSessionRequest, opts ...grpc.CallOption) (*MsgCancelSessionResponse, error)
+	MsgUpdateSession(ctx context.Context, in *MsgUpdateSessionRequest, opts ...grpc.CallOption) (*MsgUpdateSessionResponse, error)
 	MsgUpdateParams(ctx context.Context, in *MsgUpdateParamsRequest, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
 }
 
@@ -333,18 +333,18 @@ func NewMsgServiceClient(cc grpc1.ClientConn) MsgServiceClient {
 	return &msgServiceClient{cc}
 }
 
-func (c *msgServiceClient) MsgEnd(ctx context.Context, in *MsgEndRequest, opts ...grpc.CallOption) (*MsgEndResponse, error) {
-	out := new(MsgEndResponse)
-	err := c.cc.Invoke(ctx, "/sentinel.session.v3.MsgService/MsgEnd", in, out, opts...)
+func (c *msgServiceClient) MsgCancelSession(ctx context.Context, in *MsgCancelSessionRequest, opts ...grpc.CallOption) (*MsgCancelSessionResponse, error) {
+	out := new(MsgCancelSessionResponse)
+	err := c.cc.Invoke(ctx, "/sentinel.session.v3.MsgService/MsgCancelSession", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *msgServiceClient) MsgUpdate(ctx context.Context, in *MsgUpdateRequest, opts ...grpc.CallOption) (*MsgUpdateResponse, error) {
-	out := new(MsgUpdateResponse)
-	err := c.cc.Invoke(ctx, "/sentinel.session.v3.MsgService/MsgUpdate", in, out, opts...)
+func (c *msgServiceClient) MsgUpdateSession(ctx context.Context, in *MsgUpdateSessionRequest, opts ...grpc.CallOption) (*MsgUpdateSessionResponse, error) {
+	out := new(MsgUpdateSessionResponse)
+	err := c.cc.Invoke(ctx, "/sentinel.session.v3.MsgService/MsgUpdateSession", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -362,8 +362,8 @@ func (c *msgServiceClient) MsgUpdateParams(ctx context.Context, in *MsgUpdatePar
 
 // MsgServiceServer is the server API for MsgService service.
 type MsgServiceServer interface {
-	MsgEnd(context.Context, *MsgEndRequest) (*MsgEndResponse, error)
-	MsgUpdate(context.Context, *MsgUpdateRequest) (*MsgUpdateResponse, error)
+	MsgCancelSession(context.Context, *MsgCancelSessionRequest) (*MsgCancelSessionResponse, error)
+	MsgUpdateSession(context.Context, *MsgUpdateSessionRequest) (*MsgUpdateSessionResponse, error)
 	MsgUpdateParams(context.Context, *MsgUpdateParamsRequest) (*MsgUpdateParamsResponse, error)
 }
 
@@ -371,11 +371,11 @@ type MsgServiceServer interface {
 type UnimplementedMsgServiceServer struct {
 }
 
-func (*UnimplementedMsgServiceServer) MsgEnd(ctx context.Context, req *MsgEndRequest) (*MsgEndResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method MsgEnd not implemented")
+func (*UnimplementedMsgServiceServer) MsgCancelSession(ctx context.Context, req *MsgCancelSessionRequest) (*MsgCancelSessionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MsgCancelSession not implemented")
 }
-func (*UnimplementedMsgServiceServer) MsgUpdate(ctx context.Context, req *MsgUpdateRequest) (*MsgUpdateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method MsgUpdate not implemented")
+func (*UnimplementedMsgServiceServer) MsgUpdateSession(ctx context.Context, req *MsgUpdateSessionRequest) (*MsgUpdateSessionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MsgUpdateSession not implemented")
 }
 func (*UnimplementedMsgServiceServer) MsgUpdateParams(ctx context.Context, req *MsgUpdateParamsRequest) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method MsgUpdateParams not implemented")
@@ -385,38 +385,38 @@ func RegisterMsgServiceServer(s grpc1.Server, srv MsgServiceServer) {
 	s.RegisterService(&_MsgService_serviceDesc, srv)
 }
 
-func _MsgService_MsgEnd_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgEndRequest)
+func _MsgService_MsgCancelSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgCancelSessionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServiceServer).MsgEnd(ctx, in)
+		return srv.(MsgServiceServer).MsgCancelSession(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/sentinel.session.v3.MsgService/MsgEnd",
+		FullMethod: "/sentinel.session.v3.MsgService/MsgCancelSession",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServiceServer).MsgEnd(ctx, req.(*MsgEndRequest))
+		return srv.(MsgServiceServer).MsgCancelSession(ctx, req.(*MsgCancelSessionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _MsgService_MsgUpdate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgUpdateRequest)
+func _MsgService_MsgUpdateSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUpdateSessionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServiceServer).MsgUpdate(ctx, in)
+		return srv.(MsgServiceServer).MsgUpdateSession(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/sentinel.session.v3.MsgService/MsgUpdate",
+		FullMethod: "/sentinel.session.v3.MsgService/MsgUpdateSession",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServiceServer).MsgUpdate(ctx, req.(*MsgUpdateRequest))
+		return srv.(MsgServiceServer).MsgUpdateSession(ctx, req.(*MsgUpdateSessionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -444,12 +444,12 @@ var _MsgService_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*MsgServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "MsgEnd",
-			Handler:    _MsgService_MsgEnd_Handler,
+			MethodName: "MsgCancelSession",
+			Handler:    _MsgService_MsgCancelSession_Handler,
 		},
 		{
-			MethodName: "MsgUpdate",
-			Handler:    _MsgService_MsgUpdate_Handler,
+			MethodName: "MsgUpdateSession",
+			Handler:    _MsgService_MsgUpdateSession_Handler,
 		},
 		{
 			MethodName: "MsgUpdateParams",
@@ -460,7 +460,7 @@ var _MsgService_serviceDesc = grpc.ServiceDesc{
 	Metadata: "sentinel/session/v3/msg.proto",
 }
 
-func (m *MsgEndRequest) Marshal() (dAtA []byte, err error) {
+func (m *MsgCancelSessionRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -470,12 +470,12 @@ func (m *MsgEndRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgEndRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgCancelSessionRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgEndRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgCancelSessionRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -495,7 +495,7 @@ func (m *MsgEndRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgUpdateRequest) Marshal() (dAtA []byte, err error) {
+func (m *MsgUpdateSessionRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -505,12 +505,12 @@ func (m *MsgUpdateRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgUpdateRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgUpdateSessionRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgUpdateRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgUpdateSessionRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -605,7 +605,7 @@ func (m *MsgUpdateParamsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgEndResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgCancelSessionResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -615,12 +615,12 @@ func (m *MsgEndResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgEndResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgCancelSessionResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgEndResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgCancelSessionResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -628,7 +628,7 @@ func (m *MsgEndResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgUpdateResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgUpdateSessionResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -638,12 +638,12 @@ func (m *MsgUpdateResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgUpdateResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgUpdateSessionResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgUpdateResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgUpdateSessionResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -685,7 +685,7 @@ func encodeVarintMsg(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *MsgEndRequest) Size() (n int) {
+func (m *MsgCancelSessionRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -701,7 +701,7 @@ func (m *MsgEndRequest) Size() (n int) {
 	return n
 }
 
-func (m *MsgUpdateRequest) Size() (n int) {
+func (m *MsgUpdateSessionRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -742,7 +742,7 @@ func (m *MsgUpdateParamsRequest) Size() (n int) {
 	return n
 }
 
-func (m *MsgEndResponse) Size() (n int) {
+func (m *MsgCancelSessionResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -751,7 +751,7 @@ func (m *MsgEndResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgUpdateResponse) Size() (n int) {
+func (m *MsgUpdateSessionResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -775,7 +775,7 @@ func sovMsg(x uint64) (n int) {
 func sozMsg(x uint64) (n int) {
 	return sovMsg(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *MsgEndRequest) Unmarshal(dAtA []byte) error {
+func (m *MsgCancelSessionRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -798,10 +798,10 @@ func (m *MsgEndRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgEndRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgCancelSessionRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgEndRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgCancelSessionRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -876,7 +876,7 @@ func (m *MsgEndRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgUpdateRequest) Unmarshal(dAtA []byte) error {
+func (m *MsgUpdateSessionRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -899,10 +899,10 @@ func (m *MsgUpdateRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgUpdateRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgUpdateSessionRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgUpdateRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgUpdateSessionRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1227,7 +1227,7 @@ func (m *MsgUpdateParamsRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgEndResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgCancelSessionResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1250,10 +1250,10 @@ func (m *MsgEndResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgEndResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgCancelSessionResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgEndResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgCancelSessionResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
@@ -1277,7 +1277,7 @@ func (m *MsgEndResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgUpdateResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgUpdateSessionResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1300,10 +1300,10 @@ func (m *MsgUpdateResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgUpdateResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgUpdateSessionResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgUpdateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgUpdateSessionResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

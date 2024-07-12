@@ -23,29 +23,29 @@ func NewQueryServiceServer(k keeper.Keeper) v2.QueryServiceServer {
 	return &queryServer{k}
 }
 
-func (k *queryServer) QueryPlan(c context.Context, req *v2.QueryPlanRequest) (*v2.QueryPlanResponse, error) {
+func (q *queryServer) QueryPlan(c context.Context, req *v2.QueryPlanRequest) (*v2.QueryPlanResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQueryPlan(ctx, req)
+	return q.HandleQueryPlan(ctx, req)
 }
 
-func (k *queryServer) QueryPlans(c context.Context, req *v2.QueryPlansRequest) (res *v2.QueryPlansResponse, err error) {
+func (q *queryServer) QueryPlans(c context.Context, req *v2.QueryPlansRequest) (res *v2.QueryPlansResponse, err error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQueryPlans(ctx, req)
+	return q.HandleQueryPlans(ctx, req)
 }
 
-func (k *queryServer) QueryPlansForProvider(c context.Context, req *v2.QueryPlansForProviderRequest) (res *v2.QueryPlansForProviderResponse, err error) {
+func (q *queryServer) QueryPlansForProvider(c context.Context, req *v2.QueryPlansForProviderRequest) (res *v2.QueryPlansForProviderResponse, err error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQueryPlansForProvider(ctx, req)
+	return q.HandleQueryPlansForProvider(ctx, req)
 }

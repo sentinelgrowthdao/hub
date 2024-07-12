@@ -13,7 +13,7 @@ import (
 	"github.com/sentinel-official/hub/v12/x/node/types/v3"
 )
 
-func (k *Keeper) HandleMsgRegister(ctx sdk.Context, msg *v2.MsgRegisterRequest) (*v2.MsgRegisterResponse, error) {
+func (k *Keeper) HandleMsgRegisterNode(ctx sdk.Context, msg *v3.MsgRegisterNodeRequest) (*v3.MsgRegisterNodeResponse, error) {
 	if !k.IsValidGigabytePrices(ctx, msg.GigabytePrices) {
 		return nil, types.NewErrorInvalidPrices(msg.GigabytePrices)
 	}
@@ -58,10 +58,10 @@ func (k *Keeper) HandleMsgRegister(ctx sdk.Context, msg *v2.MsgRegisterRequest) 
 		},
 	)
 
-	return &v2.MsgRegisterResponse{}, nil
+	return &v3.MsgRegisterNodeResponse{}, nil
 }
 
-func (k *Keeper) HandleMsgUpdateDetails(ctx sdk.Context, msg *v2.MsgUpdateDetailsRequest) (*v2.MsgUpdateDetailsResponse, error) {
+func (k *Keeper) HandleMsgUpdateNodeDetails(ctx sdk.Context, msg *v3.MsgUpdateNodeDetailsRequest) (*v3.MsgUpdateNodeDetailsResponse, error) {
 	if msg.GigabytePrices != nil {
 		if !k.IsValidGigabytePrices(ctx, msg.GigabytePrices) {
 			return nil, types.NewErrorInvalidPrices(msg.GigabytePrices)
@@ -103,10 +103,10 @@ func (k *Keeper) HandleMsgUpdateDetails(ctx sdk.Context, msg *v2.MsgUpdateDetail
 		},
 	)
 
-	return &v2.MsgUpdateDetailsResponse{}, nil
+	return &v3.MsgUpdateNodeDetailsResponse{}, nil
 }
 
-func (k *Keeper) HandleMsgUpdateStatus(ctx sdk.Context, msg *v2.MsgUpdateStatusRequest) (*v2.MsgUpdateStatusResponse, error) {
+func (k *Keeper) HandleMsgUpdateNodeStatus(ctx sdk.Context, msg *v3.MsgUpdateNodeStatusRequest) (*v3.MsgUpdateNodeStatusResponse, error) {
 	nodeAddr, err := base.NodeAddressFromBech32(msg.From)
 	if err != nil {
 		return nil, err
@@ -155,7 +155,7 @@ func (k *Keeper) HandleMsgUpdateStatus(ctx sdk.Context, msg *v2.MsgUpdateStatusR
 		},
 	)
 
-	return &v2.MsgUpdateStatusResponse{}, nil
+	return &v3.MsgUpdateNodeStatusResponse{}, nil
 }
 
 func (k *Keeper) HandleMsgStartSession(ctx sdk.Context, msg *v3.MsgStartSessionRequest) (*v3.MsgStartSessionResponse, error) {

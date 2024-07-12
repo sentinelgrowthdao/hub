@@ -12,8 +12,12 @@ import (
 
 func (k *Keeper) handleInactiveLeases(ctx sdk.Context) {
 	k.IterateLeasesForInactiveAt(ctx, ctx.BlockTime(), func(_ int, item v1.Lease) bool {
-		msg := item.MsgEndRequest()
-		if _, err := k.HandleMsgEnd(ctx, msg); err != nil {
+		msg := &v1.MsgEndLeaseRequest{
+			From: item.ProvAddress,
+			ID:   item.ID,
+		}
+
+		if _, err := k.HandleMsgEndLease(ctx, msg); err != nil {
 			panic(err)
 		}
 
@@ -84,8 +88,14 @@ func (k *Keeper) handleLeasePayouts(ctx sdk.Context) {
 
 func (k *Keeper) handleLeaseRenewals(ctx sdk.Context) {
 	k.IterateLeasesForRenewalAt(ctx, ctx.BlockTime(), func(_ int, item v1.Lease) bool {
-		msg := item.MsgRenewRequest()
-		if _, err := k.HandleMsgRenew(ctx, msg); err != nil {
+		msg := &v1.MsgRenewLeaseRequest{
+			From:  item.ProvAddress,
+			ID:    item.ID,
+			Hours: item.MaxHours,
+			Denom: item.Price.Denom,
+		}
+
+		if _, err := k.HandleMsgRenewLease(ctx, msg); err != nil {
 			panic(err)
 		}
 

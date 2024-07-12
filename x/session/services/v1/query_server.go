@@ -22,18 +22,18 @@ func NewQueryServiceServer(k keeper.Keeper) v1.QueryServiceServer {
 	return &queryServer{k}
 }
 
-func (k *queryServer) QuerySessions(_ context.Context, _ *v1.QuerySessionsRequest) (*v1.QuerySessionsResponse, error) {
+func (q *queryServer) QuerySessions(_ context.Context, _ *v1.QuerySessionsRequest) (*v1.QuerySessionsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QuerySessionsForAddress(_ context.Context, _ *v1.QuerySessionsForAddressRequest) (*v1.QuerySessionsForAddressResponse, error) {
+func (q *queryServer) QuerySessionsForAddress(_ context.Context, _ *v1.QuerySessionsForAddressRequest) (*v1.QuerySessionsForAddressResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QuerySession(_ context.Context, _ *v1.QuerySessionRequest) (*v1.QuerySessionResponse, error) {
+func (q *queryServer) QuerySession(_ context.Context, _ *v1.QuerySessionRequest) (*v1.QuerySessionResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QueryParams(_ context.Context, _ *v1.QueryParamsRequest) (*v1.QueryParamsResponse, error) {
+func (q *queryServer) QueryParams(_ context.Context, _ *v1.QueryParamsRequest) (*v1.QueryParamsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "")
 }

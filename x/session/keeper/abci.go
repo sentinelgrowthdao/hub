@@ -14,8 +14,12 @@ func (k *Keeper) handleInactivePendingSessions(ctx sdk.Context) {
 			return false
 		}
 
-		msg := item.MsgEndRequest()
-		if _, err := k.HandleMsgEnd(ctx, msg); err != nil {
+		msg := &v3.MsgCancelSessionRequest{
+			From: item.GetAccAddress(),
+			ID:   item.GetID(),
+		}
+
+		if _, err := k.HandleMsgCancelSession(ctx, msg); err != nil {
 			panic(err)
 		}
 

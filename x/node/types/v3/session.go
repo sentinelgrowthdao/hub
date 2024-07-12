@@ -16,8 +16,8 @@ var (
 func (m *Session) GetDownloadBytes() sdkmath.Int { return m.DownloadBytes }
 func (m *Session) GetUploadBytes() sdkmath.Int   { return m.UploadBytes }
 
-func (m *Session) MsgEndRequest() *sessiontypes.MsgEndRequest {
-	return &sessiontypes.MsgEndRequest{
+func (m *Session) MsgCancelSessionRequest() *sessiontypes.MsgCancelSessionRequest {
+	return &sessiontypes.MsgCancelSessionRequest{
 		From: m.AccAddress,
 		ID:   m.ID,
 	}

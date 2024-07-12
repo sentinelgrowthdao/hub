@@ -10,7 +10,7 @@ import (
 	"github.com/sentinel-official/hub/v12/x/provider/types/v3"
 )
 
-func (k *Keeper) HandleMsgRegister(ctx sdk.Context, msg *v2.MsgRegisterRequest) (*v2.MsgRegisterResponse, error) {
+func (k *Keeper) HandleMsgRegisterProvider(ctx sdk.Context, msg *v3.MsgRegisterProviderRequest) (*v3.MsgRegisterProviderResponse, error) {
 	accAddr, err := sdk.AccAddressFromBech32(msg.From)
 	if err != nil {
 		return nil, err
@@ -47,10 +47,42 @@ func (k *Keeper) HandleMsgRegister(ctx sdk.Context, msg *v2.MsgRegisterRequest) 
 		},
 	)
 
-	return &v2.MsgRegisterResponse{}, nil
+	return &v3.MsgRegisterProviderResponse{}, nil
 }
 
-func (k *Keeper) HandleMsgUpdate(ctx sdk.Context, msg *v2.MsgUpdateRequest) (*v2.MsgUpdateResponse, error) {
+func (k *Keeper) HandleMsgUpdateProviderDetails(ctx sdk.Context, msg *v3.MsgUpdateProviderDetailsRequest) (*v3.MsgUpdateProviderDetailsResponse, error) {
+	provAddr, err := base.ProvAddressFromBech32(msg.From)
+	if err != nil {
+		return nil, err
+	}
+
+	provider, found := k.GetProvider(ctx, provAddr)
+	if !found {
+		return nil, types.NewErrorProviderNotFound(provAddr)
+	}
+
+	if msg.Name != "" {
+		provider.Name = msg.Name
+	}
+	provider.Identity = msg.Identity
+	provider.Website = msg.Website
+	provider.Description = msg.Description
+
+	k.SetProvider(ctx, provider)
+	ctx.EventManager().EmitTypedEvent(
+		&v3.EventUpdateDetails{
+			ProvAddress: provider.Address,
+			Name:        provider.Name,
+			Identity:    provider.Identity,
+			Website:     provider.Website,
+			Description: provider.Description,
+		},
+	)
+
+	return &v3.MsgUpdateProviderDetailsResponse{}, nil
+}
+
+func (k *Keeper) HandleMsgUpdateProviderStatus(ctx sdk.Context, msg *v3.MsgUpdateProviderStatusRequest) (*v3.MsgUpdateProviderStatusResponse, error) {
 	provAddr, err := base.ProvAddressFromBech32(msg.From)
 	if err != nil {
 		return nil, err
@@ -78,31 +110,18 @@ func (k *Keeper) HandleMsgUpdate(ctx sdk.Context, msg *v2.MsgUpdateRequest) (*v2
 		}
 	}
 
-	if msg.Name != "" {
-		provider.Name = msg.Name
-	}
-	provider.Identity = msg.Identity
-	provider.Website = msg.Website
-	provider.Description = msg.Description
-
-	if !msg.Status.Equal(v1base.StatusUnspecified) {
-		provider.Status = msg.Status
-		provider.StatusAt = ctx.BlockTime()
-	}
+	provider.Status = msg.Status
+	provider.StatusAt = ctx.BlockTime()
 
 	k.SetProvider(ctx, provider)
 	ctx.EventManager().EmitTypedEvent(
-		&v3.EventUpdate{
+		&v3.EventUpdateStatus{
 			ProvAddress: provider.Address,
-			Name:        provider.Name,
-			Identity:    provider.Identity,
-			Website:     provider.Website,
-			Description: provider.Description,
 			Status:      provider.Status,
 		},
 	)
 
-	return &v2.MsgUpdateResponse{}, nil
+	return &v3.MsgUpdateProviderStatusResponse{}, nil
 }
 
 func (k *Keeper) HandleMsgUpdateParams(ctx sdk.Context, msg *v3.MsgUpdateParamsRequest) (*v3.MsgUpdateParamsResponse, error) {

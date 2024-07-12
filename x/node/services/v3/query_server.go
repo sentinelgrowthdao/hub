@@ -23,11 +23,11 @@ func NewQueryServiceServer(k keeper.Keeper) v3.QueryServiceServer {
 	return &queryServer{k}
 }
 
-func (k *queryServer) QueryParams(c context.Context, req *v3.QueryParamsRequest) (*v3.QueryParamsResponse, error) {
+func (q *queryServer) QueryParams(c context.Context, req *v3.QueryParamsRequest) (*v3.QueryParamsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQueryParams(ctx, req)
+	return q.HandleQueryParams(ctx, req)
 }

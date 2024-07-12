@@ -13,11 +13,8 @@ import (
 )
 
 func RegisterServices(configurator sdkmodule.Configurator, k keeper.Keeper) {
-	v1types.RegisterMsgServiceServer(configurator.MsgServer(), v1.NewMsgServiceServer(k))
-	v1types.RegisterQueryServiceServer(configurator.QueryServer(), v1.NewQueryServiceServer(k))
-
-	v2types.RegisterMsgServiceServer(configurator.MsgServer(), v2.NewMsgServiceServer(k))
-	v2types.RegisterQueryServiceServer(configurator.QueryServer(), v2.NewQueryServiceServer(k))
-
 	v3types.RegisterMsgServiceServer(configurator.MsgServer(), v3.NewMsgServiceServer(k))
+
+	v1types.RegisterQueryServiceServer(configurator.QueryServer(), v1.NewQueryServiceServer(k))
+	v2types.RegisterQueryServiceServer(configurator.QueryServer(), v2.NewQueryServiceServer(k))
 }

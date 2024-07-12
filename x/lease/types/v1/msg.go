@@ -11,15 +11,93 @@ import (
 )
 
 var (
-	_ sdk.Msg = (*MsgStartRequest)(nil)
-	_ sdk.Msg = (*MsgUpdateRequest)(nil)
-	_ sdk.Msg = (*MsgRenewRequest)(nil)
-	_ sdk.Msg = (*MsgEndRequest)(nil)
+	_ sdk.Msg = (*MsgEndLeaseRequest)(nil)
+	_ sdk.Msg = (*MsgRenewLeaseRequest)(nil)
+	_ sdk.Msg = (*MsgStartLeaseRequest)(nil)
+	_ sdk.Msg = (*MsgUpdateLeaseRequest)(nil)
 	_ sdk.Msg = (*MsgUpdateParamsRequest)(nil)
 )
 
-func NewMsgStartRequest(from base.ProvAddress, nodeAddr base.NodeAddress, hours int64, denom string, renewable bool) *MsgStartRequest {
-	return &MsgStartRequest{
+func NewMsgEndLeaseRequest(from base.ProvAddress, id uint64) *MsgEndLeaseRequest {
+	return &MsgEndLeaseRequest{
+		From: from.String(),
+		ID:   id,
+	}
+}
+
+func (m *MsgEndLeaseRequest) ValidateBasic() error {
+	if m.From == "" {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
+	}
+	if _, err := base.ProvAddressFromBech32(m.From); err != nil {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
+	}
+	if m.ID == 0 {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "id cannot be zero")
+	}
+
+	return nil
+}
+
+func (m *MsgEndLeaseRequest) GetSigners() []sdk.AccAddress {
+	from, err := base.ProvAddressFromBech32(m.From)
+	if err != nil {
+		panic(err)
+	}
+
+	return []sdk.AccAddress{from.Bytes()}
+}
+
+func NewMsgRenewLeaseRequest(from base.ProvAddress, id uint64, hours int64, denom string) *MsgRenewLeaseRequest {
+	return &MsgRenewLeaseRequest{
+		From:  from.String(),
+		ID:    id,
+		Hours: hours,
+		Denom: denom,
+	}
+}
+
+func (m *MsgRenewLeaseRequest) GetHours() time.Duration {
+	return time.Duration(m.Hours) * time.Hour
+}
+
+func (m *MsgRenewLeaseRequest) ValidateBasic() error {
+	if m.From == "" {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
+	}
+	if _, err := base.ProvAddressFromBech32(m.From); err != nil {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
+	}
+	if m.ID == 0 {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "id cannot be zero")
+	}
+	if m.Hours == 0 {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "hours cannot be empty")
+	}
+	if m.Hours < 0 {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "hours cannot be negative")
+	}
+	if m.Denom == "" {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "denom cannot be empty")
+	}
+	if err := sdk.ValidateDenom(m.Denom); err != nil {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
+	}
+
+	return nil
+}
+
+func (m *MsgRenewLeaseRequest) GetSigners() []sdk.AccAddress {
+	from, err := base.ProvAddressFromBech32(m.From)
+	if err != nil {
+		panic(err)
+	}
+
+	return []sdk.AccAddress{from.Bytes()}
+}
+
+func NewMsgStartLeaseRequest(from base.ProvAddress, nodeAddr base.NodeAddress, hours int64, denom string, renewable bool) *MsgStartLeaseRequest {
+	return &MsgStartLeaseRequest{
 		From:        from.String(),
 		NodeAddress: nodeAddr.String(),
 		Hours:       hours,
@@ -28,11 +106,11 @@ func NewMsgStartRequest(from base.ProvAddress, nodeAddr base.NodeAddress, hours 
 	}
 }
 
-func (m *MsgStartRequest) GetHours() time.Duration {
+func (m *MsgStartLeaseRequest) GetHours() time.Duration {
 	return time.Duration(m.Hours) * time.Hour
 }
 
-func (m *MsgStartRequest) ValidateBasic() error {
+func (m *MsgStartLeaseRequest) ValidateBasic() error {
 	if m.From == "" {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
 	}
@@ -61,7 +139,7 @@ func (m *MsgStartRequest) ValidateBasic() error {
 	return nil
 }
 
-func (m *MsgStartRequest) GetSigners() []sdk.AccAddress {
+func (m *MsgStartLeaseRequest) GetSigners() []sdk.AccAddress {
 	from, err := base.ProvAddressFromBech32(m.From)
 	if err != nil {
 		panic(err)
@@ -70,15 +148,15 @@ func (m *MsgStartRequest) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{from.Bytes()}
 }
 
-func NewMsgUpdateRequest(from base.ProvAddress, id uint64, renewable bool) *MsgUpdateRequest {
-	return &MsgUpdateRequest{
+func NewMsgUpdateLeaseRequest(from base.ProvAddress, id uint64, renewable bool) *MsgUpdateLeaseRequest {
+	return &MsgUpdateLeaseRequest{
 		From:      from.String(),
 		ID:        id,
 		Renewable: renewable,
 	}
 }
 
-func (m *MsgUpdateRequest) ValidateBasic() error {
+func (m *MsgUpdateLeaseRequest) ValidateBasic() error {
 	if m.From == "" {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
 	}
@@ -92,85 +170,7 @@ func (m *MsgUpdateRequest) ValidateBasic() error {
 	return nil
 }
 
-func (m *MsgUpdateRequest) GetSigners() []sdk.AccAddress {
-	from, err := base.ProvAddressFromBech32(m.From)
-	if err != nil {
-		panic(err)
-	}
-
-	return []sdk.AccAddress{from.Bytes()}
-}
-
-func NewMsgRenewRequest(from base.ProvAddress, id uint64, hours int64, denom string) *MsgRenewRequest {
-	return &MsgRenewRequest{
-		From:  from.String(),
-		ID:    id,
-		Hours: hours,
-		Denom: denom,
-	}
-}
-
-func (m *MsgRenewRequest) GetHours() time.Duration {
-	return time.Duration(m.Hours) * time.Hour
-}
-
-func (m *MsgRenewRequest) ValidateBasic() error {
-	if m.From == "" {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
-	}
-	if _, err := base.ProvAddressFromBech32(m.From); err != nil {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
-	}
-	if m.ID == 0 {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, "id cannot be zero")
-	}
-	if m.Hours == 0 {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, "hours cannot be empty")
-	}
-	if m.Hours < 0 {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, "hours cannot be negative")
-	}
-	if m.Denom == "" {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, "denom cannot be empty")
-	}
-	if err := sdk.ValidateDenom(m.Denom); err != nil {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
-	}
-
-	return nil
-}
-
-func (m *MsgRenewRequest) GetSigners() []sdk.AccAddress {
-	from, err := base.ProvAddressFromBech32(m.From)
-	if err != nil {
-		panic(err)
-	}
-
-	return []sdk.AccAddress{from.Bytes()}
-}
-
-func NewMsgEndRequest(from base.ProvAddress, id uint64) *MsgEndRequest {
-	return &MsgEndRequest{
-		From: from.String(),
-		ID:   id,
-	}
-}
-
-func (m *MsgEndRequest) ValidateBasic() error {
-	if m.From == "" {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
-	}
-	if _, err := base.ProvAddressFromBech32(m.From); err != nil {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
-	}
-	if m.ID == 0 {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, "id cannot be zero")
-	}
-
-	return nil
-}
-
-func (m *MsgEndRequest) GetSigners() []sdk.AccAddress {
+func (m *MsgUpdateLeaseRequest) GetSigners() []sdk.AccAddress {
 	from, err := base.ProvAddressFromBech32(m.From)
 	if err != nil {
 		panic(err)

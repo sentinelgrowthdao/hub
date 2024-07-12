@@ -6,13 +6,13 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	"github.com/spf13/cobra"
 
-	base "github.com/sentinel-official/hub/v12/types"
-	"github.com/sentinel-official/hub/v12/x/provider/types/v2"
+	v1base "github.com/sentinel-official/hub/v12/types/v1"
+	"github.com/sentinel-official/hub/v12/x/provider/types/v3"
 )
 
-func txRegister() *cobra.Command {
+func txRegisterProvider() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "register [name]",
+		Use:   "register-provider [name]",
 		Short: "Register a new provider with a name and optional details",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -36,7 +36,7 @@ func txRegister() *cobra.Command {
 				return err
 			}
 
-			msg := v2.NewMsgRegisterRequest(
+			msg := v3.NewMsgRegisterProviderRequest(
 				ctx.FromAddress.Bytes(),
 				args[0],
 				identity,
@@ -59,9 +59,9 @@ func txRegister() *cobra.Command {
 	return cmd
 }
 
-func txUpdate() *cobra.Command {
+func txUpdateProviderDetails() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "update",
+		Use:   "update-provider-details",
 		Short: "Update the details of an existing provider",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, err := client.GetClientTxContext(cmd)
@@ -89,18 +89,12 @@ func txUpdate() *cobra.Command {
 				return err
 			}
 
-			status, err := base.StatusFromFlags(cmd.Flags())
-			if err != nil {
-				return err
-			}
-
-			msg := v2.NewMsgUpdateRequest(
+			msg := v3.NewMsgUpdateProviderDetailsRequest(
 				ctx.FromAddress.Bytes(),
 				name,
 				identity,
 				website,
 				description,
-				status,
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
@@ -114,8 +108,34 @@ func txUpdate() *cobra.Command {
 	cmd.Flags().String(flagName, "", "name of the provider")
 	cmd.Flags().String(flagIdentity, "", "unique identity of the provider")
 	cmd.Flags().String(flagWebsite, "", "official website URL of the provider")
-	cmd.Flags().String(flagDescription, "", "breif description of the provider's services or offerings")
-	cmd.Flags().String(base.FlagStatus, "", "operational status of the provider (active|inactive)")
+	cmd.Flags().String(flagDescription, "", "brief description of the provider's services or offerings")
+
+	return cmd
+}
+
+func txUpdateProviderStatus() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "update-provider-status [status]",
+		Short: "Update the operational status of an existing provider",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			ctx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			msg := v3.NewMsgUpdateProviderStatusRequest(
+				ctx.FromAddress.Bytes(),
+				v1base.StatusFromString(args[0]),
+			)
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(ctx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
 
 	return cmd
 }

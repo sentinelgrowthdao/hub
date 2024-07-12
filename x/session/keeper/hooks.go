@@ -18,8 +18,12 @@ func (k *Keeper) NodeInactivePreHook(ctx sdk.Context, addr base.NodeAddress) err
 			return false
 		}
 
-		msg := item.MsgEndRequest()
-		if _, err := k.HandleMsgEnd(ctx, msg); err != nil {
+		msg := &v3.MsgCancelSessionRequest{
+			From: item.GetAccAddress(),
+			ID:   item.GetID(),
+		}
+
+		if _, err := k.HandleMsgCancelSession(ctx, msg); err != nil {
 			panic(err)
 		}
 
@@ -35,8 +39,12 @@ func (k *Keeper) SubscriptionInactivePendingPreHook(ctx sdk.Context, id uint64) 
 			return false
 		}
 
-		msg := item.MsgEndRequest()
-		if _, err := k.HandleMsgEnd(ctx, msg); err != nil {
+		msg := &v3.MsgCancelSessionRequest{
+			From: item.GetAccAddress(),
+			ID:   item.GetID(),
+		}
+
+		if _, err := k.HandleMsgCancelSession(ctx, msg); err != nil {
 			panic(err)
 		}
 

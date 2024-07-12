@@ -21,8 +21,6 @@ type Session interface {
 	GetStatus() v1base.Status
 	GetUploadBytes() sdkmath.Int
 
-	MsgEndRequest() *MsgEndRequest
-
 	SetDownloadBytes(sdkmath.Int)
 	SetDuration(time.Duration)
 	SetInactiveAt(time.Time)

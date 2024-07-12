@@ -21,12 +21,27 @@ func NewMsgServiceServer(k keeper.Keeper) v3.MsgServiceServer {
 	return &msgServer{k}
 }
 
-func (k *msgServer) MsgStartSession(c context.Context, msg *v3.MsgStartSessionRequest) (*v3.MsgStartSessionResponse, error) {
+func (m *msgServer) MsgRegisterNode(c context.Context, req *v3.MsgRegisterNodeRequest) (*v3.MsgRegisterNodeResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleMsgStartSession(ctx, msg)
+	return m.HandleMsgRegisterNode(ctx, req)
 }
 
-func (k *msgServer) MsgUpdateParams(c context.Context, msg *v3.MsgUpdateParamsRequest) (*v3.MsgUpdateParamsResponse, error) {
+func (m *msgServer) MsgUpdateNodeDetails(c context.Context, req *v3.MsgUpdateNodeDetailsRequest) (*v3.MsgUpdateNodeDetailsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleMsgUpdateParams(ctx, msg)
+	return m.HandleMsgUpdateNodeDetails(ctx, req)
+}
+
+func (m *msgServer) MsgUpdateNodeStatus(c context.Context, req *v3.MsgUpdateNodeStatusRequest) (*v3.MsgUpdateNodeStatusResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return m.HandleMsgUpdateNodeStatus(ctx, req)
+}
+
+func (m *msgServer) MsgStartSession(c context.Context, req *v3.MsgStartSessionRequest) (*v3.MsgStartSessionResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return m.HandleMsgStartSession(ctx, req)
+}
+
+func (m *msgServer) MsgUpdateParams(c context.Context, req *v3.MsgUpdateParamsRequest) (*v3.MsgUpdateParamsResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return m.HandleMsgUpdateParams(ctx, req)
 }

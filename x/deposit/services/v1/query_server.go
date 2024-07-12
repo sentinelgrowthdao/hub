@@ -23,20 +23,20 @@ func NewQueryServiceServer(k keeper.Keeper) v1.QueryServiceServer {
 	return &queryServer{k}
 }
 
-func (k *queryServer) QueryDeposit(c context.Context, req *v1.QueryDepositRequest) (*v1.QueryDepositResponse, error) {
+func (q *queryServer) QueryDeposit(c context.Context, req *v1.QueryDepositRequest) (*v1.QueryDepositResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQueryDeposit(ctx, req)
+	return q.HandleQueryDeposit(ctx, req)
 }
 
-func (k *queryServer) QueryDeposits(c context.Context, req *v1.QueryDepositsRequest) (*v1.QueryDepositsResponse, error) {
+func (q *queryServer) QueryDeposits(c context.Context, req *v1.QueryDepositsRequest) (*v1.QueryDepositsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQueryDeposits(ctx, req)
+	return q.HandleQueryDeposits(ctx, req)
 }

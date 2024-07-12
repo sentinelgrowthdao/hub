@@ -19,10 +19,10 @@ func GetTxCommands() []*cobra.Command {
 	}
 
 	cmd.AddCommand(
-		txStart(),
-		txUpdate(),
-		txRenew(),
-		txEnd(),
+		txEndLease(),
+		txRenewLease(),
+		txStartLease(),
+		txUpdateLease(),
 	)
 
 	return []*cobra.Command{cmd}

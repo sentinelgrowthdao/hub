@@ -19,9 +19,9 @@ func GetTxCommands() []*cobra.Command {
 	}
 
 	cmd.AddCommand(
-		txRegister(),
-		txUpdateDetails(),
-		txUpdateStatus(),
+		txRegisterNode(),
+		txUpdateNodeDetails(),
+		txUpdateNodeStatus(),
 		txStartSession(),
 	)
 

@@ -16,13 +16,6 @@ var (
 func (m *Session) GetDownloadBytes() sdkmath.Int { return m.DownloadBytes }
 func (m *Session) GetUploadBytes() sdkmath.Int   { return m.UploadBytes }
 
-func (m *Session) MsgEndRequest() *sessiontypes.MsgEndRequest {
-	return &sessiontypes.MsgEndRequest{
-		From: m.AccAddress,
-		ID:   m.ID,
-	}
-}
-
 func (m *Session) SetDownloadBytes(v sdkmath.Int) { m.DownloadBytes = v }
 func (m *Session) SetDuration(v time.Duration)    { m.Duration = v }
 func (m *Session) SetInactiveAt(v time.Time)      { m.InactiveAt = v }

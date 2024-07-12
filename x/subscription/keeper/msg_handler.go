@@ -14,7 +14,53 @@ import (
 	"github.com/sentinel-official/hub/v12/x/subscription/types/v3"
 )
 
-func (k *Keeper) HandleMsgAllocate(ctx sdk.Context, msg *v2.MsgAllocateRequest) (*v2.MsgAllocateResponse, error) {
+func (k *Keeper) HandleMsgCancelSubscription(ctx sdk.Context, msg *v3.MsgCancelSubscriptionRequest) (*v3.MsgCancelSubscriptionResponse, error) {
+	subscription, found := k.GetSubscription(ctx, msg.ID)
+	if !found {
+		return nil, types.NewErrorSubscriptionNotFound(msg.ID)
+	}
+	if !subscription.Status.Equal(v1base.StatusActive) {
+		return nil, types.NewErrorInvalidSubscriptionStatus(subscription.ID, subscription.Status)
+	}
+	if msg.From != subscription.AccAddress {
+		return nil, types.NewErrorUnauthorized(msg.From)
+	}
+
+	if err := k.SubscriptionInactivePendingPreHook(ctx, subscription.ID); err != nil {
+		return nil, err
+	}
+
+	k.DeleteSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
+	k.DeleteSubscriptionForRenewalAt(ctx, subscription.RenewalAt, subscription.ID)
+
+	delay := k.StatusChangeDelay(ctx)
+	subscription.Status = v1base.StatusInactivePending
+	subscription.InactiveAt = ctx.BlockTime().Add(delay)
+	subscription.RenewalAt = time.Time{}
+	subscription.StatusAt = ctx.BlockTime()
+
+	k.SetSubscription(ctx, subscription)
+	k.SetSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
+
+	ctx.EventManager().EmitTypedEvent(
+		&v3.EventUpdate{
+			ID:         subscription.ID,
+			PlanID:     subscription.PlanID,
+			AccAddress: subscription.AccAddress,
+			Status:     subscription.Status,
+			InactiveAt: subscription.InactiveAt.String(),
+			RenewalAt:  subscription.RenewalAt.String(),
+		},
+	)
+
+	return &v3.MsgCancelSubscriptionResponse{}, nil
+}
+
+func (k *Keeper) HandleMsgRenewSubscription(ctx sdk.Context, msg *v3.MsgRenewSubscriptionRequest) (*v3.MsgRenewSubscriptionResponse, error) {
+	return &v3.MsgRenewSubscriptionResponse{}, nil
+}
+
+func (k *Keeper) HandleMsgShareSubscription(ctx sdk.Context, msg *v3.MsgShareSubscriptionRequest) (*v3.MsgShareSubscriptionResponse, error) {
 	subscription, found := k.GetSubscription(ctx, msg.ID)
 	if !found {
 		return nil, types.NewErrorSubscriptionNotFound(msg.ID)
@@ -33,7 +79,7 @@ func (k *Keeper) HandleMsgAllocate(ctx sdk.Context, msg *v2.MsgAllocateRequest) 
 		return nil, types.NewErrorAllocationNotFound(subscription.ID, fromAddr)
 	}
 
-	toAddr, err := sdk.AccAddressFromBech32(msg.Address)
+	toAddr, err := sdk.AccAddressFromBech32(msg.AccAddress)
 	if err != nil {
 		return nil, err
 	}
@@ -88,52 +134,10 @@ func (k *Keeper) HandleMsgAllocate(ctx sdk.Context, msg *v2.MsgAllocateRequest) 
 		},
 	)
 
-	return &v2.MsgAllocateResponse{}, nil
+	return &v3.MsgShareSubscriptionResponse{}, nil
 }
 
-func (k *Keeper) HandleMsgCancel(ctx sdk.Context, msg *v2.MsgCancelRequest) (*v2.MsgCancelResponse, error) {
-	subscription, found := k.GetSubscription(ctx, msg.ID)
-	if !found {
-		return nil, types.NewErrorSubscriptionNotFound(msg.ID)
-	}
-	if !subscription.Status.Equal(v1base.StatusActive) {
-		return nil, types.NewErrorInvalidSubscriptionStatus(subscription.ID, subscription.Status)
-	}
-	if msg.From != subscription.AccAddress {
-		return nil, types.NewErrorUnauthorized(msg.From)
-	}
-
-	if err := k.SubscriptionInactivePendingPreHook(ctx, subscription.ID); err != nil {
-		return nil, err
-	}
-
-	k.DeleteSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
-	k.DeleteSubscriptionForRenewalAt(ctx, subscription.RenewalAt, subscription.ID)
-
-	delay := k.StatusChangeDelay(ctx)
-	subscription.Status = v1base.StatusInactivePending
-	subscription.InactiveAt = ctx.BlockTime().Add(delay)
-	subscription.RenewalAt = time.Time{}
-	subscription.StatusAt = ctx.BlockTime()
-
-	k.SetSubscription(ctx, subscription)
-	k.SetSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
-
-	ctx.EventManager().EmitTypedEvent(
-		&v3.EventUpdate{
-			ID:         subscription.ID,
-			PlanID:     subscription.PlanID,
-			AccAddress: subscription.AccAddress,
-			Status:     subscription.Status,
-			InactiveAt: subscription.InactiveAt.String(),
-			RenewalAt:  subscription.RenewalAt.String(),
-		},
-	)
-
-	return &v2.MsgCancelResponse{}, nil
-}
-
-func (k *Keeper) HandleMsgStart(ctx sdk.Context, msg *v3.MsgStartRequest) (*v3.MsgStartResponse, error) {
+func (k *Keeper) HandleMsgStartSubscription(ctx sdk.Context, msg *v3.MsgStartSubscriptionRequest) (*v3.MsgStartSubscriptionResponse, error) {
 	plan, found := k.plan.GetPlan(ctx, msg.ID)
 	if !found {
 		return nil, types.NewErrorPlanNotFound(msg.ID)
@@ -231,10 +235,10 @@ func (k *Keeper) HandleMsgStart(ctx sdk.Context, msg *v3.MsgStartRequest) (*v3.M
 		},
 	)
 
-	return &v3.MsgStartResponse{}, nil
+	return &v3.MsgStartSubscriptionResponse{}, nil
 }
 
-func (k *Keeper) HandleMsgUpdate(ctx sdk.Context, msg *v3.MsgUpdateRequest) (*v3.MsgUpdateResponse, error) {
+func (k *Keeper) HandleMsgUpdateSubscription(ctx sdk.Context, msg *v3.MsgUpdateSubscriptionRequest) (*v3.MsgUpdateSubscriptionResponse, error) {
 	subscription, found := k.GetSubscription(ctx, msg.ID)
 	if !found {
 		return nil, types.NewErrorSubscriptionNotFound(msg.ID)
@@ -276,11 +280,7 @@ func (k *Keeper) HandleMsgUpdate(ctx sdk.Context, msg *v3.MsgUpdateRequest) (*v3
 		},
 	)
 
-	return &v3.MsgUpdateResponse{}, nil
-}
-
-func (k *Keeper) HandleMsgRenew(ctx sdk.Context, msg *v3.MsgRenewRequest) (*v3.MsgRenewResponse, error) {
-	return &v3.MsgRenewResponse{}, nil
+	return &v3.MsgUpdateSubscriptionResponse{}, nil
 }
 
 func (k *Keeper) HandleMsgStartSession(ctx sdk.Context, msg *v3.MsgStartSessionRequest) (*v3.MsgStartSessionResponse, error) {

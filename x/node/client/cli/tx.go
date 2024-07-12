@@ -11,13 +11,12 @@ import (
 
 	base "github.com/sentinel-official/hub/v12/types"
 	v1base "github.com/sentinel-official/hub/v12/types/v1"
-	"github.com/sentinel-official/hub/v12/x/node/types/v2"
 	"github.com/sentinel-official/hub/v12/x/node/types/v3"
 )
 
-func txRegister() *cobra.Command {
+func txRegisterNode() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "register [remote-url] [gigabyte-prices] [hourly-prices]",
+		Use:   "register-node [remote-url] [gigabyte-prices] [hourly-prices]",
 		Short: "Register a new node with a remote URL and pricing details",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -36,7 +35,7 @@ func txRegister() *cobra.Command {
 				return err
 			}
 
-			msg := v2.NewMsgRegisterRequest(
+			msg := v3.NewMsgRegisterNodeRequest(
 				ctx.FromAddress.Bytes(),
 				gigabytePrices,
 				hourlyPrices,
@@ -57,9 +56,9 @@ func txRegister() *cobra.Command {
 	return cmd
 }
 
-func txUpdateDetails() *cobra.Command {
+func txUpdateNodeDetails() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "update-details",
+		Use:   "update-node-details",
 		Short: "Update the pricing and remote URL details of an existing node",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, err := client.GetClientTxContext(cmd)
@@ -82,7 +81,7 @@ func txUpdateDetails() *cobra.Command {
 				return err
 			}
 
-			msg := v2.NewMsgUpdateDetailsRequest(
+			msg := v3.NewMsgUpdateNodeDetailsRequest(
 				ctx.FromAddress.Bytes(),
 				gigabytePrices,
 				hourlyPrices,
@@ -104,9 +103,9 @@ func txUpdateDetails() *cobra.Command {
 	return cmd
 }
 
-func txUpdateStatus() *cobra.Command {
+func txUpdateNodeStatus() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "update-status [status]",
+		Use:   "update-node-status [status]",
 		Short: "Update the operational status of a node",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -115,7 +114,7 @@ func txUpdateStatus() *cobra.Command {
 				return err
 			}
 
-			msg := v2.NewMsgUpdateStatusRequest(
+			msg := v3.NewMsgUpdateNodeStatusRequest(
 				ctx.FromAddress.Bytes(),
 				v1base.StatusFromString(args[0]),
 			)

@@ -19,8 +19,8 @@ func GetTxCommands() []*cobra.Command {
 	}
 
 	cmd.AddCommand(
-		txUpdate(),
-		txEnd(),
+		txCancelSession(),
+		txUpdateSession(),
 	)
 
 	return []*cobra.Command{cmd}

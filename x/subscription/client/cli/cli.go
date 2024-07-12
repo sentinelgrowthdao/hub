@@ -6,10 +6,10 @@ import (
 
 func GetQueryCommands() []*cobra.Command {
 	return []*cobra.Command{
-		querySubscription(),
-		querySubscriptions(),
 		queryAllocation(),
 		queryAllocations(),
+		querySubscription(),
+		querySubscriptions(),
 		queryParams(),
 	}
 }
@@ -21,11 +21,11 @@ func GetTxCommands() []*cobra.Command {
 	}
 
 	cmd.AddCommand(
-		txCancel(),
-		txAllocate(),
-		txStart(),
-		txUpdate(),
-		txRenew(),
+		txCancelSubscription(),
+		txRenewSubscription(),
+		txShareSubscription(),
+		txStartSubscription(),
+		txUpdateSubscription(),
 		txStartSession(),
 	)
 

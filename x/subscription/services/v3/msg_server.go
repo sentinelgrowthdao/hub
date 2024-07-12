@@ -23,26 +23,36 @@ func NewMsgServiceServer(k keeper.Keeper) v3.MsgServiceServer {
 	return &msgServer{k}
 }
 
-func (k *msgServer) MsgStart(c context.Context, msg *v3.MsgStartRequest) (*v3.MsgStartResponse, error) {
+func (m *msgServer) MsgCancelSubscription(c context.Context, req *v3.MsgCancelSubscriptionRequest) (*v3.MsgCancelSubscriptionResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleMsgStart(ctx, msg)
+	return m.HandleMsgCancelSubscription(ctx, req)
 }
 
-func (k *msgServer) MsgUpdate(c context.Context, msg *v3.MsgUpdateRequest) (*v3.MsgUpdateResponse, error) {
-	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleMsgUpdate(ctx, msg)
-}
-
-func (k *msgServer) MsgRenew(_ context.Context, _ *v3.MsgRenewRequest) (*v3.MsgRenewResponse, error) {
+func (m *msgServer) MsgRenewSubscription(_ context.Context, _ *v3.MsgRenewSubscriptionRequest) (*v3.MsgRenewSubscriptionResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *msgServer) MsgStartSession(c context.Context, msg *v3.MsgStartSessionRequest) (*v3.MsgStartSessionResponse, error) {
+func (m *msgServer) MsgShareSubscription(c context.Context, req *v3.MsgShareSubscriptionRequest) (*v3.MsgShareSubscriptionResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleMsgStartSession(ctx, msg)
+	return m.HandleMsgShareSubscription(ctx, req)
 }
 
-func (k *msgServer) MsgUpdateParams(c context.Context, msg *v3.MsgUpdateParamsRequest) (*v3.MsgUpdateParamsResponse, error) {
+func (m *msgServer) MsgStartSubscription(c context.Context, req *v3.MsgStartSubscriptionRequest) (*v3.MsgStartSubscriptionResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleMsgUpdateParams(ctx, msg)
+	return m.HandleMsgStartSubscription(ctx, req)
+}
+
+func (m *msgServer) MsgUpdateSubscription(c context.Context, req *v3.MsgUpdateSubscriptionRequest) (*v3.MsgUpdateSubscriptionResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return m.HandleMsgUpdateSubscription(ctx, req)
+}
+
+func (m *msgServer) MsgStartSession(c context.Context, req *v3.MsgStartSessionRequest) (*v3.MsgStartSessionResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return m.HandleMsgStartSession(ctx, req)
+}
+
+func (m *msgServer) MsgUpdateParams(c context.Context, req *v3.MsgUpdateParamsRequest) (*v3.MsgUpdateParamsResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return m.HandleMsgUpdateParams(ctx, req)
 }

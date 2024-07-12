@@ -16,11 +16,15 @@ message EventCreate {
   string description = 5;
 }
 
-message EventUpdate {
+message EventUpdateDetails {
   string prov_address = 1;
   string name = 2;
   string identity = 3;
   string website = 4;
   string description = 5;
-  sentinel.types.v1.Status status = 6;
+}
+
+message EventUpdateStatus {
+  string prov_address = 1;
+  sentinel.types.v1.Status status = 2;
 }

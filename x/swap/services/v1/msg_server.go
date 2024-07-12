@@ -21,7 +21,7 @@ func NewMsgServiceServer(k keeper.Keeper) v1.MsgServiceServer {
 	return &msgServer{k}
 }
 
-func (k *msgServer) MsgSwap(c context.Context, msg *v1.MsgSwapRequest) (*v1.MsgSwapResponse, error) {
+func (m *msgServer) MsgSwap(c context.Context, req *v1.MsgSwapRequest) (*v1.MsgSwapResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleMsgSwap(ctx, msg)
+	return m.HandleMsgSwap(ctx, req)
 }

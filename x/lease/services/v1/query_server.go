@@ -23,47 +23,47 @@ func NewQueryServiceServer(k keeper.Keeper) v1.QueryServiceServer {
 	return &queryServer{k}
 }
 
-func (k *queryServer) QueryLease(c context.Context, req *v1.QueryLeaseRequest) (*v1.QueryLeaseResponse, error) {
+func (q *queryServer) QueryLease(c context.Context, req *v1.QueryLeaseRequest) (*v1.QueryLeaseResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQueryLease(ctx, req)
+	return q.HandleQueryLease(ctx, req)
 }
 
-func (k *queryServer) QueryLeases(c context.Context, req *v1.QueryLeasesRequest) (*v1.QueryLeasesResponse, error) {
+func (q *queryServer) QueryLeases(c context.Context, req *v1.QueryLeasesRequest) (*v1.QueryLeasesResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQueryLeases(ctx, req)
+	return q.HandleQueryLeases(ctx, req)
 }
 
-func (k *queryServer) QueryLeasesForProvider(c context.Context, req *v1.QueryLeasesForProviderRequest) (*v1.QueryLeasesForProviderResponse, error) {
+func (q *queryServer) QueryLeasesForProvider(c context.Context, req *v1.QueryLeasesForProviderRequest) (*v1.QueryLeasesForProviderResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQueryLeasesForProvider(ctx, req)
+	return q.HandleQueryLeasesForProvider(ctx, req)
 }
 
-func (k *queryServer) QueryLeasesForNode(c context.Context, req *v1.QueryLeasesForNodeRequest) (*v1.QueryLeasesForNodeResponse, error) {
+func (q *queryServer) QueryLeasesForNode(c context.Context, req *v1.QueryLeasesForNodeRequest) (*v1.QueryLeasesForNodeResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQueryLeasesForNode(ctx, req)
+	return q.HandleQueryLeasesForNode(ctx, req)
 }
 
-func (k *queryServer) QueryParams(c context.Context, req *v1.QueryParamsRequest) (*v1.QueryParamsResponse, error) {
+func (q *queryServer) QueryParams(c context.Context, req *v1.QueryParamsRequest) (*v1.QueryParamsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQueryParams(ctx, req)
+	return q.HandleQueryParams(ctx, req)
 }

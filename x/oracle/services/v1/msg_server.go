@@ -21,7 +21,7 @@ func NewMsgServiceServer(k keeper.Keeper) v1.MsgServiceServer {
 	return &msgServer{k}
 }
 
-func (k *msgServer) MsgUpdateParams(c context.Context, msg *v1.MsgUpdateParamsRequest) (*v1.MsgUpdateParamsResponse, error) {
+func (m *msgServer) MsgUpdateParams(c context.Context, req *v1.MsgUpdateParamsRequest) (*v1.MsgUpdateParamsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleMsgUpdateParams(ctx, msg)
+	return m.HandleMsgUpdateParams(ctx, req)
 }

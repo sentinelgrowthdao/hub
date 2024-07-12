@@ -22,26 +22,26 @@ func NewQueryServiceServer(k keeper.Keeper) v1.QueryServiceServer {
 	return &queryServer{k}
 }
 
-func (k *queryServer) QuerySubscriptions(_ context.Context, _ *v1.QuerySubscriptionsRequest) (*v1.QuerySubscriptionsResponse, error) {
+func (q *queryServer) QuerySubscriptions(_ context.Context, _ *v1.QuerySubscriptionsRequest) (*v1.QuerySubscriptionsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QuerySubscriptionsForAddress(_ context.Context, _ *v1.QuerySubscriptionsForAddressRequest) (*v1.QuerySubscriptionsForAddressResponse, error) {
+func (q *queryServer) QuerySubscriptionsForAddress(_ context.Context, _ *v1.QuerySubscriptionsForAddressRequest) (*v1.QuerySubscriptionsForAddressResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QuerySubscription(_ context.Context, _ *v1.QuerySubscriptionRequest) (*v1.QuerySubscriptionResponse, error) {
+func (q *queryServer) QuerySubscription(_ context.Context, _ *v1.QuerySubscriptionRequest) (*v1.QuerySubscriptionResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QueryQuota(_ context.Context, _ *v1.QueryQuotaRequest) (*v1.QueryQuotaResponse, error) {
+func (q *queryServer) QueryQuota(_ context.Context, _ *v1.QueryQuotaRequest) (*v1.QueryQuotaResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QueryQuotas(_ context.Context, _ *v1.QueryQuotasRequest) (*v1.QueryQuotasResponse, error) {
+func (q *queryServer) QueryQuotas(_ context.Context, _ *v1.QueryQuotasRequest) (*v1.QueryQuotasResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (k *queryServer) QueryParams(_ context.Context, _ *v1.QueryParamsRequest) (*v1.QueryParamsResponse, error) {
+func (q *queryServer) QueryParams(_ context.Context, _ *v1.QueryParamsRequest) (*v1.QueryParamsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "")
 }

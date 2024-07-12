@@ -15,10 +15,77 @@ import (
 	"github.com/sentinel-official/hub/v12/x/subscription/types/v3"
 )
 
-func txAllocate() *cobra.Command {
+func txCancelSubscription() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "allocate [id] [acc-addr] [bytes]",
-		Short: "Add an allocation for a subscription",
+		Use:   "cancel-subscription [id]",
+		Short: "Cancel an active subscription",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			ctx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			id, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			msg := v2.NewMsgCancelRequest(
+				ctx.FromAddress,
+				id,
+			)
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(ctx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func txRenewSubscription() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "renew-subscription [id] [denom]",
+		Short: "Renew an existing subscription",
+		Args:  cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			ctx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			id, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			msg := v3.NewMsgRenewSubscriptionRequest(
+				ctx.FromAddress.Bytes(),
+				id,
+				args[1],
+			)
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(ctx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func txShareSubscription() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "share-subscription [id] [acc-addr] [bytes]",
+		Short: "Share a subscription with an account",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, err := client.GetClientTxContext(cmd)
@@ -60,42 +127,9 @@ func txAllocate() *cobra.Command {
 	return cmd
 }
 
-func txCancel() *cobra.Command {
+func txStartSubscription() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "cancel [id]",
-		Short: "Cancel an active subscription",
-		Args:  cobra.ExactArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			ctx, err := client.GetClientTxContext(cmd)
-			if err != nil {
-				return err
-			}
-
-			id, err := strconv.ParseUint(args[0], 10, 64)
-			if err != nil {
-				return err
-			}
-
-			msg := v2.NewMsgCancelRequest(
-				ctx.FromAddress,
-				id,
-			)
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
-
-			return tx.GenerateOrBroadcastTxCLI(ctx, cmd.Flags(), msg)
-		},
-	}
-
-	flags.AddTxFlagsToCmd(cmd)
-
-	return cmd
-}
-
-func txStart() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "start [id] [denom] [renewable]",
+		Use:   "start-subscription [id] [denom] [renewable]",
 		Short: "Start a subscription for a plan",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -114,7 +148,7 @@ func txStart() *cobra.Command {
 				return err
 			}
 
-			msg := v3.NewMsgStartRequest(
+			msg := v3.NewMsgStartSubscriptionRequest(
 				ctx.FromAddress.Bytes(),
 				id,
 				args[1],
@@ -133,9 +167,9 @@ func txStart() *cobra.Command {
 	return cmd
 }
 
-func txUpdate() *cobra.Command {
+func txUpdateSubscription() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "update [id] [renewable]",
+		Use:   "update-subscription [id] [renewable]",
 		Short: "Update the details of an existing subscription",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -154,46 +188,12 @@ func txUpdate() *cobra.Command {
 				return err
 			}
 
-			msg := v3.NewMsgUpdateRequest(
+			msg := v3.NewMsgUpdateSubscriptionRequest(
 				ctx.FromAddress.Bytes(),
 				id,
 				renewable,
 			)
 			if err = msg.ValidateBasic(); err != nil {
-				return err
-			}
-
-			return tx.GenerateOrBroadcastTxCLI(ctx, cmd.Flags(), msg)
-		},
-	}
-
-	flags.AddTxFlagsToCmd(cmd)
-
-	return cmd
-}
-
-func txRenew() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "renew [id] [denom]",
-		Short: "Renew an existing subscription",
-		Args:  cobra.ExactArgs(2),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			ctx, err := client.GetClientTxContext(cmd)
-			if err != nil {
-				return err
-			}
-
-			id, err := strconv.ParseUint(args[0], 10, 64)
-			if err != nil {
-				return err
-			}
-
-			msg := v3.NewMsgRenewRequest(
-				ctx.FromAddress.Bytes(),
-				id,
-				args[1],
-			)
-			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
 

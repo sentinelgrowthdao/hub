@@ -10,7 +10,7 @@ import (
 	"github.com/sentinel-official/hub/v12/x/plan/types/v3"
 )
 
-func (k *Keeper) HandleMsgCreate(ctx sdk.Context, msg *v2.MsgCreateRequest) (*v2.MsgCreateResponse, error) {
+func (k *Keeper) HandleMsgCreatePlan(ctx sdk.Context, msg *v3.MsgCreatePlanRequest) (*v3.MsgCreatePlanResponse, error) {
 	provAddr, err := base.ProvAddressFromBech32(msg.From)
 	if err != nil {
 		return nil, err
@@ -45,10 +45,66 @@ func (k *Keeper) HandleMsgCreate(ctx sdk.Context, msg *v2.MsgCreateRequest) (*v2
 		},
 	)
 
-	return &v2.MsgCreateResponse{}, nil
+	return &v3.MsgCreatePlanResponse{}, nil
 }
 
-func (k *Keeper) HandleMsgUpdateStatus(ctx sdk.Context, msg *v2.MsgUpdateStatusRequest) (*v2.MsgUpdateStatusResponse, error) {
+func (k *Keeper) HandleMsgLinkNode(ctx sdk.Context, msg *v3.MsgLinkNodeRequest) (*v3.MsgLinkNodeResponse, error) {
+	plan, found := k.GetPlan(ctx, msg.ID)
+	if !found {
+		return nil, types.NewErrorPlanNotFound(msg.ID)
+	}
+	if msg.From != plan.ProviderAddress {
+		return nil, types.NewErrorUnauthorized(msg.From)
+	}
+
+	nodeAddr, err := base.NodeAddressFromBech32(msg.NodeAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	if !k.node.HasNode(ctx, nodeAddr) {
+		return nil, types.NewErrorNodeNotFound(nodeAddr)
+	}
+
+	k.node.SetNodeForPlan(ctx, plan.ID, nodeAddr)
+	ctx.EventManager().EmitTypedEvent(
+		&v3.EventLinkNode{
+			ID:          plan.ID,
+			ProvAddress: plan.ProviderAddress,
+			NodeAddress: nodeAddr.String(),
+		},
+	)
+
+	return &v3.MsgLinkNodeResponse{}, nil
+}
+
+func (k *Keeper) HandleMsgUnlinkNode(ctx sdk.Context, msg *v3.MsgUnlinkNodeRequest) (*v3.MsgUnlinkNodeResponse, error) {
+	plan, found := k.GetPlan(ctx, msg.ID)
+	if !found {
+		return nil, types.NewErrorPlanNotFound(msg.ID)
+	}
+	if msg.From != plan.ProviderAddress {
+		return nil, types.NewErrorUnauthorized(msg.From)
+	}
+
+	nodeAddr, err := base.NodeAddressFromBech32(msg.NodeAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	k.node.DeleteNodeForPlan(ctx, plan.ID, nodeAddr)
+	ctx.EventManager().EmitTypedEvent(
+		&v3.EventUnlinkNode{
+			ID:          plan.ID,
+			ProvAddress: plan.ProviderAddress,
+			NodeAddress: nodeAddr.String(),
+		},
+	)
+
+	return &v3.MsgUnlinkNodeResponse{}, nil
+}
+
+func (k *Keeper) HandleMsgUpdatePlanStatus(ctx sdk.Context, msg *v3.MsgUpdatePlanStatusRequest) (*v3.MsgUpdatePlanStatusResponse, error) {
 	plan, found := k.GetPlan(ctx, msg.ID)
 	if !found {
 		return nil, types.NewErrorPlanNotFound(msg.ID)
@@ -80,61 +136,5 @@ func (k *Keeper) HandleMsgUpdateStatus(ctx sdk.Context, msg *v2.MsgUpdateStatusR
 		},
 	)
 
-	return &v2.MsgUpdateStatusResponse{}, nil
-}
-
-func (k *Keeper) HandleMsgLinkNode(ctx sdk.Context, msg *v2.MsgLinkNodeRequest) (*v2.MsgLinkNodeResponse, error) {
-	plan, found := k.GetPlan(ctx, msg.ID)
-	if !found {
-		return nil, types.NewErrorPlanNotFound(msg.ID)
-	}
-	if msg.From != plan.ProviderAddress {
-		return nil, types.NewErrorUnauthorized(msg.From)
-	}
-
-	nodeAddr, err := base.NodeAddressFromBech32(msg.NodeAddress)
-	if err != nil {
-		return nil, err
-	}
-
-	if !k.node.HasNode(ctx, nodeAddr) {
-		return nil, types.NewErrorNodeNotFound(nodeAddr)
-	}
-
-	k.node.SetNodeForPlan(ctx, plan.ID, nodeAddr)
-	ctx.EventManager().EmitTypedEvent(
-		&v3.EventLinkNode{
-			ID:          plan.ID,
-			ProvAddress: plan.ProviderAddress,
-			NodeAddress: nodeAddr.String(),
-		},
-	)
-
-	return &v2.MsgLinkNodeResponse{}, nil
-}
-
-func (k *Keeper) HandleMsgUnlinkNode(ctx sdk.Context, msg *v2.MsgUnlinkNodeRequest) (*v2.MsgUnlinkNodeResponse, error) {
-	plan, found := k.GetPlan(ctx, msg.ID)
-	if !found {
-		return nil, types.NewErrorPlanNotFound(msg.ID)
-	}
-	if msg.From != plan.ProviderAddress {
-		return nil, types.NewErrorUnauthorized(msg.From)
-	}
-
-	nodeAddr, err := base.NodeAddressFromBech32(msg.NodeAddress)
-	if err != nil {
-		return nil, err
-	}
-
-	k.node.DeleteNodeForPlan(ctx, plan.ID, nodeAddr)
-	ctx.EventManager().EmitTypedEvent(
-		&v3.EventUnlinkNode{
-			ID:          plan.ID,
-			ProvAddress: plan.ProviderAddress,
-			NodeAddress: nodeAddr.String(),
-		},
-	)
-
-	return &v2.MsgUnlinkNodeResponse{}, nil
+	return &v3.MsgUpdatePlanStatusResponse{}, nil
 }

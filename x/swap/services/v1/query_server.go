@@ -23,29 +23,29 @@ func NewQueryServiceServer(k keeper.Keeper) v1.QueryServiceServer {
 	return &queryServer{k}
 }
 
-func (k *queryServer) QuerySwap(c context.Context, req *v1.QuerySwapRequest) (*v1.QuerySwapResponse, error) {
+func (q *queryServer) QuerySwap(c context.Context, req *v1.QuerySwapRequest) (*v1.QuerySwapResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQuerySwap(ctx, req)
+	return q.HandleQuerySwap(ctx, req)
 }
 
-func (k *queryServer) QuerySwaps(c context.Context, req *v1.QuerySwapsRequest) (*v1.QuerySwapsResponse, error) {
+func (q *queryServer) QuerySwaps(c context.Context, req *v1.QuerySwapsRequest) (*v1.QuerySwapsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQuerySwaps(ctx, req)
+	return q.HandleQuerySwaps(ctx, req)
 }
 
-func (k *queryServer) QueryParams(c context.Context, req *v1.QueryParamsRequest) (*v1.QueryParamsResponse, error) {
+func (q *queryServer) QueryParams(c context.Context, req *v1.QueryParamsRequest) (*v1.QueryParamsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQueryParams(ctx, req)
+	return q.HandleQueryParams(ctx, req)
 }

@@ -2,6 +2,7 @@ package v3
 
 import (
 	sdkerrors "cosmossdk.io/errors"
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
@@ -10,15 +11,128 @@ import (
 )
 
 var (
-	_ sdk.Msg = (*MsgStartRequest)(nil)
-	_ sdk.Msg = (*MsgUpdateRequest)(nil)
-	_ sdk.Msg = (*MsgRenewRequest)(nil)
+	_ sdk.Msg = (*MsgCancelSubscriptionRequest)(nil)
+	_ sdk.Msg = (*MsgRenewSubscriptionRequest)(nil)
+	_ sdk.Msg = (*MsgShareSubscriptionRequest)(nil)
+	_ sdk.Msg = (*MsgStartSubscriptionRequest)(nil)
+	_ sdk.Msg = (*MsgUpdateSubscriptionRequest)(nil)
 	_ sdk.Msg = (*MsgStartSessionRequest)(nil)
 	_ sdk.Msg = (*MsgUpdateParamsRequest)(nil)
 )
 
-func NewMsgStartRequest(from sdk.AccAddress, id uint64, denom string, renewable bool) *MsgStartRequest {
-	return &MsgStartRequest{
+func NewMsgCancelSubscriptionRequest(from sdk.AccAddress, id uint64) *MsgCancelSubscriptionRequest {
+	return &MsgCancelSubscriptionRequest{
+		From: from.String(),
+		ID:   id,
+	}
+}
+
+func (m *MsgCancelSubscriptionRequest) ValidateBasic() error {
+	if m.From == "" {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
+	}
+	if _, err := sdk.AccAddressFromBech32(m.From); err != nil {
+		return sdkerrors.Wrapf(types.ErrorInvalidMessage, "invalid from %s", err)
+	}
+	if m.ID == 0 {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "id cannot be zero")
+	}
+
+	return nil
+}
+
+func (m *MsgCancelSubscriptionRequest) GetSigners() []sdk.AccAddress {
+	from, err := sdk.AccAddressFromBech32(m.From)
+	if err != nil {
+		panic(err)
+	}
+
+	return []sdk.AccAddress{from.Bytes()}
+}
+
+func NewMsgRenewSubscriptionRequest(from sdk.AccAddress, id uint64, denom string) *MsgRenewSubscriptionRequest {
+	return &MsgRenewSubscriptionRequest{
+		From:  from.String(),
+		ID:    id,
+		Denom: denom,
+	}
+}
+
+func (m *MsgRenewSubscriptionRequest) ValidateBasic() error {
+	if m.From == "" {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
+	}
+	if _, err := sdk.AccAddressFromBech32(m.From); err != nil {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
+	}
+	if m.ID == 0 {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "id cannot be zero")
+	}
+	if m.Denom == "" {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "denom cannot be empty")
+	}
+	if err := sdk.ValidateDenom(m.Denom); err != nil {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
+	}
+
+	return nil
+}
+
+func (m *MsgRenewSubscriptionRequest) GetSigners() []sdk.AccAddress {
+	from, err := sdk.AccAddressFromBech32(m.From)
+	if err != nil {
+		panic(err)
+	}
+
+	return []sdk.AccAddress{from.Bytes()}
+}
+
+func NewMsgShareSubscriptionRequest(from sdk.AccAddress, id uint64, accAddr sdk.AccAddress, bytes sdkmath.Int) *MsgShareSubscriptionRequest {
+	return &MsgShareSubscriptionRequest{
+		From:       from.String(),
+		ID:         id,
+		AccAddress: accAddr.String(),
+		Bytes:      bytes,
+	}
+}
+
+func (m *MsgShareSubscriptionRequest) ValidateBasic() error {
+	if m.From == "" {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
+	}
+	if _, err := sdk.AccAddressFromBech32(m.From); err != nil {
+		return sdkerrors.Wrapf(types.ErrorInvalidMessage, "invalid from %s", err)
+	}
+	if m.ID == 0 {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "id cannot be zero")
+	}
+	if m.AccAddress == "" {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "acc_address cannot be empty")
+	}
+	if _, err := sdk.AccAddressFromBech32(m.AccAddress); err != nil {
+		return sdkerrors.Wrapf(types.ErrorInvalidMessage, "invalid acc_address %s", err)
+	}
+	if m.Bytes.IsNil() {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "bytes cannot be nil")
+	}
+	if m.Bytes.IsNegative() {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "bytes cannot be negative")
+	}
+
+	return nil
+}
+
+func (m *MsgShareSubscriptionRequest) GetSigners() []sdk.AccAddress {
+	from, err := sdk.AccAddressFromBech32(m.From)
+	if err != nil {
+		panic(err)
+	}
+
+	return []sdk.AccAddress{from.Bytes()}
+}
+
+func NewMsgStartSubscriptionRequest(from sdk.AccAddress, id uint64, denom string, renewable bool) *MsgStartSubscriptionRequest {
+	return &MsgStartSubscriptionRequest{
 		From:      from.String(),
 		ID:        id,
 		Denom:     denom,
@@ -26,7 +140,7 @@ func NewMsgStartRequest(from sdk.AccAddress, id uint64, denom string, renewable 
 	}
 }
 
-func (m *MsgStartRequest) ValidateBasic() error {
+func (m *MsgStartSubscriptionRequest) ValidateBasic() error {
 	if m.From == "" {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
 	}
@@ -46,7 +160,7 @@ func (m *MsgStartRequest) ValidateBasic() error {
 	return nil
 }
 
-func (m *MsgStartRequest) GetSigners() []sdk.AccAddress {
+func (m *MsgStartSubscriptionRequest) GetSigners() []sdk.AccAddress {
 	from, err := sdk.AccAddressFromBech32(m.From)
 	if err != nil {
 		panic(err)
@@ -55,15 +169,15 @@ func (m *MsgStartRequest) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{from.Bytes()}
 }
 
-func NewMsgUpdateRequest(from sdk.AccAddress, id uint64, renewable bool) *MsgUpdateRequest {
-	return &MsgUpdateRequest{
+func NewMsgUpdateSubscriptionRequest(from sdk.AccAddress, id uint64, renewable bool) *MsgUpdateSubscriptionRequest {
+	return &MsgUpdateSubscriptionRequest{
 		From:      from.String(),
 		ID:        id,
 		Renewable: renewable,
 	}
 }
 
-func (m *MsgUpdateRequest) ValidateBasic() error {
+func (m *MsgUpdateSubscriptionRequest) ValidateBasic() error {
 	if m.From == "" {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
 	}
@@ -77,44 +191,7 @@ func (m *MsgUpdateRequest) ValidateBasic() error {
 	return nil
 }
 
-func (m *MsgUpdateRequest) GetSigners() []sdk.AccAddress {
-	from, err := sdk.AccAddressFromBech32(m.From)
-	if err != nil {
-		panic(err)
-	}
-
-	return []sdk.AccAddress{from.Bytes()}
-}
-
-func NewMsgRenewRequest(from sdk.AccAddress, id uint64, denom string) *MsgRenewRequest {
-	return &MsgRenewRequest{
-		From:  from.String(),
-		ID:    id,
-		Denom: denom,
-	}
-}
-
-func (m *MsgRenewRequest) ValidateBasic() error {
-	if m.From == "" {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
-	}
-	if _, err := sdk.AccAddressFromBech32(m.From); err != nil {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
-	}
-	if m.ID == 0 {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, "id cannot be zero")
-	}
-	if m.Denom == "" {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, "denom cannot be empty")
-	}
-	if err := sdk.ValidateDenom(m.Denom); err != nil {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
-	}
-
-	return nil
-}
-
-func (m *MsgRenewRequest) GetSigners() []sdk.AccAddress {
+func (m *MsgUpdateSubscriptionRequest) GetSigners() []sdk.AccAddress {
 	from, err := sdk.AccAddressFromBech32(m.From)
 	if err != nil {
 		panic(err)

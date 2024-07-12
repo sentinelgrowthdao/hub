@@ -13,19 +13,19 @@ import (
 )
 
 var (
-	_ sdk.Msg = (*MsgEndRequest)(nil)
-	_ sdk.Msg = (*MsgUpdateRequest)(nil)
+	_ sdk.Msg = (*MsgCancelSessionRequest)(nil)
+	_ sdk.Msg = (*MsgUpdateSessionRequest)(nil)
 	_ sdk.Msg = (*MsgUpdateParamsRequest)(nil)
 )
 
-func NewMsgEndRequest(from sdk.AccAddress, id uint64) *MsgEndRequest {
-	return &MsgEndRequest{
+func NewMsgCancelSessionRequest(from sdk.AccAddress, id uint64) *MsgCancelSessionRequest {
+	return &MsgCancelSessionRequest{
 		From: from.String(),
 		ID:   id,
 	}
 }
 
-func (m *MsgEndRequest) ValidateBasic() error {
+func (m *MsgCancelSessionRequest) ValidateBasic() error {
 	if m.From == "" {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
 	}
@@ -39,7 +39,7 @@ func (m *MsgEndRequest) ValidateBasic() error {
 	return nil
 }
 
-func (m *MsgEndRequest) GetSigners() []sdk.AccAddress {
+func (m *MsgCancelSessionRequest) GetSigners() []sdk.AccAddress {
 	from, err := sdk.AccAddressFromBech32(m.From)
 	if err != nil {
 		panic(err)
@@ -48,8 +48,8 @@ func (m *MsgEndRequest) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{from.Bytes()}
 }
 
-func NewMsgUpdateRequest(from base.NodeAddress, id uint64, downloadBytes, uploadBytes sdkmath.Int, duration time.Duration, signature []byte) *MsgUpdateRequest {
-	return &MsgUpdateRequest{
+func NewMsgUpdateSessionRequest(from base.NodeAddress, id uint64, downloadBytes, uploadBytes sdkmath.Int, duration time.Duration, signature []byte) *MsgUpdateSessionRequest {
+	return &MsgUpdateSessionRequest{
 		From:          from.String(),
 		ID:            id,
 		DownloadBytes: downloadBytes,
@@ -59,7 +59,7 @@ func NewMsgUpdateRequest(from base.NodeAddress, id uint64, downloadBytes, upload
 	}
 }
 
-func (m *MsgUpdateRequest) Proof() *Proof {
+func (m *MsgUpdateSessionRequest) Proof() *Proof {
 	return &Proof{
 		ID:            m.ID,
 		DownloadBytes: m.DownloadBytes,
@@ -68,7 +68,7 @@ func (m *MsgUpdateRequest) Proof() *Proof {
 	}
 }
 
-func (m *MsgUpdateRequest) ValidateBasic() error {
+func (m *MsgUpdateSessionRequest) ValidateBasic() error {
 	if m.From == "" {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
 	}
@@ -100,7 +100,7 @@ func (m *MsgUpdateRequest) ValidateBasic() error {
 	return nil
 }
 
-func (m *MsgUpdateRequest) GetSigners() []sdk.AccAddress {
+func (m *MsgUpdateSessionRequest) GetSigners() []sdk.AccAddress {
 	from, err := base.NodeAddressFromBech32(m.From)
 	if err != nil {
 		panic(err)

@@ -28,7 +28,85 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-type MsgStartRequest struct {
+type MsgEndLeaseRequest struct {
+	From string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
+	ID   uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (m *MsgEndLeaseRequest) Reset()         { *m = MsgEndLeaseRequest{} }
+func (m *MsgEndLeaseRequest) String() string { return proto.CompactTextString(m) }
+func (*MsgEndLeaseRequest) ProtoMessage()    {}
+func (*MsgEndLeaseRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4e6a1e1e644cf079, []int{0}
+}
+func (m *MsgEndLeaseRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgEndLeaseRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgEndLeaseRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgEndLeaseRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgEndLeaseRequest.Merge(m, src)
+}
+func (m *MsgEndLeaseRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgEndLeaseRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgEndLeaseRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgEndLeaseRequest proto.InternalMessageInfo
+
+type MsgRenewLeaseRequest struct {
+	From  string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
+	ID    uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	Hours int64  `protobuf:"varint,3,opt,name=hours,proto3" json:"hours,omitempty"`
+	Denom string `protobuf:"bytes,4,opt,name=denom,proto3" json:"denom,omitempty"`
+}
+
+func (m *MsgRenewLeaseRequest) Reset()         { *m = MsgRenewLeaseRequest{} }
+func (m *MsgRenewLeaseRequest) String() string { return proto.CompactTextString(m) }
+func (*MsgRenewLeaseRequest) ProtoMessage()    {}
+func (*MsgRenewLeaseRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4e6a1e1e644cf079, []int{1}
+}
+func (m *MsgRenewLeaseRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgRenewLeaseRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgRenewLeaseRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgRenewLeaseRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgRenewLeaseRequest.Merge(m, src)
+}
+func (m *MsgRenewLeaseRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgRenewLeaseRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgRenewLeaseRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgRenewLeaseRequest proto.InternalMessageInfo
+
+type MsgStartLeaseRequest struct {
 	From        string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
 	NodeAddress string `protobuf:"bytes,2,opt,name=node_address,json=nodeAddress,proto3" json:"node_address,omitempty"`
 	Hours       int64  `protobuf:"varint,3,opt,name=hours,proto3" json:"hours,omitempty"`
@@ -36,18 +114,18 @@ type MsgStartRequest struct {
 	Renewable   bool   `protobuf:"varint,5,opt,name=renewable,proto3" json:"renewable,omitempty"`
 }
 
-func (m *MsgStartRequest) Reset()         { *m = MsgStartRequest{} }
-func (m *MsgStartRequest) String() string { return proto.CompactTextString(m) }
-func (*MsgStartRequest) ProtoMessage()    {}
-func (*MsgStartRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4e6a1e1e644cf079, []int{0}
+func (m *MsgStartLeaseRequest) Reset()         { *m = MsgStartLeaseRequest{} }
+func (m *MsgStartLeaseRequest) String() string { return proto.CompactTextString(m) }
+func (*MsgStartLeaseRequest) ProtoMessage()    {}
+func (*MsgStartLeaseRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4e6a1e1e644cf079, []int{2}
 }
-func (m *MsgStartRequest) XXX_Unmarshal(b []byte) error {
+func (m *MsgStartLeaseRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgStartRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgStartLeaseRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgStartRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgStartLeaseRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -57,114 +135,36 @@ func (m *MsgStartRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, err
 		return b[:n], nil
 	}
 }
-func (m *MsgStartRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgStartRequest.Merge(m, src)
+func (m *MsgStartLeaseRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgStartLeaseRequest.Merge(m, src)
 }
-func (m *MsgStartRequest) XXX_Size() int {
+func (m *MsgStartLeaseRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgStartRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgStartRequest.DiscardUnknown(m)
+func (m *MsgStartLeaseRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgStartLeaseRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgStartRequest proto.InternalMessageInfo
+var xxx_messageInfo_MsgStartLeaseRequest proto.InternalMessageInfo
 
-type MsgUpdateRequest struct {
+type MsgUpdateLeaseRequest struct {
 	From      string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
 	ID        uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	Renewable bool   `protobuf:"varint,3,opt,name=renewable,proto3" json:"renewable,omitempty"`
 }
 
-func (m *MsgUpdateRequest) Reset()         { *m = MsgUpdateRequest{} }
-func (m *MsgUpdateRequest) String() string { return proto.CompactTextString(m) }
-func (*MsgUpdateRequest) ProtoMessage()    {}
-func (*MsgUpdateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4e6a1e1e644cf079, []int{1}
-}
-func (m *MsgUpdateRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MsgUpdateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgUpdateRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *MsgUpdateRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgUpdateRequest.Merge(m, src)
-}
-func (m *MsgUpdateRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgUpdateRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgUpdateRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MsgUpdateRequest proto.InternalMessageInfo
-
-type MsgRenewRequest struct {
-	From  string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
-	ID    uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
-	Hours int64  `protobuf:"varint,3,opt,name=hours,proto3" json:"hours,omitempty"`
-	Denom string `protobuf:"bytes,4,opt,name=denom,proto3" json:"denom,omitempty"`
-}
-
-func (m *MsgRenewRequest) Reset()         { *m = MsgRenewRequest{} }
-func (m *MsgRenewRequest) String() string { return proto.CompactTextString(m) }
-func (*MsgRenewRequest) ProtoMessage()    {}
-func (*MsgRenewRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4e6a1e1e644cf079, []int{2}
-}
-func (m *MsgRenewRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MsgRenewRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgRenewRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *MsgRenewRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgRenewRequest.Merge(m, src)
-}
-func (m *MsgRenewRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgRenewRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgRenewRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MsgRenewRequest proto.InternalMessageInfo
-
-type MsgEndRequest struct {
-	From string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
-	ID   uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
-}
-
-func (m *MsgEndRequest) Reset()         { *m = MsgEndRequest{} }
-func (m *MsgEndRequest) String() string { return proto.CompactTextString(m) }
-func (*MsgEndRequest) ProtoMessage()    {}
-func (*MsgEndRequest) Descriptor() ([]byte, []int) {
+func (m *MsgUpdateLeaseRequest) Reset()         { *m = MsgUpdateLeaseRequest{} }
+func (m *MsgUpdateLeaseRequest) String() string { return proto.CompactTextString(m) }
+func (*MsgUpdateLeaseRequest) ProtoMessage()    {}
+func (*MsgUpdateLeaseRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_4e6a1e1e644cf079, []int{3}
 }
-func (m *MsgEndRequest) XXX_Unmarshal(b []byte) error {
+func (m *MsgUpdateLeaseRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgEndRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgUpdateLeaseRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgEndRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgUpdateLeaseRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -174,17 +174,17 @@ func (m *MsgEndRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error
 		return b[:n], nil
 	}
 }
-func (m *MsgEndRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgEndRequest.Merge(m, src)
+func (m *MsgUpdateLeaseRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUpdateLeaseRequest.Merge(m, src)
 }
-func (m *MsgEndRequest) XXX_Size() int {
+func (m *MsgUpdateLeaseRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgEndRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgEndRequest.DiscardUnknown(m)
+func (m *MsgUpdateLeaseRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUpdateLeaseRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgEndRequest proto.InternalMessageInfo
+var xxx_messageInfo_MsgUpdateLeaseRequest proto.InternalMessageInfo
 
 type MsgUpdateParamsRequest struct {
 	From   string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
@@ -224,21 +224,21 @@ func (m *MsgUpdateParamsRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUpdateParamsRequest proto.InternalMessageInfo
 
-type MsgStartResponse struct {
+type MsgEndLeaseResponse struct {
 }
 
-func (m *MsgStartResponse) Reset()         { *m = MsgStartResponse{} }
-func (m *MsgStartResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgStartResponse) ProtoMessage()    {}
-func (*MsgStartResponse) Descriptor() ([]byte, []int) {
+func (m *MsgEndLeaseResponse) Reset()         { *m = MsgEndLeaseResponse{} }
+func (m *MsgEndLeaseResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgEndLeaseResponse) ProtoMessage()    {}
+func (*MsgEndLeaseResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_4e6a1e1e644cf079, []int{5}
 }
-func (m *MsgStartResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgEndLeaseResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgStartResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgEndLeaseResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgStartResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgEndLeaseResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -248,33 +248,33 @@ func (m *MsgStartResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, er
 		return b[:n], nil
 	}
 }
-func (m *MsgStartResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgStartResponse.Merge(m, src)
+func (m *MsgEndLeaseResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgEndLeaseResponse.Merge(m, src)
 }
-func (m *MsgStartResponse) XXX_Size() int {
+func (m *MsgEndLeaseResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgStartResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgStartResponse.DiscardUnknown(m)
+func (m *MsgEndLeaseResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgEndLeaseResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgStartResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgEndLeaseResponse proto.InternalMessageInfo
 
-type MsgUpdateResponse struct {
+type MsgRenewLeaseResponse struct {
 }
 
-func (m *MsgUpdateResponse) Reset()         { *m = MsgUpdateResponse{} }
-func (m *MsgUpdateResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgUpdateResponse) ProtoMessage()    {}
-func (*MsgUpdateResponse) Descriptor() ([]byte, []int) {
+func (m *MsgRenewLeaseResponse) Reset()         { *m = MsgRenewLeaseResponse{} }
+func (m *MsgRenewLeaseResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgRenewLeaseResponse) ProtoMessage()    {}
+func (*MsgRenewLeaseResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_4e6a1e1e644cf079, []int{6}
 }
-func (m *MsgUpdateResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgRenewLeaseResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgUpdateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgRenewLeaseResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgUpdateResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgRenewLeaseResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -284,33 +284,33 @@ func (m *MsgUpdateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, e
 		return b[:n], nil
 	}
 }
-func (m *MsgUpdateResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgUpdateResponse.Merge(m, src)
+func (m *MsgRenewLeaseResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgRenewLeaseResponse.Merge(m, src)
 }
-func (m *MsgUpdateResponse) XXX_Size() int {
+func (m *MsgRenewLeaseResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgUpdateResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgUpdateResponse.DiscardUnknown(m)
+func (m *MsgRenewLeaseResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgRenewLeaseResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgUpdateResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgRenewLeaseResponse proto.InternalMessageInfo
 
-type MsgRenewResponse struct {
+type MsgStartLeaseResponse struct {
 }
 
-func (m *MsgRenewResponse) Reset()         { *m = MsgRenewResponse{} }
-func (m *MsgRenewResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgRenewResponse) ProtoMessage()    {}
-func (*MsgRenewResponse) Descriptor() ([]byte, []int) {
+func (m *MsgStartLeaseResponse) Reset()         { *m = MsgStartLeaseResponse{} }
+func (m *MsgStartLeaseResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgStartLeaseResponse) ProtoMessage()    {}
+func (*MsgStartLeaseResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_4e6a1e1e644cf079, []int{7}
 }
-func (m *MsgRenewResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgStartLeaseResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgRenewResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgStartLeaseResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgRenewResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgStartLeaseResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -320,33 +320,33 @@ func (m *MsgRenewResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, er
 		return b[:n], nil
 	}
 }
-func (m *MsgRenewResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgRenewResponse.Merge(m, src)
+func (m *MsgStartLeaseResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgStartLeaseResponse.Merge(m, src)
 }
-func (m *MsgRenewResponse) XXX_Size() int {
+func (m *MsgStartLeaseResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgRenewResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgRenewResponse.DiscardUnknown(m)
+func (m *MsgStartLeaseResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgStartLeaseResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgRenewResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgStartLeaseResponse proto.InternalMessageInfo
 
-type MsgEndResponse struct {
+type MsgUpdateLeaseResponse struct {
 }
 
-func (m *MsgEndResponse) Reset()         { *m = MsgEndResponse{} }
-func (m *MsgEndResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgEndResponse) ProtoMessage()    {}
-func (*MsgEndResponse) Descriptor() ([]byte, []int) {
+func (m *MsgUpdateLeaseResponse) Reset()         { *m = MsgUpdateLeaseResponse{} }
+func (m *MsgUpdateLeaseResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgUpdateLeaseResponse) ProtoMessage()    {}
+func (*MsgUpdateLeaseResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_4e6a1e1e644cf079, []int{8}
 }
-func (m *MsgEndResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgUpdateLeaseResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgEndResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgUpdateLeaseResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgEndResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgUpdateLeaseResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -356,17 +356,17 @@ func (m *MsgEndResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, erro
 		return b[:n], nil
 	}
 }
-func (m *MsgEndResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgEndResponse.Merge(m, src)
+func (m *MsgUpdateLeaseResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUpdateLeaseResponse.Merge(m, src)
 }
-func (m *MsgEndResponse) XXX_Size() int {
+func (m *MsgUpdateLeaseResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgEndResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgEndResponse.DiscardUnknown(m)
+func (m *MsgUpdateLeaseResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUpdateLeaseResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgEndResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgUpdateLeaseResponse proto.InternalMessageInfo
 
 type MsgUpdateParamsResponse struct {
 }
@@ -405,15 +405,15 @@ func (m *MsgUpdateParamsResponse) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
 
 func init() {
-	proto.RegisterType((*MsgStartRequest)(nil), "sentinel.lease.v1.MsgStartRequest")
-	proto.RegisterType((*MsgUpdateRequest)(nil), "sentinel.lease.v1.MsgUpdateRequest")
-	proto.RegisterType((*MsgRenewRequest)(nil), "sentinel.lease.v1.MsgRenewRequest")
-	proto.RegisterType((*MsgEndRequest)(nil), "sentinel.lease.v1.MsgEndRequest")
+	proto.RegisterType((*MsgEndLeaseRequest)(nil), "sentinel.lease.v1.MsgEndLeaseRequest")
+	proto.RegisterType((*MsgRenewLeaseRequest)(nil), "sentinel.lease.v1.MsgRenewLeaseRequest")
+	proto.RegisterType((*MsgStartLeaseRequest)(nil), "sentinel.lease.v1.MsgStartLeaseRequest")
+	proto.RegisterType((*MsgUpdateLeaseRequest)(nil), "sentinel.lease.v1.MsgUpdateLeaseRequest")
 	proto.RegisterType((*MsgUpdateParamsRequest)(nil), "sentinel.lease.v1.MsgUpdateParamsRequest")
-	proto.RegisterType((*MsgStartResponse)(nil), "sentinel.lease.v1.MsgStartResponse")
-	proto.RegisterType((*MsgUpdateResponse)(nil), "sentinel.lease.v1.MsgUpdateResponse")
-	proto.RegisterType((*MsgRenewResponse)(nil), "sentinel.lease.v1.MsgRenewResponse")
-	proto.RegisterType((*MsgEndResponse)(nil), "sentinel.lease.v1.MsgEndResponse")
+	proto.RegisterType((*MsgEndLeaseResponse)(nil), "sentinel.lease.v1.MsgEndLeaseResponse")
+	proto.RegisterType((*MsgRenewLeaseResponse)(nil), "sentinel.lease.v1.MsgRenewLeaseResponse")
+	proto.RegisterType((*MsgStartLeaseResponse)(nil), "sentinel.lease.v1.MsgStartLeaseResponse")
+	proto.RegisterType((*MsgUpdateLeaseResponse)(nil), "sentinel.lease.v1.MsgUpdateLeaseResponse")
 	proto.RegisterType((*MsgUpdateParamsResponse)(nil), "sentinel.lease.v1.MsgUpdateParamsResponse")
 }
 
@@ -421,39 +421,39 @@ func init() { proto.RegisterFile("sentinel/lease/v1/msg.proto", fileDescriptor_4
 
 var fileDescriptor_4e6a1e1e644cf079 = []byte{
 	// 522 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x54, 0x4d, 0x6f, 0xd3, 0x40,
-	0x10, 0xb5, 0x93, 0x34, 0x6a, 0xa6, 0x7c, 0xb4, 0x4b, 0x55, 0x5c, 0x83, 0xdc, 0xd4, 0x70, 0x08,
-	0x48, 0xd8, 0x4a, 0x10, 0xe2, 0xc0, 0x89, 0x08, 0x0e, 0x1c, 0x22, 0x21, 0x57, 0x80, 0x84, 0x90,
-	0x90, 0x13, 0x4f, 0x1c, 0x4b, 0xb1, 0xd7, 0x78, 0x1d, 0x03, 0xff, 0x02, 0xf1, 0x2b, 0xf8, 0x27,
-	0xe4, 0xd8, 0x23, 0xa7, 0x0a, 0x9c, 0x3f, 0x82, 0xbc, 0xbb, 0x69, 0x93, 0xa6, 0xb1, 0x20, 0x37,
-	0xef, 0x9b, 0xe7, 0x37, 0x6f, 0x66, 0x9f, 0x16, 0xee, 0x30, 0x8c, 0xd2, 0x20, 0xc2, 0xb1, 0x3d,
-	0x46, 0x97, 0xa1, 0x9d, 0xb5, 0xed, 0x90, 0xf9, 0x56, 0x9c, 0xd0, 0x94, 0x92, 0xbd, 0x79, 0xd1,
-	0xe2, 0x45, 0x2b, 0x6b, 0xeb, 0xfb, 0x3e, 0xf5, 0x29, 0xaf, 0xda, 0xc5, 0x97, 0x20, 0xea, 0xc6,
-	0xaa, 0x4a, 0xec, 0x26, 0x6e, 0xc8, 0x44, 0xdd, 0xfc, 0xae, 0xc2, 0xcd, 0x1e, 0xf3, 0x4f, 0x52,
-	0x37, 0x49, 0x1d, 0xfc, 0x34, 0x41, 0x96, 0x12, 0x02, 0xb5, 0x61, 0x42, 0x43, 0x4d, 0x6d, 0xaa,
-	0xad, 0x86, 0xc3, 0xbf, 0xc9, 0x31, 0x5c, 0x8b, 0xa8, 0x87, 0x1f, 0x5d, 0xcf, 0x4b, 0x90, 0x31,
-	0xad, 0xc2, 0x6b, 0x3b, 0x05, 0xf6, 0x5c, 0x40, 0x64, 0x1f, 0xb6, 0x46, 0x74, 0x92, 0x30, 0xad,
-	0xda, 0x54, 0x5b, 0x55, 0x47, 0x1c, 0x0a, 0xd4, 0xc3, 0x88, 0x86, 0x5a, 0x8d, 0xff, 0x21, 0x0e,
-	0xe4, 0x2e, 0x34, 0x12, 0x8c, 0xf0, 0xb3, 0xdb, 0x1f, 0xa3, 0xb6, 0xd5, 0x54, 0x5b, 0xdb, 0xce,
-	0x05, 0x60, 0x7e, 0x80, 0xdd, 0x1e, 0xf3, 0xdf, 0xc4, 0x9e, 0x9b, 0x62, 0x99, 0xa9, 0x03, 0xa8,
-	0x04, 0x1e, 0xb7, 0x52, 0xeb, 0xd6, 0xf3, 0xb3, 0xa3, 0xca, 0xab, 0x17, 0x4e, 0x25, 0xf0, 0x96,
-	0xd5, 0xab, 0x97, 0xd5, 0x03, 0x3e, 0xb1, 0x53, 0x9c, 0x37, 0x11, 0xff, 0x8f, 0x31, 0xcd, 0x67,
-	0x70, 0xbd, 0xc7, 0xfc, 0x97, 0x91, 0xb7, 0x41, 0x23, 0x13, 0xe1, 0xe0, 0x7c, 0x0b, 0xaf, 0xf9,
-	0x9d, 0x95, 0xa9, 0x3c, 0x85, 0xba, 0xb8, 0x58, 0xae, 0xb4, 0xd3, 0x39, 0xb4, 0x56, 0x22, 0x62,
-	0x09, 0x95, 0x6e, 0x6d, 0x7a, 0x76, 0xa4, 0x38, 0x92, 0x6e, 0x12, 0xbe, 0x6c, 0x19, 0x00, 0x16,
-	0xd3, 0x88, 0xa1, 0x79, 0x0b, 0xf6, 0x16, 0x2e, 0x40, 0x82, 0x82, 0x28, 0xf7, 0x26, 0xb1, 0x5d,
-	0xb8, 0x31, 0x1f, 0x50, 0x22, 0x87, 0x70, 0x7b, 0xc5, 0xb5, 0x28, 0x75, 0x7e, 0x56, 0x01, 0x8a,
-	0x56, 0x98, 0x64, 0xc1, 0x00, 0xc9, 0x09, 0x6c, 0xcf, 0x1b, 0x13, 0xf3, 0x0a, 0xb7, 0x97, 0x62,
-	0xa9, 0xdf, 0x2b, 0xe5, 0x88, 0x1e, 0xe4, 0x2d, 0x34, 0xce, 0xdb, 0x93, 0x35, 0x7f, 0x2c, 0x05,
-	0x4b, 0xbf, 0x5f, 0x4e, 0x92, 0xba, 0xc2, 0x2c, 0x1f, 0x7e, 0x9d, 0xd9, 0xc5, 0x44, 0xad, 0x33,
-	0xbb, 0xb4, 0x3d, 0xd2, 0x83, 0xba, 0xd8, 0x1e, 0x69, 0x5e, 0x4d, 0xbf, 0x48, 0x8e, 0x7e, 0x5c,
-	0xc2, 0x90, 0x72, 0x23, 0x1e, 0xec, 0xc5, 0xd5, 0x93, 0x07, 0x65, 0xc3, 0x2d, 0x85, 0x4a, 0x7f,
-	0xf8, 0x2f, 0x54, 0xd1, 0xa9, 0xfb, 0x6e, 0xfa, 0xc7, 0x50, 0x7e, 0xe4, 0x86, 0x32, 0xcd, 0x0d,
-	0xf5, 0x34, 0x37, 0xd4, 0xdf, 0xb9, 0xa1, 0x7e, 0x9b, 0x19, 0xca, 0xe9, 0xcc, 0x50, 0x7e, 0xcd,
-	0x0c, 0xe5, 0xfd, 0x13, 0x3f, 0x48, 0x47, 0x93, 0xbe, 0x35, 0xa0, 0xa1, 0x3d, 0xd7, 0x7d, 0x44,
-	0x87, 0xc3, 0x60, 0x10, 0xb8, 0x63, 0x7b, 0x34, 0xe9, 0xdb, 0x59, 0xbb, 0x63, 0x7f, 0x91, 0xaf,
-	0x52, 0xfa, 0x35, 0x46, 0x66, 0x67, 0xed, 0x7e, 0x9d, 0xbf, 0x4a, 0x8f, 0xff, 0x06, 0x00, 0x00,
-	0xff, 0xff, 0x49, 0x78, 0x50, 0x58, 0xfd, 0x04, 0x00, 0x00,
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x94, 0xcf, 0x6e, 0xd3, 0x40,
+	0x10, 0xc6, 0xed, 0x24, 0x8d, 0xc8, 0x84, 0x3f, 0x62, 0x49, 0x5b, 0xd7, 0x20, 0x37, 0x58, 0x02,
+	0x0c, 0x12, 0xb6, 0x12, 0x84, 0xb8, 0x42, 0x04, 0x07, 0x24, 0x22, 0x21, 0x23, 0x84, 0x84, 0x90,
+	0x90, 0x1d, 0x4f, 0x1c, 0x4b, 0xb1, 0xd7, 0x78, 0x1d, 0x03, 0x67, 0x5e, 0x80, 0x1b, 0xaf, 0xc0,
+	0xa3, 0xe4, 0xd8, 0x23, 0xa7, 0x0a, 0x9c, 0x17, 0x41, 0xde, 0x4d, 0x69, 0x5c, 0x37, 0x4d, 0xe9,
+	0xcd, 0x9e, 0x6f, 0x76, 0x7e, 0x3b, 0x33, 0x9f, 0x16, 0x6e, 0x32, 0x8c, 0xd2, 0x20, 0xc2, 0xa9,
+	0x35, 0x45, 0x87, 0xa1, 0x95, 0xf5, 0xac, 0x90, 0xf9, 0x66, 0x9c, 0xd0, 0x94, 0x92, 0xeb, 0x47,
+	0xa2, 0xc9, 0x45, 0x33, 0xeb, 0xa9, 0x1d, 0x9f, 0xfa, 0x94, 0xab, 0x56, 0xf1, 0x25, 0x12, 0x55,
+	0xad, 0x5a, 0x25, 0x76, 0x12, 0x27, 0x64, 0x42, 0xd7, 0x9f, 0x02, 0x19, 0x32, 0xff, 0x45, 0xe4,
+	0xbd, 0x2a, 0x64, 0x1b, 0x3f, 0xcd, 0x90, 0xa5, 0x84, 0x40, 0x63, 0x9c, 0xd0, 0x50, 0x91, 0xbb,
+	0xb2, 0xd1, 0xb2, 0xf9, 0x37, 0xd9, 0x81, 0x5a, 0xe0, 0x29, 0xb5, 0xae, 0x6c, 0x34, 0x06, 0xcd,
+	0xfc, 0x70, 0xbf, 0xf6, 0xf2, 0xb9, 0x5d, 0x0b, 0x3c, 0x3d, 0x82, 0xce, 0x90, 0xf9, 0x36, 0x46,
+	0xf8, 0xf9, 0xa2, 0x35, 0x48, 0x07, 0xb6, 0x26, 0x74, 0x96, 0x30, 0xa5, 0xde, 0x95, 0x8d, 0xba,
+	0x2d, 0x7e, 0x8a, 0xa8, 0x87, 0x11, 0x0d, 0x95, 0x06, 0x2f, 0x21, 0x7e, 0xf4, 0x1f, 0x32, 0x07,
+	0xbe, 0x49, 0x9d, 0x24, 0xdd, 0x08, 0xbc, 0x0d, 0x97, 0x23, 0xea, 0xe1, 0x47, 0xc7, 0xf3, 0x12,
+	0x64, 0x8c, 0xa3, 0x5b, 0x76, 0xbb, 0x88, 0x3d, 0x13, 0xa1, 0xff, 0x61, 0x93, 0x5b, 0xd0, 0x4a,
+	0x8a, 0x46, 0x1d, 0x77, 0x8a, 0xca, 0x56, 0x57, 0x36, 0x2e, 0xd9, 0xc7, 0x01, 0xdd, 0x81, 0xed,
+	0x21, 0xf3, 0xdf, 0xc6, 0x9e, 0x93, 0xe2, 0x85, 0x47, 0x51, 0x42, 0xd4, 0x4f, 0x22, 0x10, 0x76,
+	0xfe, 0x21, 0x5e, 0xf3, 0x3d, 0x9e, 0xc5, 0x78, 0x02, 0x4d, 0xb1, 0x6c, 0xce, 0x69, 0xf7, 0xf7,
+	0xcc, 0x8a, 0x6d, 0x4c, 0x51, 0x65, 0xd0, 0x98, 0x1f, 0xee, 0x4b, 0xf6, 0x32, 0x5d, 0xdf, 0x86,
+	0x1b, 0x25, 0x57, 0xb0, 0x98, 0x46, 0x0c, 0xf5, 0x5d, 0xde, 0xe0, 0xea, 0xaa, 0x4b, 0xc2, 0xea,
+	0x4a, 0x96, 0x82, 0xb2, 0x72, 0xdf, 0xb2, 0xb2, 0x07, 0xbb, 0x95, 0x4e, 0x84, 0xd4, 0xff, 0xd6,
+	0x00, 0x28, 0xca, 0x61, 0x92, 0x05, 0x23, 0x24, 0x1f, 0xa0, 0xbd, 0x72, 0x19, 0x72, 0xe7, 0x94,
+	0x26, 0xaa, 0x16, 0x56, 0xef, 0x6e, 0x4a, 0x13, 0x30, 0xe2, 0xc2, 0x95, 0x52, 0x4f, 0xe4, 0xde,
+	0xe9, 0x07, 0x2b, 0x06, 0x57, 0x8d, 0xcd, 0x89, 0x25, 0xc6, 0xf1, 0x78, 0xd6, 0x31, 0x2a, 0x9e,
+	0x5e, 0xc7, 0xa8, 0x4e, 0x9a, 0x20, 0x5c, 0x2d, 0x4f, 0x9a, 0xac, 0x39, 0x5b, 0xf5, 0xa7, 0x7a,
+	0xff, 0x1c, 0x99, 0x4b, 0xcc, 0x04, 0xae, 0x9d, 0x58, 0x1b, 0x39, 0xf3, 0x74, 0xc9, 0xa4, 0xea,
+	0x83, 0xf3, 0xa4, 0x0a, 0xd2, 0xe0, 0xdd, 0xfc, 0x8f, 0x26, 0xfd, 0xcc, 0x35, 0x69, 0x9e, 0x6b,
+	0xf2, 0x41, 0xae, 0xc9, 0xbf, 0x73, 0x4d, 0xfe, 0xbe, 0xd0, 0xa4, 0x83, 0x85, 0x26, 0xfd, 0x5a,
+	0x68, 0xd2, 0xfb, 0xc7, 0x7e, 0x90, 0x4e, 0x66, 0xae, 0x39, 0xa2, 0xa1, 0x75, 0x54, 0xf7, 0x21,
+	0x1d, 0x8f, 0x83, 0x51, 0xe0, 0x4c, 0xad, 0xc9, 0xcc, 0xb5, 0xb2, 0x5e, 0xdf, 0xfa, 0xb2, 0x7c,
+	0xf9, 0xd2, 0xaf, 0x31, 0x32, 0x2b, 0xeb, 0xb9, 0x4d, 0xfe, 0xf2, 0x3d, 0xfa, 0x1b, 0x00, 0x00,
+	0xff, 0xff, 0xfe, 0xd4, 0x7b, 0xfc, 0x61, 0x05, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -468,10 +468,10 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgServiceClient interface {
-	MsgStart(ctx context.Context, in *MsgStartRequest, opts ...grpc.CallOption) (*MsgStartResponse, error)
-	MsgUpdate(ctx context.Context, in *MsgUpdateRequest, opts ...grpc.CallOption) (*MsgUpdateResponse, error)
-	MsgRenew(ctx context.Context, in *MsgRenewRequest, opts ...grpc.CallOption) (*MsgRenewResponse, error)
-	MsgEnd(ctx context.Context, in *MsgEndRequest, opts ...grpc.CallOption) (*MsgEndResponse, error)
+	MsgEndLease(ctx context.Context, in *MsgEndLeaseRequest, opts ...grpc.CallOption) (*MsgEndLeaseResponse, error)
+	MsgRenewLease(ctx context.Context, in *MsgRenewLeaseRequest, opts ...grpc.CallOption) (*MsgRenewLeaseResponse, error)
+	MsgStartLease(ctx context.Context, in *MsgStartLeaseRequest, opts ...grpc.CallOption) (*MsgStartLeaseResponse, error)
+	MsgUpdateLease(ctx context.Context, in *MsgUpdateLeaseRequest, opts ...grpc.CallOption) (*MsgUpdateLeaseResponse, error)
 	MsgUpdateParams(ctx context.Context, in *MsgUpdateParamsRequest, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
 }
 
@@ -483,36 +483,36 @@ func NewMsgServiceClient(cc grpc1.ClientConn) MsgServiceClient {
 	return &msgServiceClient{cc}
 }
 
-func (c *msgServiceClient) MsgStart(ctx context.Context, in *MsgStartRequest, opts ...grpc.CallOption) (*MsgStartResponse, error) {
-	out := new(MsgStartResponse)
-	err := c.cc.Invoke(ctx, "/sentinel.lease.v1.MsgService/MsgStart", in, out, opts...)
+func (c *msgServiceClient) MsgEndLease(ctx context.Context, in *MsgEndLeaseRequest, opts ...grpc.CallOption) (*MsgEndLeaseResponse, error) {
+	out := new(MsgEndLeaseResponse)
+	err := c.cc.Invoke(ctx, "/sentinel.lease.v1.MsgService/MsgEndLease", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *msgServiceClient) MsgUpdate(ctx context.Context, in *MsgUpdateRequest, opts ...grpc.CallOption) (*MsgUpdateResponse, error) {
-	out := new(MsgUpdateResponse)
-	err := c.cc.Invoke(ctx, "/sentinel.lease.v1.MsgService/MsgUpdate", in, out, opts...)
+func (c *msgServiceClient) MsgRenewLease(ctx context.Context, in *MsgRenewLeaseRequest, opts ...grpc.CallOption) (*MsgRenewLeaseResponse, error) {
+	out := new(MsgRenewLeaseResponse)
+	err := c.cc.Invoke(ctx, "/sentinel.lease.v1.MsgService/MsgRenewLease", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *msgServiceClient) MsgRenew(ctx context.Context, in *MsgRenewRequest, opts ...grpc.CallOption) (*MsgRenewResponse, error) {
-	out := new(MsgRenewResponse)
-	err := c.cc.Invoke(ctx, "/sentinel.lease.v1.MsgService/MsgRenew", in, out, opts...)
+func (c *msgServiceClient) MsgStartLease(ctx context.Context, in *MsgStartLeaseRequest, opts ...grpc.CallOption) (*MsgStartLeaseResponse, error) {
+	out := new(MsgStartLeaseResponse)
+	err := c.cc.Invoke(ctx, "/sentinel.lease.v1.MsgService/MsgStartLease", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *msgServiceClient) MsgEnd(ctx context.Context, in *MsgEndRequest, opts ...grpc.CallOption) (*MsgEndResponse, error) {
-	out := new(MsgEndResponse)
-	err := c.cc.Invoke(ctx, "/sentinel.lease.v1.MsgService/MsgEnd", in, out, opts...)
+func (c *msgServiceClient) MsgUpdateLease(ctx context.Context, in *MsgUpdateLeaseRequest, opts ...grpc.CallOption) (*MsgUpdateLeaseResponse, error) {
+	out := new(MsgUpdateLeaseResponse)
+	err := c.cc.Invoke(ctx, "/sentinel.lease.v1.MsgService/MsgUpdateLease", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -530,10 +530,10 @@ func (c *msgServiceClient) MsgUpdateParams(ctx context.Context, in *MsgUpdatePar
 
 // MsgServiceServer is the server API for MsgService service.
 type MsgServiceServer interface {
-	MsgStart(context.Context, *MsgStartRequest) (*MsgStartResponse, error)
-	MsgUpdate(context.Context, *MsgUpdateRequest) (*MsgUpdateResponse, error)
-	MsgRenew(context.Context, *MsgRenewRequest) (*MsgRenewResponse, error)
-	MsgEnd(context.Context, *MsgEndRequest) (*MsgEndResponse, error)
+	MsgEndLease(context.Context, *MsgEndLeaseRequest) (*MsgEndLeaseResponse, error)
+	MsgRenewLease(context.Context, *MsgRenewLeaseRequest) (*MsgRenewLeaseResponse, error)
+	MsgStartLease(context.Context, *MsgStartLeaseRequest) (*MsgStartLeaseResponse, error)
+	MsgUpdateLease(context.Context, *MsgUpdateLeaseRequest) (*MsgUpdateLeaseResponse, error)
 	MsgUpdateParams(context.Context, *MsgUpdateParamsRequest) (*MsgUpdateParamsResponse, error)
 }
 
@@ -541,17 +541,17 @@ type MsgServiceServer interface {
 type UnimplementedMsgServiceServer struct {
 }
 
-func (*UnimplementedMsgServiceServer) MsgStart(ctx context.Context, req *MsgStartRequest) (*MsgStartResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method MsgStart not implemented")
+func (*UnimplementedMsgServiceServer) MsgEndLease(ctx context.Context, req *MsgEndLeaseRequest) (*MsgEndLeaseResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MsgEndLease not implemented")
 }
-func (*UnimplementedMsgServiceServer) MsgUpdate(ctx context.Context, req *MsgUpdateRequest) (*MsgUpdateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method MsgUpdate not implemented")
+func (*UnimplementedMsgServiceServer) MsgRenewLease(ctx context.Context, req *MsgRenewLeaseRequest) (*MsgRenewLeaseResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MsgRenewLease not implemented")
 }
-func (*UnimplementedMsgServiceServer) MsgRenew(ctx context.Context, req *MsgRenewRequest) (*MsgRenewResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method MsgRenew not implemented")
+func (*UnimplementedMsgServiceServer) MsgStartLease(ctx context.Context, req *MsgStartLeaseRequest) (*MsgStartLeaseResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MsgStartLease not implemented")
 }
-func (*UnimplementedMsgServiceServer) MsgEnd(ctx context.Context, req *MsgEndRequest) (*MsgEndResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method MsgEnd not implemented")
+func (*UnimplementedMsgServiceServer) MsgUpdateLease(ctx context.Context, req *MsgUpdateLeaseRequest) (*MsgUpdateLeaseResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MsgUpdateLease not implemented")
 }
 func (*UnimplementedMsgServiceServer) MsgUpdateParams(ctx context.Context, req *MsgUpdateParamsRequest) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method MsgUpdateParams not implemented")
@@ -561,74 +561,74 @@ func RegisterMsgServiceServer(s grpc1.Server, srv MsgServiceServer) {
 	s.RegisterService(&_MsgService_serviceDesc, srv)
 }
 
-func _MsgService_MsgStart_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgStartRequest)
+func _MsgService_MsgEndLease_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgEndLeaseRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServiceServer).MsgStart(ctx, in)
+		return srv.(MsgServiceServer).MsgEndLease(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/sentinel.lease.v1.MsgService/MsgStart",
+		FullMethod: "/sentinel.lease.v1.MsgService/MsgEndLease",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServiceServer).MsgStart(ctx, req.(*MsgStartRequest))
+		return srv.(MsgServiceServer).MsgEndLease(ctx, req.(*MsgEndLeaseRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _MsgService_MsgUpdate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgUpdateRequest)
+func _MsgService_MsgRenewLease_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRenewLeaseRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServiceServer).MsgUpdate(ctx, in)
+		return srv.(MsgServiceServer).MsgRenewLease(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/sentinel.lease.v1.MsgService/MsgUpdate",
+		FullMethod: "/sentinel.lease.v1.MsgService/MsgRenewLease",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServiceServer).MsgUpdate(ctx, req.(*MsgUpdateRequest))
+		return srv.(MsgServiceServer).MsgRenewLease(ctx, req.(*MsgRenewLeaseRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _MsgService_MsgRenew_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgRenewRequest)
+func _MsgService_MsgStartLease_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgStartLeaseRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServiceServer).MsgRenew(ctx, in)
+		return srv.(MsgServiceServer).MsgStartLease(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/sentinel.lease.v1.MsgService/MsgRenew",
+		FullMethod: "/sentinel.lease.v1.MsgService/MsgStartLease",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServiceServer).MsgRenew(ctx, req.(*MsgRenewRequest))
+		return srv.(MsgServiceServer).MsgStartLease(ctx, req.(*MsgStartLeaseRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _MsgService_MsgEnd_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgEndRequest)
+func _MsgService_MsgUpdateLease_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUpdateLeaseRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServiceServer).MsgEnd(ctx, in)
+		return srv.(MsgServiceServer).MsgUpdateLease(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/sentinel.lease.v1.MsgService/MsgEnd",
+		FullMethod: "/sentinel.lease.v1.MsgService/MsgUpdateLease",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServiceServer).MsgEnd(ctx, req.(*MsgEndRequest))
+		return srv.(MsgServiceServer).MsgUpdateLease(ctx, req.(*MsgUpdateLeaseRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -656,20 +656,20 @@ var _MsgService_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*MsgServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "MsgStart",
-			Handler:    _MsgService_MsgStart_Handler,
+			MethodName: "MsgEndLease",
+			Handler:    _MsgService_MsgEndLease_Handler,
 		},
 		{
-			MethodName: "MsgUpdate",
-			Handler:    _MsgService_MsgUpdate_Handler,
+			MethodName: "MsgRenewLease",
+			Handler:    _MsgService_MsgRenewLease_Handler,
 		},
 		{
-			MethodName: "MsgRenew",
-			Handler:    _MsgService_MsgRenew_Handler,
+			MethodName: "MsgStartLease",
+			Handler:    _MsgService_MsgStartLease_Handler,
 		},
 		{
-			MethodName: "MsgEnd",
-			Handler:    _MsgService_MsgEnd_Handler,
+			MethodName: "MsgUpdateLease",
+			Handler:    _MsgService_MsgUpdateLease_Handler,
 		},
 		{
 			MethodName: "MsgUpdateParams",
@@ -680,7 +680,7 @@ var _MsgService_serviceDesc = grpc.ServiceDesc{
 	Metadata: "sentinel/lease/v1/msg.proto",
 }
 
-func (m *MsgStartRequest) Marshal() (dAtA []byte, err error) {
+func (m *MsgEndLeaseRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -690,12 +690,94 @@ func (m *MsgStartRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgStartRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgEndLeaseRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgStartRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgEndLeaseRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ID != 0 {
+		i = encodeVarintMsg(dAtA, i, uint64(m.ID))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.From) > 0 {
+		i -= len(m.From)
+		copy(dAtA[i:], m.From)
+		i = encodeVarintMsg(dAtA, i, uint64(len(m.From)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgRenewLeaseRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgRenewLeaseRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgRenewLeaseRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Denom) > 0 {
+		i -= len(m.Denom)
+		copy(dAtA[i:], m.Denom)
+		i = encodeVarintMsg(dAtA, i, uint64(len(m.Denom)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.Hours != 0 {
+		i = encodeVarintMsg(dAtA, i, uint64(m.Hours))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.ID != 0 {
+		i = encodeVarintMsg(dAtA, i, uint64(m.ID))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.From) > 0 {
+		i -= len(m.From)
+		copy(dAtA[i:], m.From)
+		i = encodeVarintMsg(dAtA, i, uint64(len(m.From)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgStartLeaseRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgStartLeaseRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgStartLeaseRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -739,7 +821,7 @@ func (m *MsgStartRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgUpdateRequest) Marshal() (dAtA []byte, err error) {
+func (m *MsgUpdateLeaseRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -749,12 +831,12 @@ func (m *MsgUpdateRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgUpdateRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgUpdateLeaseRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgUpdateRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgUpdateLeaseRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -769,88 +851,6 @@ func (m *MsgUpdateRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x18
 	}
-	if m.ID != 0 {
-		i = encodeVarintMsg(dAtA, i, uint64(m.ID))
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.From) > 0 {
-		i -= len(m.From)
-		copy(dAtA[i:], m.From)
-		i = encodeVarintMsg(dAtA, i, uint64(len(m.From)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *MsgRenewRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MsgRenewRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MsgRenewRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Denom) > 0 {
-		i -= len(m.Denom)
-		copy(dAtA[i:], m.Denom)
-		i = encodeVarintMsg(dAtA, i, uint64(len(m.Denom)))
-		i--
-		dAtA[i] = 0x22
-	}
-	if m.Hours != 0 {
-		i = encodeVarintMsg(dAtA, i, uint64(m.Hours))
-		i--
-		dAtA[i] = 0x18
-	}
-	if m.ID != 0 {
-		i = encodeVarintMsg(dAtA, i, uint64(m.ID))
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.From) > 0 {
-		i -= len(m.From)
-		copy(dAtA[i:], m.From)
-		i = encodeVarintMsg(dAtA, i, uint64(len(m.From)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *MsgEndRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MsgEndRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MsgEndRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
 	if m.ID != 0 {
 		i = encodeVarintMsg(dAtA, i, uint64(m.ID))
 		i--
@@ -906,7 +906,7 @@ func (m *MsgUpdateParamsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgStartResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgEndLeaseResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -916,12 +916,12 @@ func (m *MsgStartResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgStartResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgEndLeaseResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgStartResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgEndLeaseResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -929,7 +929,7 @@ func (m *MsgStartResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgUpdateResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgRenewLeaseResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -939,12 +939,12 @@ func (m *MsgUpdateResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgUpdateResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgRenewLeaseResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgUpdateResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgRenewLeaseResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -952,7 +952,7 @@ func (m *MsgUpdateResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgRenewResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgStartLeaseResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -962,12 +962,12 @@ func (m *MsgRenewResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgRenewResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgStartLeaseResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgRenewResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgStartLeaseResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -975,7 +975,7 @@ func (m *MsgRenewResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgEndResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgUpdateLeaseResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -985,12 +985,12 @@ func (m *MsgEndResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgEndResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgUpdateLeaseResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgEndResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgUpdateLeaseResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1032,7 +1032,46 @@ func encodeVarintMsg(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *MsgStartRequest) Size() (n int) {
+func (m *MsgEndLeaseRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.From)
+	if l > 0 {
+		n += 1 + l + sovMsg(uint64(l))
+	}
+	if m.ID != 0 {
+		n += 1 + sovMsg(uint64(m.ID))
+	}
+	return n
+}
+
+func (m *MsgRenewLeaseRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.From)
+	if l > 0 {
+		n += 1 + l + sovMsg(uint64(l))
+	}
+	if m.ID != 0 {
+		n += 1 + sovMsg(uint64(m.ID))
+	}
+	if m.Hours != 0 {
+		n += 1 + sovMsg(uint64(m.Hours))
+	}
+	l = len(m.Denom)
+	if l > 0 {
+		n += 1 + l + sovMsg(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgStartLeaseRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1059,7 +1098,7 @@ func (m *MsgStartRequest) Size() (n int) {
 	return n
 }
 
-func (m *MsgUpdateRequest) Size() (n int) {
+func (m *MsgUpdateLeaseRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1074,45 +1113,6 @@ func (m *MsgUpdateRequest) Size() (n int) {
 	}
 	if m.Renewable {
 		n += 2
-	}
-	return n
-}
-
-func (m *MsgRenewRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.From)
-	if l > 0 {
-		n += 1 + l + sovMsg(uint64(l))
-	}
-	if m.ID != 0 {
-		n += 1 + sovMsg(uint64(m.ID))
-	}
-	if m.Hours != 0 {
-		n += 1 + sovMsg(uint64(m.Hours))
-	}
-	l = len(m.Denom)
-	if l > 0 {
-		n += 1 + l + sovMsg(uint64(l))
-	}
-	return n
-}
-
-func (m *MsgEndRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.From)
-	if l > 0 {
-		n += 1 + l + sovMsg(uint64(l))
-	}
-	if m.ID != 0 {
-		n += 1 + sovMsg(uint64(m.ID))
 	}
 	return n
 }
@@ -1132,7 +1132,7 @@ func (m *MsgUpdateParamsRequest) Size() (n int) {
 	return n
 }
 
-func (m *MsgStartResponse) Size() (n int) {
+func (m *MsgEndLeaseResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1141,7 +1141,7 @@ func (m *MsgStartResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgUpdateResponse) Size() (n int) {
+func (m *MsgRenewLeaseResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1150,7 +1150,7 @@ func (m *MsgUpdateResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgRenewResponse) Size() (n int) {
+func (m *MsgStartLeaseResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1159,7 +1159,7 @@ func (m *MsgRenewResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgEndResponse) Size() (n int) {
+func (m *MsgUpdateLeaseResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1183,7 +1183,7 @@ func sovMsg(x uint64) (n int) {
 func sozMsg(x uint64) (n int) {
 	return sovMsg(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *MsgStartRequest) Unmarshal(dAtA []byte) error {
+func (m *MsgEndLeaseRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1206,10 +1206,263 @@ func (m *MsgStartRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgStartRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgEndLeaseRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgStartRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgEndLeaseRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field From", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMsg
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthMsg
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthMsg
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.From = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+			}
+			m.ID = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMsg
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ID |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipMsg(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthMsg
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgRenewLeaseRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowMsg
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgRenewLeaseRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgRenewLeaseRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field From", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMsg
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthMsg
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthMsg
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.From = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+			}
+			m.ID = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMsg
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ID |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Hours", wireType)
+			}
+			m.Hours = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMsg
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Hours |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Denom", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMsg
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthMsg
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthMsg
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Denom = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipMsg(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthMsg
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgStartLeaseRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowMsg
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgStartLeaseRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgStartLeaseRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1368,7 +1621,7 @@ func (m *MsgStartRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgUpdateRequest) Unmarshal(dAtA []byte) error {
+func (m *MsgUpdateLeaseRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1391,10 +1644,10 @@ func (m *MsgUpdateRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgUpdateRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgUpdateLeaseRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgUpdateRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgUpdateLeaseRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1468,259 +1721,6 @@ func (m *MsgUpdateRequest) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.Renewable = bool(v != 0)
-		default:
-			iNdEx = preIndex
-			skippy, err := skipMsg(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthMsg
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgRenewRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowMsg
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgRenewRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgRenewRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field From", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMsg
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthMsg
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthMsg
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.From = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
-			}
-			m.ID = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMsg
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ID |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Hours", wireType)
-			}
-			m.Hours = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMsg
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Hours |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Denom", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMsg
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthMsg
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthMsg
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Denom = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipMsg(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthMsg
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgEndRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowMsg
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgEndRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgEndRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field From", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMsg
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthMsg
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthMsg
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.From = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
-			}
-			m.ID = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMsg
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ID |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipMsg(dAtA[iNdEx:])
@@ -1857,7 +1857,7 @@ func (m *MsgUpdateParamsRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgStartResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgEndLeaseResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1880,10 +1880,10 @@ func (m *MsgStartResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgStartResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgEndLeaseResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgStartResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgEndLeaseResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
@@ -1907,7 +1907,7 @@ func (m *MsgStartResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgUpdateResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgRenewLeaseResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1930,10 +1930,10 @@ func (m *MsgUpdateResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgUpdateResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgRenewLeaseResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgUpdateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgRenewLeaseResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
@@ -1957,7 +1957,7 @@ func (m *MsgUpdateResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgRenewResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgStartLeaseResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1980,10 +1980,10 @@ func (m *MsgRenewResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgRenewResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgStartLeaseResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgRenewResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgStartLeaseResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
@@ -2007,7 +2007,7 @@ func (m *MsgRenewResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgEndResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgUpdateLeaseResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2030,10 +2030,10 @@ func (m *MsgEndResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgEndResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgUpdateLeaseResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgEndResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgUpdateLeaseResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

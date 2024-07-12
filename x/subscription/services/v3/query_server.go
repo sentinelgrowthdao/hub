@@ -21,22 +21,22 @@ func NewQueryServiceServer(k keeper.Keeper) v3.QueryServiceServer {
 	return &queryServer{k}
 }
 
-func (k *queryServer) QuerySubscription(c context.Context, req *v3.QuerySubscriptionRequest) (*v3.QuerySubscriptionResponse, error) {
+func (q *queryServer) QuerySubscription(c context.Context, req *v3.QuerySubscriptionRequest) (*v3.QuerySubscriptionResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQuerySubscription(ctx, req)
+	return q.HandleQuerySubscription(ctx, req)
 }
 
-func (k *queryServer) QuerySubscriptions(c context.Context, req *v3.QuerySubscriptionsRequest) (*v3.QuerySubscriptionsResponse, error) {
+func (q *queryServer) QuerySubscriptions(c context.Context, req *v3.QuerySubscriptionsRequest) (*v3.QuerySubscriptionsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQuerySubscriptions(ctx, req)
+	return q.HandleQuerySubscriptions(ctx, req)
 }
 
-func (k *queryServer) QuerySubscriptionsForAccount(c context.Context, req *v3.QuerySubscriptionsForAccountRequest) (*v3.QuerySubscriptionsForAccountResponse, error) {
+func (q *queryServer) QuerySubscriptionsForAccount(c context.Context, req *v3.QuerySubscriptionsForAccountRequest) (*v3.QuerySubscriptionsForAccountResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQuerySubscriptionsForAccount(ctx, req)
+	return q.HandleQuerySubscriptionsForAccount(ctx, req)
 }
 
-func (k *queryServer) QuerySubscriptionsForPlan(c context.Context, req *v3.QuerySubscriptionsForPlanRequest) (*v3.QuerySubscriptionsForPlanResponse, error) {
+func (q *queryServer) QuerySubscriptionsForPlan(c context.Context, req *v3.QuerySubscriptionsForPlanRequest) (*v3.QuerySubscriptionsForPlanResponse, error) {
 	ctx := sdk.UnwrapSDKContext(c)
-	return k.HandleQuerySubscriptionsForPlan(ctx, req)
+	return q.HandleQuerySubscriptionsForPlan(ctx, req)
 }
