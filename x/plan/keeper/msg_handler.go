@@ -8,6 +8,7 @@ import (
 	"github.com/sentinel-official/hub/v12/x/plan/types"
 	"github.com/sentinel-official/hub/v12/x/plan/types/v2"
 	"github.com/sentinel-official/hub/v12/x/plan/types/v3"
+	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types/v3"
 )
 
 func (k *Keeper) HandleMsgCreatePlan(ctx sdk.Context, msg *v3.MsgCreatePlanRequest) (*v3.MsgCreatePlanResponse, error) {
@@ -45,7 +46,9 @@ func (k *Keeper) HandleMsgCreatePlan(ctx sdk.Context, msg *v3.MsgCreatePlanReque
 		},
 	)
 
-	return &v3.MsgCreatePlanResponse{}, nil
+	return &v3.MsgCreatePlanResponse{
+		ID: plan.ID,
+	}, nil
 }
 
 func (k *Keeper) HandleMsgLinkNode(ctx sdk.Context, msg *v3.MsgLinkNodeRequest) (*v3.MsgLinkNodeResponse, error) {
@@ -137,4 +140,51 @@ func (k *Keeper) HandleMsgUpdatePlanStatus(ctx sdk.Context, msg *v3.MsgUpdatePla
 	)
 
 	return &v3.MsgUpdatePlanStatusResponse{}, nil
+}
+
+func (k *Keeper) HandleMsgStartSession(ctx sdk.Context, msg *v3.MsgStartSessionRequest) (*v3.MsgStartSessionResponse, error) {
+	subscriptionReq := &subscriptiontypes.MsgStartSubscriptionRequest{
+		From:      msg.From,
+		ID:        msg.ID,
+		Denom:     msg.Denom,
+		Renewable: msg.Renewable,
+	}
+
+	subscriptionResp, err := k.subscription.HandleMsgStartSubscription(ctx, subscriptionReq)
+	if err != nil {
+		return nil, err
+	}
+
+	sessionReq := &subscriptiontypes.MsgStartSessionRequest{
+		From:        msg.From,
+		ID:          subscriptionResp.ID,
+		NodeAddress: msg.NodeAddress,
+	}
+
+	sessionResp, err := k.subscription.HandleMsgStartSession(ctx, sessionReq)
+	if err != nil {
+		return nil, err
+	}
+
+	return &v3.MsgStartSessionResponse{
+		ID: sessionResp.ID,
+	}, nil
+}
+
+func (k *Keeper) HandleMsgStartSubscription(ctx sdk.Context, msg *v3.MsgStartSubscriptionRequest) (*v3.MsgStartSubscriptionResponse, error) {
+	subscriptionReq := &subscriptiontypes.MsgStartSubscriptionRequest{
+		From:      msg.From,
+		ID:        msg.ID,
+		Denom:     msg.Denom,
+		Renewable: msg.Renewable,
+	}
+
+	subscriptionResp, err := k.subscription.HandleMsgStartSubscription(ctx, subscriptionReq)
+	if err != nil {
+		return nil, err
+	}
+
+	return &v3.MsgStartSubscriptionResponse{
+		ID: subscriptionResp.ID,
+	}, nil
 }

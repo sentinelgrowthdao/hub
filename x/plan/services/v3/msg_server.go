@@ -40,3 +40,13 @@ func (m *msgServer) MsgUpdatePlanStatus(c context.Context, req *v3.MsgUpdatePlan
 	ctx := sdk.UnwrapSDKContext(c)
 	return m.HandleMsgUpdatePlanStatus(ctx, req)
 }
+
+func (m *msgServer) MsgStartSession(c context.Context, req *v3.MsgStartSessionRequest) (*v3.MsgStartSessionResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return m.HandleMsgStartSession(ctx, req)
+}
+
+func (m *msgServer) MsgStartSubscription(c context.Context, req *v3.MsgStartSubscriptionRequest) (*v3.MsgStartSubscriptionResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	return m.HandleMsgStartSubscription(ctx, req)
+}

@@ -6,6 +6,7 @@ import (
 
 	base "github.com/sentinel-official/hub/v12/types"
 	nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v2"
+	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types/v3"
 )
 
 type AccountKeeper interface {
@@ -25,4 +26,9 @@ type NodeKeeper interface {
 
 type ProviderKeeper interface {
 	HasProvider(ctx sdk.Context, addr base.ProvAddress) bool
+}
+
+type SubscriptionKeeper interface {
+	HandleMsgStartSession(ctx sdk.Context, msg *subscriptiontypes.MsgStartSessionRequest) (*subscriptiontypes.MsgStartSessionResponse, error)
+	HandleMsgStartSubscription(ctx sdk.Context, msg *subscriptiontypes.MsgStartSubscriptionRequest) (*subscriptiontypes.MsgStartSubscriptionResponse, error)
 }

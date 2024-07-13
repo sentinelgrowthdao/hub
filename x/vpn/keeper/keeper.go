@@ -53,6 +53,7 @@ func NewKeeper(
 
 	k.Plan.WithNodeKeeper(&k.Node)
 	k.Plan.WithProviderKeeper(&k.Provider)
+	k.Plan.WithSubscriptionKeeper(&k.Subscription)
 
 	k.Provider.WithDistributionKeeper(distributionKeeper)
 	k.Provider.WithLeaseKeeper(&k.Lease)

@@ -10,6 +10,7 @@ import (
 	v3nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v3"
 	v1plantypes "github.com/sentinel-official/hub/v12/x/plan/types/v1"
 	v2plantypes "github.com/sentinel-official/hub/v12/x/plan/types/v2"
+	v3plantypes "github.com/sentinel-official/hub/v12/x/plan/types/v3"
 	v1providertypes "github.com/sentinel-official/hub/v12/x/provider/types/v1"
 	v2providertypes "github.com/sentinel-official/hub/v12/x/provider/types/v2"
 	v3providertypes "github.com/sentinel-official/hub/v12/x/provider/types/v3"
@@ -37,6 +38,7 @@ func RegisterInterfaces(registry codectypes.InterfaceRegistry) {
 	v2subscriptiontypes.RegisterInterfaces(registry)
 
 	v3nodetypes.RegisterInterfaces(registry)
+	v3plantypes.RegisterInterfaces(registry)
 	v3providertypes.RegisterInterfaces(registry)
 	v3sessiontypes.RegisterInterfaces(registry)
 	v3subscriptiontypes.RegisterInterfaces(registry)
