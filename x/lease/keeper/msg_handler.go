@@ -260,7 +260,9 @@ func (k *Keeper) HandleMsgStartLease(ctx sdk.Context, msg *v1.MsgStartLeaseReque
 		},
 	)
 
-	return &v1.MsgStartLeaseResponse{}, nil
+	return &v1.MsgStartLeaseResponse{
+		ID: lease.ID,
+	}, nil
 }
 
 func (k *Keeper) HandleMsgUpdateLease(ctx sdk.Context, msg *v1.MsgUpdateLeaseRequest) (*v1.MsgUpdateLeaseResponse, error) {

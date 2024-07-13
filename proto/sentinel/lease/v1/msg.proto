@@ -41,7 +41,11 @@ message MsgUpdateParamsRequest {
 
 message MsgEndLeaseResponse {}
 message MsgRenewLeaseResponse {}
-message MsgStartLeaseResponse {}
+
+message MsgStartLeaseResponse {
+  uint64 id = 1 [(gogoproto.customname) = "ID"];
+}
+
 message MsgUpdateLeaseResponse {}
 message MsgUpdateParamsResponse {}
 
