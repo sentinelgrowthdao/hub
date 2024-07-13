@@ -170,21 +170,3 @@ func (k *Keeper) HandleMsgStartSession(ctx sdk.Context, msg *v3.MsgStartSessionR
 		ID: sessionResp.ID,
 	}, nil
 }
-
-func (k *Keeper) HandleMsgStartSubscription(ctx sdk.Context, msg *v3.MsgStartSubscriptionRequest) (*v3.MsgStartSubscriptionResponse, error) {
-	subscriptionReq := &subscriptiontypes.MsgStartSubscriptionRequest{
-		From:      msg.From,
-		ID:        msg.ID,
-		Denom:     msg.Denom,
-		Renewable: msg.Renewable,
-	}
-
-	subscriptionResp, err := k.subscription.HandleMsgStartSubscription(ctx, subscriptionReq)
-	if err != nil {
-		return nil, err
-	}
-
-	return &v3.MsgStartSubscriptionResponse{
-		ID: subscriptionResp.ID,
-	}, nil
-}

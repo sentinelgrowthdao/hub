@@ -45,8 +45,3 @@ func (m *msgServer) MsgStartSession(c context.Context, req *v3.MsgStartSessionRe
 	ctx := sdk.UnwrapSDKContext(c)
 	return m.HandleMsgStartSession(ctx, req)
 }
-
-func (m *msgServer) MsgStartSubscription(c context.Context, req *v3.MsgStartSubscriptionRequest) (*v3.MsgStartSubscriptionResponse, error) {
-	ctx := sdk.UnwrapSDKContext(c)
-	return m.HandleMsgStartSubscription(ctx, req)
-}

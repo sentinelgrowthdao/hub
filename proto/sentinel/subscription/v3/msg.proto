@@ -75,6 +75,8 @@ service MsgService {
   rpc MsgShareSubscription(MsgShareSubscriptionRequest) returns (MsgShareSubscriptionResponse);
   rpc MsgStartSubscription(MsgStartSubscriptionRequest) returns (MsgStartSubscriptionResponse);
   rpc MsgUpdateSubscription(MsgUpdateSubscriptionRequest) returns (MsgUpdateSubscriptionResponse);
+
   rpc MsgStartSession(MsgStartSessionRequest) returns (MsgStartSessionResponse);
+
   rpc MsgUpdateParams(MsgUpdateParamsRequest) returns (MsgUpdateParamsResponse);
 }

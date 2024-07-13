@@ -14,7 +14,6 @@ func RegisterInterfaces(registry codectypes.InterfaceRegistry) {
 		&MsgUnlinkNodeRequest{},
 		&MsgUpdatePlanStatusRequest{},
 		&MsgStartSessionRequest{},
-		&MsgStartSubscriptionRequest{},
 	)
 
 	sdkmsgservice.RegisterMsgServiceDesc(registry, &_MsgService_serviceDesc)

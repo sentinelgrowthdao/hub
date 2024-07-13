@@ -17,7 +17,6 @@ var (
 	_ sdk.Msg = (*MsgUnlinkNodeRequest)(nil)
 	_ sdk.Msg = (*MsgUpdatePlanStatusRequest)(nil)
 	_ sdk.Msg = (*MsgStartSessionRequest)(nil)
-	_ sdk.Msg = (*MsgStartSubscriptionRequest)(nil)
 )
 
 func NewMsgCreatePlanRequest(from base.ProvAddress, duration time.Duration, gigabytes int64, prices sdk.Coins) *MsgCreatePlanRequest {
@@ -218,44 +217,6 @@ func (m *MsgStartSessionRequest) ValidateBasic() error {
 }
 
 func (m *MsgStartSessionRequest) GetSigners() []sdk.AccAddress {
-	from, err := sdk.AccAddressFromBech32(m.From)
-	if err != nil {
-		panic(err)
-	}
-
-	return []sdk.AccAddress{from.Bytes()}
-}
-
-func NewMsgStartSubscriptionRequest(from sdk.AccAddress, id uint64, denom string, renewable bool) *MsgStartSubscriptionRequest {
-	return &MsgStartSubscriptionRequest{
-		From:      from.String(),
-		ID:        id,
-		Denom:     denom,
-		Renewable: renewable,
-	}
-}
-
-func (m *MsgStartSubscriptionRequest) ValidateBasic() error {
-	if m.From == "" {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
-	}
-	if _, err := sdk.AccAddressFromBech32(m.From); err != nil {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
-	}
-	if m.ID == 0 {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, "id cannot be zero")
-	}
-	if m.Denom == "" {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, "denom cannot be empty")
-	}
-	if err := sdk.ValidateDenom(m.Denom); err != nil {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
-	}
-
-	return nil
-}
-
-func (m *MsgStartSubscriptionRequest) GetSigners() []sdk.AccAddress {
 	from, err := sdk.AccAddressFromBech32(m.From)
 	if err != nil {
 		panic(err)
