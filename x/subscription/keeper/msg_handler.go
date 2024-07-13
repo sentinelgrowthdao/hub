@@ -235,7 +235,9 @@ func (k *Keeper) HandleMsgStartSubscription(ctx sdk.Context, msg *v3.MsgStartSub
 		},
 	)
 
-	return &v3.MsgStartSubscriptionResponse{}, nil
+	return &v3.MsgStartSubscriptionResponse{
+		ID: subscription.ID,
+	}, nil
 }
 
 func (k *Keeper) HandleMsgUpdateSubscription(ctx sdk.Context, msg *v3.MsgUpdateSubscriptionRequest) (*v3.MsgUpdateSubscriptionResponse, error) {
@@ -354,7 +356,9 @@ func (k *Keeper) HandleMsgStartSession(ctx sdk.Context, msg *v3.MsgStartSessionR
 		},
 	)
 
-	return &v3.MsgStartSessionResponse{}, nil
+	return &v3.MsgStartSessionResponse{
+		ID: session.ID,
+	}, nil
 }
 
 func (k *Keeper) HandleMsgUpdateParams(ctx sdk.Context, msg *v3.MsgUpdateParamsRequest) (*v3.MsgUpdateParamsResponse, error) {

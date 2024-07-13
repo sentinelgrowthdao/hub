@@ -56,9 +56,17 @@ message MsgUpdateParamsRequest {
 message MsgCancelSubscriptionResponse {}
 message MsgRenewSubscriptionResponse {}
 message MsgShareSubscriptionResponse {}
-message MsgStartSubscriptionResponse {}
+
+message MsgStartSubscriptionResponse {
+  uint64 id = 1 [(gogoproto.customname) = "ID"];
+}
+
 message MsgUpdateSubscriptionResponse {}
-message MsgStartSessionResponse {}
+
+message MsgStartSessionResponse {
+  uint64 id = 1 [(gogoproto.customname) = "ID"];
+}
+
 message MsgUpdateParamsResponse {}
 
 service MsgService {
