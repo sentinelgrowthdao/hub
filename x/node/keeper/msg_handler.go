@@ -257,7 +257,9 @@ func (k *Keeper) HandleMsgStartSession(ctx sdk.Context, msg *v3.MsgStartSessionR
 		},
 	)
 
-	return &v3.MsgStartSessionResponse{}, nil
+	return &v3.MsgStartSessionResponse{
+		ID: session.ID,
+	}, nil
 }
 
 func (k *Keeper) HandleMsgUpdateParams(ctx sdk.Context, msg *v3.MsgUpdateParamsRequest) (*v3.MsgUpdateParamsResponse, error) {
