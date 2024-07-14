@@ -42,12 +42,12 @@ message QueryPlanResponse {
 
 service QueryService {
   rpc QueryPlans(QueryPlansRequest) returns (QueryPlansResponse) {
-    option (google.api.http).get = "/sentinel/plans";
+    option (google.api.http).get = "/sentinel/plan/v2/plans";
   }
   rpc QueryPlansForProvider(QueryPlansForProviderRequest) returns (QueryPlansForProviderResponse) {
-    option (google.api.http).get = "/sentinel/providers/{address}/plans";
+    option (google.api.http).get = "/sentinel/plan/v2/providers/{address}/plans";
   }
   rpc QueryPlan(QueryPlanRequest) returns (QueryPlanResponse) {
-    option (google.api.http).get = "/sentinel/plans/{id}";
+    option (google.api.http).get = "/sentinel/plan/v2/plans/{id}";
   }
 }

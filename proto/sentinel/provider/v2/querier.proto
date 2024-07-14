@@ -38,12 +38,12 @@ message QueryParamsResponse {
 
 service QueryService {
   rpc QueryProviders(QueryProvidersRequest) returns (QueryProvidersResponse) {
-    option (google.api.http).get = "/sentinel/providers";
+    option (google.api.http).get = "/sentinel/provider/v2/providers";
   }
   rpc QueryProvider(QueryProviderRequest) returns (QueryProviderResponse) {
-    option (google.api.http).get = "/sentinel/providers/{address}";
+    option (google.api.http).get = "/sentinel/provider/v2/providers/{address}";
   }
   rpc QueryParams(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/sentinel/params/provider";
+    option (google.api.http).get = "/sentinel/provider/v2/params";
   }
 }

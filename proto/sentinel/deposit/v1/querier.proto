@@ -29,9 +29,9 @@ message QueryDepositResponse {
 
 service QueryService {
   rpc QueryDeposits(QueryDepositsRequest) returns (QueryDepositsResponse) {
-    option (google.api.http).get = "/sentinel/deposits";
+    option (google.api.http).get = "/sentinel/deposit/v1/deposits";
   }
   rpc QueryDeposit(QueryDepositRequest) returns (QueryDepositResponse) {
-    option (google.api.http).get = "/sentinel/deposits/{address}";
+    option (google.api.http).get = "/sentinel/deposit/v1/deposits/{address}";
   }
 }

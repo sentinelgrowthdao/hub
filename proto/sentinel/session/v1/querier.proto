@@ -48,15 +48,15 @@ message QueryParamsResponse {
 
 service QueryService {
   rpc QuerySessions(QuerySessionsRequest) returns (QuerySessionsResponse) {
-    option (google.api.http).get = "/sentinel/sessions";
+    option (google.api.http).get = "/sentinel/session/v1/sessions";
   }
   rpc QuerySessionsForAddress(QuerySessionsForAddressRequest) returns (QuerySessionsForAddressResponse) {
-    option (google.api.http).get = "/sentinel/accounts/{address}/sessions";
+    option (google.api.http).get = "/sentinel/session/v1/accounts/{address}/sessions";
   }
   rpc QuerySession(QuerySessionRequest) returns (QuerySessionResponse) {
-    option (google.api.http).get = "/sentinel/sessions/{id}";
+    option (google.api.http).get = "/sentinel/session/v1/sessions/{id}";
   }
   rpc QueryParams(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/sentinel/modules/session/params";
+    option (google.api.http).get = "/sentinel/session/v1/params";
   }
 }

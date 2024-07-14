@@ -321,11 +321,11 @@ func RegisterQueryServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 }
 
 var (
-	pattern_QueryService_QueryProviders_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"sentinel", "providers"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_QueryService_QueryProviders_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sentinel", "provider", "v2", "providers"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_QueryService_QueryProvider_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"sentinel", "providers", "address"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_QueryService_QueryProvider_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"sentinel", "provider", "v2", "providers", "address"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_QueryService_QueryParams_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"sentinel", "params", "provider"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_QueryService_QueryParams_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"sentinel", "provider", "v2", "params"}, "", runtime.AssumeColonVerbOpt(true)))
 )
 
 var (
