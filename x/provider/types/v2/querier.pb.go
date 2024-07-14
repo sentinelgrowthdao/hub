@@ -31,12 +31,9 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// QueryProvidersRequest represents a request to query providers with optional pagination and status filter.
 type QueryProvidersRequest struct {
-	// Field 1: Pagination parameters for the query.
 	Pagination *query.PageRequest `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
-	// Field 2: Status filter for querying providers.
-	Status v1.Status `protobuf:"varint,2,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
+	Status     v1.Status          `protobuf:"varint,2,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
 }
 
 func (m *QueryProvidersRequest) Reset()         { *m = QueryProvidersRequest{} }
@@ -72,9 +69,7 @@ func (m *QueryProvidersRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryProvidersRequest proto.InternalMessageInfo
 
-// QueryProviderRequest represents a request to query a specific provider by address.
 type QueryProviderRequest struct {
-	// Field 1: Address of the provider to be queried.
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 }
 
@@ -111,7 +106,6 @@ func (m *QueryProviderRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryProviderRequest proto.InternalMessageInfo
 
-// QueryParamsRequest represents a request to query parameters for providers.
 type QueryParamsRequest struct {
 }
 
@@ -148,11 +142,8 @@ func (m *QueryParamsRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryParamsRequest proto.InternalMessageInfo
 
-// QueryProvidersResponse represents the response to a query for providers.
 type QueryProvidersResponse struct {
-	// Field 1: List of providers returned in the response.
-	Providers []Provider `protobuf:"bytes,1,rep,name=providers,proto3" json:"providers"`
-	// Field 2: Pagination details for the response.
+	Providers  []Provider          `protobuf:"bytes,1,rep,name=providers,proto3" json:"providers"`
 	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -189,9 +180,7 @@ func (m *QueryProvidersResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryProvidersResponse proto.InternalMessageInfo
 
-// QueryProviderResponse represents the response to a query for a specific provider.
 type QueryProviderResponse struct {
-	// Field 1: The queried provider.
 	Provider Provider `protobuf:"bytes,1,opt,name=provider,proto3" json:"provider"`
 }
 
@@ -228,9 +217,7 @@ func (m *QueryProviderResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryProviderResponse proto.InternalMessageInfo
 
-// QueryParamsResponse represents the response to a query for provider parameters.
 type QueryParamsResponse struct {
-	// Field 1: Parameters for providers returned in the response.
 	Params Params `protobuf:"bytes,1,opt,name=params,proto3" json:"params"`
 }
 
@@ -332,11 +319,8 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type QueryServiceClient interface {
-	// RPC method for querying providers with optional pagination and status filter.
 	QueryProviders(ctx context.Context, in *QueryProvidersRequest, opts ...grpc.CallOption) (*QueryProvidersResponse, error)
-	// RPC method for querying a specific provider by address.
 	QueryProvider(ctx context.Context, in *QueryProviderRequest, opts ...grpc.CallOption) (*QueryProviderResponse, error)
-	// RPC method for querying parameters for providers.
 	QueryParams(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 }
 
@@ -377,11 +361,8 @@ func (c *queryServiceClient) QueryParams(ctx context.Context, in *QueryParamsReq
 
 // QueryServiceServer is the server API for QueryService service.
 type QueryServiceServer interface {
-	// RPC method for querying providers with optional pagination and status filter.
 	QueryProviders(context.Context, *QueryProvidersRequest) (*QueryProvidersResponse, error)
-	// RPC method for querying a specific provider by address.
 	QueryProvider(context.Context, *QueryProviderRequest) (*QueryProviderResponse, error)
-	// RPC method for querying parameters for providers.
 	QueryParams(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 }
 

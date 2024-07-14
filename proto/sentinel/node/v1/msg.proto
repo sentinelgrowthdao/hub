@@ -9,7 +9,6 @@ option go_package = "github.com/sentinel-official/hub/v12/x/node/types/v1";
 option (gogoproto.equal_all) = false;
 option (gogoproto.goproto_getters_all) = false;
 
-// MsgRegisterRequest defines the SDK message for registering a node
 message MsgRegisterRequest {
   string from = 1;
   string provider = 2;
@@ -20,7 +19,6 @@ message MsgRegisterRequest {
   string remote_url = 4 [(gogoproto.customname) = "RemoteURL"];
 }
 
-// MsgUpdateRequest defines the SDK message for updating a node
 message MsgUpdateRequest {
   string from = 1;
   string provider = 2;
@@ -31,20 +29,15 @@ message MsgUpdateRequest {
   string remote_url = 4 [(gogoproto.customname) = "RemoteURL"];
 }
 
-// MsgSetStatusRequest defines the SDK message for modifying the status of a
-// node
 message MsgSetStatusRequest {
   string from = 1;
   sentinel.types.v1.Status status = 2;
 }
 
-// MsgRegisterResponse defines the response of message MsgRegisterRequest
 message MsgRegisterResponse {}
 
-// MsgUpdateResponse defines the response of message MsgUpdateRequest
 message MsgUpdateResponse {}
 
-// MsgSetStatusResponse defines the response of message MsgSetStatusRequest
 message MsgSetStatusResponse {}
 
 service MsgService {

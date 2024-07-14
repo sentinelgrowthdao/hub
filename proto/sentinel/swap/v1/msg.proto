@@ -7,8 +7,6 @@ option go_package = "github.com/sentinel-official/hub/v12/x/swap/types/v1";
 option (gogoproto.equal_all) = false;
 option (gogoproto.goproto_getters_all) = false;
 
-// MsgSwapRequest defines the SDK message for swapping an ERC-20 token to the
-// native coin
 message MsgSwapRequest {
   string from = 1;
   bytes tx_hash = 2;
@@ -19,7 +17,6 @@ message MsgSwapRequest {
   ];
 }
 
-// MsgSwapResponse defines the response of message MsgSwapRequest
 message MsgSwapResponse {}
 
 service MsgService {

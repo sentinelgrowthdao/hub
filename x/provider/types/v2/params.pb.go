@@ -25,15 +25,8 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// Params defines the parameters for the provider module.
 type Params struct {
-	// Field 1: Deposit required for providers.
-	// - (gogoproto.nullable) = false: Field is not nullable.
-	Deposit types.Coin `protobuf:"bytes,1,opt,name=deposit,proto3" json:"deposit"`
-	// Field 2: Staking share associated with the providers.
-	// - (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec":
-	//   Custom type definition for the field.
-	// - (gogoproto.nullable) = false: Field is not nullable.
+	Deposit      types.Coin                  `protobuf:"bytes,1,opt,name=deposit,proto3" json:"deposit"`
 	StakingShare cosmossdk_io_math.LegacyDec `protobuf:"bytes,2,opt,name=staking_share,json=stakingShare,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"staking_share"`
 }
 

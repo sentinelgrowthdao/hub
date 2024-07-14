@@ -29,12 +29,9 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// MsgCancelRequest defines the SDK message for cancelling a subscription.
 type MsgCancelRequest struct {
-	// Field 1: Address initiating the cancel request.
 	From string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
-	// Field 2: Unique identifier for the subscription to be cancelled.
-	ID uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	ID   uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 }
 
 func (m *MsgCancelRequest) Reset()         { *m = MsgCancelRequest{} }
@@ -70,16 +67,11 @@ func (m *MsgCancelRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgCancelRequest proto.InternalMessageInfo
 
-// MsgAllocateRequest defines the SDK message for allocating bytes of a subscription for an address.
 type MsgAllocateRequest struct {
-	// Field 1: Address initiating the allocate request.
-	From string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
-	// Field 2: Unique identifier for the subscription.
-	ID uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
-	// Field 3: Address for which bytes are allocated.
-	Address string `protobuf:"bytes,3,opt,name=address,proto3" json:"address,omitempty"`
-	// Field 4: Number of bytes to allocate.
-	Bytes cosmossdk_io_math.Int `protobuf:"bytes,4,opt,name=bytes,proto3,customtype=cosmossdk.io/math.Int" json:"bytes"`
+	From    string                `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
+	ID      uint64                `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	Address string                `protobuf:"bytes,3,opt,name=address,proto3" json:"address,omitempty"`
+	Bytes   cosmossdk_io_math.Int `protobuf:"bytes,4,opt,name=bytes,proto3,customtype=cosmossdk.io/math.Int" json:"bytes"`
 }
 
 func (m *MsgAllocateRequest) Reset()         { *m = MsgAllocateRequest{} }
@@ -115,7 +107,6 @@ func (m *MsgAllocateRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgAllocateRequest proto.InternalMessageInfo
 
-// MsgCancelResponse defines the response of message MsgCancelRequest.
 type MsgCancelResponse struct {
 }
 
@@ -152,7 +143,6 @@ func (m *MsgCancelResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgCancelResponse proto.InternalMessageInfo
 
-// MsgAllocateResponse defines the response of message MsgAllocateRequest.
 type MsgAllocateResponse struct {
 }
 
@@ -240,9 +230,7 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgServiceClient interface {
-	// RPC method for cancelling a subscription.
 	MsgCancel(ctx context.Context, in *MsgCancelRequest, opts ...grpc.CallOption) (*MsgCancelResponse, error)
-	// RPC method for allocating bytes of a subscription for an address.
 	MsgAllocate(ctx context.Context, in *MsgAllocateRequest, opts ...grpc.CallOption) (*MsgAllocateResponse, error)
 }
 
@@ -274,9 +262,7 @@ func (c *msgServiceClient) MsgAllocate(ctx context.Context, in *MsgAllocateReque
 
 // MsgServiceServer is the server API for MsgService service.
 type MsgServiceServer interface {
-	// RPC method for cancelling a subscription.
 	MsgCancel(context.Context, *MsgCancelRequest) (*MsgCancelResponse, error)
-	// RPC method for allocating bytes of a subscription for an address.
 	MsgAllocate(context.Context, *MsgAllocateRequest) (*MsgAllocateResponse, error)
 }
 

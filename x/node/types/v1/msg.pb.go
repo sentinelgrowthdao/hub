@@ -31,7 +31,6 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// MsgRegisterRequest defines the SDK message for registering a node
 type MsgRegisterRequest struct {
 	From      string                                   `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
 	Provider  string                                   `protobuf:"bytes,2,opt,name=provider,proto3" json:"provider,omitempty"`
@@ -72,7 +71,6 @@ func (m *MsgRegisterRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgRegisterRequest proto.InternalMessageInfo
 
-// MsgUpdateRequest defines the SDK message for updating a node
 type MsgUpdateRequest struct {
 	From      string                                   `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
 	Provider  string                                   `protobuf:"bytes,2,opt,name=provider,proto3" json:"provider,omitempty"`
@@ -113,8 +111,6 @@ func (m *MsgUpdateRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUpdateRequest proto.InternalMessageInfo
 
-// MsgSetStatusRequest defines the SDK message for modifying the status of a
-// node
 type MsgSetStatusRequest struct {
 	From   string    `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
 	Status v1.Status `protobuf:"varint,2,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
@@ -153,7 +149,6 @@ func (m *MsgSetStatusRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgSetStatusRequest proto.InternalMessageInfo
 
-// MsgRegisterResponse defines the response of message MsgRegisterRequest
 type MsgRegisterResponse struct {
 }
 
@@ -190,7 +185,6 @@ func (m *MsgRegisterResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgRegisterResponse proto.InternalMessageInfo
 
-// MsgUpdateResponse defines the response of message MsgUpdateRequest
 type MsgUpdateResponse struct {
 }
 
@@ -227,7 +221,6 @@ func (m *MsgUpdateResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUpdateResponse proto.InternalMessageInfo
 
-// MsgSetStatusResponse defines the response of message MsgSetStatusRequest
 type MsgSetStatusResponse struct {
 }
 

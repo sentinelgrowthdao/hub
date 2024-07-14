@@ -31,11 +31,8 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// QueryPlansRequest defines the request for querying subscription plans.
 type QueryPlansRequest struct {
-	// Field 1: Status filter for subscription plans.
-	Status v1.Status `protobuf:"varint,1,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
-	// Field 2: Pagination information.
+	Status     v1.Status          `protobuf:"varint,1,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
 	Pagination *query.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -72,14 +69,9 @@ func (m *QueryPlansRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryPlansRequest proto.InternalMessageInfo
 
-// QueryPlansForProviderRequest defines the request for querying subscription plans
-// associated with a provider.
 type QueryPlansForProviderRequest struct {
-	// Field 1: Provider's address for filtering subscription plans.
-	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-	// Field 2: Status filter for subscription plans.
-	Status v1.Status `protobuf:"varint,2,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
-	// Field 3: Pagination information.
+	Address    string             `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
+	Status     v1.Status          `protobuf:"varint,2,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
 	Pagination *query.PageRequest `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -116,9 +108,7 @@ func (m *QueryPlansForProviderRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryPlansForProviderRequest proto.InternalMessageInfo
 
-// QueryPlanRequest defines the request for querying a specific subscription plan.
 type QueryPlanRequest struct {
-	// Field 1: Identifier of the subscription plan.
 	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 }
 
@@ -155,11 +145,8 @@ func (m *QueryPlanRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryPlanRequest proto.InternalMessageInfo
 
-// QueryPlansResponse defines the response for querying subscription plans.
 type QueryPlansResponse struct {
-	// Field 1: List of subscription plans.
-	Plans []Plan `protobuf:"bytes,1,rep,name=plans,proto3" json:"plans"`
-	// Field 2: Pagination information.
+	Plans      []Plan              `protobuf:"bytes,1,rep,name=plans,proto3" json:"plans"`
 	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -196,12 +183,8 @@ func (m *QueryPlansResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryPlansResponse proto.InternalMessageInfo
 
-// QueryPlansForProviderResponse defines the response for querying subscription
-// plans associated with a provider.
 type QueryPlansForProviderResponse struct {
-	// Field 1: List of subscription plans.
-	Plans []Plan `protobuf:"bytes,1,rep,name=plans,proto3" json:"plans"`
-	// Field 2: Pagination information.
+	Plans      []Plan              `protobuf:"bytes,1,rep,name=plans,proto3" json:"plans"`
 	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -238,9 +221,7 @@ func (m *QueryPlansForProviderResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryPlansForProviderResponse proto.InternalMessageInfo
 
-// QueryPlanResponse defines the response for querying a specific subscription plan.
 type QueryPlanResponse struct {
-	// Field 1: Subscription plan information.
 	Plan Plan `protobuf:"bytes,1,opt,name=plan,proto3" json:"plan"`
 }
 
@@ -340,11 +321,8 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type QueryServiceClient interface {
-	// RPC method for querying all subscription plans.
 	QueryPlans(ctx context.Context, in *QueryPlansRequest, opts ...grpc.CallOption) (*QueryPlansResponse, error)
-	// RPC method for querying subscription plans associated with a provider.
 	QueryPlansForProvider(ctx context.Context, in *QueryPlansForProviderRequest, opts ...grpc.CallOption) (*QueryPlansForProviderResponse, error)
-	// RPC method for querying a specific subscription plan.
 	QueryPlan(ctx context.Context, in *QueryPlanRequest, opts ...grpc.CallOption) (*QueryPlanResponse, error)
 }
 
@@ -385,11 +363,8 @@ func (c *queryServiceClient) QueryPlan(ctx context.Context, in *QueryPlanRequest
 
 // QueryServiceServer is the server API for QueryService service.
 type QueryServiceServer interface {
-	// RPC method for querying all subscription plans.
 	QueryPlans(context.Context, *QueryPlansRequest) (*QueryPlansResponse, error)
-	// RPC method for querying subscription plans associated with a provider.
 	QueryPlansForProvider(context.Context, *QueryPlansForProviderRequest) (*QueryPlansForProviderResponse, error)
-	// RPC method for querying a specific subscription plan.
 	QueryPlan(context.Context, *QueryPlanRequest) (*QueryPlanResponse, error)
 }
 

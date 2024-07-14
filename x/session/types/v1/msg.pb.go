@@ -28,7 +28,6 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// MsgStartRequest defines the SDK message for starting a session
 type MsgStartRequest struct {
 	From string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
 	Id   uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
@@ -68,7 +67,6 @@ func (m *MsgStartRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgStartRequest proto.InternalMessageInfo
 
-// MsgUpdateRequest defines the SDK message for updating a session
 type MsgUpdateRequest struct {
 	From      string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
 	Proof     Proof  `protobuf:"bytes,2,opt,name=proof,proto3" json:"proof"`
@@ -108,7 +106,6 @@ func (m *MsgUpdateRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUpdateRequest proto.InternalMessageInfo
 
-// MsgEndRequest defines the SDK message for ending a session
 type MsgEndRequest struct {
 	From   string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
 	Id     uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
@@ -148,7 +145,6 @@ func (m *MsgEndRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgEndRequest proto.InternalMessageInfo
 
-// MsgStartResponse defines the response of message MsgStartRequest
 type MsgStartResponse struct {
 }
 
@@ -185,7 +181,6 @@ func (m *MsgStartResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgStartResponse proto.InternalMessageInfo
 
-// MsgUpdateResponse defines the response of message MsgUpdateRequest
 type MsgUpdateResponse struct {
 }
 
@@ -222,7 +217,6 @@ func (m *MsgUpdateResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUpdateResponse proto.InternalMessageInfo
 
-// MsgEndResponse defines the response of message MsgEndRequest
 type MsgEndResponse struct {
 }
 

@@ -66,6 +66,5 @@ service MsgService {
   rpc MsgLinkNode(MsgLinkNodeRequest) returns (MsgLinkNodeResponse);
   rpc MsgUnlinkNode(MsgUnlinkNodeRequest) returns (MsgUnlinkNodeResponse);
   rpc MsgUpdatePlanStatus(MsgUpdatePlanStatusRequest) returns (MsgUpdatePlanStatusResponse);
-
   rpc MsgStartSession(MsgStartSessionRequest) returns (MsgStartSessionResponse);
 }

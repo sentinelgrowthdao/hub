@@ -30,7 +30,6 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// MsgSubscribeToNodeRequest defines the SDK message for subscribing to a node
 type MsgSubscribeToNodeRequest struct {
 	From    string     `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
 	Address string     `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
@@ -70,7 +69,6 @@ func (m *MsgSubscribeToNodeRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgSubscribeToNodeRequest proto.InternalMessageInfo
 
-// MsgSubscribeToPlanRequest defines the SDK message for subscribing to a plan
 type MsgSubscribeToPlanRequest struct {
 	From  string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
 	Id    uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
@@ -110,7 +108,6 @@ func (m *MsgSubscribeToPlanRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgSubscribeToPlanRequest proto.InternalMessageInfo
 
-// MsgCancelRequest defines the SDK message for cancelling a subscription
 type MsgCancelRequest struct {
 	From string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
 	Id   uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
@@ -149,7 +146,6 @@ func (m *MsgCancelRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgCancelRequest proto.InternalMessageInfo
 
-// MsgAddQuotaRequest defines the SDK message for adding the quota to an address
 type MsgAddQuotaRequest struct {
 	From    string                                 `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
 	Id      uint64                                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
@@ -190,8 +186,6 @@ func (m *MsgAddQuotaRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgAddQuotaRequest proto.InternalMessageInfo
 
-// MsgUpdateQuotaRequest defines the SDK message for updating the quota of an
-// address
 type MsgUpdateQuotaRequest struct {
 	From    string                                 `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
 	Id      uint64                                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
@@ -232,8 +226,6 @@ func (m *MsgUpdateQuotaRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUpdateQuotaRequest proto.InternalMessageInfo
 
-// MsgSubscribeToNodeResponse defines the response of message
-// MsgSubscribeToNodeRequest
 type MsgSubscribeToNodeResponse struct {
 }
 
@@ -270,8 +262,6 @@ func (m *MsgSubscribeToNodeResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgSubscribeToNodeResponse proto.InternalMessageInfo
 
-// MsgSubscribeToPlanResponse defines the response of message
-// MsgSubscribeToPlanRequest
 type MsgSubscribeToPlanResponse struct {
 }
 
@@ -308,7 +298,6 @@ func (m *MsgSubscribeToPlanResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgSubscribeToPlanResponse proto.InternalMessageInfo
 
-// MsgCancelResponse defines the response of message MsgCancelRequest
 type MsgCancelResponse struct {
 }
 
@@ -345,7 +334,6 @@ func (m *MsgCancelResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgCancelResponse proto.InternalMessageInfo
 
-// MsgAddQuotaResponse defines the response of message MsgAddQuotaRequest
 type MsgAddQuotaResponse struct {
 }
 
@@ -382,7 +370,6 @@ func (m *MsgAddQuotaResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgAddQuotaResponse proto.InternalMessageInfo
 
-// MsgUpdateQuotaResponse defines the response of message MsgUpdateQuotaRequest
 type MsgUpdateQuotaResponse struct {
 }
 

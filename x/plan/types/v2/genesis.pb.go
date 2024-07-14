@@ -23,12 +23,8 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// GenesisPlan represents the genesis state for a plan.
 type GenesisPlan struct {
-	// Field 1: Plan information.
-	// - (gogoproto.nullable) = false: Field is not nullable.
-	Plan Plan `protobuf:"bytes,1,opt,name=plan,proto3" json:"plan"`
-	// Field 2: List of node addresses associated with the plan.
+	Plan  Plan     `protobuf:"bytes,1,opt,name=plan,proto3" json:"plan"`
 	Nodes []string `protobuf:"bytes,2,rep,name=nodes,proto3" json:"nodes,omitempty"`
 }
 
@@ -66,9 +62,6 @@ func (m *GenesisPlan) XXX_DiscardUnknown() {
 var xxx_messageInfo_GenesisPlan proto.InternalMessageInfo
 
 type GenesisState struct {
-	// Field 1: List of plans included in the genesis state.
-	// - (gogoproto.moretags) = "yaml:\"plans\"": YAML tag for better representation.
-	// - (gogoproto.nullable) = false: Field is not nullable.
 	Plans []GenesisPlan `protobuf:"bytes,1,rep,name=plans,proto3" json:"plans" yaml:"plans"`
 }
 

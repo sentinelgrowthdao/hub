@@ -68,8 +68,6 @@ service MsgService {
   rpc MsgRegisterNode(MsgRegisterNodeRequest) returns (MsgRegisterNodeResponse);
   rpc MsgUpdateNodeDetails(MsgUpdateNodeDetailsRequest) returns (MsgUpdateNodeDetailsResponse);
   rpc MsgUpdateNodeStatus(MsgUpdateNodeStatusRequest) returns (MsgUpdateNodeStatusResponse);
-
   rpc MsgStartSession(MsgStartSessionRequest) returns (MsgStartSessionResponse);
-
   rpc MsgUpdateParams(MsgUpdateParamsRequest) returns (MsgUpdateParamsResponse);
 }

@@ -7,17 +7,12 @@ option go_package = "github.com/sentinel-official/hub/v12/x/oracle/types/v1";
 option (gogoproto.equal_all) = false;
 option (gogoproto.goproto_getters_all) = false;
 
-// Asset defines the structure for an asset, providing key details used in oracle operations.
 message Asset {
-  // The denomination key or symbol for the asset, used as a unique identifier.
   string denom = 1;
-
-  // Number of decimal places that the asset's smallest unit is divided into.
   string multiplier = 2 [
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false
   ];
-
   uint64 pool_id = 3 [(gogoproto.customname) = "PoolID"];
   string base_asset_denom = 4;
   string quote_asset_denom = 5;

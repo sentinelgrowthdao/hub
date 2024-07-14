@@ -24,15 +24,8 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// Bandwidth represents information about upload and download bandwidth.
 type Bandwidth struct {
-	// Upload bandwidth value represented as a string.
-	// It uses a custom type "cosmossdk.io/math.Int".
-	// The value is not nullable, as indicated by "(gogoproto.nullable) = false".
-	Upload cosmossdk_io_math.Int `protobuf:"bytes,1,opt,name=upload,proto3,customtype=cosmossdk.io/math.Int" json:"upload"`
-	// Download bandwidth value represented as a string.
-	// It uses a custom type "cosmossdk.io/math.Int".
-	// The value is not nullable, as indicated by "(gogoproto.nullable) = false".
+	Upload   cosmossdk_io_math.Int `protobuf:"bytes,1,opt,name=upload,proto3,customtype=cosmossdk.io/math.Int" json:"upload"`
 	Download cosmossdk_io_math.Int `protobuf:"bytes,2,opt,name=download,proto3,customtype=cosmossdk.io/math.Int" json:"download"`
 }
 

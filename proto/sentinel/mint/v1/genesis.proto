@@ -8,11 +8,7 @@ option go_package = "github.com/sentinel-official/hub/v12/x/mint/types/v1";
 option (gogoproto.equal_all) = false;
 option (gogoproto.goproto_getters_all) = false;
 
-// GenesisState represents the genesis state for the module.
 message GenesisState {
-  // Field 1: List of inflations included in the genesis state.
-  // - (gogoproto.moretags) = "yaml:\"inflations\"": YAML tag for better representation.
-  // - (gogoproto.nullable) = false: Field is not nullable.
   repeated Inflation inflations = 1 [
     (gogoproto.moretags) = "yaml:\"inflations\"",
     (gogoproto.nullable) = false

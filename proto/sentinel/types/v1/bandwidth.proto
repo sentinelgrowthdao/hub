@@ -7,19 +7,11 @@ option go_package = "github.com/sentinel-official/hub/v12/types/v1";
 option (gogoproto.equal_all) = false;
 option (gogoproto.goproto_getters_all) = false;
 
-// Bandwidth represents information about upload and download bandwidth.
 message Bandwidth {
-  // Upload bandwidth value represented as a string.
-  // It uses a custom type "cosmossdk.io/math.Int".
-  // The value is not nullable, as indicated by "(gogoproto.nullable) = false".
   string upload = 1 [
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false
   ];
-
-  // Download bandwidth value represented as a string.
-  // It uses a custom type "cosmossdk.io/math.Int".
-  // The value is not nullable, as indicated by "(gogoproto.nullable) = false".
   string download = 2 [
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false

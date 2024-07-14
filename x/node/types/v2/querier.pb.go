@@ -31,11 +31,8 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// QueryNodesRequest represents a request to query nodes with a specific status and pagination.
 type QueryNodesRequest struct {
-	// Field 1: Status to filter nodes by.
-	Status v1.Status `protobuf:"varint,1,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
-	// Field 2: Pagination parameters for the query.
+	Status     v1.Status          `protobuf:"varint,1,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
 	Pagination *query.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -72,13 +69,9 @@ func (m *QueryNodesRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryNodesRequest proto.InternalMessageInfo
 
-// QueryNodesForPlanRequest represents a request to query nodes for a specific plan with status and pagination.
 type QueryNodesForPlanRequest struct {
-	// Field 1: Plan ID to filter nodes by.
-	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	// Field 2: Status to filter nodes by.
-	Status v1.Status `protobuf:"varint,2,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
-	// Field 3: Pagination parameters for the query.
+	Id         uint64             `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Status     v1.Status          `protobuf:"varint,2,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
 	Pagination *query.PageRequest `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -115,9 +108,7 @@ func (m *QueryNodesForPlanRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryNodesForPlanRequest proto.InternalMessageInfo
 
-// QueryNodeRequest represents a request to query information about a specific node.
 type QueryNodeRequest struct {
-	// Field 1: Address of the node to query.
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 }
 
@@ -154,7 +145,6 @@ func (m *QueryNodeRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryNodeRequest proto.InternalMessageInfo
 
-// QueryParamsRequest represents a request to query module parameters.
 type QueryParamsRequest struct {
 }
 
@@ -191,11 +181,8 @@ func (m *QueryParamsRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryParamsRequest proto.InternalMessageInfo
 
-// QueryNodesResponse represents a response containing a list of nodes and pagination information.
 type QueryNodesResponse struct {
-	// Field 1: List of nodes in the response.
-	Nodes []Node `protobuf:"bytes,1,rep,name=nodes,proto3" json:"nodes"`
-	// Field 2: Pagination information in the response.
+	Nodes      []Node              `protobuf:"bytes,1,rep,name=nodes,proto3" json:"nodes"`
 	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -232,11 +219,8 @@ func (m *QueryNodesResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryNodesResponse proto.InternalMessageInfo
 
-// QueryNodesForPlanResponse represents a response containing a list of nodes for a specific plan and pagination information.
 type QueryNodesForPlanResponse struct {
-	// Field 1: List of nodes in the response.
-	Nodes []Node `protobuf:"bytes,1,rep,name=nodes,proto3" json:"nodes"`
-	// Field 2: Pagination information in the response.
+	Nodes      []Node              `protobuf:"bytes,1,rep,name=nodes,proto3" json:"nodes"`
 	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -273,9 +257,7 @@ func (m *QueryNodesForPlanResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryNodesForPlanResponse proto.InternalMessageInfo
 
-// QueryNodeResponse represents a response containing information about a specific node.
 type QueryNodeResponse struct {
-	// Field 1: Information about the queried node.
 	Node Node `protobuf:"bytes,1,opt,name=node,proto3" json:"node"`
 }
 
@@ -312,9 +294,7 @@ func (m *QueryNodeResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryNodeResponse proto.InternalMessageInfo
 
-// QueryParamsResponse represents a response containing module parameters.
 type QueryParamsResponse struct {
-	// Field 1: Module parameters in the response.
 	Params Params `protobuf:"bytes,1,opt,name=params,proto3" json:"params"`
 }
 
@@ -421,13 +401,9 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type QueryServiceClient interface {
-	// RPC method for querying nodes with a specific status and pagination.
 	QueryNodes(ctx context.Context, in *QueryNodesRequest, opts ...grpc.CallOption) (*QueryNodesResponse, error)
-	// RPC method for querying nodes for a specific plan with status and pagination.
 	QueryNodesForPlan(ctx context.Context, in *QueryNodesForPlanRequest, opts ...grpc.CallOption) (*QueryNodesForPlanResponse, error)
-	// RPC method for querying information about a specific node.
 	QueryNode(ctx context.Context, in *QueryNodeRequest, opts ...grpc.CallOption) (*QueryNodeResponse, error)
-	// RPC method for querying module parameters.
 	QueryParams(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 }
 
@@ -477,13 +453,9 @@ func (c *queryServiceClient) QueryParams(ctx context.Context, in *QueryParamsReq
 
 // QueryServiceServer is the server API for QueryService service.
 type QueryServiceServer interface {
-	// RPC method for querying nodes with a specific status and pagination.
 	QueryNodes(context.Context, *QueryNodesRequest) (*QueryNodesResponse, error)
-	// RPC method for querying nodes for a specific plan with status and pagination.
 	QueryNodesForPlan(context.Context, *QueryNodesForPlanRequest) (*QueryNodesForPlanResponse, error)
-	// RPC method for querying information about a specific node.
 	QueryNode(context.Context, *QueryNodeRequest) (*QueryNodeResponse, error)
-	// RPC method for querying module parameters.
 	QueryParams(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 }
 

@@ -7,7 +7,6 @@ option go_package = "github.com/sentinel-official/hub/v12/x/provider/types/v1";
 option (gogoproto.equal_all) = false;
 option (gogoproto.goproto_getters_all) = false;
 
-// MsgRegisterRequest defines the SDK message for registering a provider
 message MsgRegisterRequest {
   string from = 1;
   string name = 2;
@@ -16,7 +15,6 @@ message MsgRegisterRequest {
   string description = 5;
 }
 
-// MsgUpdateRequest defines the SDK message for updating a provider
 message MsgUpdateRequest {
   string from = 1;
   string name = 2;
@@ -25,10 +23,8 @@ message MsgUpdateRequest {
   string description = 5;
 }
 
-// MsgRegisterResponse defines the response of message MsgRegisterRequest
 message MsgRegisterResponse {}
 
-// MsgUpdateResponse defines the response of message MsgUpdateRequest
 message MsgUpdateResponse {}
 
 service MsgService {

@@ -24,11 +24,8 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// Asset defines the structure for an asset, providing key details used in oracle operations.
 type Asset struct {
-	// The denomination key or symbol for the asset, used as a unique identifier.
-	Denom string `protobuf:"bytes,1,opt,name=denom,proto3" json:"denom,omitempty"`
-	// Number of decimal places that the asset's smallest unit is divided into.
+	Denom           string                `protobuf:"bytes,1,opt,name=denom,proto3" json:"denom,omitempty"`
 	Multiplier      cosmossdk_io_math.Int `protobuf:"bytes,2,opt,name=multiplier,proto3,customtype=cosmossdk.io/math.Int" json:"multiplier"`
 	PoolID          uint64                `protobuf:"varint,3,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
 	BaseAssetDenom  string                `protobuf:"bytes,4,opt,name=base_asset_denom,json=baseAssetDenom,proto3" json:"base_asset_denom,omitempty"`

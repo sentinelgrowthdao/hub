@@ -23,11 +23,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// GenesisState represents the genesis state for the module.
 type GenesisState struct {
-	// Field 1: List of deposits included in the genesis state.
-	// - (gogoproto.moretags) = "yaml:\"deposits\"": YAML tag for better representation.
-	// - (gogoproto.nullable) = false: Field is not nullable.
 	Deposits []Deposit `protobuf:"bytes,1,rep,name=deposits,proto3" json:"deposits" yaml:"deposits"`
 }
 

@@ -30,9 +30,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// QuerySessionsRequest represents the request to query sessions.
 type QuerySessionsRequest struct {
-	// Field 1: Pagination parameters.
 	Pagination *query.PageRequest `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -69,11 +67,8 @@ func (m *QuerySessionsRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QuerySessionsRequest proto.InternalMessageInfo
 
-// QuerySessionsForAccountRequest represents the request to query sessions for an account.
 type QuerySessionsForAccountRequest struct {
-	// Field 1: Account address.
-	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-	// Field 2: Pagination parameters.
+	Address    string             `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 	Pagination *query.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -110,11 +105,8 @@ func (m *QuerySessionsForAccountRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QuerySessionsForAccountRequest proto.InternalMessageInfo
 
-// QuerySessionsForNodeRequest represents the request to query sessions for a node.
 type QuerySessionsForNodeRequest struct {
-	// Field 1: Node address.
-	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-	// Field 2: Pagination parameters.
+	Address    string             `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 	Pagination *query.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -151,11 +143,8 @@ func (m *QuerySessionsForNodeRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QuerySessionsForNodeRequest proto.InternalMessageInfo
 
-// QuerySessionsForSubscriptionRequest represents the request to query sessions for a subscription.
 type QuerySessionsForSubscriptionRequest struct {
-	// Field 1: Subscription ID.
-	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	// Field 2: Pagination parameters.
+	Id         uint64             `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Pagination *query.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -192,13 +181,9 @@ func (m *QuerySessionsForSubscriptionRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QuerySessionsForSubscriptionRequest proto.InternalMessageInfo
 
-// QuerySessionsForAllocationRequest represents the request to query sessions for an allocation.
 type QuerySessionsForAllocationRequest struct {
-	// Field 1: Subscription ID.
-	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	// Field 2: Allocation address.
-	Address string `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
-	// Field 3: Pagination parameters.
+	Id         uint64             `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Address    string             `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
 	Pagination *query.PageRequest `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -235,9 +220,7 @@ func (m *QuerySessionsForAllocationRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QuerySessionsForAllocationRequest proto.InternalMessageInfo
 
-// QuerySessionRequest represents the request to query a specific session.
 type QuerySessionRequest struct {
-	// Field 1: Session ID.
 	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 }
 
@@ -274,7 +257,6 @@ func (m *QuerySessionRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QuerySessionRequest proto.InternalMessageInfo
 
-// QueryParamsRequest represents the request to query session parameters.
 type QueryParamsRequest struct {
 }
 
@@ -311,11 +293,8 @@ func (m *QueryParamsRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryParamsRequest proto.InternalMessageInfo
 
-// QuerySessionsResponse represents the response for querying sessions.
 type QuerySessionsResponse struct {
-	// Field 1: List of sessions.
-	Sessions []Session `protobuf:"bytes,1,rep,name=sessions,proto3" json:"sessions"`
-	// Field 2: Pagination details.
+	Sessions   []Session           `protobuf:"bytes,1,rep,name=sessions,proto3" json:"sessions"`
 	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -352,11 +331,8 @@ func (m *QuerySessionsResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QuerySessionsResponse proto.InternalMessageInfo
 
-// QuerySessionsForAccountResponse represents the response for querying sessions for an account.
 type QuerySessionsForAccountResponse struct {
-	// Field 1: List of sessions.
-	Sessions []Session `protobuf:"bytes,1,rep,name=sessions,proto3" json:"sessions"`
-	// Field 2: Pagination details.
+	Sessions   []Session           `protobuf:"bytes,1,rep,name=sessions,proto3" json:"sessions"`
 	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -393,11 +369,8 @@ func (m *QuerySessionsForAccountResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QuerySessionsForAccountResponse proto.InternalMessageInfo
 
-// QuerySessionsForNodeResponse represents the response for querying sessions for a node.
 type QuerySessionsForNodeResponse struct {
-	// Field 1: List of sessions.
-	Sessions []Session `protobuf:"bytes,1,rep,name=sessions,proto3" json:"sessions"`
-	// Field 2: Pagination details.
+	Sessions   []Session           `protobuf:"bytes,1,rep,name=sessions,proto3" json:"sessions"`
 	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -434,11 +407,8 @@ func (m *QuerySessionsForNodeResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QuerySessionsForNodeResponse proto.InternalMessageInfo
 
-// QuerySessionsForSubscriptionResponse represents the response for querying sessions for a subscription.
 type QuerySessionsForSubscriptionResponse struct {
-	// Field 1: List of sessions.
-	Sessions []Session `protobuf:"bytes,1,rep,name=sessions,proto3" json:"sessions"`
-	// Field 2: Pagination details.
+	Sessions   []Session           `protobuf:"bytes,1,rep,name=sessions,proto3" json:"sessions"`
 	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -475,11 +445,8 @@ func (m *QuerySessionsForSubscriptionResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QuerySessionsForSubscriptionResponse proto.InternalMessageInfo
 
-// QuerySessionsForAllocationResponse represents the response for querying sessions for an allocation.
 type QuerySessionsForAllocationResponse struct {
-	// Field 1: List of sessions.
-	Sessions []Session `protobuf:"bytes,1,rep,name=sessions,proto3" json:"sessions"`
-	// Field 2: Pagination details.
+	Sessions   []Session           `protobuf:"bytes,1,rep,name=sessions,proto3" json:"sessions"`
 	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -516,9 +483,7 @@ func (m *QuerySessionsForAllocationResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QuerySessionsForAllocationResponse proto.InternalMessageInfo
 
-// QuerySessionResponse represents the response for querying a specific session.
 type QuerySessionResponse struct {
-	// Field 1: Session details.
 	Session Session `protobuf:"bytes,1,opt,name=session,proto3" json:"session"`
 }
 
@@ -555,9 +520,7 @@ func (m *QuerySessionResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QuerySessionResponse proto.InternalMessageInfo
 
-// QueryParamsResponse represents the response for querying session parameters.
 type QueryParamsResponse struct {
-	// Field 1: Session parameters.
 	Params Params `protobuf:"bytes,1,opt,name=params,proto3" json:"params"`
 }
 
@@ -679,19 +642,12 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type QueryServiceClient interface {
-	// RPC method to query sessions.
 	QuerySessions(ctx context.Context, in *QuerySessionsRequest, opts ...grpc.CallOption) (*QuerySessionsResponse, error)
-	// RPC method to query sessions for an account.
 	QuerySessionsForAccount(ctx context.Context, in *QuerySessionsForAccountRequest, opts ...grpc.CallOption) (*QuerySessionsForAccountResponse, error)
-	// RPC method to query sessions for a node.
 	QuerySessionsForNode(ctx context.Context, in *QuerySessionsForNodeRequest, opts ...grpc.CallOption) (*QuerySessionsForNodeResponse, error)
-	// RPC method to query sessions for a subscription.
 	QuerySessionsForSubscription(ctx context.Context, in *QuerySessionsForSubscriptionRequest, opts ...grpc.CallOption) (*QuerySessionsForSubscriptionResponse, error)
-	// RPC method to query sessions for an allocation.
 	QuerySessionsForAllocation(ctx context.Context, in *QuerySessionsForAllocationRequest, opts ...grpc.CallOption) (*QuerySessionsForAllocationResponse, error)
-	// RPC method to query a specific session.
 	QuerySession(ctx context.Context, in *QuerySessionRequest, opts ...grpc.CallOption) (*QuerySessionResponse, error)
-	// RPC method to query session parameters.
 	QueryParams(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 }
 
@@ -768,19 +724,12 @@ func (c *queryServiceClient) QueryParams(ctx context.Context, in *QueryParamsReq
 
 // QueryServiceServer is the server API for QueryService service.
 type QueryServiceServer interface {
-	// RPC method to query sessions.
 	QuerySessions(context.Context, *QuerySessionsRequest) (*QuerySessionsResponse, error)
-	// RPC method to query sessions for an account.
 	QuerySessionsForAccount(context.Context, *QuerySessionsForAccountRequest) (*QuerySessionsForAccountResponse, error)
-	// RPC method to query sessions for a node.
 	QuerySessionsForNode(context.Context, *QuerySessionsForNodeRequest) (*QuerySessionsForNodeResponse, error)
-	// RPC method to query sessions for a subscription.
 	QuerySessionsForSubscription(context.Context, *QuerySessionsForSubscriptionRequest) (*QuerySessionsForSubscriptionResponse, error)
-	// RPC method to query sessions for an allocation.
 	QuerySessionsForAllocation(context.Context, *QuerySessionsForAllocationRequest) (*QuerySessionsForAllocationResponse, error)
-	// RPC method to query a specific session.
 	QuerySession(context.Context, *QuerySessionRequest) (*QuerySessionResponse, error)
-	// RPC method to query session parameters.
 	QueryParams(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 }
 

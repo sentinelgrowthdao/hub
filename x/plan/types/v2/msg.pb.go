@@ -35,16 +35,11 @@ var _ = time.Kitchen
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// MsgCreateRequest defines the SDK message for creating a subscription plan.
 type MsgCreateRequest struct {
-	// Field 1: Sender's address.
-	From string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
-	// Field 2: Duration of the subscription plan.
-	Duration time.Duration `protobuf:"bytes,2,opt,name=duration,proto3,stdduration" json:"duration"`
-	// Field 3: Amount of gigabytes in the subscription plan.
-	Gigabytes int64 `protobuf:"varint,3,opt,name=gigabytes,proto3" json:"gigabytes,omitempty"`
-	// Field 4: Prices associated with the subscription plan.
-	Prices github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,4,rep,name=prices,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"prices"`
+	From      string                                   `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
+	Duration  time.Duration                            `protobuf:"bytes,2,opt,name=duration,proto3,stdduration" json:"duration"`
+	Gigabytes int64                                    `protobuf:"varint,3,opt,name=gigabytes,proto3" json:"gigabytes,omitempty"`
+	Prices    github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,4,rep,name=prices,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"prices"`
 }
 
 func (m *MsgCreateRequest) Reset()         { *m = MsgCreateRequest{} }
@@ -80,13 +75,9 @@ func (m *MsgCreateRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgCreateRequest proto.InternalMessageInfo
 
-// MsgUpdateStatusRequest defines the SDK message for modifying the status of a subscription plan.
 type MsgUpdateStatusRequest struct {
-	// Field 1: Sender's address.
-	From string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
-	// Field 2: Identifier of the subscription plan.
-	ID uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
-	// Field 3: New status for the subscription plan.
+	From   string    `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
+	ID     uint64    `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	Status v1.Status `protobuf:"varint,3,opt,name=status,proto3,enum=sentinel.types.v1.Status" json:"status,omitempty"`
 }
 
@@ -123,13 +114,9 @@ func (m *MsgUpdateStatusRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUpdateStatusRequest proto.InternalMessageInfo
 
-// MsgLinkNodeRequest defines the SDK message for adding a node to a subscription plan.
 type MsgLinkNodeRequest struct {
-	// Field 1: Sender's address.
-	From string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
-	// Field 2: Identifier of the subscription plan.
-	ID uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
-	// Field 3: Node address to be linked to the subscription plan.
+	From        string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
+	ID          uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	NodeAddress string `protobuf:"bytes,3,opt,name=node_address,json=nodeAddress,proto3" json:"node_address,omitempty"`
 }
 
@@ -166,13 +153,9 @@ func (m *MsgLinkNodeRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgLinkNodeRequest proto.InternalMessageInfo
 
-// MsgUnlinkNodeRequest defines the SDK message for removing a node from a subscription plan.
 type MsgUnlinkNodeRequest struct {
-	// Field 1: Sender's address.
-	From string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
-	// Field 2: Identifier of the subscription plan.
-	ID uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
-	// Field 3: Node address to be unlinked from the subscription plan.
+	From        string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
+	ID          uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	NodeAddress string `protobuf:"bytes,3,opt,name=node_address,json=nodeAddress,proto3" json:"node_address,omitempty"`
 }
 
@@ -209,13 +192,9 @@ func (m *MsgUnlinkNodeRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUnlinkNodeRequest proto.InternalMessageInfo
 
-// MsgSubscribeRequest defines the SDK message for subscribing to a subscription plan.
 type MsgSubscribeRequest struct {
-	// Field 1: Sender's address.
-	From string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
-	// Field 2: Identifier of the subscription plan.
-	ID uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
-	// Field 3: Denomination for the subscription.
+	From  string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
+	ID    uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	Denom string `protobuf:"bytes,3,opt,name=denom,proto3" json:"denom,omitempty"`
 }
 
@@ -252,7 +231,6 @@ func (m *MsgSubscribeRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgSubscribeRequest proto.InternalMessageInfo
 
-// MsgCreateResponse defines the response of message MsgCreateRequest.
 type MsgCreateResponse struct {
 }
 
@@ -289,7 +267,6 @@ func (m *MsgCreateResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgCreateResponse proto.InternalMessageInfo
 
-// MsgUpdateStatusResponse defines the response of message MsgUpdateStatusRequest.
 type MsgUpdateStatusResponse struct {
 }
 
@@ -326,7 +303,6 @@ func (m *MsgUpdateStatusResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUpdateStatusResponse proto.InternalMessageInfo
 
-// MsgLinkNodeResponse defines the response of message MsgLinkNodeRequest.
 type MsgLinkNodeResponse struct {
 }
 
@@ -363,7 +339,6 @@ func (m *MsgLinkNodeResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgLinkNodeResponse proto.InternalMessageInfo
 
-// MsgUnlinkNodeResponse defines the response of message MsgUnlinkNodeRequest.
 type MsgUnlinkNodeResponse struct {
 }
 
@@ -400,7 +375,6 @@ func (m *MsgUnlinkNodeResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUnlinkNodeResponse proto.InternalMessageInfo
 
-// MsgSubscribeResponse defines the response of message MsgSubscribeRequest.
 type MsgSubscribeResponse struct {
 }
 
@@ -508,15 +482,10 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgServiceClient interface {
-	// RPC method for creating a subscription plan.
 	MsgCreate(ctx context.Context, in *MsgCreateRequest, opts ...grpc.CallOption) (*MsgCreateResponse, error)
-	// RPC method for modifying the status of a subscription plan.
 	MsgUpdateStatus(ctx context.Context, in *MsgUpdateStatusRequest, opts ...grpc.CallOption) (*MsgUpdateStatusResponse, error)
-	// RPC method for linking a node to a subscription plan.
 	MsgLinkNode(ctx context.Context, in *MsgLinkNodeRequest, opts ...grpc.CallOption) (*MsgLinkNodeResponse, error)
-	// RPC method for unlinking a node from a subscription plan.
 	MsgUnlinkNode(ctx context.Context, in *MsgUnlinkNodeRequest, opts ...grpc.CallOption) (*MsgUnlinkNodeResponse, error)
-	// RPC method for subscribing to a subscription plan.
 	MsgSubscribe(ctx context.Context, in *MsgSubscribeRequest, opts ...grpc.CallOption) (*MsgSubscribeResponse, error)
 }
 
@@ -575,15 +544,10 @@ func (c *msgServiceClient) MsgSubscribe(ctx context.Context, in *MsgSubscribeReq
 
 // MsgServiceServer is the server API for MsgService service.
 type MsgServiceServer interface {
-	// RPC method for creating a subscription plan.
 	MsgCreate(context.Context, *MsgCreateRequest) (*MsgCreateResponse, error)
-	// RPC method for modifying the status of a subscription plan.
 	MsgUpdateStatus(context.Context, *MsgUpdateStatusRequest) (*MsgUpdateStatusResponse, error)
-	// RPC method for linking a node to a subscription plan.
 	MsgLinkNode(context.Context, *MsgLinkNodeRequest) (*MsgLinkNodeResponse, error)
-	// RPC method for unlinking a node from a subscription plan.
 	MsgUnlinkNode(context.Context, *MsgUnlinkNodeRequest) (*MsgUnlinkNodeResponse, error)
-	// RPC method for subscribing to a subscription plan.
 	MsgSubscribe(context.Context, *MsgSubscribeRequest) (*MsgSubscribeResponse, error)
 }
 

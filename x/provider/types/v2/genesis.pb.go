@@ -23,14 +23,9 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// Message representing the genesis state for the module.
 type GenesisState struct {
-	// Field 1: List of providers included in the genesis state.
-	// - (gogoproto.nullable) = false: Field is not nullable.
 	Providers []Provider `protobuf:"bytes,1,rep,name=providers,proto3" json:"providers"`
-	// Field 2: Parameters associated with the genesis state.
-	// - (gogoproto.nullable) = false: Field is not nullable.
-	Params Params `protobuf:"bytes,2,opt,name=params,proto3" json:"params"`
+	Params    Params     `protobuf:"bytes,2,opt,name=params,proto3" json:"params"`
 }
 
 func (m *GenesisState) Reset()         { *m = GenesisState{} }

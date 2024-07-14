@@ -72,23 +72,18 @@ service QueryService {
   rpc QuerySessions(QuerySessionsRequest) returns (QuerySessionsResponse) {
     option (google.api.http).get = "/sentinel/session/v3/sessions";
   }
-
   rpc QuerySessionsForAccount(QuerySessionsForAccountRequest) returns (QuerySessionsForAccountResponse) {
     option (google.api.http).get = "/sentinel/session/v3/accounts/{address}/sessions";
   }
-
   rpc QuerySessionsForNode(QuerySessionsForNodeRequest) returns (QuerySessionsForNodeResponse) {
     option (google.api.http).get = "/sentinel/session/v3/nodes/{address}/sessions";
   }
-
   rpc QuerySessionsForSubscription(QuerySessionsForSubscriptionRequest) returns (QuerySessionsForSubscriptionResponse) {
     option (google.api.http).get = "/sentinel/session/v3/subscriptions/{id}/sessions";
   }
-
   rpc QuerySessionsForAllocation(QuerySessionsForAllocationRequest) returns (QuerySessionsForAllocationResponse) {
     option (google.api.http).get = "/sentinel/session/v3/subscriptions/{id}/allocations/{address}/sessions";
   }
-
   rpc QuerySession(QuerySessionRequest) returns (QuerySessionResponse) {
     option (google.api.http).get = "/sentinel/session/v3/sessions/{id}";
   }

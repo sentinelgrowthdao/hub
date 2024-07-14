@@ -58,19 +58,15 @@ service QueryService {
   rpc QueryLease(QueryLeaseRequest) returns (QueryLeaseResponse) {
     option (google.api.http).get = "/sentinel/lease/v3/leases/{id}";
   }
-
   rpc QueryLeases(QueryLeasesRequest) returns (QueryLeasesResponse) {
     option (google.api.http).get = "/sentinel/lease/v3/leases";
   }
-
   rpc QueryLeasesForProvider(QueryLeasesForProviderRequest) returns (QueryLeasesForProviderResponse) {
     option (google.api.http).get = "/sentinel/lease/v3/providers/{address}/leases";
   }
-
   rpc QueryLeasesForNode(QueryLeasesForNodeRequest) returns (QueryLeasesForNodeResponse) {
     option (google.api.http).get = "/sentinel/lease/v3/nodes/{address}/leases";
   }
-
   rpc QueryParams(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/sentinel/lease/v3/params";
   }

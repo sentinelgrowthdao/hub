@@ -51,15 +51,12 @@ service QueryService {
   rpc QueryNodes(QueryNodesRequest) returns (QueryNodesResponse) {
     option (google.api.http).get = "/sentinel/node/v1/nodes";
   }
-
   rpc QueryNodesForProvider(QueryNodesForProviderRequest) returns (QueryNodesForProviderResponse) {
     option (google.api.http).get = "/sentinel/node/v1/providers/{address}/nodes";
   }
-
   rpc QueryNode(QueryNodeRequest) returns (QueryNodeResponse) {
     option (google.api.http).get = "/sentinel/node/v1/nodes/{address}";
   }
-
   rpc QueryParams(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/sentinel/node/v1/params";
   }

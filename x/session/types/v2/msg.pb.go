@@ -28,13 +28,9 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// MsgStartRequest defines the SDK message for starting a session.
 type MsgStartRequest struct {
-	// Field 1: Sender's address.
-	From string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
-	// Field 2: Identifier of the session.
-	ID uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
-	// Field 3: Address associated with the session.
+	From    string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
+	ID      uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	Address string `protobuf:"bytes,3,opt,name=address,proto3" json:"address,omitempty"`
 }
 
@@ -71,13 +67,9 @@ func (m *MsgStartRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgStartRequest proto.InternalMessageInfo
 
-// MsgUpdateDetailsRequest defines the SDK message for updating a session.
 type MsgUpdateDetailsRequest struct {
-	// Field 1: Sender's address.
-	From string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
-	// Field 2: Proof associated with the session.
-	Proof Proof `protobuf:"bytes,2,opt,name=proof,proto3" json:"proof"`
-	// Field 3: Signature associated with the session.
+	From      string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
+	Proof     Proof  `protobuf:"bytes,2,opt,name=proof,proto3" json:"proof"`
 	Signature []byte `protobuf:"bytes,3,opt,name=signature,proto3" json:"signature,omitempty"`
 }
 
@@ -114,13 +106,9 @@ func (m *MsgUpdateDetailsRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUpdateDetailsRequest proto.InternalMessageInfo
 
-// MsgEndRequest defines the SDK message for ending a session.
 type MsgEndRequest struct {
-	// Field 1: Sender's address.
-	From string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
-	// Field 2: Identifier of the session.
-	ID uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
-	// Field 3: Rating associated with the session.
+	From   string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
+	ID     uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	Rating uint64 `protobuf:"varint,3,opt,name=rating,proto3" json:"rating,omitempty"`
 }
 
@@ -157,7 +145,6 @@ func (m *MsgEndRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgEndRequest proto.InternalMessageInfo
 
-// MsgStartResponse defines the response of message MsgStartRequest.
 type MsgStartResponse struct {
 }
 
@@ -194,7 +181,6 @@ func (m *MsgStartResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgStartResponse proto.InternalMessageInfo
 
-// MsgUpdateDetailsResponse defines the response of message MsgUpdateDetailsRequest.
 type MsgUpdateDetailsResponse struct {
 }
 
@@ -231,7 +217,6 @@ func (m *MsgUpdateDetailsResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUpdateDetailsResponse proto.InternalMessageInfo
 
-// MsgEndResponse defines the response of message MsgEndRequest.
 type MsgEndResponse struct {
 }
 
@@ -323,11 +308,8 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgServiceClient interface {
-	// RPC method for handling MsgStart messages.
 	MsgStart(ctx context.Context, in *MsgStartRequest, opts ...grpc.CallOption) (*MsgStartResponse, error)
-	// RPC method for handling MsgUpdateDetails messages.
 	MsgUpdateDetails(ctx context.Context, in *MsgUpdateDetailsRequest, opts ...grpc.CallOption) (*MsgUpdateDetailsResponse, error)
-	// RPC method for handling MsgEnd messages.
 	MsgEnd(ctx context.Context, in *MsgEndRequest, opts ...grpc.CallOption) (*MsgEndResponse, error)
 }
 
@@ -368,11 +350,8 @@ func (c *msgServiceClient) MsgEnd(ctx context.Context, in *MsgEndRequest, opts .
 
 // MsgServiceServer is the server API for MsgService service.
 type MsgServiceServer interface {
-	// RPC method for handling MsgStart messages.
 	MsgStart(context.Context, *MsgStartRequest) (*MsgStartResponse, error)
-	// RPC method for handling MsgUpdateDetails messages.
 	MsgUpdateDetails(context.Context, *MsgUpdateDetailsRequest) (*MsgUpdateDetailsResponse, error)
-	// RPC method for handling MsgEnd messages.
 	MsgEnd(context.Context, *MsgEndRequest) (*MsgEndResponse, error)
 }
 
