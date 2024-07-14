@@ -24,6 +24,9 @@ type DistributionKeeper interface {
 
 type DepositKeeper interface {
 	AddDeposit(ctx sdk.Context, addr sdk.AccAddress, coins sdk.Coins) error
+	SendCoinsFromDepositToAccount(ctx sdk.Context, fromAddr, toAddr sdk.AccAddress, coins sdk.Coins) error
+	SendCoinsFromDepositToModule(ctx sdk.Context, fromAddr sdk.AccAddress, toModule string, coins sdk.Coins) error
+	SubtractDeposit(ctx sdk.Context, addr sdk.AccAddress, coins sdk.Coins) error
 }
 
 type LeaseKeeper interface {
@@ -32,6 +35,7 @@ type LeaseKeeper interface {
 
 type SessionKeeper interface {
 	GetCount(ctx sdk.Context) uint64
+	GetSession(ctx sdk.Context, id uint64) (sessiontypes.Session, bool)
 	NodeInactivePreHook(ctx sdk.Context, addr base.NodeAddress) error
 	SetCount(ctx sdk.Context, count uint64)
 	SetSession(ctx sdk.Context, session sessiontypes.Session)

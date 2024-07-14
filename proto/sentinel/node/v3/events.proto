@@ -40,3 +40,17 @@ message EventCreateSession {
     (gogoproto.stdduration) = true
   ];
 }
+
+message EventPay {
+  uint64 id = 1 [(gogoproto.customname) = "ID"];
+  string acc_address = 2;
+  string node_address = 3;
+  string payment = 4;
+  string staking_reward = 5;
+}
+
+message EventRefund {
+  uint64 id = 1 [(gogoproto.customname) = "ID"];
+  string acc_address = 2;
+  string amount = 3;
+}
