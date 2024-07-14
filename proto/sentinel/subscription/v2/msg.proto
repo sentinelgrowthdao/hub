@@ -7,11 +7,6 @@ option go_package = "github.com/sentinel-official/hub/v12/x/subscription/types/v
 option (gogoproto.equal_all) = false;
 option (gogoproto.goproto_getters_all) = false;
 
-message MsgCancelRequest {
-  string from = 1;
-  uint64 id = 2 [(gogoproto.customname) = "ID"];
-}
-
 message MsgAllocateRequest {
   string from = 1;
   uint64 id = 2 [(gogoproto.customname) = "ID"];
@@ -22,11 +17,16 @@ message MsgAllocateRequest {
   ];
 }
 
-message MsgCancelResponse {}
+message MsgCancelRequest {
+  string from = 1;
+  uint64 id = 2 [(gogoproto.customname) = "ID"];
+}
 
 message MsgAllocateResponse {}
 
+message MsgCancelResponse {}
+
 service MsgService {
-  rpc MsgCancel(MsgCancelRequest) returns (MsgCancelResponse);
   rpc MsgAllocate(MsgAllocateRequest) returns (MsgAllocateResponse);
+  rpc MsgCancel(MsgCancelRequest) returns (MsgCancelResponse);
 }

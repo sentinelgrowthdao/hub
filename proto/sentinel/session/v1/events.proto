@@ -9,13 +9,17 @@ option go_package = "github.com/sentinel-official/hub/v12/x/session/types/v1";
 option (gogoproto.equal_all) = false;
 option (gogoproto.goproto_getters_all) = false;
 
-message EventStart {
+message EventPay {
   uint64 id = 1 [(gogoproto.moretags) = "yaml:\"id\""];
   string node = 2 [(gogoproto.moretags) = "yaml:\"node\""];
   uint64 subscription = 3 [(gogoproto.moretags) = "yaml:\"subscription\""];
+  cosmos.base.v1beta1.Coin amount = 4 [
+    (gogoproto.moretags) = "yaml:\"amount\"",
+    (gogoproto.nullable) = false
+  ];
 }
 
-message EventUpdate {
+message EventStart {
   uint64 id = 1 [(gogoproto.moretags) = "yaml:\"id\""];
   string node = 2 [(gogoproto.moretags) = "yaml:\"node\""];
   uint64 subscription = 3 [(gogoproto.moretags) = "yaml:\"subscription\""];
@@ -28,12 +32,8 @@ message EventSetStatus {
   sentinel.types.v1.Status status = 4 [(gogoproto.moretags) = "yaml:\"status\""];
 }
 
-message EventPay {
+message EventUpdate {
   uint64 id = 1 [(gogoproto.moretags) = "yaml:\"id\""];
   string node = 2 [(gogoproto.moretags) = "yaml:\"node\""];
   uint64 subscription = 3 [(gogoproto.moretags) = "yaml:\"subscription\""];
-  cosmos.base.v1beta1.Coin amount = 4 [
-    (gogoproto.moretags) = "yaml:\"amount\"",
-    (gogoproto.nullable) = false
-  ];
 }

@@ -13,6 +13,34 @@ option go_package = "github.com/sentinel-official/hub/v12/x/subscription/types/v
 option (gogoproto.equal_all) = false;
 option (gogoproto.goproto_getters_all) = false;
 
+message QueryAllocationsRequest {
+  uint64 id = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryAllocationRequest {
+  uint64 id = 1;
+  string address = 2;
+}
+
+message QueryPayoutsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryPayoutsForAccountRequest {
+  string address = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryPayoutsForNodeRequest {
+  string address = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryPayoutRequest {
+  uint64 id = 1;
+}
+
 message QuerySubscriptionsRequest {
   cosmos.base.query.v1beta1.PageRequest pagination = 1;
 }
@@ -36,35 +64,35 @@ message QuerySubscriptionRequest {
   uint64 id = 1;
 }
 
-message QueryAllocationRequest {
-  uint64 id = 1;
-  string address = 2;
-}
-
-message QueryAllocationsRequest {
-  uint64 id = 1;
-  cosmos.base.query.v1beta1.PageRequest pagination = 2;
-}
-
-message QueryPayoutsRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
-}
-
-message QueryPayoutsForAccountRequest {
-  string address = 1;
-  cosmos.base.query.v1beta1.PageRequest pagination = 2;
-}
-
-message QueryPayoutsForNodeRequest {
-  string address = 1;
-  cosmos.base.query.v1beta1.PageRequest pagination = 2;
-}
-
-message QueryPayoutRequest {
-  uint64 id = 1;
-}
-
 message QueryParamsRequest {}
+
+message QueryAllocationsResponse {
+  repeated Allocation allocations = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryAllocationResponse {
+  Allocation allocation = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryPayoutsResponse {
+  repeated Payout payouts = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryPayoutsForAccountResponse {
+  repeated Payout payouts = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryPayoutsForNodeResponse {
+  repeated Payout payouts = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryPayoutResponse {
+  Payout payout = 1 [(gogoproto.nullable) = false];
+}
 
 message QuerySubscriptionsResponse {
   repeated google.protobuf.Any subscriptions = 1;
@@ -90,39 +118,29 @@ message QuerySubscriptionResponse {
   google.protobuf.Any subscription = 1;
 }
 
-message QueryAllocationResponse {
-  Allocation allocation = 1 [(gogoproto.nullable) = false];
-}
-
-message QueryAllocationsResponse {
-  repeated Allocation allocations = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
-}
-
-message QueryPayoutsResponse {
-  repeated Payout payouts = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
-}
-
-message QueryPayoutsForAccountResponse {
-  repeated Payout payouts = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
-}
-
-message QueryPayoutsForNodeResponse {
-  repeated Payout payouts = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
-}
-
-message QueryPayoutResponse {
-  Payout payout = 1 [(gogoproto.nullable) = false];
-}
-
 message QueryParamsResponse {
   Params params = 1 [(gogoproto.nullable) = false];
 }
 
 service QueryService {
+  rpc QueryAllocation(QueryAllocationRequest) returns (QueryAllocationResponse) {
+    option (google.api.http).get = "/sentinel/subscription/v2/subscriptions/{id}/allocations/{address}";
+  }
+  rpc QueryAllocations(QueryAllocationsRequest) returns (QueryAllocationsResponse) {
+    option (google.api.http).get = "/sentinel/subscription/v2/subscriptions/{id}/allocations";
+  }
+  rpc QueryPayouts(QueryPayoutsRequest) returns (QueryPayoutsResponse) {
+    option (google.api.http).get = "/sentinel/subscription/v2/payouts";
+  }
+  rpc QueryPayoutsForAccount(QueryPayoutsForAccountRequest) returns (QueryPayoutsForAccountResponse) {
+    option (google.api.http).get = "/sentinel/subscription/v2/accounts/{address}/payouts";
+  }
+  rpc QueryPayoutsForNode(QueryPayoutsForNodeRequest) returns (QueryPayoutsForNodeResponse) {
+    option (google.api.http).get = "/sentinel/subscription/v2/nodes/{address}/payouts";
+  }
+  rpc QueryPayout(QueryPayoutRequest) returns (QueryPayoutResponse) {
+    option (google.api.http).get = "/sentinel/subscription/v2/payouts/{id}";
+  }
   rpc QuerySubscriptions(QuerySubscriptionsRequest) returns (QuerySubscriptionsResponse) {
     option (google.api.http).get = "/sentinel/subscription/v2/subscriptions";
   }
@@ -137,24 +155,6 @@ service QueryService {
   }
   rpc QuerySubscription(QuerySubscriptionRequest) returns (QuerySubscriptionResponse) {
     option (google.api.http).get = "/sentinel/subscription/v2/subscriptions/{id}";
-  }
-  rpc QueryAllocations(QueryAllocationsRequest) returns (QueryAllocationsResponse) {
-    option (google.api.http).get = "/sentinel/subscription/v2/subscriptions/{id}/allocations";
-  }
-  rpc QueryAllocation(QueryAllocationRequest) returns (QueryAllocationResponse) {
-    option (google.api.http).get = "/sentinel/subscription/v2/subscriptions/{id}/allocations/{address}";
-  }
-  rpc QueryPayouts(QueryPayoutsRequest) returns (QueryPayoutsResponse) {
-    option (google.api.http).get = "/sentinel/subscription/v2/payouts";
-  }
-  rpc QueryPayoutsForAccount(QueryPayoutsForAccountRequest) returns (QueryPayoutsForAccountResponse) {
-    option (google.api.http).get = "/sentinel/subscription/v2/accounts/{address}/payouts";
-  }
-  rpc QueryPayoutsForNode(QueryPayoutsForNodeRequest) returns (QueryPayoutsForNodeResponse) {
-    option (google.api.http).get = "/sentinel/subscription/v2/nodes/{address}/payouts";
-  }
-  rpc QueryPayout(QueryPayoutRequest) returns (QueryPayoutResponse) {
-    option (google.api.http).get = "/sentinel/subscription/v2/payouts/{id}";
   }
   rpc QueryParams(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/sentinel/subscription/v2/params";

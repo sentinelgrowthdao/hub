@@ -16,6 +16,20 @@ message EventCreate {
   string remote_url = 4;
 }
 
+message EventPay {
+  uint64 id = 1 [(gogoproto.customname) = "ID"];
+  string acc_address = 2;
+  string node_address = 3;
+  string payment = 4;
+  string staking_reward = 5;
+}
+
+message EventRefund {
+  uint64 id = 1 [(gogoproto.customname) = "ID"];
+  string acc_address = 2;
+  string amount = 3;
+}
+
 message EventUpdateDetails {
   string node_address = 1;
   string gigabyte_prices = 2;
@@ -39,18 +53,4 @@ message EventCreateSession {
     (gogoproto.nullable) = false,
     (gogoproto.stdduration) = true
   ];
-}
-
-message EventPay {
-  uint64 id = 1 [(gogoproto.customname) = "ID"];
-  string acc_address = 2;
-  string node_address = 3;
-  string payment = 4;
-  string staking_reward = 5;
-}
-
-message EventRefund {
-  uint64 id = 1 [(gogoproto.customname) = "ID"];
-  string acc_address = 2;
-  string amount = 3;
 }

@@ -36,8 +36,11 @@ message MsgUpdateParamsRequest {
 }
 
 message MsgRegisterProviderResponse {}
+
 message MsgUpdateProviderDetailsResponse {}
+
 message MsgUpdateProviderStatusResponse {}
+
 message MsgUpdateParamsResponse {}
 
 service MsgService {

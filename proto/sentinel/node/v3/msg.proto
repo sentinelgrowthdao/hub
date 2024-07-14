@@ -55,7 +55,9 @@ message MsgUpdateParamsRequest {
 }
 
 message MsgRegisterNodeResponse {}
+
 message MsgUpdateNodeDetailsResponse {}
+
 message MsgUpdateNodeStatusResponse {}
 
 message MsgStartSessionResponse {

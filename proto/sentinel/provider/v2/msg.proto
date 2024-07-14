@@ -26,6 +26,7 @@ message MsgUpdateRequest {
 }
 
 message MsgRegisterResponse {}
+
 message MsgUpdateResponse {}
 
 service MsgService {

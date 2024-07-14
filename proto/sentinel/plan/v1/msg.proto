@@ -26,12 +26,6 @@ message MsgAddRequest {
   ];
 }
 
-message MsgSetStatusRequest {
-  string from = 1;
-  uint64 id = 2;
-  sentinel.types.v1.Status status = 3;
-}
-
 message MsgAddNodeRequest {
   string from = 1;
   uint64 id = 2;
@@ -44,17 +38,23 @@ message MsgRemoveNodeRequest {
   string address = 3;
 }
 
-message MsgAddResponse {}
+message MsgSetStatusRequest {
+  string from = 1;
+  uint64 id = 2;
+  sentinel.types.v1.Status status = 3;
+}
 
-message MsgSetStatusResponse {}
+message MsgAddResponse {}
 
 message MsgAddNodeResponse {}
 
 message MsgRemoveNodeResponse {}
 
+message MsgSetStatusResponse {}
+
 service MsgService {
   rpc MsgAdd(MsgAddRequest) returns (MsgAddResponse);
-  rpc MsgSetStatus(MsgSetStatusRequest) returns (MsgSetStatusResponse);
   rpc MsgAddNode(MsgAddNodeRequest) returns (MsgAddNodeResponse);
   rpc MsgRemoveNode(MsgRemoveNodeRequest) returns (MsgRemoveNodeResponse);
+  rpc MsgSetStatus(MsgSetStatusRequest) returns (MsgSetStatusResponse);
 }

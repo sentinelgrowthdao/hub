@@ -38,7 +38,9 @@ message MsgUpdateParamsRequest {
 }
 
 message MsgCancelSessionResponse {}
+
 message MsgUpdateSessionResponse {}
+
 message MsgUpdateParamsResponse {}
 
 service MsgService {

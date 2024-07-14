@@ -16,15 +16,6 @@ message EventCreate {
   ];
 }
 
-message EventUpdateStatus {
-  sentinel.types.v1.Status status = 1 [(gogoproto.moretags) = "yaml:\"status\""];
-  string address = 2 [(gogoproto.moretags) = "yaml:\"address\""];
-  uint64 id = 3 [
-    (gogoproto.customname) = "ID",
-    (gogoproto.moretags) = "yaml:\"id\""
-  ];
-}
-
 message EventLinkNode {
   string address = 1 [(gogoproto.moretags) = "yaml:\"address\""];
   string node_address = 2 [(gogoproto.moretags) = "yaml:\"node_address\""];
@@ -37,6 +28,15 @@ message EventLinkNode {
 message EventUnlinkNode {
   string address = 1 [(gogoproto.moretags) = "yaml:\"address\""];
   string node_address = 2 [(gogoproto.moretags) = "yaml:\"node_address\""];
+  uint64 id = 3 [
+    (gogoproto.customname) = "ID",
+    (gogoproto.moretags) = "yaml:\"id\""
+  ];
+}
+
+message EventUpdateStatus {
+  sentinel.types.v1.Status status = 1 [(gogoproto.moretags) = "yaml:\"status\""];
+  string address = 2 [(gogoproto.moretags) = "yaml:\"address\""];
   uint64 id = 3 [
     (gogoproto.customname) = "ID",
     (gogoproto.moretags) = "yaml:\"id\""

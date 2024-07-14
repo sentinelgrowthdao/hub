@@ -54,7 +54,9 @@ message MsgCreatePlanResponse {
 }
 
 message MsgLinkNodeResponse {}
+
 message MsgUnlinkNodeResponse {}
+
 message MsgUpdatePlanStatusResponse {}
 
 message MsgStartSessionResponse {

@@ -23,12 +23,6 @@ message MsgCreateRequest {
   ];
 }
 
-message MsgUpdateStatusRequest {
-  string from = 1;
-  uint64 id = 2 [(gogoproto.customname) = "ID"];
-  sentinel.types.v1.Status status = 3;
-}
-
 message MsgLinkNodeRequest {
   string from = 1;
   uint64 id = 2 [(gogoproto.customname) = "ID"];
@@ -41,6 +35,12 @@ message MsgUnlinkNodeRequest {
   string node_address = 3;
 }
 
+message MsgUpdateStatusRequest {
+  string from = 1;
+  uint64 id = 2 [(gogoproto.customname) = "ID"];
+  sentinel.types.v1.Status status = 3;
+}
+
 message MsgSubscribeRequest {
   string from = 1;
   uint64 id = 2 [(gogoproto.customname) = "ID"];
@@ -49,18 +49,18 @@ message MsgSubscribeRequest {
 
 message MsgCreateResponse {}
 
-message MsgUpdateStatusResponse {}
-
 message MsgLinkNodeResponse {}
 
 message MsgUnlinkNodeResponse {}
+
+message MsgUpdateStatusResponse {}
 
 message MsgSubscribeResponse {}
 
 service MsgService {
   rpc MsgCreate(MsgCreateRequest) returns (MsgCreateResponse);
-  rpc MsgUpdateStatus(MsgUpdateStatusRequest) returns (MsgUpdateStatusResponse);
   rpc MsgLinkNode(MsgLinkNodeRequest) returns (MsgLinkNodeResponse);
   rpc MsgUnlinkNode(MsgUnlinkNodeRequest) returns (MsgUnlinkNodeResponse);
+  rpc MsgUpdateStatus(MsgUpdateStatusRequest) returns (MsgUpdateStatusResponse);
   rpc MsgSubscribe(MsgSubscribeRequest) returns (MsgSubscribeResponse);
 }

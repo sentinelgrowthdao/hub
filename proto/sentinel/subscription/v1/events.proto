@@ -8,10 +8,9 @@ option go_package = "github.com/sentinel-official/hub/v12/x/subscription/types/v
 option (gogoproto.equal_all) = false;
 option (gogoproto.goproto_getters_all) = false;
 
-message EventSubscribe {
+message EventAddQuota {
   uint64 id = 1 [(gogoproto.moretags) = "yaml:\"id\""];
-  string node = 2 [(gogoproto.moretags) = "yaml:\"node\""];
-  uint64 plan = 3 [(gogoproto.moretags) = "yaml:\"plan\""];
+  string address = 2 [(gogoproto.moretags) = "yaml:\"address\""];
 }
 
 message EventSetStatus {
@@ -19,9 +18,10 @@ message EventSetStatus {
   sentinel.types.v1.Status status = 2 [(gogoproto.moretags) = "yaml:\"status\""];
 }
 
-message EventAddQuota {
+message EventSubscribe {
   uint64 id = 1 [(gogoproto.moretags) = "yaml:\"id\""];
-  string address = 2 [(gogoproto.moretags) = "yaml:\"address\""];
+  string node = 2 [(gogoproto.moretags) = "yaml:\"node\""];
+  uint64 plan = 3 [(gogoproto.moretags) = "yaml:\"plan\""];
 }
 
 message EventUpdateQuota {

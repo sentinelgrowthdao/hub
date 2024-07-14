@@ -19,6 +19,12 @@ message QuerySessionsForAccountRequest {
   cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
+message QuerySessionsForAllocationRequest {
+  uint64 id = 1;
+  string address = 2;
+  cosmos.base.query.v1beta1.PageRequest pagination = 3;
+}
+
 message QuerySessionsForNodeRequest {
   string address = 1;
   cosmos.base.query.v1beta1.PageRequest pagination = 2;
@@ -27,12 +33,6 @@ message QuerySessionsForNodeRequest {
 message QuerySessionsForSubscriptionRequest {
   uint64 id = 1;
   cosmos.base.query.v1beta1.PageRequest pagination = 2;
-}
-
-message QuerySessionsForAllocationRequest {
-  uint64 id = 1;
-  string address = 2;
-  cosmos.base.query.v1beta1.PageRequest pagination = 3;
 }
 
 message QuerySessionRequest {
@@ -49,17 +49,17 @@ message QuerySessionsForAccountResponse {
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
+message QuerySessionsForAllocationResponse {
+  repeated google.protobuf.Any sessions = 1;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
 message QuerySessionsForNodeResponse {
   repeated google.protobuf.Any sessions = 1;
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 message QuerySessionsForSubscriptionResponse {
-  repeated google.protobuf.Any sessions = 1;
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
-}
-
-message QuerySessionsForAllocationResponse {
   repeated google.protobuf.Any sessions = 1;
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }

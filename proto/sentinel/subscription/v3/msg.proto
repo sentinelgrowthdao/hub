@@ -54,7 +54,9 @@ message MsgUpdateParamsRequest {
 }
 
 message MsgCancelSubscriptionResponse {}
+
 message MsgRenewSubscriptionResponse {}
+
 message MsgShareSubscriptionResponse {}
 
 message MsgStartSubscriptionResponse {

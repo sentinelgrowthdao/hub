@@ -19,6 +19,11 @@ message MsgRegisterRequest {
   string remote_url = 4 [(gogoproto.customname) = "RemoteURL"];
 }
 
+message MsgSetStatusRequest {
+  string from = 1;
+  sentinel.types.v1.Status status = 2;
+}
+
 message MsgUpdateRequest {
   string from = 1;
   string provider = 2;
@@ -29,19 +34,14 @@ message MsgUpdateRequest {
   string remote_url = 4 [(gogoproto.customname) = "RemoteURL"];
 }
 
-message MsgSetStatusRequest {
-  string from = 1;
-  sentinel.types.v1.Status status = 2;
-}
-
 message MsgRegisterResponse {}
-
-message MsgUpdateResponse {}
 
 message MsgSetStatusResponse {}
 
+message MsgUpdateResponse {}
+
 service MsgService {
   rpc MsgRegister(MsgRegisterRequest) returns (MsgRegisterResponse);
-  rpc MsgUpdate(MsgUpdateRequest) returns (MsgUpdateResponse);
   rpc MsgSetStatus(MsgSetStatusRequest) returns (MsgSetStatusResponse);
+  rpc MsgUpdate(MsgUpdateRequest) returns (MsgUpdateResponse);
 }

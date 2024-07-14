@@ -36,12 +36,12 @@ message QueryParamsResponse {
 
 service QueryService {
   rpc QuerySwaps(QuerySwapsRequest) returns (QuerySwapsResponse) {
-    option (google.api.http).get = "/sentinel/swaps";
+    option (google.api.http).get = "/sentinel/swap/v1/swaps";
   }
   rpc QuerySwap(QuerySwapRequest) returns (QuerySwapResponse) {
-    option (google.api.http).get = "/sentinel/swaps/{tx_hash}";
+    option (google.api.http).get = "/sentinel/swap/v1/swaps/{tx_hash}";
   }
   rpc QueryParams(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/sentinel/modules/swap/params";
+    option (google.api.http).get = "/sentinel/swap/v1/params";
   }
 }

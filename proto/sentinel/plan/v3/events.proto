@@ -20,12 +20,6 @@ message EventCreate {
   string prices = 5;
 }
 
-message EventUpdateStatus {
-  uint64 id = 1 [(gogoproto.customname) = "ID"];
-  string prov_address = 2;
-  sentinel.types.v1.Status status = 3;
-}
-
 message EventLinkNode {
   uint64 id = 1 [(gogoproto.customname) = "ID"];
   string prov_address = 2;
@@ -36,4 +30,10 @@ message EventUnlinkNode {
   uint64 id = 1 [(gogoproto.customname) = "ID"];
   string prov_address = 2;
   string node_address = 3;
+}
+
+message EventUpdateStatus {
+  uint64 id = 1 [(gogoproto.customname) = "ID"];
+  string prov_address = 2;
+  sentinel.types.v1.Status status = 3;
 }
