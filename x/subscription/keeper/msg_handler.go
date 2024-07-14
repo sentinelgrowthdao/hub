@@ -57,6 +57,111 @@ func (k *Keeper) HandleMsgCancelSubscription(ctx sdk.Context, msg *v3.MsgCancelS
 }
 
 func (k *Keeper) HandleMsgRenewSubscription(ctx sdk.Context, msg *v3.MsgRenewSubscriptionRequest) (*v3.MsgRenewSubscriptionResponse, error) {
+	subscription, found := k.GetSubscription(ctx, msg.ID)
+	if !found {
+		return nil, types.NewErrorSubscriptionNotFound(msg.ID)
+	}
+	if msg.From != subscription.AccAddress {
+		return nil, types.NewErrorUnauthorized(msg.From)
+	}
+	if !subscription.Status.Equal(v1base.StatusActive) {
+		return nil, types.NewErrorInvalidSubscriptionStatus(subscription.ID, subscription.Status)
+	}
+
+	plan, found := k.plan.GetPlan(ctx, subscription.PlanID)
+	if !found {
+		return nil, types.NewErrorPlanNotFound(subscription.PlanID)
+	}
+	if !plan.Status.Equal(v1base.StatusActive) {
+		return nil, types.NewErrorInvalidPlanStatus(plan.ID, plan.Status)
+	}
+
+	price, found := plan.Price(msg.Denom)
+	if !found {
+		return nil, types.NewErrorPriceNotFound(msg.Denom)
+	}
+
+	k.DeleteSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
+	k.DeleteSubscriptionForRenewalAt(ctx, subscription.RenewalAt, subscription.ID)
+
+	share := k.provider.StakingShare(ctx)
+	reward := baseutils.GetProportionOfCoin(price, share)
+	payment := price.Sub(reward)
+
+	accAddr, err := sdk.AccAddressFromBech32(msg.From)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := k.SendCoinFromAccountToModule(ctx, accAddr, k.feeCollectorName, reward); err != nil {
+		return nil, err
+	}
+
+	provAddr, err := base.ProvAddressFromBech32(plan.ProviderAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := k.SendCoin(ctx, accAddr, provAddr.Bytes(), payment); err != nil {
+		return nil, err
+	}
+
+	renewable := subscription.IsRenewable()
+	subscription = v3.Subscription{
+		ID:         subscription.ID,
+		AccAddress: subscription.AccAddress,
+		PlanID:     subscription.PlanID,
+		Price:      price,
+		Status:     v1base.StatusActive,
+		InactiveAt: time.Time{},
+		RenewalAt:  time.Time{},
+		StatusAt:   ctx.BlockTime(),
+	}
+
+	if renewable {
+		subscription.RenewalAt = ctx.BlockTime().Add(plan.Duration)
+	} else {
+		subscription.InactiveAt = ctx.BlockTime().Add(plan.Duration)
+	}
+
+	k.SetSubscription(ctx, subscription)
+	k.SetSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
+	k.SetSubscriptionForRenewalAt(ctx, subscription.RenewalAt, subscription.ID)
+
+	ctx.EventManager().EmitTypedEvents(
+		&v3.EventRenew{
+			ID:          subscription.ID,
+			PlanID:      subscription.PlanID,
+			AccAddress:  subscription.AccAddress,
+			ProvAddress: provAddr.String(),
+			Price:       subscription.Price.String(),
+		},
+		&v3.EventPay{
+			ID:            subscription.ID,
+			PlanID:        subscription.PlanID,
+			AccAddress:    subscription.AccAddress,
+			ProvAddress:   provAddr.String(),
+			Payment:       payment.String(),
+			StakingReward: reward.String(),
+		},
+	)
+
+	k.IterateAllocationsForSubscription(ctx, subscription.ID, func(_ int, item v2.Allocation) bool {
+		item.UtilisedBytes = sdkmath.ZeroInt()
+
+		k.SetAllocation(ctx, item)
+		ctx.EventManager().EmitTypedEvent(
+			&v3.EventAllocate{
+				ID:            item.ID,
+				AccAddress:    item.Address,
+				GrantedBytes:  item.GrantedBytes.String(),
+				UtilisedBytes: item.UtilisedBytes.String(),
+			},
+		)
+
+		return false
+	})
+
 	return &v3.MsgRenewSubscriptionResponse{}, nil
 }
 
@@ -145,8 +250,6 @@ func (k *Keeper) HandleMsgStartSubscription(ctx sdk.Context, msg *v3.MsgStartSub
 	if !plan.Status.Equal(v1base.StatusActive) {
 		return nil, types.NewErrorInvalidPlanStatus(plan.ID, plan.Status)
 	}
-
-	// TODO: check duplicate account address for plan?
 
 	price, found := plan.Price(msg.Denom)
 	if !found {
@@ -306,8 +409,6 @@ func (k *Keeper) HandleMsgStartSession(ctx sdk.Context, msg *v3.MsgStartSessionR
 	if !node.Status.Equal(v1base.StatusActive) {
 		return nil, types.NewErrorInvalidNodeStatus(nodeAddr, node.Status)
 	}
-
-	// TODO: check lease exists or not
 
 	accAddr, err := sdk.AccAddressFromBech32(msg.From)
 	if err != nil {
