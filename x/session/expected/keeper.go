@@ -18,6 +18,10 @@ type DepositKeeper interface {
 	SendCoinsFromDepositToModule(ctx sdk.Context, from sdk.AccAddress, to string, coins sdk.Coins) error
 }
 
+type NodeKeeper interface {
+	SessionInactivePreHook(ctx sdk.Context, id uint64) error
+}
+
 type SubscriptionKeeper interface {
 	SessionInactivePreHook(ctx sdk.Context, id uint64) error
 }

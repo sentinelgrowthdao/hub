@@ -60,6 +60,7 @@ func NewKeeper(
 
 	k.Session.WithAccountKeeper(accountKeeper)
 	k.Session.WithDepositKeeper(&k.Deposit)
+	k.Session.WithNodeKeeper(&k.Node)
 	k.Session.WithSubscriptionKeeper(&k.Subscription)
 
 	k.Subscription.WithBankKeeper(bankKeeper)

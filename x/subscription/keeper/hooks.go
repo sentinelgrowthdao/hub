@@ -15,7 +15,7 @@ func (k *Keeper) SessionInactivePreHook(ctx sdk.Context, id uint64) error {
 		return fmt.Errorf("session %d does not exist", id)
 	}
 	if !item.GetStatus().Equal(v1base.StatusInactivePending) {
-		return fmt.Errorf("invalid status %s for session %d", item.GetStatus(), item.GetStatus())
+		return fmt.Errorf("invalid status %s for session %d", item.GetStatus(), item.GetID())
 	}
 
 	session, ok := item.(*v3.Session)

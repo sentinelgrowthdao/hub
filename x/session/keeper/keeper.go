@@ -20,6 +20,7 @@ type Keeper struct {
 	key              storetypes.StoreKey
 	account          expected.AccountKeeper
 	deposit          expected.DepositKeeper
+	node             expected.NodeKeeper
 	subscription     expected.SubscriptionKeeper
 }
 
@@ -38,6 +39,10 @@ func (k *Keeper) WithAccountKeeper(keeper expected.AccountKeeper) {
 
 func (k *Keeper) WithDepositKeeper(keeper expected.DepositKeeper) {
 	k.deposit = keeper
+}
+
+func (k *Keeper) WithNodeKeeper(keeper expected.NodeKeeper) {
+	k.node = keeper
 }
 
 func (k *Keeper) WithSubscriptionKeeper(keeper expected.SubscriptionKeeper) {
