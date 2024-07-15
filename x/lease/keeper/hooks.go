@@ -14,7 +14,8 @@ func (k *Keeper) NodeInactivePreHook(ctx sdk.Context, addr base.NodeAddress) err
 			ID:   item.ID,
 		}
 
-		if _, err := k.HandleMsgEndLease(ctx, msg); err != nil {
+		handler := k.router.Handler(msg)
+		if _, err := handler(ctx, msg); err != nil {
 			panic(err)
 		}
 
@@ -31,7 +32,8 @@ func (k *Keeper) ProviderInactivePreHook(ctx sdk.Context, addr base.ProvAddress)
 			ID:   item.ID,
 		}
 
-		if _, err := k.HandleMsgEndLease(ctx, msg); err != nil {
+		handler := k.router.Handler(msg)
+		if _, err := handler(ctx, msg); err != nil {
 			panic(err)
 		}
 

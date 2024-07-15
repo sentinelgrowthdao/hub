@@ -19,7 +19,8 @@ func (k *Keeper) handleInactivePendingSessions(ctx sdk.Context) {
 			ID:   item.GetID(),
 		}
 
-		if _, err := k.HandleMsgCancelSession(ctx, msg); err != nil {
+		handler := k.router.Handler(msg)
+		if _, err := handler(ctx, msg); err != nil {
 			panic(err)
 		}
 

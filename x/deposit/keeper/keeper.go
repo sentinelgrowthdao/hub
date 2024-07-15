@@ -14,8 +14,9 @@ import (
 )
 
 type Keeper struct {
-	key  storetypes.StoreKey
-	cdc  codec.BinaryCodec
+	key storetypes.StoreKey
+	cdc codec.BinaryCodec
+
 	bank expected.BankKeeper
 }
 

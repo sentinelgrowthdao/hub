@@ -13,9 +13,10 @@ import (
 )
 
 type Keeper struct {
-	cdc     codec.BinaryCodec
-	key     storetypes.StoreKey
-	params  paramstypes.Subspace
+	cdc    codec.BinaryCodec
+	key    storetypes.StoreKey
+	params paramstypes.Subspace
+
 	account expected.AccountKeeper
 	bank    expected.BankKeeper
 }

@@ -17,7 +17,8 @@ func (k *Keeper) handleInactiveLeases(ctx sdk.Context) {
 			ID:   item.ID,
 		}
 
-		if _, err := k.HandleMsgEndLease(ctx, msg); err != nil {
+		handler := k.router.Handler(msg)
+		if _, err := handler(ctx, msg); err != nil {
 			panic(err)
 		}
 
@@ -95,7 +96,8 @@ func (k *Keeper) handleLeaseRenewals(ctx sdk.Context) {
 			Denom: item.Price.Denom,
 		}
 
-		if _, err := k.HandleMsgRenewLease(ctx, msg); err != nil {
+		handler := k.router.Handler(msg)
+		if _, err := handler(ctx, msg); err != nil {
 			panic(err)
 		}
 

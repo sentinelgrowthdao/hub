@@ -15,7 +15,8 @@ func (k *Keeper) handleInactiveNodes(ctx sdk.Context) {
 			Status: v1base.StatusInactive,
 		}
 
-		if _, err := k.HandleMsgUpdateNodeStatus(ctx, msg); err != nil {
+		handler := k.router.Handler(msg)
+		if _, err := handler(ctx, msg); err != nil {
 			panic(err)
 		}
 

@@ -11,8 +11,9 @@ import (
 )
 
 type Keeper struct {
-	cdc  codec.BinaryCodec
-	key  storetypes.StoreKey
+	cdc codec.BinaryCodec
+	key storetypes.StoreKey
+
 	mint expected.MintKeeper
 }
 

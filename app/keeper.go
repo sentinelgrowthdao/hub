@@ -270,7 +270,7 @@ func NewKeepers(
 	)
 	k.VPNKeeper = vpnkeeper.NewKeeper(
 		encCfg.Codec, keys.KV(vpntypes.StoreKey), k.AccountKeeper, k.BankKeeper, k.DistributionKeeper,
-		govModuleAddr, authtypes.FeeCollectorName,
+		app.MsgServiceRouter(), govModuleAddr, authtypes.FeeCollectorName,
 	)
 
 	// Other keepers

@@ -19,7 +19,8 @@ func (k *Keeper) handleInactivePendingSubscriptions(ctx sdk.Context) {
 			ID:   item.ID,
 		}
 
-		if _, err := k.HandleMsgCancelSubscription(ctx, msg); err != nil {
+		handler := k.router.Handler(msg)
+		if _, err := handler(ctx, msg); err != nil {
 			panic(err)
 		}
 
@@ -71,7 +72,8 @@ func (k *Keeper) handleSubscriptionRenewals(ctx sdk.Context) {
 			Denom: item.Price.Denom,
 		}
 
-		if _, err := k.HandleMsgRenewSubscription(ctx, msg); err != nil {
+		handler := k.router.Handler(msg)
+		if _, err := handler(ctx, msg); err != nil {
 			panic(err)
 		}
 

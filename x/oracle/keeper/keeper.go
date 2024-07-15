@@ -9,9 +9,10 @@ import (
 )
 
 type Keeper struct {
-	authority  string
-	cdc        codec.Codec
-	key        storetypes.StoreKey
+	authority string
+	cdc       codec.Codec
+	key       storetypes.StoreKey
+
 	capability ibcexported.ScopedKeeper
 	ics4       ibcporttypes.ICS4Wrapper
 }

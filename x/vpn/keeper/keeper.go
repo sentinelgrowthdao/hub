@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/codec"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 
@@ -26,16 +27,17 @@ type Keeper struct {
 
 func NewKeeper(
 	cdc codec.BinaryCodec, key storetypes.StoreKey, accountKeeper expected.AccountKeeper,
-	bankKeeper expected.BankKeeper, distributionKeeper expected.DistributionKeeper, authority, feeCollectorName string,
+	bankKeeper expected.BankKeeper, distributionKeeper expected.DistributionKeeper, router *baseapp.MsgServiceRouter,
+	authority, feeCollectorName string,
 ) Keeper {
 	k := Keeper{
 		Deposit:      depositkeeper.NewKeeper(cdc, key),
-		Lease:        leasekeeper.NewKeeper(cdc, key, authority, feeCollectorName),
-		Node:         nodekeeper.NewKeeper(cdc, key, authority, feeCollectorName),
+		Lease:        leasekeeper.NewKeeper(cdc, key, router, authority, feeCollectorName),
+		Node:         nodekeeper.NewKeeper(cdc, key, router, authority, feeCollectorName),
 		Plan:         plankeeper.NewKeeper(cdc, key),
-		Provider:     providerkeeper.NewKeeper(cdc, key, authority),
-		Session:      sessionkeeper.NewKeeper(cdc, key, authority, feeCollectorName),
-		Subscription: subscriptionkeeper.NewKeeper(cdc, key, authority, feeCollectorName),
+		Provider:     providerkeeper.NewKeeper(cdc, key, router, authority),
+		Session:      sessionkeeper.NewKeeper(cdc, key, router, authority, feeCollectorName),
+		Subscription: subscriptionkeeper.NewKeeper(cdc, key, router, authority, feeCollectorName),
 	}
 
 	k.Deposit.WithBankKeeper(bankKeeper)

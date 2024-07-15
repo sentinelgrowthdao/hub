@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/cometbft/cometbft/libs/log"
+	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
@@ -14,18 +15,21 @@ import (
 )
 
 type Keeper struct {
-	authority    string
-	cdc          codec.BinaryCodec
-	key          storetypes.StoreKey
+	authority string
+	cdc       codec.BinaryCodec
+	key       storetypes.StoreKey
+	router    *baseapp.MsgServiceRouter
+
 	distribution expected.DistributionKeeper
 	lease        expected.LeaseKeeper
 }
 
-func NewKeeper(cdc codec.BinaryCodec, key storetypes.StoreKey, authority string) Keeper {
+func NewKeeper(cdc codec.BinaryCodec, key storetypes.StoreKey, router *baseapp.MsgServiceRouter, authority string) Keeper {
 	return Keeper{
 		authority: authority,
 		cdc:       cdc,
 		key:       key,
+		router:    router,
 	}
 }
 

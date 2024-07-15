@@ -14,8 +14,9 @@ import (
 )
 
 type Keeper struct {
-	cdc          codec.BinaryCodec
-	key          storetypes.StoreKey
+	cdc codec.BinaryCodec
+	key storetypes.StoreKey
+
 	node         expected.NodeKeeper
 	provider     expected.ProviderKeeper
 	subscription expected.SubscriptionKeeper
