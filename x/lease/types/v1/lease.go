@@ -2,6 +2,7 @@ package v1
 
 import (
 	"fmt"
+	"time"
 
 	sdkerrors "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -9,16 +10,20 @@ import (
 	base "github.com/sentinel-official/hub/v12/types"
 )
 
-func (m *Lease) IsRenewable() bool {
-	return !m.RenewalAt.IsZero()
-}
-
 func (m *Lease) RefundAmount() sdk.Coin {
 	hours := m.MaxHours - m.Hours
 	return sdk.NewCoin(
 		m.Price.Denom,
 		m.Price.Amount.MulRaw(hours),
 	)
+}
+
+func (m *Lease) RenewalAt() time.Time {
+	if m.Renewable {
+		return m.InactiveAt
+	}
+
+	return time.Time{}
 }
 
 func (m *Lease) Validate() error {
@@ -61,11 +66,8 @@ func (m *Lease) Validate() error {
 	if m.PayoutAt.IsZero() {
 		return fmt.Errorf("payout_at cannot be zero")
 	}
-	if m.InactiveAt.IsZero() && m.RenewalAt.IsZero() {
-		return fmt.Errorf("both inactive_at and renewal_at cannot be zero")
-	}
-	if !m.InactiveAt.IsZero() && !m.RenewalAt.IsZero() {
-		return fmt.Errorf("either inactive_at or renewal_at must be zero")
+	if m.InactiveAt.IsZero() {
+		return fmt.Errorf("inactive_at cannot be zero")
 	}
 
 	return nil

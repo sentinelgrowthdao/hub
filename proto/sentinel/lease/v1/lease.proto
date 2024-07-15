@@ -17,15 +17,12 @@ message Lease {
   cosmos.base.v1beta1.Coin deposit = 5 [(gogoproto.nullable) = false];
   int64 hours = 6;
   int64 max_hours = 7;
-  google.protobuf.Timestamp inactive_at = 8 [
+  bool renewable = 8;
+  google.protobuf.Timestamp inactive_at = 9 [
     (gogoproto.nullable) = false,
     (gogoproto.stdtime) = true
   ];
-  google.protobuf.Timestamp payout_at = 9 [
-    (gogoproto.nullable) = false,
-    (gogoproto.stdtime) = true
-  ];
-  google.protobuf.Timestamp renewal_at = 10 [
+  google.protobuf.Timestamp payout_at = 10 [
     (gogoproto.nullable) = false,
     (gogoproto.stdtime) = true
   ];

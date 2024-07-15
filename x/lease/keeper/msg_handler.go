@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"time"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
@@ -53,7 +51,7 @@ func (k *Keeper) HandleMsgEndLease(ctx sdk.Context, msg *v1.MsgEndLeaseRequest) 
 	k.DeleteLeaseForProviderByNode(ctx, provAddr, nodeAddr, lease.ID)
 	k.DeleteLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
 	k.DeleteLeaseForPayoutAt(ctx, lease.PayoutAt, lease.ID)
-	k.DeleteLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
+	k.DeleteLeaseForRenewalAt(ctx, lease.RenewalAt(), lease.ID)
 
 	ctx.EventManager().EmitTypedEvent(
 		&v1.EventEnd{
@@ -125,9 +123,8 @@ func (k *Keeper) HandleMsgRenewLease(ctx sdk.Context, msg *v1.MsgRenewLeaseReque
 
 	k.DeleteLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
 	k.DeleteLeaseForPayoutAt(ctx, lease.PayoutAt, lease.ID)
-	k.DeleteLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
+	k.DeleteLeaseForRenewalAt(ctx, lease.RenewalAt(), lease.ID)
 
-	renewable := lease.IsRenewable()
 	lease = v1.Lease{
 		ID:          lease.ID,
 		ProvAddress: lease.ProvAddress,
@@ -139,15 +136,9 @@ func (k *Keeper) HandleMsgRenewLease(ctx sdk.Context, msg *v1.MsgRenewLeaseReque
 		),
 		Hours:      0,
 		MaxHours:   msg.Hours,
-		InactiveAt: time.Time{},
+		Renewable:  lease.Renewable,
+		InactiveAt: ctx.BlockTime().Add(msg.GetHours()),
 		PayoutAt:   ctx.BlockTime(),
-		RenewalAt:  time.Time{},
-	}
-
-	if renewable {
-		lease.RenewalAt = ctx.BlockTime().Add(msg.GetHours())
-	} else {
-		lease.InactiveAt = ctx.BlockTime().Add(msg.GetHours())
 	}
 
 	if err := k.AddDeposit(ctx, provAddr.Bytes(), lease.Deposit); err != nil {
@@ -157,7 +148,7 @@ func (k *Keeper) HandleMsgRenewLease(ctx sdk.Context, msg *v1.MsgRenewLeaseReque
 	k.SetLease(ctx, lease)
 	k.SetLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
 	k.SetLeaseForPayoutAt(ctx, lease.PayoutAt, lease.ID)
-	k.SetLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
+	k.SetLeaseForRenewalAt(ctx, lease.RenewalAt(), lease.ID)
 
 	ctx.EventManager().EmitTypedEvent(
 		&v1.EventRenew{
@@ -225,15 +216,9 @@ func (k *Keeper) HandleMsgStartLease(ctx sdk.Context, msg *v1.MsgStartLeaseReque
 		),
 		Hours:      0,
 		MaxHours:   msg.Hours,
-		InactiveAt: time.Time{},
+		Renewable:  msg.Renewable,
+		InactiveAt: ctx.BlockTime().Add(msg.GetHours()),
 		PayoutAt:   ctx.BlockTime(),
-		RenewalAt:  time.Time{},
-	}
-
-	if msg.Renewable {
-		lease.RenewalAt = ctx.BlockTime().Add(msg.GetHours())
-	} else {
-		lease.InactiveAt = ctx.BlockTime().Add(msg.GetHours())
 	}
 
 	if err := k.AddDeposit(ctx, provAddr.Bytes(), lease.Deposit); err != nil {
@@ -247,7 +232,7 @@ func (k *Keeper) HandleMsgStartLease(ctx sdk.Context, msg *v1.MsgStartLeaseReque
 	k.SetLeaseForProviderByNode(ctx, provAddr, nodeAddr, lease.ID)
 	k.SetLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
 	k.SetLeaseForPayoutAt(ctx, lease.PayoutAt, lease.ID)
-	k.SetLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
+	k.SetLeaseForRenewalAt(ctx, lease.RenewalAt(), lease.ID)
 
 	ctx.EventManager().EmitTypedEvent(
 		&v1.EventCreate{
@@ -274,33 +259,19 @@ func (k *Keeper) HandleMsgUpdateLease(ctx sdk.Context, msg *v1.MsgUpdateLeaseReq
 		return nil, types.NewErrorUnauthorized(msg.From)
 	}
 
-	if msg.Renewable {
-		k.DeleteLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
-	} else {
-		k.DeleteLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
-	}
+	k.DeleteLeaseForRenewalAt(ctx, lease.RenewalAt(), lease.ID)
 
-	if msg.Renewable {
-		if !lease.InactiveAt.IsZero() {
-			lease.InactiveAt, lease.RenewalAt = time.Time{}, lease.InactiveAt
-		}
-	} else {
-		if !lease.RenewalAt.IsZero() {
-			lease.InactiveAt, lease.RenewalAt = lease.RenewalAt, time.Time{}
-		}
-	}
+	lease.Renewable = msg.Renewable
 
 	k.SetLease(ctx, lease)
-	k.SetLeaseForInactiveAt(ctx, lease.InactiveAt, lease.ID)
-	k.SetLeaseForRenewalAt(ctx, lease.RenewalAt, lease.ID)
+	k.SetLeaseForRenewalAt(ctx, lease.RenewalAt(), lease.ID)
 
 	ctx.EventManager().EmitTypedEvent(
 		&v1.EventUpdate{
 			ID:          lease.ID,
 			NodeAddress: lease.NodeAddress,
 			ProvAddress: lease.ProvAddress,
-			InactiveAt:  lease.InactiveAt.String(),
-			RenewalAt:   lease.RenewalAt.String(),
+			Renewable:   lease.Renewable,
 		},
 	)
 

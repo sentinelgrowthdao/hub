@@ -50,7 +50,6 @@ message EventUpdate {
   string node_address = 2;
   string prov_address = 3;
   int64 hours = 4;
-  string inactive_at = 5;
+  bool renewable = 5;
   string payout_at = 6;
-  string renewal_at = 7;
 }
