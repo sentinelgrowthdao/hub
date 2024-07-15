@@ -40,4 +40,5 @@ message EventUpdateStatus {
   string acc_address = 2;
   string node_address = 3;
   sentinel.types.v1.Status status = 4;
+  string status_at = 5;
 }

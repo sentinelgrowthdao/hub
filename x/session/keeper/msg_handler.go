@@ -48,6 +48,7 @@ func (k *Keeper) HandleMsgCancelSession(ctx sdk.Context, msg *v3.MsgCancelSessio
 			AccAddress:  session.GetAccAddress(),
 			NodeAddress: session.GetNodeAddress(),
 			Status:      session.GetStatus(),
+			StatusAt:    session.GetStatusAt().String(),
 		},
 	)
 

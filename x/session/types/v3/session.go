@@ -19,6 +19,7 @@ type Session interface {
 	GetInactiveAt() time.Time
 	GetNodeAddress() string
 	GetStatus() v1base.Status
+	GetStatusAt() time.Time
 	GetUploadBytes() sdkmath.Int
 
 	SetDownloadBytes(sdkmath.Int)
