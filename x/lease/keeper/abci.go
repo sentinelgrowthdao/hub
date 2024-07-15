@@ -12,6 +12,8 @@ import (
 
 func (k *Keeper) handleInactiveLeases(ctx sdk.Context) {
 	k.IterateLeasesForInactiveAt(ctx, ctx.BlockTime(), func(_ int, item v1.Lease) bool {
+		k.DeleteLeaseForInactiveAt(ctx, item.InactiveAt, item.ID)
+
 		msg := &v1.MsgEndLeaseRequest{
 			From: item.ProvAddress,
 			ID:   item.ID,
@@ -30,17 +32,8 @@ func (k *Keeper) handleLeasePayouts(ctx sdk.Context) {
 	share := k.StakingShare(ctx)
 
 	k.IterateLeasesForPayoutAt(ctx, ctx.BlockTime(), func(_ int, item v1.Lease) bool {
-		k.DeleteLeaseForPayoutAt(ctx, item.PayoutAt, item.ID)
-
-		reward := baseutils.GetProportionOfCoin(item.Price, share)
-		payment := item.Price.Sub(reward)
-
 		provAddr, err := base.ProvAddressFromBech32(item.ProvAddress)
 		if err != nil {
-			panic(err)
-		}
-
-		if err := k.SendCoinFromDepositToModule(ctx, provAddr.Bytes(), k.feeCollectorName, reward); err != nil {
 			panic(err)
 		}
 
@@ -49,6 +42,14 @@ func (k *Keeper) handleLeasePayouts(ctx sdk.Context) {
 			panic(err)
 		}
 
+		k.DeleteLeaseForPayoutAt(ctx, item.PayoutAt, item.ID)
+
+		reward := baseutils.GetProportionOfCoin(item.Price, share)
+		if err := k.SendCoinFromDepositToModule(ctx, provAddr.Bytes(), k.feeCollectorName, reward); err != nil {
+			panic(err)
+		}
+
+		payment := item.Price.Sub(reward)
 		if err := k.SendCoinFromDepositToAccount(ctx, provAddr.Bytes(), nodeAddr.Bytes(), payment); err != nil {
 			panic(err)
 		}
@@ -89,6 +90,8 @@ func (k *Keeper) handleLeasePayouts(ctx sdk.Context) {
 
 func (k *Keeper) handleLeaseRenewals(ctx sdk.Context) {
 	k.IterateLeasesForRenewalAt(ctx, ctx.BlockTime(), func(_ int, item v1.Lease) bool {
+		k.DeleteLeaseForRenewalAt(ctx, item.RenewalAt(), item.ID)
+
 		msg := &v1.MsgRenewLeaseRequest{
 			From:  item.ProvAddress,
 			ID:    item.ID,
@@ -106,7 +109,7 @@ func (k *Keeper) handleLeaseRenewals(ctx sdk.Context) {
 }
 
 func (k *Keeper) BeginBlock(ctx sdk.Context) {
-	k.handleInactiveLeases(ctx)
-	k.handleLeasePayouts(ctx)
 	k.handleLeaseRenewals(ctx)
+	k.handleLeasePayouts(ctx)
+	k.handleInactiveLeases(ctx)
 }

@@ -4,10 +4,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func cacheContext(c sdk.Context) (cc sdk.Context, writeCache func()) {
-	cms := c.MultiStore().CacheMultiStore()
-	cc = c.WithMultiStore(cms)
-	return cc, cms.Write
+func cacheContext(ctx sdk.Context) (c sdk.Context, write func()) {
+	cms := ctx.MultiStore().CacheMultiStore()
+	c = ctx.WithMultiStore(cms)
+
+	return c, cms.Write
 }
 
 func (k *Keeper) BeginBlock(ctx sdk.Context) {

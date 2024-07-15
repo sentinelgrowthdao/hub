@@ -14,6 +14,8 @@ func (k *Keeper) handleInactivePendingSessions(ctx sdk.Context) {
 			return false
 		}
 
+		k.DeleteSessionForInactiveAt(ctx, item.GetInactiveAt(), item.GetID())
+
 		msg := &v3.MsgCancelSessionRequest{
 			From: item.GetAccAddress(),
 			ID:   item.GetID(),
@@ -34,10 +36,6 @@ func (k *Keeper) handleInactiveSessions(ctx sdk.Context) {
 			return false
 		}
 
-		if err := k.SessionInactivePreHook(ctx, item.GetID()); err != nil {
-			panic(err)
-		}
-
 		accAddr, err := sdk.AccAddressFromBech32(item.GetAccAddress())
 		if err != nil {
 			panic(err)
@@ -48,12 +46,17 @@ func (k *Keeper) handleInactiveSessions(ctx sdk.Context) {
 			panic(err)
 		}
 
+		k.DeleteSessionForInactiveAt(ctx, item.GetInactiveAt(), item.GetID())
+
+		if err := k.SessionInactivePreHook(ctx, item.GetID()); err != nil {
+			panic(err)
+		}
+
 		k.DeleteSession(ctx, item.GetID())
 		k.DeleteSessionForAccount(ctx, accAddr, item.GetID())
 		k.DeleteSessionForAllocation(ctx, 0, accAddr, item.GetID())
 		k.DeleteSessionForNode(ctx, nodeAddr, item.GetID())
 		k.DeleteSessionForSubscription(ctx, 0, item.GetID())
-		k.DeleteSessionForInactiveAt(ctx, item.GetInactiveAt(), item.GetID())
 
 		ctx.EventManager().EmitTypedEvent(
 			&v3.EventUpdateStatus{

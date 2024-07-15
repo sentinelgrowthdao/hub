@@ -25,16 +25,8 @@ func (k *Keeper) SessionInactivePreHook(ctx sdk.Context, id uint64) error {
 		return nil
 	}
 
-	payment := session.PaymentAmount()
-	share := k.StakingShare(ctx)
-
 	accAddr, err := sdk.AccAddressFromBech32(session.AccAddress)
 	if err != nil {
-		return err
-	}
-
-	reward := baseutils.GetProportionOfCoin(payment, share)
-	if err := k.SendCoinFromDepositToModule(ctx, accAddr, k.feeCollectorName, reward); err != nil {
 		return err
 	}
 
@@ -43,17 +35,20 @@ func (k *Keeper) SessionInactivePreHook(ctx sdk.Context, id uint64) error {
 		return err
 	}
 
-	payment = payment.Sub(reward)
+	amount := session.PaymentAmount()
+	share := k.StakingShare(ctx)
+
+	reward := baseutils.GetProportionOfCoin(amount, share)
+	if err := k.SendCoinFromDepositToModule(ctx, accAddr, k.feeCollectorName, reward); err != nil {
+		return err
+	}
+
+	payment := amount.Sub(reward)
 	if err := k.SendCoinFromDepositToAccount(ctx, accAddr, nodeAddr.Bytes(), payment); err != nil {
 		return err
 	}
 
-	refund := session.RefundAmount()
-	if err := k.SubtractDeposit(ctx, accAddr, refund); err != nil {
-		return err
-	}
-
-	ctx.EventManager().EmitTypedEvents(
+	ctx.EventManager().EmitTypedEvent(
 		&v3.EventPay{
 			ID:            session.ID,
 			AccAddress:    session.AccAddress,
@@ -61,6 +56,14 @@ func (k *Keeper) SessionInactivePreHook(ctx sdk.Context, id uint64) error {
 			Payment:       payment.String(),
 			StakingReward: reward.String(),
 		},
+	)
+
+	refund := session.RefundAmount()
+	if err := k.SubtractDeposit(ctx, accAddr, refund); err != nil {
+		return err
+	}
+
+	ctx.EventManager().EmitTypedEvent(
 		&v3.EventRefund{
 			ID:         session.ID,
 			AccAddress: session.AccAddress,
