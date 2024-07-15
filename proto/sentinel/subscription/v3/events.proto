@@ -51,7 +51,8 @@ message EventUpdate {
   uint64 id = 1 [(gogoproto.customname) = "ID"];
   uint64 plan_id = 2 [(gogoproto.customname) = "PlanID"];
   string acc_address = 3;
-  sentinel.types.v1.Status status = 4;
-  string inactive_at = 5;
-  string renewal_at = 6;
+  bool renewable = 4;
+  sentinel.types.v1.Status status = 5;
+  string inactive_at = 6;
+  string status_at = 7;
 }

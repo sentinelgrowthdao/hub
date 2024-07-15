@@ -15,12 +15,9 @@ message Subscription {
   string acc_address = 2;
   uint64 plan_id = 3 [(gogoproto.customname) = "PlanID"];
   cosmos.base.v1beta1.Coin price = 4 [(gogoproto.nullable) = false];
-  sentinel.types.v1.Status status = 5;
-  google.protobuf.Timestamp inactive_at = 6 [
-    (gogoproto.nullable) = false,
-    (gogoproto.stdtime) = true
-  ];
-  google.protobuf.Timestamp renewal_at = 7 [
+  bool renewable = 5;
+  sentinel.types.v1.Status status = 6;
+  google.protobuf.Timestamp inactive_at = 7 [
     (gogoproto.nullable) = false,
     (gogoproto.stdtime) = true
   ];

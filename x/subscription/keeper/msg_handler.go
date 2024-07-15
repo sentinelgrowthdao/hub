@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"time"
-
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -31,12 +29,12 @@ func (k *Keeper) HandleMsgCancelSubscription(ctx sdk.Context, msg *v3.MsgCancelS
 	}
 
 	k.DeleteSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
-	k.DeleteSubscriptionForRenewalAt(ctx, subscription.RenewalAt, subscription.ID)
+	k.DeleteSubscriptionForRenewalAt(ctx, subscription.RenewalAt(), subscription.ID)
 
 	delay := k.StatusChangeDelay(ctx)
+	subscription.Renewable = false
 	subscription.Status = v1base.StatusInactivePending
 	subscription.InactiveAt = ctx.BlockTime().Add(delay)
-	subscription.RenewalAt = time.Time{}
 	subscription.StatusAt = ctx.BlockTime()
 
 	k.SetSubscription(ctx, subscription)
@@ -47,9 +45,10 @@ func (k *Keeper) HandleMsgCancelSubscription(ctx sdk.Context, msg *v3.MsgCancelS
 			ID:         subscription.ID,
 			PlanID:     subscription.PlanID,
 			AccAddress: subscription.AccAddress,
+			Renewable:  subscription.Renewable,
 			Status:     subscription.Status,
 			InactiveAt: subscription.InactiveAt.String(),
-			RenewalAt:  subscription.RenewalAt.String(),
+			StatusAt:   subscription.StatusAt.String(),
 		},
 	)
 
@@ -82,7 +81,7 @@ func (k *Keeper) HandleMsgRenewSubscription(ctx sdk.Context, msg *v3.MsgRenewSub
 	}
 
 	k.DeleteSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
-	k.DeleteSubscriptionForRenewalAt(ctx, subscription.RenewalAt, subscription.ID)
+	k.DeleteSubscriptionForRenewalAt(ctx, subscription.RenewalAt(), subscription.ID)
 
 	share := k.provider.StakingShare(ctx)
 	reward := baseutils.GetProportionOfCoin(price, share)
@@ -106,27 +105,20 @@ func (k *Keeper) HandleMsgRenewSubscription(ctx sdk.Context, msg *v3.MsgRenewSub
 		return nil, err
 	}
 
-	renewable := subscription.IsRenewable()
 	subscription = v3.Subscription{
 		ID:         subscription.ID,
 		AccAddress: subscription.AccAddress,
 		PlanID:     subscription.PlanID,
 		Price:      price,
+		Renewable:  subscription.Renewable,
 		Status:     v1base.StatusActive,
-		InactiveAt: time.Time{},
-		RenewalAt:  time.Time{},
+		InactiveAt: ctx.BlockTime().Add(plan.Duration),
 		StatusAt:   ctx.BlockTime(),
-	}
-
-	if renewable {
-		subscription.RenewalAt = ctx.BlockTime().Add(plan.Duration)
-	} else {
-		subscription.InactiveAt = ctx.BlockTime().Add(plan.Duration)
 	}
 
 	k.SetSubscription(ctx, subscription)
 	k.SetSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
-	k.SetSubscriptionForRenewalAt(ctx, subscription.RenewalAt, subscription.ID)
+	k.SetSubscriptionForRenewalAt(ctx, subscription.RenewalAt(), subscription.ID)
 
 	ctx.EventManager().EmitTypedEvents(
 		&v3.EventRenew{
@@ -284,16 +276,10 @@ func (k *Keeper) HandleMsgStartSubscription(ctx sdk.Context, msg *v3.MsgStartSub
 		AccAddress: accAddr.String(),
 		PlanID:     plan.ID,
 		Price:      price,
+		Renewable:  msg.Renewable,
 		Status:     v1base.StatusActive,
-		InactiveAt: time.Time{},
-		RenewalAt:  time.Time{},
+		InactiveAt: ctx.BlockTime().Add(plan.Duration),
 		StatusAt:   ctx.BlockTime(),
-	}
-
-	if msg.Renewable {
-		subscription.RenewalAt = ctx.BlockTime().Add(plan.Duration)
-	} else {
-		subscription.InactiveAt = ctx.BlockTime().Add(plan.Duration)
 	}
 
 	k.SetCount(ctx, count+1)
@@ -301,7 +287,7 @@ func (k *Keeper) HandleMsgStartSubscription(ctx sdk.Context, msg *v3.MsgStartSub
 	k.SetSubscriptionForAccount(ctx, accAddr, subscription.ID)
 	k.SetSubscriptionForPlan(ctx, subscription.PlanID, subscription.ID)
 	k.SetSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
-	k.SetSubscriptionForRenewalAt(ctx, subscription.RenewalAt, subscription.ID)
+	k.SetSubscriptionForRenewalAt(ctx, subscription.RenewalAt(), subscription.ID)
 
 	ctx.EventManager().EmitTypedEvents(
 		&v3.EventCreate{
@@ -355,33 +341,19 @@ func (k *Keeper) HandleMsgUpdateSubscription(ctx sdk.Context, msg *v3.MsgUpdateS
 		return nil, types.NewErrorUnauthorized(msg.From)
 	}
 
-	if msg.Renewable {
-		k.DeleteSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
-	} else {
-		k.DeleteSubscriptionForRenewalAt(ctx, subscription.RenewalAt, subscription.ID)
-	}
+	k.DeleteSubscriptionForRenewalAt(ctx, subscription.RenewalAt(), subscription.ID)
 
-	if msg.Renewable {
-		if !subscription.InactiveAt.IsZero() {
-			subscription.InactiveAt, subscription.RenewalAt = time.Time{}, subscription.InactiveAt
-		}
-	} else {
-		if !subscription.RenewalAt.IsZero() {
-			subscription.InactiveAt, subscription.RenewalAt = subscription.RenewalAt, time.Time{}
-		}
-	}
+	subscription.Renewable = msg.Renewable
 
 	k.SetSubscription(ctx, subscription)
-	k.SetSubscriptionForInactiveAt(ctx, subscription.InactiveAt, subscription.ID)
-	k.SetSubscriptionForRenewalAt(ctx, subscription.RenewalAt, subscription.ID)
+	k.SetSubscriptionForRenewalAt(ctx, subscription.RenewalAt(), subscription.ID)
 
 	ctx.EventManager().EmitTypedEvent(
 		&v3.EventUpdate{
 			ID:         subscription.ID,
 			PlanID:     subscription.PlanID,
 			AccAddress: subscription.AccAddress,
-			InactiveAt: subscription.InactiveAt.String(),
-			RenewalAt:  subscription.RenewalAt.String(),
+			Renewable:  msg.Renewable,
 		},
 	)
 
