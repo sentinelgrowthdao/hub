@@ -6,7 +6,7 @@ import (
 	deposittypes "github.com/sentinel-official/hub/v12/x/deposit/types/v1"
 	leasetypes "github.com/sentinel-official/hub/v12/x/lease/types/v1"
 	nodetypes "github.com/sentinel-official/hub/v12/x/node/types/v3"
-	plantypes "github.com/sentinel-official/hub/v12/x/plan/types/v2"
+	plantypes "github.com/sentinel-official/hub/v12/x/plan/types/v3"
 	providertypes "github.com/sentinel-official/hub/v12/x/provider/types/v2"
 	sessiontypes "github.com/sentinel-official/hub/v12/x/session/types/v3"
 	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types/v3"

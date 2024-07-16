@@ -96,7 +96,7 @@ func (k *Keeper) HandleMsgRenewSubscription(ctx sdk.Context, msg *v3.MsgRenewSub
 		return nil, err
 	}
 
-	provAddr, err := base.ProvAddressFromBech32(plan.ProviderAddress)
+	provAddr, err := base.ProvAddressFromBech32(plan.ProvAddress)
 	if err != nil {
 		return nil, err
 	}
@@ -261,7 +261,7 @@ func (k *Keeper) HandleMsgStartSubscription(ctx sdk.Context, msg *v3.MsgStartSub
 		return nil, err
 	}
 
-	provAddr, err := base.ProvAddressFromBech32(plan.ProviderAddress)
+	provAddr, err := base.ProvAddressFromBech32(plan.ProvAddress)
 	if err != nil {
 		return nil, err
 	}
@@ -310,7 +310,7 @@ func (k *Keeper) HandleMsgStartSubscription(ctx sdk.Context, msg *v3.MsgStartSub
 	alloc := v2.Allocation{
 		ID:            subscription.ID,
 		Address:       subscription.AccAddress,
-		GrantedBytes:  base.Gigabyte.MulRaw(plan.Gigabytes),
+		GrantedBytes:  plan.Bytes,
 		UtilisedBytes: sdkmath.ZeroInt(),
 	}
 
