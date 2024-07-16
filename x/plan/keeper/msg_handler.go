@@ -108,29 +108,6 @@ func (k *Keeper) HandleMsgUnlinkNode(ctx sdk.Context, msg *v3.MsgUnlinkNodeReque
 	return &v3.MsgUnlinkNodeResponse{}, nil
 }
 
-func (k *Keeper) HandleMsgUpdatePlanDetails(ctx sdk.Context, msg *v3.MsgUpdatePlanDetailsRequest) (*v3.MsgUpdatePlanDetailsResponse, error) {
-	plan, found := k.GetPlan(ctx, msg.ID)
-	if !found {
-		return nil, types.NewErrorPlanNotFound(msg.ID)
-	}
-	if msg.From != plan.ProvAddress {
-		return nil, types.NewErrorUnauthorized(msg.From)
-	}
-
-	plan.Private = msg.Private
-
-	k.SetPlan(ctx, plan)
-	ctx.EventManager().EmitTypedEvent(
-		&v3.EventUpdate{
-			ID:          plan.ID,
-			ProvAddress: plan.ProvAddress,
-			Private:     plan.Private,
-		},
-	)
-
-	return &v3.MsgUpdatePlanDetailsResponse{}, nil
-}
-
 func (k *Keeper) HandleMsgUpdatePlanStatus(ctx sdk.Context, msg *v3.MsgUpdatePlanStatusRequest) (*v3.MsgUpdatePlanStatusResponse, error) {
 	plan, found := k.GetPlan(ctx, msg.ID)
 	if !found {

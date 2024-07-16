@@ -146,45 +146,6 @@ func txUnlinkNode() *cobra.Command {
 	return cmd
 }
 
-func txUpdatePlanDetails() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "update-plan-details [id] [private]",
-		Short: "Update the details of an existing subscription plan",
-		Args:  cobra.ExactArgs(2),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			ctx, err := client.GetClientTxContext(cmd)
-			if err != nil {
-				return err
-			}
-
-			id, err := strconv.ParseUint(args[0], 10, 64)
-			if err != nil {
-				return err
-			}
-
-			private, err := strconv.ParseBool(args[1])
-			if err != nil {
-				return err
-			}
-
-			msg := v3.NewMsgUpdatePlanDetailsRequest(
-				ctx.FromAddress.Bytes(),
-				id,
-				private,
-			)
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
-
-			return tx.GenerateOrBroadcastTxCLI(ctx, cmd.Flags(), msg)
-		},
-	}
-
-	flags.AddTxFlagsToCmd(cmd)
-
-	return cmd
-}
-
 func txUpdatePlanStatus() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "update-plan-status [id] [status]",

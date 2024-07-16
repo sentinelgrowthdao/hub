@@ -148,37 +148,6 @@ func (m *MsgUnlinkNodeRequest) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{from.Bytes()}
 }
 
-func NewMsgUpdatePlanDetailsRequest(from base.ProvAddress, id uint64, private bool) *MsgUpdatePlanDetailsRequest {
-	return &MsgUpdatePlanDetailsRequest{
-		From:    from.String(),
-		ID:      id,
-		Private: private,
-	}
-}
-
-func (m *MsgUpdatePlanDetailsRequest) ValidateBasic() error {
-	if m.From == "" {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
-	}
-	if _, err := base.ProvAddressFromBech32(m.From); err != nil {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
-	}
-	if m.ID == 0 {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, "id cannot be zero")
-	}
-
-	return nil
-}
-
-func (m *MsgUpdatePlanDetailsRequest) GetSigners() []sdk.AccAddress {
-	from, err := base.ProvAddressFromBech32(m.From)
-	if err != nil {
-		panic(err)
-	}
-
-	return []sdk.AccAddress{from.Bytes()}
-}
-
 func NewMsgUpdatePlanStatusRequest(from base.ProvAddress, id uint64, status v1base.Status) *MsgUpdatePlanStatusRequest {
 	return &MsgUpdatePlanStatusRequest{
 		From:   from.String(),

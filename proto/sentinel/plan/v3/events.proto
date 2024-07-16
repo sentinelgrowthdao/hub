@@ -36,6 +36,5 @@ message EventUnlinkNode {
 message EventUpdate {
   uint64 id = 1 [(gogoproto.customname) = "ID"];
   string prov_address = 2;
-  bool private = 3;
-  sentinel.types.v1.Status status = 4;
+  sentinel.types.v1.Status status = 3;
 }

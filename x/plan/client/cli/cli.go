@@ -21,7 +21,6 @@ func GetTxCommands() []*cobra.Command {
 		txCreatePlan(),
 		txLinkNode(),
 		txUnlinkNode(),
-		txUpdatePlanDetails(),
 		txUpdatePlanStatus(),
 	)
 
