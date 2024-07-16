@@ -4,6 +4,7 @@ import (
 	"time"
 
 	sdkerrors "cosmossdk.io/errors"
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
@@ -19,12 +20,13 @@ var (
 	_ sdk.Msg = (*MsgStartSessionRequest)(nil)
 )
 
-func NewMsgCreatePlanRequest(from base.ProvAddress, duration time.Duration, gigabytes int64, prices sdk.Coins) *MsgCreatePlanRequest {
+func NewMsgCreatePlanRequest(from base.ProvAddress, bytes sdkmath.Int, duration time.Duration, prices sdk.Coins, private bool) *MsgCreatePlanRequest {
 	return &MsgCreatePlanRequest{
-		From:      from.String(),
-		Duration:  duration,
-		Gigabytes: gigabytes,
-		Prices:    prices,
+		From:     from.String(),
+		Bytes:    bytes,
+		Duration: duration,
+		Prices:   prices,
+		Private:  private,
 	}
 }
 
@@ -35,23 +37,23 @@ func (m *MsgCreatePlanRequest) ValidateBasic() error {
 	if _, err := base.ProvAddressFromBech32(m.From); err != nil {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
 	}
+	if m.Bytes.IsNil() {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "bytes cannot be nil")
+	}
+	if m.Bytes.IsNegative() {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "bytes cannot be negative")
+	}
+	if m.Bytes.IsZero() {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "bytes cannot be zero")
+	}
 	if m.Duration < 0 {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "duration cannot be negative")
 	}
 	if m.Duration == 0 {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "duration cannot be zero")
 	}
-	if m.Gigabytes < 0 {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, "gigabytes cannot be negative")
-	}
-	if m.Gigabytes == 0 {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, "gigabytes cannot be zero")
-	}
 	if m.Prices == nil {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "prices cannot be nil")
-	}
-	if m.Prices.Len() == 0 {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, "prices cannot be empty")
 	}
 	if m.Prices.IsAnyNil() {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "prices cannot contain nil")
@@ -138,6 +140,37 @@ func (m *MsgUnlinkNodeRequest) ValidateBasic() error {
 }
 
 func (m *MsgUnlinkNodeRequest) GetSigners() []sdk.AccAddress {
+	from, err := base.ProvAddressFromBech32(m.From)
+	if err != nil {
+		panic(err)
+	}
+
+	return []sdk.AccAddress{from.Bytes()}
+}
+
+func NewMsgUpdatePlanDetailsRequest(from base.ProvAddress, id uint64, private bool) *MsgUpdatePlanDetailsRequest {
+	return &MsgUpdatePlanDetailsRequest{
+		From:    from.String(),
+		ID:      id,
+		Private: private,
+	}
+}
+
+func (m *MsgUpdatePlanDetailsRequest) ValidateBasic() error {
+	if m.From == "" {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "from cannot be empty")
+	}
+	if _, err := base.ProvAddressFromBech32(m.From); err != nil {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
+	}
+	if m.ID == 0 {
+		return sdkerrors.Wrap(types.ErrorInvalidMessage, "id cannot be zero")
+	}
+
+	return nil
+}
+
+func (m *MsgUpdatePlanDetailsRequest) GetSigners() []sdk.AccAddress {
 	from, err := base.ProvAddressFromBech32(m.From)
 	if err != nil {
 		panic(err)

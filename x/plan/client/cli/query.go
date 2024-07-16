@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 
 	base "github.com/sentinel-official/hub/v12/types"
-	"github.com/sentinel-official/hub/v12/x/plan/types/v2"
+	"github.com/sentinel-official/hub/v12/x/plan/types/v3"
 )
 
 func queryPlan() *cobra.Command {
@@ -27,11 +27,11 @@ func queryPlan() *cobra.Command {
 				return err
 			}
 
-			qc := v2.NewQueryServiceClient(ctx)
+			qc := v3.NewQueryServiceClient(ctx)
 
 			res, err := qc.QueryPlan(
 				cmd.Context(),
-				v2.NewQueryPlanRequest(id),
+				v3.NewQueryPlanRequest(id),
 			)
 			if err != nil {
 				return err
@@ -71,12 +71,12 @@ func queryPlans() *cobra.Command {
 				return err
 			}
 
-			qc := v2.NewQueryServiceClient(ctx)
+			qc := v3.NewQueryServiceClient(ctx)
 
 			if provAddr != nil {
 				res, err := qc.QueryPlansForProvider(
 					cmd.Context(),
-					v2.NewQueryPlansForProviderRequest(provAddr, status, pagination),
+					v3.NewQueryPlansForProviderRequest(provAddr, status, pagination),
 				)
 				if err != nil {
 					return err
@@ -87,7 +87,7 @@ func queryPlans() *cobra.Command {
 
 			res, err := qc.QueryPlans(
 				cmd.Context(),
-				v2.NewQueryPlansRequest(status, pagination),
+				v3.NewQueryPlansRequest(status, pagination),
 			)
 			if err != nil {
 				return err

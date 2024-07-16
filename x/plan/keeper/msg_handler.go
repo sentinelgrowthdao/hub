@@ -6,7 +6,6 @@ import (
 	base "github.com/sentinel-official/hub/v12/types"
 	v1base "github.com/sentinel-official/hub/v12/types/v1"
 	"github.com/sentinel-official/hub/v12/x/plan/types"
-	"github.com/sentinel-official/hub/v12/x/plan/types/v2"
 	"github.com/sentinel-official/hub/v12/x/plan/types/v3"
 	subscriptiontypes "github.com/sentinel-official/hub/v12/x/subscription/types/v3"
 )
@@ -22,14 +21,15 @@ func (k *Keeper) HandleMsgCreatePlan(ctx sdk.Context, msg *v3.MsgCreatePlanReque
 	}
 
 	count := k.GetCount(ctx)
-	plan := v2.Plan{
-		ID:              count + 1,
-		ProviderAddress: provAddr.String(),
-		Duration:        msg.Duration,
-		Gigabytes:       msg.Gigabytes,
-		Prices:          msg.Prices,
-		Status:          v1base.StatusInactive,
-		StatusAt:        ctx.BlockTime(),
+	plan := v3.Plan{
+		ID:          count + 1,
+		ProvAddress: provAddr.String(),
+		Bytes:       msg.Bytes,
+		Duration:    msg.Duration,
+		Prices:      msg.Prices,
+		Private:     msg.Private,
+		Status:      v1base.StatusInactive,
+		StatusAt:    ctx.BlockTime(),
 	}
 
 	k.SetCount(ctx, count+1)
@@ -39,9 +39,10 @@ func (k *Keeper) HandleMsgCreatePlan(ctx sdk.Context, msg *v3.MsgCreatePlanReque
 	ctx.EventManager().EmitTypedEvent(
 		&v3.EventCreate{
 			ID:          plan.ID,
-			ProvAddress: plan.ProviderAddress,
+			ProvAddress: plan.ProvAddress,
+			Bytes:       plan.Bytes.String(),
 			Duration:    plan.Duration,
-			Gigabytes:   plan.Gigabytes,
+			Private:     plan.Private,
 			Prices:      plan.Prices.String(),
 		},
 	)
@@ -56,7 +57,7 @@ func (k *Keeper) HandleMsgLinkNode(ctx sdk.Context, msg *v3.MsgLinkNodeRequest) 
 	if !found {
 		return nil, types.NewErrorPlanNotFound(msg.ID)
 	}
-	if msg.From != plan.ProviderAddress {
+	if msg.From != plan.ProvAddress {
 		return nil, types.NewErrorUnauthorized(msg.From)
 	}
 
@@ -73,7 +74,7 @@ func (k *Keeper) HandleMsgLinkNode(ctx sdk.Context, msg *v3.MsgLinkNodeRequest) 
 	ctx.EventManager().EmitTypedEvent(
 		&v3.EventLinkNode{
 			ID:          plan.ID,
-			ProvAddress: plan.ProviderAddress,
+			ProvAddress: plan.ProvAddress,
 			NodeAddress: nodeAddr.String(),
 		},
 	)
@@ -86,7 +87,7 @@ func (k *Keeper) HandleMsgUnlinkNode(ctx sdk.Context, msg *v3.MsgUnlinkNodeReque
 	if !found {
 		return nil, types.NewErrorPlanNotFound(msg.ID)
 	}
-	if msg.From != plan.ProviderAddress {
+	if msg.From != plan.ProvAddress {
 		return nil, types.NewErrorUnauthorized(msg.From)
 	}
 
@@ -99,7 +100,7 @@ func (k *Keeper) HandleMsgUnlinkNode(ctx sdk.Context, msg *v3.MsgUnlinkNodeReque
 	ctx.EventManager().EmitTypedEvent(
 		&v3.EventUnlinkNode{
 			ID:          plan.ID,
-			ProvAddress: plan.ProviderAddress,
+			ProvAddress: plan.ProvAddress,
 			NodeAddress: nodeAddr.String(),
 		},
 	)
@@ -107,12 +108,35 @@ func (k *Keeper) HandleMsgUnlinkNode(ctx sdk.Context, msg *v3.MsgUnlinkNodeReque
 	return &v3.MsgUnlinkNodeResponse{}, nil
 }
 
+func (k *Keeper) HandleMsgUpdatePlanDetails(ctx sdk.Context, msg *v3.MsgUpdatePlanDetailsRequest) (*v3.MsgUpdatePlanDetailsResponse, error) {
+	plan, found := k.GetPlan(ctx, msg.ID)
+	if !found {
+		return nil, types.NewErrorPlanNotFound(msg.ID)
+	}
+	if msg.From != plan.ProvAddress {
+		return nil, types.NewErrorUnauthorized(msg.From)
+	}
+
+	plan.Private = msg.Private
+
+	k.SetPlan(ctx, plan)
+	ctx.EventManager().EmitTypedEvent(
+		&v3.EventUpdate{
+			ID:          plan.ID,
+			ProvAddress: plan.ProvAddress,
+			Private:     plan.Private,
+		},
+	)
+
+	return &v3.MsgUpdatePlanDetailsResponse{}, nil
+}
+
 func (k *Keeper) HandleMsgUpdatePlanStatus(ctx sdk.Context, msg *v3.MsgUpdatePlanStatusRequest) (*v3.MsgUpdatePlanStatusResponse, error) {
 	plan, found := k.GetPlan(ctx, msg.ID)
 	if !found {
 		return nil, types.NewErrorPlanNotFound(msg.ID)
 	}
-	if msg.From != plan.ProviderAddress {
+	if msg.From != plan.ProvAddress {
 		return nil, types.NewErrorUnauthorized(msg.From)
 	}
 
@@ -132,9 +156,9 @@ func (k *Keeper) HandleMsgUpdatePlanStatus(ctx sdk.Context, msg *v3.MsgUpdatePla
 
 	k.SetPlan(ctx, plan)
 	ctx.EventManager().EmitTypedEvent(
-		&v3.EventUpdateStatus{
+		&v3.EventUpdate{
 			ID:          plan.ID,
-			ProvAddress: plan.ProviderAddress,
+			ProvAddress: plan.ProvAddress,
 			Status:      plan.Status,
 		},
 	)

@@ -1,9 +1,11 @@
 package cli
 
 import (
+	"fmt"
 	"strconv"
 	"time"
 
+	sdkmath "cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -17,21 +19,21 @@ import (
 
 func txCreatePlan() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-plan [duration] [gigabytes] [prices]",
-		Short: "Create a new subscription plan with duration, gigabytes and pricing details",
-		Args:  cobra.ExactArgs(3),
+		Use:   "create-plan [bytes] [duration] [prices] [private]",
+		Short: "Create a new subscription plan with bytes, duration and pricing details",
+		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			duration, err := time.ParseDuration(args[0])
-			if err != nil {
-				return err
+			bytes, ok := sdkmath.NewIntFromString(args[0])
+			if !ok {
+				return fmt.Errorf("invalid bytes %s", args[0])
 			}
 
-			gigabytes, err := strconv.ParseInt(args[1], 10, 64)
+			duration, err := time.ParseDuration(args[1])
 			if err != nil {
 				return err
 			}
@@ -41,11 +43,17 @@ func txCreatePlan() *cobra.Command {
 				return err
 			}
 
+			private, err := strconv.ParseBool(args[3])
+			if err != nil {
+				return err
+			}
+
 			msg := v3.NewMsgCreatePlanRequest(
 				ctx.FromAddress.Bytes(),
+				bytes,
 				duration,
-				gigabytes,
 				prices,
+				private,
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
@@ -124,6 +132,45 @@ func txUnlinkNode() *cobra.Command {
 				ctx.FromAddress.Bytes(),
 				id,
 				addr,
+			)
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(ctx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func txUpdatePlanDetails() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "update-plan-details [id] [private]",
+		Short: "Update the details of an existing subscription plan",
+		Args:  cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			ctx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			id, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			private, err := strconv.ParseBool(args[1])
+			if err != nil {
+				return err
+			}
+
+			msg := v3.NewMsgUpdatePlanDetailsRequest(
+				ctx.FromAddress.Bytes(),
+				id,
+				private,
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err

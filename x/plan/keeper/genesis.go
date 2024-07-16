@@ -4,12 +4,16 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
-	"github.com/sentinel-official/hub/v12/x/plan/types/v2"
+	"github.com/sentinel-official/hub/v12/x/plan/types/v3"
 )
 
-func (k *Keeper) InitGenesis(ctx sdk.Context, state *v2.GenesisState) {
+func (k *Keeper) InitGenesis(ctx sdk.Context, state *v3.GenesisState) {
 	for _, item := range state.Plans {
-		addr := item.Plan.GetProviderAddress()
+		addr, err := base.ProvAddressFromBech32(item.Plan.ProvAddress)
+		if err != nil {
+			panic(err)
+		}
+
 		k.SetPlan(ctx, item.Plan)
 		k.SetPlanForProvider(ctx, addr, item.Plan.ID)
 
@@ -33,14 +37,14 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *v2.GenesisState) {
 	k.SetCount(ctx, count)
 }
 
-func (k *Keeper) ExportGenesis(ctx sdk.Context) *v2.GenesisState {
+func (k *Keeper) ExportGenesis(ctx sdk.Context) *v3.GenesisState {
 	var (
 		plans = k.GetPlans(ctx)
-		items = make(v2.GenesisPlans, 0, len(plans))
+		items = make(v3.GenesisPlans, 0, len(plans))
 	)
 
 	for _, plan := range plans {
-		item := v2.GenesisPlan{
+		item := v3.GenesisPlan{
 			Plan:  plan,
 			Nodes: []string{},
 		}
@@ -53,5 +57,5 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *v2.GenesisState {
 		items = append(items, item)
 	}
 
-	return v2.NewGenesisState(items)
+	return v3.NewGenesisState(items)
 }

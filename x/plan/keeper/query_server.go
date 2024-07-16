@@ -12,21 +12,21 @@ import (
 	base "github.com/sentinel-official/hub/v12/types"
 	v1base "github.com/sentinel-official/hub/v12/types/v1"
 	"github.com/sentinel-official/hub/v12/x/plan/types"
-	"github.com/sentinel-official/hub/v12/x/plan/types/v2"
+	"github.com/sentinel-official/hub/v12/x/plan/types/v3"
 )
 
-func (k *Keeper) HandleQueryPlan(ctx sdk.Context, req *v2.QueryPlanRequest) (*v2.QueryPlanResponse, error) {
+func (k *Keeper) HandleQueryPlan(ctx sdk.Context, req *v3.QueryPlanRequest) (*v3.QueryPlanResponse, error) {
 	item, found := k.GetPlan(ctx, req.Id)
 	if !found {
 		return nil, status.Errorf(codes.NotFound, "plan does not exist for id %d", req.Id)
 	}
 
-	return &v2.QueryPlanResponse{Plan: item}, nil
+	return &v3.QueryPlanResponse{Plan: item}, nil
 }
 
-func (k *Keeper) HandleQueryPlans(ctx sdk.Context, req *v2.QueryPlansRequest) (res *v2.QueryPlansResponse, err error) {
+func (k *Keeper) HandleQueryPlans(ctx sdk.Context, req *v3.QueryPlansRequest) (res *v3.QueryPlansResponse, err error) {
 	var (
-		items     v2.Plans
+		items     []v3.Plan
 		keyPrefix []byte
 	)
 
@@ -41,7 +41,7 @@ func (k *Keeper) HandleQueryPlans(ctx sdk.Context, req *v2.QueryPlansRequest) (r
 
 	store := prefix.NewStore(k.Store(ctx), keyPrefix)
 	pagination, err := sdkquery.Paginate(store, req.Pagination, func(_, value []byte) error {
-		var item v2.Plan
+		var item v3.Plan
 		if err := k.cdc.Unmarshal(value, &item); err != nil {
 			return err
 		}
@@ -54,17 +54,17 @@ func (k *Keeper) HandleQueryPlans(ctx sdk.Context, req *v2.QueryPlansRequest) (r
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &v2.QueryPlansResponse{Plans: items, Pagination: pagination}, nil
+	return &v3.QueryPlansResponse{Plans: items, Pagination: pagination}, nil
 }
 
-func (k *Keeper) HandleQueryPlansForProvider(ctx sdk.Context, req *v2.QueryPlansForProviderRequest) (res *v2.QueryPlansForProviderResponse, err error) {
+func (k *Keeper) HandleQueryPlansForProvider(ctx sdk.Context, req *v3.QueryPlansForProviderRequest) (res *v3.QueryPlansForProviderResponse, err error) {
 	addr, err := base.ProvAddressFromBech32(req.Address)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "invalid address %s", req.Address)
 	}
 
 	var (
-		items v2.Plans
+		items []v3.Plan
 		store = prefix.NewStore(k.Store(ctx), types.GetPlanForProviderKeyPrefix(addr))
 	)
 
@@ -90,5 +90,5 @@ func (k *Keeper) HandleQueryPlansForProvider(ctx sdk.Context, req *v2.QueryPlans
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &v2.QueryPlansForProviderResponse{Plans: items, Pagination: pagination}, nil
+	return &v3.QueryPlansForProviderResponse{Plans: items, Pagination: pagination}, nil
 }

@@ -3,7 +3,6 @@ package v2
 import (
 	"context"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -23,29 +22,14 @@ func NewQueryServiceServer(k keeper.Keeper) v2.QueryServiceServer {
 	return &queryServer{k}
 }
 
-func (q *queryServer) QueryPlan(c context.Context, req *v2.QueryPlanRequest) (*v2.QueryPlanResponse, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "empty request")
-	}
-
-	ctx := sdk.UnwrapSDKContext(c)
-	return q.HandleQueryPlan(ctx, req)
+func (q *queryServer) QueryPlan(_ context.Context, _ *v2.QueryPlanRequest) (*v2.QueryPlanResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (q *queryServer) QueryPlans(c context.Context, req *v2.QueryPlansRequest) (res *v2.QueryPlansResponse, err error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "empty request")
-	}
-
-	ctx := sdk.UnwrapSDKContext(c)
-	return q.HandleQueryPlans(ctx, req)
+func (q *queryServer) QueryPlans(_ context.Context, _ *v2.QueryPlansRequest) (*v2.QueryPlansResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
 }
 
-func (q *queryServer) QueryPlansForProvider(c context.Context, req *v2.QueryPlansForProviderRequest) (res *v2.QueryPlansForProviderResponse, err error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "empty request")
-	}
-
-	ctx := sdk.UnwrapSDKContext(c)
-	return q.HandleQueryPlansForProvider(ctx, req)
+func (q *queryServer) QueryPlansForProvider(_ context.Context, _ *v2.QueryPlansForProviderRequest) (*v2.QueryPlansForProviderResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "")
 }

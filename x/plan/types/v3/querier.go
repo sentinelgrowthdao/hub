@@ -1,4 +1,4 @@
-package v2
+package v3
 
 import (
 	sdkquery "github.com/cosmos/cosmos-sdk/types/query"

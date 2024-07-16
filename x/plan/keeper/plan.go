@@ -9,11 +9,11 @@ import (
 	base "github.com/sentinel-official/hub/v12/types"
 	v1base "github.com/sentinel-official/hub/v12/types/v1"
 	"github.com/sentinel-official/hub/v12/x/plan/types"
-	"github.com/sentinel-official/hub/v12/x/plan/types/v2"
+	"github.com/sentinel-official/hub/v12/x/plan/types/v3"
 )
 
 // SetActivePlan stores an active plan in the module's KVStore.
-func (k *Keeper) SetActivePlan(ctx sdk.Context, plan v2.Plan) {
+func (k *Keeper) SetActivePlan(ctx sdk.Context, plan v3.Plan) {
 	store := k.Store(ctx)
 	key := types.ActivePlanKey(plan.ID)
 	value := k.cdc.MustMarshal(&plan)
@@ -30,7 +30,7 @@ func (k *Keeper) HasActivePlan(ctx sdk.Context, id uint64) bool {
 }
 
 // GetActivePlan retrieves an active plan from the module's KVStore.
-func (k *Keeper) GetActivePlan(ctx sdk.Context, id uint64) (plan v2.Plan, found bool) {
+func (k *Keeper) GetActivePlan(ctx sdk.Context, id uint64) (plan v3.Plan, found bool) {
 	store := k.Store(ctx)
 	key := types.ActivePlanKey(id)
 	value := store.Get(key)
@@ -52,7 +52,7 @@ func (k *Keeper) DeleteActivePlan(ctx sdk.Context, id uint64) {
 }
 
 // SetInactivePlan stores an inactive plan in the module's KVStore.
-func (k *Keeper) SetInactivePlan(ctx sdk.Context, plan v2.Plan) {
+func (k *Keeper) SetInactivePlan(ctx sdk.Context, plan v3.Plan) {
 	store := k.Store(ctx)
 	key := types.InactivePlanKey(plan.ID)
 	value := k.cdc.MustMarshal(&plan)
@@ -69,7 +69,7 @@ func (k *Keeper) HasInactivePlan(ctx sdk.Context, id uint64) bool {
 }
 
 // GetInactivePlan retrieves an inactive plan from the module's KVStore.
-func (k *Keeper) GetInactivePlan(ctx sdk.Context, id uint64) (plan v2.Plan, found bool) {
+func (k *Keeper) GetInactivePlan(ctx sdk.Context, id uint64) (plan v3.Plan, found bool) {
 	store := k.Store(ctx)
 	key := types.InactivePlanKey(id)
 	value := store.Get(key)
@@ -91,7 +91,7 @@ func (k *Keeper) DeleteInactivePlan(ctx sdk.Context, id uint64) {
 }
 
 // SetPlan stores a plan in the KVStore based on its status (Active or Inactive).
-func (k *Keeper) SetPlan(ctx sdk.Context, plan v2.Plan) {
+func (k *Keeper) SetPlan(ctx sdk.Context, plan v3.Plan) {
 	switch plan.Status {
 	case v1base.StatusActive:
 		k.SetActivePlan(ctx, plan)
@@ -108,7 +108,7 @@ func (k *Keeper) HasPlan(ctx sdk.Context, id uint64) bool {
 }
 
 // GetPlan retrieves a plan from either the active or inactive state.
-func (k *Keeper) GetPlan(ctx sdk.Context, id uint64) (plan v2.Plan, found bool) {
+func (k *Keeper) GetPlan(ctx sdk.Context, id uint64) (plan v3.Plan, found bool) {
 	plan, found = k.GetActivePlan(ctx, id)
 	if found {
 		return plan, true
@@ -123,14 +123,14 @@ func (k *Keeper) GetPlan(ctx sdk.Context, id uint64) (plan v2.Plan, found bool) 
 }
 
 // GetPlans retrieves all plans (both active and inactive) from the module's KVStore.
-func (k *Keeper) GetPlans(ctx sdk.Context) (items v2.Plans) {
+func (k *Keeper) GetPlans(ctx sdk.Context) (items []v3.Plan) {
 	store := k.Store(ctx)
 	iterator := sdk.KVStorePrefixIterator(store, types.PlanKeyPrefix)
 
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var item v2.Plan
+		var item v3.Plan
 		k.cdc.MustUnmarshal(iterator.Value(), &item)
 
 		items = append(items, item)
@@ -157,7 +157,7 @@ func (k *Keeper) DeletePlanForProvider(ctx sdk.Context, addr base.ProvAddress, i
 }
 
 // GetPlansForProvider retrieves all plans associated with a specific provider address.
-func (k *Keeper) GetPlansForProvider(ctx sdk.Context, addr base.ProvAddress) (items v2.Plans) {
+func (k *Keeper) GetPlansForProvider(ctx sdk.Context, addr base.ProvAddress) (items []v3.Plan) {
 	store := k.Store(ctx)
 	iterator := sdk.KVStorePrefixIterator(store, types.GetPlanForProviderKeyPrefix(addr))
 
