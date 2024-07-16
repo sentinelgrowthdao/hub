@@ -8,11 +8,6 @@ import (
 
 	base "github.com/sentinel-official/hub/v12/types"
 	v1base "github.com/sentinel-official/hub/v12/types/v1"
-	sessiontypes "github.com/sentinel-official/hub/v12/x/session/types/v3"
-)
-
-var (
-	_ sessiontypes.Session = (*Session)(nil)
 )
 
 func (m *Session) GetDownloadBytes() sdkmath.Int { return m.DownloadBytes }

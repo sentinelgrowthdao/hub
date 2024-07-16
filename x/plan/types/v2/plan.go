@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	sdkerrors "cosmossdk.io/errors"
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
@@ -30,7 +31,7 @@ func (m *Plan) Price(denom string) (sdk.Coin, bool) {
 		}
 	}
 
-	return sdk.Coin{}, false
+	return sdk.Coin{Amount: sdkmath.ZeroInt()}, false
 }
 
 func (m *Plan) Validate() error {

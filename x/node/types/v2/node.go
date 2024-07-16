@@ -5,6 +5,7 @@ import (
 	"net/url"
 
 	sdkerrors "cosmossdk.io/errors"
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	base "github.com/sentinel-official/hub/v12/types"
@@ -100,7 +101,7 @@ func (m *Node) GigabytePrice(denom string) (sdk.Coin, bool) {
 		}
 	}
 
-	return sdk.Coin{}, false
+	return sdk.Coin{Amount: sdkmath.ZeroInt()}, false
 }
 
 func (m *Node) HourlyPrice(denom string) (sdk.Coin, bool) {
@@ -110,5 +111,5 @@ func (m *Node) HourlyPrice(denom string) (sdk.Coin, bool) {
 		}
 	}
 
-	return sdk.Coin{}, false
+	return sdk.Coin{Amount: sdkmath.ZeroInt()}, false
 }
