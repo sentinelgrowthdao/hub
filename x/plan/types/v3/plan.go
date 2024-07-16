@@ -12,22 +12,14 @@ import (
 )
 
 func (m *Plan) Price(denom string) (sdk.Coin, bool) {
-	if m.Prices.Len() == 0 {
-		return sdk.Coin{
-			Denom:  denom,
-			Amount: sdkmath.ZeroInt(),
-		}, true
-	}
-
 	for _, v := range m.Prices {
 		if v.Denom == denom {
 			return v, true
 		}
 	}
 
-	return sdk.Coin{
-		Amount: sdkmath.ZeroInt(),
-	}, false
+	// If there are no prices and denom is empty, return a zero amount coin and true
+	return sdk.Coin{Amount: sdkmath.ZeroInt()}, m.Prices.Len() == 0 && denom == ""
 }
 
 func (m *Plan) Validate() error {
@@ -35,7 +27,7 @@ func (m *Plan) Validate() error {
 		return fmt.Errorf("id cannot be zero")
 	}
 	if m.ProvAddress == "" {
-		return fmt.Errorf("provider_address cannot be empty")
+		return fmt.Errorf("prov_address cannot be empty")
 	}
 	if _, err := base.ProvAddressFromBech32(m.ProvAddress); err != nil {
 		return sdkerrors.Wrapf(err, "invalid prov_address %s", m.ProvAddress)

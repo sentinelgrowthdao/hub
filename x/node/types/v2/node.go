@@ -101,7 +101,8 @@ func (m *Node) GigabytePrice(denom string) (sdk.Coin, bool) {
 		}
 	}
 
-	return sdk.Coin{Amount: sdkmath.ZeroInt()}, false
+	// If there are no prices and denom is empty, return a zero amount coin and true
+	return sdk.Coin{Amount: sdkmath.ZeroInt()}, m.GigabytePrices.Len() == 0 && denom == ""
 }
 
 func (m *Node) HourlyPrice(denom string) (sdk.Coin, bool) {
@@ -111,5 +112,6 @@ func (m *Node) HourlyPrice(denom string) (sdk.Coin, bool) {
 		}
 	}
 
-	return sdk.Coin{Amount: sdkmath.ZeroInt()}, false
+	// If there are no prices and denom is empty, return a zero amount coin and true
+	return sdk.Coin{Amount: sdkmath.ZeroInt()}, m.HourlyPrices.Len() == 0 && denom == ""
 }

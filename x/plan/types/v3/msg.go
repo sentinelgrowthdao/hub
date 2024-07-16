@@ -233,11 +233,10 @@ func (m *MsgStartSessionRequest) ValidateBasic() error {
 	if m.ID == 0 {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "id cannot be zero")
 	}
-	if m.Denom == "" {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, "denom cannot be empty")
-	}
-	if err := sdk.ValidateDenom(m.Denom); err != nil {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
+	if m.Denom != "" {
+		if err := sdk.ValidateDenom(m.Denom); err != nil {
+			return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
+		}
 	}
 	if m.NodeAddress == "" {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "node_address cannot be empty")

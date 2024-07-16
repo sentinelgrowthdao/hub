@@ -38,9 +38,6 @@ func (m *MsgRegisterNodeRequest) ValidateBasic() error {
 	if m.GigabytePrices == nil {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "gigabyte_prices cannot be nil")
 	}
-	if m.GigabytePrices.Len() == 0 {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, "gigabyte_prices length cannot be zero")
-	}
 	if m.GigabytePrices.IsAnyNil() {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "gigabyte_prices cannot contain nil")
 	}
@@ -49,9 +46,6 @@ func (m *MsgRegisterNodeRequest) ValidateBasic() error {
 	}
 	if m.HourlyPrices == nil {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "hourly_prices cannot be nil")
-	}
-	if m.HourlyPrices.Len() == 0 {
-		return sdkerrors.Wrap(types.ErrorInvalidMessage, "hourly_prices length cannot be zero")
 	}
 	if m.HourlyPrices.IsAnyNil() {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, "hourly_prices cannot contain nil")
@@ -106,9 +100,6 @@ func (m *MsgUpdateNodeDetailsRequest) ValidateBasic() error {
 		return sdkerrors.Wrap(types.ErrorInvalidMessage, err.Error())
 	}
 	if m.GigabytePrices != nil {
-		if m.GigabytePrices.Len() == 0 {
-			return sdkerrors.Wrap(types.ErrorInvalidMessage, "gigabyte_prices length cannot be zero")
-		}
 		if m.GigabytePrices.IsAnyNil() {
 			return sdkerrors.Wrap(types.ErrorInvalidMessage, "gigabyte_prices cannot contain nil")
 		}
@@ -117,9 +108,6 @@ func (m *MsgUpdateNodeDetailsRequest) ValidateBasic() error {
 		}
 	}
 	if m.HourlyPrices != nil {
-		if m.HourlyPrices.Len() == 0 {
-			return sdkerrors.Wrap(types.ErrorInvalidMessage, "hourly_prices length cannot be zero")
-		}
 		if m.HourlyPrices.IsAnyNil() {
 			return sdkerrors.Wrap(types.ErrorInvalidMessage, "hourly_prices cannot contain nil")
 		}
