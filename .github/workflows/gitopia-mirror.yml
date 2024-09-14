@@ -18,5 +18,5 @@ jobs:
         uses: gitopia/gitopia-mirror-action@v0.5.0
         with:
           gitopiaWallet: "${{ secrets.GITOPIA_WALLET }}"
-          remoteUrl: "gitopia://sentinel/hub"
+          remoteUrl: "gitopia://sentineldvpn/hub"
           force: true
